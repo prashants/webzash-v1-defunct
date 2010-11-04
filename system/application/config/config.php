@@ -324,6 +324,15 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+/*
+|--------------------------------------------------------------------------
+| Custom : Assets Path
+|--------------------------------------------------------------------------
+|
+| Sets the assets path for images, css, javascript, etc 
+|
+*/
+$config['asset_path'] = 'system/application/assets/';
 
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */
