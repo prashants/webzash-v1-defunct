@@ -55,7 +55,39 @@ class Group extends Controller {
 		return;
 	}
 
-	function delete()
+	function delete($id)
 	{
+		$id = $this->input->xss_clean($id);
+		$id = (int)$id;
+		if ( ! is_int($id)) {
+			$this->session->set_flashdata('error', "Invalid Account Group");
+			redirect('account');
+			return;
+		}
+		if ($id < 5) {
+			$this->session->set_flashdata('error', "Cannot delete system created Account Group");
+			redirect('account');
+			return;
+		}
+		$data_present_q = $this->db->query("SELECT * FROM groups WHERE parent_id = ?", array($id));
+		if ($data_present_q->num_rows() > 0)
+		{
+			$this->session->set_flashdata('error', "Cannot delete non-empty Account Group");
+			redirect('account');
+		}
+		$data_present_q = $this->db->query("SELECT * FROM ledgers WHERE group_id = ?", array($id));
+		if ($data_present_q->num_rows() > 0)
+		{
+			$this->session->set_flashdata('error', "Cannot delete non-empty Account Group");
+			redirect('account');
+		}
+		if ($this->db->query("DELETE FROM groups WHERE id = ?", array($id)))
+		{
+			$this->session->set_flashdata('message', "Account Group deleted successfully");
+			redirect('account');
+		} else {
+			$this->session->set_flashdata('error', "Error deleting Account Group");
+			redirect('account');
+		}
 	}
 }
