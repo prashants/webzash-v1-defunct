@@ -44,3 +44,13 @@
 			<div class="clear">
 			</div>
 			<div id="main-content">
+				<?php if ($this->session->flashdata('message')) { ?>
+					<div id="message-box">
+						<p><?php echo $this->session->flashdata('message'); ?></p>
+					</div>
+				<?php } ?>
+				<?php if (validation_errors()) { ?>
+					<div id="validation-error-box">
+						<?php echo validation_errors(); ?>
+					</div>
+				<?php } ?>

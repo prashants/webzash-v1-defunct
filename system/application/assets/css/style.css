@@ -136,3 +136,20 @@ body {
 .clear {
 	clear:both;
 }
+
+#message-box {
+	border:solid 1px #FFEC8B;
+	background:#FFF8C6;
+	color:#222222;
+	padding:0 10px 0 10px;
+	margin:0 0 10px 0;
+	text-align:left;
+}
+
+#validation-error-box {
+	border:solid 1px #C34A2C;
+	background:#FFBABA;
+	color:#222222;
+	padding:0 10px 0 10px;
+	text-align:left;
+}
