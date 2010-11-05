@@ -6,11 +6,11 @@ class Account extends Controller {
 	{
 		$this->_get_groups(0);
 		$data['tree'] = "<table border=0 cellpadding=5>";
-		$data['tree'] .= "<thead><tr><th>Name</th><th>Type</th><th colspan=2>Actions</th></tr></thead>";
+		$data['tree'] .= "<thead><tr><th width=70%>Name</th><th>Type</th><th colspan=2>Actions</th></tr></thead>";
 		$data['tree'] .= "<tbody>" . $this->tree . "</tbody>";
 		$data['tree'] .= "</table>";
 		$page_data['page_title'] = "Chart of accounts";
-		$page_data['page_links'] = array('group/new' => 'New Group', 'ledger/new' => 'New Ledger');
+		$page_data['page_links'] = array('group/add' => 'New Group', 'ledger/add' => 'New Ledger');
 		$this->load->view('template/header', $page_data);
 		$this->load->view('welcome_message', $data);
 		$this->load->view('template/footer');
@@ -64,7 +64,7 @@ class Account extends Controller {
 		$html = "";
 		for ($i = 2; $i <= $counter; $i++)
 		{
-			$html .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+			$html .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		}
 		return $html;
 	}
