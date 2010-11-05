@@ -3,6 +3,7 @@
 <head>
 <title>Webzash <?php if (isset($page_title)) echo '|' . $page_title; ?></title>
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>/css/style.css">
+<link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>/css/accounts.css">
 </head>
 <body>
 <div id="container">
