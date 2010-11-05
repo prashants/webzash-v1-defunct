@@ -4,6 +4,8 @@
 <title>Webzash <?php if (isset($page_title)) echo '|' . $page_title; ?></title>
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>/css/style.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>/css/accounts.css">
+<script type="text/javascript" src="<?php echo asset_url(); ?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>/js/custom.js"></script>
 </head>
 <body>
 <div id="container">
@@ -47,6 +49,11 @@
 				<?php if ($this->session->flashdata('message')) { ?>
 					<div id="message-box">
 						<p><?php echo $this->session->flashdata('message'); ?></p>
+					</div>
+				<?php } ?>
+				<?php if ($this->session->flashdata('error')) { ?>
+					<div id="error-box">
+						<p><?php echo $this->session->flashdata('error'); ?></p>
 					</div>
 				<?php } ?>
 				<?php if (validation_errors()) { ?>
