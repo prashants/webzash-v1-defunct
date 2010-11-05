@@ -1,14 +1,21 @@
-ul.group-head
-{
-	list-style:none;
-	padding:0;
-	margin: 0 0 0 25px;
+th {
+	background:none repeat scroll 0 0 #D3DCE3;
+	color:#000000;
+	font-weight:bold;
 }
 
-ul.group-first
+tr:hover {
+	background:none repeat scroll 0 0 #F0FFF0;
+}
+
+.group-tr
 {
-	list-style:none;
-	padding:0;
-	margin:0;
+	background:none repeat scroll 0 0 #D5D5D5;
+	padding:10px;
+}
+
+.ledger-tr
+{
+	background:none repeat scroll 0 0 #E5E5E5;
 }
 
