@@ -59,7 +59,7 @@ class Group extends Controller {
 	{
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
-		if ( ! is_int($id)) {
+		if ($id < 1) {
 			$this->session->set_flashdata('error', "Invalid Account Group");
 			redirect('account');
 			return;
