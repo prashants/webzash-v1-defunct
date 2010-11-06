@@ -25,7 +25,6 @@ class MY_Form_validation extends CI_Form_validation {
 		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM $table WHERE $column = '$str'");
 		$row = $query->row();
 		return ($row->dupe > 0) ? FALSE : TRUE;
-		echo "hello";
 	}
 
 	function uniquewithid($str, $field)
@@ -38,9 +37,23 @@ class MY_Form_validation extends CI_Form_validation {
 		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM $table WHERE $column = '$str' AND id != ?", array($id));
 		$row = $query->row();
 		return ($row->dupe > 0) ? FALSE : TRUE;
-		echo "hello";
 	}
 
+	function is_dc($str)
+	{
+		$CI =& get_instance();
+
+		$CI->form_validation->set_message('is_dc', '%s can only be "Dr" or "Cr"');
+		return ($str == "D" || $str == "C") ? TRUE : FALSE;
+	}
+
+	function currency($str)
+	{
+		$CI =& get_instance();
+
+		$CI->form_validation->set_message('currency', '%s must be a valid amount. Maximum 2 decimal places is allowed.');
+		return preg_match('/^[\-+]?[0-9]*\.?[0-9]{0,2}$/', $str) ? TRUE : FALSE;
+	}
 }
 
 ?>
