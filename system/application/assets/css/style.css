@@ -61,10 +61,22 @@ body {
 }
 
 #footer {
-	background-color:#CCCCCC;
 	color:#555555;
-	font-size:92%;
+	font-size:100%;
 	margin:9px 20px 18px 20px;
+	text-align:center;
+}
+
+#footer {
+	color:#555555;
+	font-size:100%;
+	text-align:center;
+}
+
+
+#footer a {
+	color:#555555;
+	font-size:100%;
 	text-align:center;
 }
 

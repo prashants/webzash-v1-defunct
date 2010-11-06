@@ -12,7 +12,7 @@ class Account extends Controller {
 		$page_data['page_title'] = "Chart of accounts";
 		$page_data['page_links'] = array('group/add' => 'New Group', 'ledger/add' => 'New Ledger');
 		$this->load->view('template/header', $page_data);
-		$this->load->view('welcome_message', $data);
+		$this->load->view('account/index', $data);
 		$this->load->view('template/footer');
 	}
 

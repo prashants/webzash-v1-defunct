@@ -9,7 +9,10 @@ class Welcome extends Controller {
 	
 	function index()
 	{
+		$page_data['page_title'] = "Welcome to Webzash";
+		$this->load->view('template/header', $page_data);
 		$this->load->view('welcome_message');
+		$this->load->view('template/footer');
 	}
 }
 

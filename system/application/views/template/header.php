@@ -19,7 +19,7 @@
 	</div>
 	<div id="menu">
 		<ul id="nav">
-			<li><a href="#">Dashboard</a></li>
+			<li><a href="<?php print base_url(); ?>" title="Dashboard">Dashboard</a></li>
 			<li><?php echo anchor('account', 'Accounts', array('title' => 'Chart of accounts')); ?></li>
 			<li><a href="#">Vouchers</a></li>
 			<li><a href="#">Reports</a></li>
