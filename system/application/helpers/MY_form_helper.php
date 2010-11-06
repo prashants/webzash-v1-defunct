@@ -33,5 +33,18 @@ if ( ! function_exists('form_dropdown_dc'))
 	}
 }
 
+if ( ! function_exists('convert_dc'))
+{
+	function convert_dc($label)
+	{
+		if ($label == "D")
+			return "Dr";
+		else if ($label == "C")
+			return "Cr";
+		else
+			return "Error";
+	}
+}
+
 /* End of file MY_form_helper.php */
 /* Location: ./system/application/helpers/MY_form_helper.php */
