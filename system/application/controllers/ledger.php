@@ -27,10 +27,19 @@ class Ledger extends Controller {
 			'value' => $this->input->post('ledger_name'),
 		);
 		$data['ledger_group_id'] = $this->Group_model->get_all_groups();
+		$data['op_balance'] = array(
+			'name' => 'op_balance',
+			'id' => 'op_balance',
+			'maxlength' => '15',
+			'size' => '15',
+			'value' => $this->input->post('op_balance'),
+		);
 
 		/* Form validations */
 		$this->form_validation->set_rules('ledger_name', 'Ledger name', 'trim|required|min_length[2]|max_length[100]|unique[ledgers.name]');
 		$this->form_validation->set_rules('ledger_group_id', 'Parent group', 'trim|required|is_natural_no_zero');
+		$this->form_validation->set_rules('op_balance', 'Opening balance', 'trim|currency');
+		$this->form_validation->set_rules('op_balance_dc', 'Opening balance type', 'trim|required|is_dc');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -42,8 +51,10 @@ class Ledger extends Controller {
 		{
 			$data_name = $this->input->post('ledger_name', TRUE);
 			$data_group_id = $this->input->post('ledger_group_id', TRUE);
+			$data_op_balance = $this->input->post('op_balance', TRUE);
+			$data_op_balance_dc = $this->input->post('op_balance_dc', TRUE);
 
-			if ( ! $this->db->query("INSERT INTO ledgers (name, group_id) VALUES (?, ?)", array($data_name, $data_group_id)))
+			if ( ! $this->db->query("INSERT INTO ledgers (name, group_id, op_balance, op_balance_dc) VALUES (?, ?, ?, ?)", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc)))
 			{
 				$this->session->set_flashdata('error', "Error addding Ledger A/C");
 				$this->load->view('template/header', $page_data);
@@ -59,74 +70,83 @@ class Ledger extends Controller {
 
 	function edit($id)
 	{
-		$page_data['page_title'] = "Edit Group";
+		$page_data['page_title'] = "Edit Ledger";
 
 		/* Checking for valid data */
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->session->set_flashdata('error', "Invalid Account Group");
-			redirect('account');
-			return;
-		}
-		if ($id < 5) {
-			$this->session->set_flashdata('error', "Cannot edit system created Account Group");
+			$this->session->set_flashdata('error', "Invalid Ledger A/C");
 			redirect('account');
 			return;
 		}
 
 		/* Loading current group */
-		$group_data_q = $this->db->query("SELECT * FROM groups WHERE id = ?", array($id));
-		if ($group_data_q->num_rows() < 1)
+		$ledger_data_q = $this->db->query("SELECT * FROM ledgers WHERE id = ?", array($id));
+		if ($ledger_data_q->num_rows() < 1)
 		{
-			$this->session->set_flashdata('error', "Invalid Account Group");
+			$this->session->set_flashdata('error', "Invalid Ledger A/C");
 			redirect('account');
 			return;
 		}
-		$group_data = $group_data_q->row();
+		$ledger_data = $ledger_data_q->row();
 
 		/* Form fields */
-		$data['group_name'] = array(
-			'name' => 'group_name',
-			'id' => 'group_name',
+		$data['ledger_name'] = array(
+			'name' => 'ledger_name',
+			'id' => 'ledger_name',
 			'maxlength' => '100',
 			'size' => '40',
-			'value' => $group_data->name,
+			'value' => $ledger_data->name,
 		);
-		$data['group_parent'] = $this->Group_model->get_all_groups($id);
-		$data['group_parent_active'] = $group_data->parent_id;
-		$data['group_id'] = $id;
+		$data['ledger_group'] = $this->Group_model->get_all_groups();
+		$data['ledger_group_active'] = $ledger_data->group_id;
+		$data['op_balance'] = array(
+			'name' => 'op_balance',
+			'id' => 'op_balance',
+			'maxlength' => '15',
+			'size' => '15',
+			'value' => $ledger_data->op_balance,
+		);
+		$data['op_balance_dc'] = $ledger_data->op_balance_dc;
+		$data['ledger_id'] = $id;
 
 		/* Form validations */
-		$this->form_validation->set_rules('group_name', 'Group name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[groups.name.' . $id . ']');
-		$this->form_validation->set_rules('group_parent', 'Parent group', 'trim|required|is_natural_no_zero');
+		$this->form_validation->set_rules('ledger_name', 'Ledger name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[ledgers.name.' . $id . ']');
+		$this->form_validation->set_rules('ledger_group', 'Parent group', 'trim|required|is_natural_no_zero');
+		$this->form_validation->set_rules('op_balance', 'Opening balance', 'trim|currency');
+		$this->form_validation->set_rules('op_balance_dc', 'Opening balance type', 'trim|required|is_dc');
 
 		if ($this->form_validation->run() == FALSE)
 		{
 			/* Re-populating form */
 			if ($this->input->post('submit', TRUE))
 			{
-				$data['group_name']['value'] = $this->input->post('group_name', TRUE);
-				$data['group_parent_active'] = $this->input->post('group_parent', TRUE);
+				$data['ledger_name']['value'] = $this->input->post('ledger_name', TRUE);
+				$data['ledger_group_active'] = $this->input->post('ledger_group', TRUE);
+				$data['op_balance']['value'] = $this->input->post('op_balance', TRUE);
+				$data['op_balance_dc'] = $this->input->post('op_balance_dc', TRUE);
 			}
 			$this->load->view('template/header', $page_data);
-			$this->load->view('group/edit', $data);
+			$this->load->view('ledger/edit', $data);
 			$this->load->view('template/footer');
 		}
 		else
 		{
-			$data_name = $this->input->post('group_name', TRUE);
-			$data_parent_id = $this->input->post('group_parent', TRUE);
+			$data_name = $this->input->post('ledger_name', TRUE);
+			$data_group_id = $this->input->post('ledger_group', TRUE);
+			$data_op_balance = $this->input->post('op_balance', TRUE);
+			$data_op_balance_dc = $this->input->post('op_balance_dc', TRUE);
 			$data_id = $id;
 
-			if ( ! $this->db->query("UPDATE groups SET name = ?, parent_id = ? WHERE id = ?", array($data_name, $data_parent_id, $data_id)))
+			if ( ! $this->db->query("UPDATE ledgers SET name = ?, group_id = ?, op_balance = ?, op_balance_dc = ? WHERE id = ?", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_id)))
 			{
-				$this->session->set_flashdata('error', "Error updating Account group");
+				$this->session->set_flashdata('error', "Error updating Ledger A/C");
 				$this->load->view('template/header', $page_data);
-				$this->load->view('group/edit', $data);
+				$this->load->view('ledger/edit', $data);
 				$this->load->view('template/footer');
 			} else {
-				$this->session->set_flashdata('message', "Account group updated successfully");
+				$this->session->set_flashdata('message', "Ledger A/C updated successfully");
 				redirect('account');
 			}
 		}
@@ -139,37 +159,25 @@ class Ledger extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->session->set_flashdata('error', "Invalid Account Group");
+			$this->session->set_flashdata('error', "Invalid Ledger A/C");
 			redirect('account');
 			return;
 		}
-		if ($id < 5) {
-			$this->session->set_flashdata('error', "Cannot delete system created Account Group");
-			redirect('account');
-			return;
-		}
-		$data_present_q = $this->db->query("SELECT * FROM groups WHERE parent_id = ?", array($id));
+		$data_present_q = $this->db->query("SELECT * FROM voucher_items WHERE ledger_id = ?", array($id));
 		if ($data_present_q->num_rows() > 0)
 		{
-			$this->session->set_flashdata('error', "Cannot delete non-empty Account Group");
-			redirect('account');
-			return;
-		}
-		$data_present_q = $this->db->query("SELECT * FROM ledgers WHERE group_id = ?", array($id));
-		if ($data_present_q->num_rows() > 0)
-		{
-			$this->session->set_flashdata('error', "Cannot delete non-empty Account Group");
+			$this->session->set_flashdata('error', "Cannot delete non-empty Ledger A/C");
 			redirect('account');
 			return;
 		}
 
-		/* Deleting group */
-		if ($this->db->query("DELETE FROM groups WHERE id = ?", array($id)))
+		/* Deleting ledger */
+		if ($this->db->query("DELETE FROM ledgers WHERE id = ?", array($id)))
 		{
-			$this->session->set_flashdata('message', "Account Group deleted successfully");
+			$this->session->set_flashdata('message', "Ledger A/C deleted successfully");
 			redirect('account');
 		} else {
-			$this->session->set_flashdata('error', "Error deleting Account Group");
+			$this->session->set_flashdata('error', "Error deleting Ledger A/C");
 			redirect('account');
 		}
 		return;

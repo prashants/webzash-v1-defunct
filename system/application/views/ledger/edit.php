@@ -1,5 +1,5 @@
 <?php
-	echo form_open('ledger/add');
+	echo form_open('ledger/edit/' . $ledger_id);
 	echo "<p>";
 	echo form_label('Ledger name', 'ledger_name');
 	echo "<br />";
@@ -8,16 +8,17 @@
 	echo "<p>";
 	echo form_label('Parent group', 'ledger_group_id');
 	echo "<br />";
-	echo form_dropdown('ledger_group_id', $ledger_group_id);
+	echo form_dropdown('ledger_group', $ledger_group, isset($ledger_group_active) ? $ledger_group_active : '');
 	echo "</p>";
 	echo "<p>";
 	echo form_label('Opening balance', 'op_balance');
 	echo "<br />";
-	echo form_dropdown_dc('op_balance_dc');
+	echo form_dropdown_dc('op_balance_dc', isset($op_balance_dc) ? $op_balance_dc : '');
 	echo " ";
 	echo form_input($op_balance);
 	echo "</p>";
-	echo form_submit('submit', 'Create');
+	echo form_hidden('ledger_id', $ledger_id);
+	echo form_submit('submit', 'Update');
 	echo " ";
 	echo anchor('account', 'Back', 'Back to Chart of Accounts');
 	echo form_close();
