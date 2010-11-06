@@ -1,21 +1,21 @@
 th {
-	background:none repeat scroll 0 0 #D3DCE3;
-	color:#000000;
+	background:none repeat scroll 0 0 #0099CC;
+	color:#FFFFFF;
 	font-weight:bold;
 }
 
 tr:hover {
-	background:none repeat scroll 0 0 #F0FFF0;
+	background:none repeat scroll 0 0 #ECFBD4;
 }
 
 .group-tr
 {
-	background:none repeat scroll 0 0 #D5D5D5;
+	background:none repeat scroll 0 0 #E5F1F4;
 	padding:10px;
 }
 
 .ledger-tr
 {
-	background:none repeat scroll 0 0 #E5E5E5;
+	background:none repeat scroll 0 0 #F8FBFC;
 }
 
