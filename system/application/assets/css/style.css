@@ -174,3 +174,19 @@ body {
 	padding:0 10px 0 10px;
 	text-align:left;
 }
+
+/* NOT SO COMMON */
+.voucher-add-links {
+	margin:0 0 10px 0;
+}
+
+.voucher-add-links a {
+	text-decoration:underline;
+	color:#000000;
+	font-size:90%;
+}
+
+.voucher-add-links a:hover
+{
+	color:#AAAAAA;
+}
