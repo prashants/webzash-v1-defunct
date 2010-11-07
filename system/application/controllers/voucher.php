@@ -63,15 +63,16 @@ class Voucher extends Controller {
 
 	function _show_voucher($voucher_type = NULL)
 	{
+		$voucher_q = NULL;
 		if ($voucher_type > 5)
 		{
 			$this->session->set_flashdata('error', "Invalid voucher type");
 			redirect('voucher/show/all');
 			return;
 		} else if ($voucher_type > 0) {
-			$voucher_q = $this->db->query('SELECT * FROM vouchers WHERE type = ? ORDER BY date DESC ', array($voucher_type));
+			$voucher_q = $this->db->query('SELECT * FROM vouchers WHERE type = ? ORDER BY date DESC, number DESC', array($voucher_type));
 		} else {
-			$voucher_q = $this->db->query('SELECT * FROM vouchers ORDER BY date DESC');
+			$voucher_q = $this->db->query('SELECT * FROM vouchers ORDER BY date DESC, number DESC');
 		}
 
 		$html = "<table border=0 cellpadding=5 class=\"generaltable\">";
@@ -81,15 +82,26 @@ class Voucher extends Controller {
 		$odd_even = "odd";
 		foreach ($voucher_q->result() as $row)
 		{
-			$this->tree .= "<tr class=\"tr-" . $odd_even . "\">";
-			$this->tree .= "<td>" . $row->number . "</td>";
-			$this->tree .= "<td>" . $row->date . "</td>";
-			$this->tree .= "<td>Ledger A/C</td>";
-			$this->tree .= "<td>" . $row->type . "</td>";
-			$this->tree .= "<td>" . $row->draft . "</td>";
-			$this->tree .= "<td>" . $row->dr_total . "</td>";
-			$this->tree .= "<td>" . $row->cr_total . "</td>";
-			$this->tree .= "</tr>";
+			$html .= "<tr class=\"tr-" . $odd_even . "\">";
+			$html .= "<td>" . $row->number . "</td>";
+			$html .= "<td>" . $row->date . "</td>";
+			$html .= "<td>Ledger A/C</td>";
+			$html_voucher_type = "";
+			switch ($row->type)
+			{
+				case 1: $html_voucher_type = "RECEIPT"; break;
+				case 2: $html_voucher_type = "PAYMENT"; break;
+				case 3: $html_voucher_type = "CONTRA"; break;
+				case 4: $html_voucher_type = "JOURNAL"; break;
+			}
+			$html .= "<td>" . $html_voucher_type . "</td>";
+			if ($row->draft == 0)
+				$html .= "<td>ACTIVE</td>";
+			else
+				$html .= "<td>DFAFT</td>";
+			$html .= "<td>" . $row->dr_total . "</td>";
+			$html .= "<td>" . $row->cr_total . "</td>";
+			$html .= "</tr>";
 			$odd_even = ($odd_even == "odd") ? "even" : "odd";
 		}
 		$html .= "</tbody>";
@@ -204,6 +216,12 @@ class Voucher extends Controller {
 			if ($dr_total != $cr_total)
 			{
 				$this->session->set_flashdata('error', "Debit and Credit Total does not match!");
+				$this->load->view('template/header', $page_data);
+				$this->load->view('voucher/add', $data);
+				$this->load->view('template/footer');
+				return;
+			} else if ($dr_total == 0 && $cr_total == 0) {
+				$this->session->set_flashdata('error', "Cannot save empty voucher");
 				$this->load->view('template/header', $page_data);
 				$this->load->view('voucher/add', $data);
 				$this->load->view('template/footer');
