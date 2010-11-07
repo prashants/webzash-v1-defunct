@@ -51,8 +51,18 @@ class MY_Form_validation extends CI_Form_validation {
 	{
 		$CI =& get_instance();
 
-		$CI->form_validation->set_message('currency', '%s must be a valid amount. Maximum 2 decimal places is allowed.');
+		$CI->form_validation->set_message('currency', '%s must be a valid amount. Maximum 2 decimal places is allowed');
 		return preg_match('/^[\-+]?[0-9]*\.?[0-9]{0,2}$/', $str) ? TRUE : FALSE;
+	}
+
+	function is_date($str)
+	{
+		$CI =& get_instance();
+
+		$CI->form_validation->set_message('is_date', '%s is a valid date');
+
+		list($d, $m, $y) = explode('/', $str);
+		return checkdate($m , $d, $y) ? TRUE : FALSE;
 	}
 }
 
