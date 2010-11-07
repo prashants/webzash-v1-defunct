@@ -5,8 +5,10 @@
 
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/style.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/tables.css">
+<link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/jquery.datepick.css">
 
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.datepick.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/custom.js"></script>
 
 </head>

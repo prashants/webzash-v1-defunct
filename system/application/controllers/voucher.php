@@ -137,7 +137,7 @@ class Voucher extends Controller {
 			'id' => 'voucher_date',
 			'maxlength' => '11',
 			'size' => '11',
-			'value' => '',
+			'value' => '01/11/2010',
 		);
 		$data['ledger_dc'] = "D";
 		$data['dr_amount'] = array(
