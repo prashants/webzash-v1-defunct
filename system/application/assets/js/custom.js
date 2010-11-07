@@ -1,6 +1,6 @@
 /* Confirm click */
 
-$(document).ready(function(){
+$(document).ready(function() {
 	$(".confirmClick").click( function() { 
 	    if ($(this).attr('title')) {
 		var question = 'Are you sure you want to ' + $(this).attr('title').toLowerCase() + '?';
@@ -13,6 +13,9 @@ $(document).ready(function(){
 		return false;
 	    }
 	});
+	$('.datepicker').datepicker();
+	$('.datepicker').datepicker("option", "constrainInput", true);
+	$('.datepicker').datepicker("option", "dateFormat", "dd/mm/yy");
 })
 
 

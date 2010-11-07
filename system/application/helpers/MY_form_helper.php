@@ -39,7 +39,7 @@ if ( ! function_exists('form_input_date'))
 	{
 		$defaults = array('type' => 'text', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
 
-		return "<input "._parse_form_attributes($data, $defaults).$extra." />";
+		return "<input "._parse_form_attributes($data, $defaults).$extra." class=\"datepicker\"/>";
 	}
 }
 

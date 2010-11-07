@@ -2,10 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>Webzash<?php if (isset($page_title)) echo ' | ' . $page_title; ?></title>
+
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/style.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/tables.css">
+<link type="text/css" href="<?php echo asset_url(); ?>css/jquery-ui-darkness.css" rel="stylesheet" />
+
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/custom.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery-ui.min.js"></script>
+
 </head>
 <body>
 <div id="container">
