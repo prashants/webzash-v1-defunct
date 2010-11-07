@@ -51,18 +51,39 @@
 			<div class="clear">
 			</div>
 			<div id="main-content">
-				<?php if ($this->session->flashdata('message')) { ?>
-					<div id="message-box">
-						<p><?php echo $this->session->flashdata('message'); ?></p>
-					</div>
-				<?php } ?>
-				<?php if ($this->session->flashdata('error')) { ?>
-					<div id="error-box">
-						<p><?php echo $this->session->flashdata('error'); ?></p>
-					</div>
-				<?php } ?>
-				<?php if (validation_errors()) { ?>
-					<div id="validation-error-box">
-						<?php echo validation_errors(); ?>
-					</div>
-				<?php } ?>
+				<?php
+				$messages = $this->messages->get();
+				if (is_array($messages))
+				{
+					if (count($messages['success']) > 0)
+					{
+						echo "<div id=\"success-box\">";
+						echo "<ul>";
+						foreach ($messages['success'] as $message) {
+							echo ('<li>' . $message . '</li>');
+						}
+						echo "</ul>";
+						echo "</div>";
+					}
+					if (count($messages['error']) > 0)
+					{
+						echo "<div id=\"error-box\">";
+						echo "<ul>";
+						foreach ($messages['error'] as $message) {
+							echo ('<li>' . $message . '</li>');
+						}
+						echo "</ul>";
+						echo "</div>";
+					}
+					if (count($messages['message']) > 0)
+					{
+						echo "<div id=\"message-box\">";
+						echo "<ul>";
+						foreach ($messages['message'] as $message) {
+							echo ('<li>' . $message . '</li>');
+						}
+						echo "</ul>";
+						echo "</div>";
+					}
+				}
+				?>

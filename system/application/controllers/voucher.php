@@ -50,7 +50,7 @@ class Voucher extends Controller {
 			$data['voucher_table'] = $this->_show_voucher(4);
 			break;
 		default :
-			$this->session->set_flashdata('error', "Invalid voucher type");
+			$this->messages->add('Invalid voucher type', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
