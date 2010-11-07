@@ -10,7 +10,7 @@
 	echo form_input_date($voucher_date);
 	echo "</p>";
 
-	echo "<table>";
+	echo "<table class=\"generaltable\">";
 	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th><th>Actions</th></tr></thead>";
 
 

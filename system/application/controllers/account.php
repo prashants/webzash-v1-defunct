@@ -5,7 +5,7 @@ class Account extends Controller {
 	function index()
 	{
 		$this->_get_groups(0);
-		$data['tree'] = "<table border=0 cellpadding=5>";
+		$data['tree'] = "<table border=0 cellpadding=5 class=\"generaltable\">";
 		$data['tree'] .= "<thead><tr><th>Name</th><th>Type</th><th>O/P Balance</th><th colspan=2>Actions</th></tr></thead>";
 		$data['tree'] .= "<tbody>" . $this->tree . "</tbody>";
 		$data['tree'] .= "</table>";

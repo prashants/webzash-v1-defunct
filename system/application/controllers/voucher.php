@@ -74,7 +74,7 @@ class Voucher extends Controller {
 			$voucher_q = $this->db->query('SELECT * FROM vouchers ORDER BY date DESC');
 		}
 
-		$html = "<table border=0 cellpadding=5>";
+		$html = "<table border=0 cellpadding=5 class=\"generaltable\">";
 		$html .= "<thead><tr><th>Number</th><th>Date</th><th>Ledger A/C</th><th>Type</th><th>Status</th><th>DR Amount</th><th>CR Amount</th><th colspan=3>Actions</th></tr></thead>";
 		$html .= "<tbody>";
 

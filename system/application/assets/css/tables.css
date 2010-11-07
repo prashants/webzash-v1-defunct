@@ -1,20 +1,20 @@
-th {
+.generaltable th {
 	background:none repeat scroll 0 0 #0099CC;
 	color:#FFFFFF;
 	font-weight:bold;
 }
 
-tr:hover {
+.generaltable tr:hover {
 	background:none repeat scroll 0 0 #ECFBD4;
 }
 
-.group-tr
+.generaltable .group-tr
 {
 	background:none repeat scroll 0 0 #E5F1F4;
 	padding:10px;
 }
 
-.ledger-tr
+.generaltable .ledger-tr
 {
 	background:none repeat scroll 0 0 #F8FBFC;
 }
