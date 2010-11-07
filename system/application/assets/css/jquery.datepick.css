@@ -9,6 +9,16 @@
 	font-family: Arial,Helvetica,Sans-serif;
 	font-size: 90%;
 }
+
+/* CUSTOM SETTINGS */
+.datepick {
+	font-family:"Sans";
+	font-size:13.3333px;
+	font-weight:400;
+	font-style:normal;
+}
+/* CUSTOM SETTINGS ENDS */
+
 .datepick-rtl {
 	direction: rtl;
 }
