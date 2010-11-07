@@ -11,7 +11,7 @@
 	echo "</p>";
 
 	echo "<table class=\"generaltable\">";
-	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th><th>Actions</th></tr></thead>";
+	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th><th colspan=2>Actions</th></tr></thead>";
 
 
 	for ($i = 0; $i < 5; $i++)
@@ -35,17 +35,31 @@
 		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', ($_POST) ? $ledger_id_p[$i] : '') . "</td>";
 		echo "<td>" . form_input($dr_amount) . "</td>";
 		echo "<td>" . form_input($cr_amount) . "</td>";
-		echo "<td> - + </td>";
+		echo "<td>" . anchor('group/edit/', img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger'))) . "</td>";
+		echo "<td>" . anchor('group/delete/', img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger'))) . "</td>";
 		echo "</tr>";
 	}
+	echo "<tr><td colspan=2>TOTAL</td><td>0</td><td>0</td><td></td></tr>";
 	echo "</table>";
-	echo "<br />";
 
 	echo "<p>";
 	echo form_label('Narration', 'voucher_narration');
 	echo "<br />";
 	echo form_textarea($voucher_narration);
 	echo "</p>";
+
+	echo "<p>";
+	echo form_fieldset('Options', array('class' => "fieldset-auto-width"));
+	echo form_checkbox('draft', 1) . "Create as Draft";
+	echo "<br /><br />";
+	echo form_checkbox('print', 1) . "Print";
+	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	echo form_checkbox('email', 1) . "Email";
+	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	echo form_checkbox('pdf', 1) . "Download PDF";
+	echo form_fieldset_close();
+	echo "</p>";
+	echo "<br /><br />";
 
 	echo form_submit('submit', 'Create');
 	echo " ";

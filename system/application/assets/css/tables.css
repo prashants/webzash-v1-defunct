@@ -19,3 +19,10 @@
 	background:none repeat scroll 0 0 #F8FBFC;
 }
 
+tr.tr-odd {
+	background:none repeat scroll 0 0 #E5F1F4;
+}
+
+tr.tr-even {
+	background:none repeat scroll 0 0 #F8FBFC;
+}
