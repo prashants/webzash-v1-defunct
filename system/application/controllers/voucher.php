@@ -130,7 +130,7 @@ class Voucher extends Controller {
 			$data['voucher_type'] = "journal";
 			break;
 		default :
-			$this->session->set_flashdata('error', "Invalid voucher type");
+			$this->messages->add('Invalid voucher type', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -189,6 +189,7 @@ class Voucher extends Controller {
 
 		if ($this->form_validation->run() == FALSE)
 		{
+			$this->messages->add(validation_errors(), 'error');
 			$this->load->view('template/header', $page_data);
 			$this->load->view('voucher/add', $data);
 			$this->load->view('template/footer');
@@ -215,13 +216,13 @@ class Voucher extends Controller {
 			}
 			if ($dr_total != $cr_total)
 			{
-				$this->session->set_flashdata('error', "Debit and Credit Total does not match!");
+				$this->messages->add('Debit and Credit Total does not match!', 'error');
 				$this->load->view('template/header', $page_data);
 				$this->load->view('voucher/add', $data);
 				$this->load->view('template/footer');
 				return;
 			} else if ($dr_total == 0 && $cr_total == 0) {
-				$this->session->set_flashdata('error', "Cannot save empty voucher");
+				$this->messages->add('Cannot save empty voucher', 'error');
 				$this->load->view('template/header', $page_data);
 				$this->load->view('voucher/add', $data);
 				$this->load->view('template/footer');
@@ -244,7 +245,7 @@ class Voucher extends Controller {
 			$voucher_id = NULL;
 			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, draft, type) VALUES (?, ?, ?, 0, ?)", array($data_number, $data_date, $data_narration, $data_type)))
 			{
-				$this->session->set_flashdata('error', "Error addding Voucher A/C");
+				$this->messages->add('Error addding Voucher A/C', 'error');
 				$this->load->view('template/header', $page_data);
 				$this->load->view('voucher/add', $data);
 				$this->load->view('template/footer');
@@ -279,18 +280,18 @@ class Voucher extends Controller {
 
 				if ( ! $this->db->query("INSERT INTO voucher_items (voucher_id, ledger_id, amount, dc) VALUES (?, ?, ?, ?)", array($voucher_id, $data_ledger_id, $data_amount, $data_ledger_dc)))
 				{
-					$this->session->set_flashdata('error', "Error addding Ledger A/C " . $data_ledger_id);
+					$this->messages->add('Error addding Ledger A/C ' . $data_ledger_id, 'error');
 				}
 			}
 
 			/* Updating Debit and Credit Total in vouchers table */
 			if ( ! $this->db->query("UPDATE vouchers SET dr_total = ?, cr_total = ? WHERE id = ?", array($dr_total, $cr_total, $voucher_id)))
 			{
-				$this->session->set_flashdata('error', "Error updating voucher total");
+				$this->messages->add('Error updating voucher total', 'error');
 			}
 
 			/* Success */
-			$this->session->set_flashdata('message', "Voucher added successfully");
+			$this->messages->add('Voucher added successfully', 'success');
 			redirect('voucher/show/' . $voucher_type);
 
 			$this->load->view('template/header', $page_data);

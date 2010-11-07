@@ -42,6 +42,8 @@ class Messages
     // add a message, default type is message
     function add($message, $type = 'message')
     {
+	if (strlen($message) < 1)
+		return;
         $messages = $this->_ci->session->userdata('messages');
         // handle PEAR errors gracefully
         if (is_a($message, 'PEAR_Error')) {
