@@ -15,37 +15,37 @@ class Voucher extends Controller {
 
 	function show($voucher_type)
 	{
-		$page_data['page_links'] = array(
+		$this->template->set('nav_links', array(
 			'voucher/show/all' => 'All',
 			'voucher/show/receipt' => 'Receipt',
 			'voucher/show/payment' => 'Payment',
 			'voucher/show/contra' => 'Contra',
 			'voucher/show/journal' => 'Journal',
-		);
+		));
 		switch ($voucher_type)
 		{
 		case 'all' :
-			$page_data['page_title'] = "All Vouchers";
+			$this->template->set('page_title', 'All Vouchers');
 			$data['voucher_type'] = "";
 			$data['voucher_table'] = $this->_show_voucher();
 			break;
 		case 'receipt' :
-			$page_data['page_title'] = "Receipt Vouchers";
+			$this->template->set('page_title', 'Receipt Vouchers');
 			$data['voucher_type'] = "receipt";
 			$data['voucher_table'] = $this->_show_voucher(1);
 			break;
 		case 'payment' :
-			$page_data['page_title'] = "Payment Vouchers";
+			$this->template->set('page_title', 'Payment Vouchers');
 			$data['voucher_type'] = "payment";
 			$data['voucher_table'] = $this->_show_voucher(2);
 			break;
 		case 'contra' :
-			$page_data['page_title'] = "Contra Vouchers";
+			$this->template->set('page_title', 'Contra Vouchers');
 			$data['voucher_type'] = "contra";
 			$data['voucher_table'] = $this->_show_voucher(3);
 			break;
 		case 'journal' :
-			$page_data['page_title'] = "Journal Vouchers";
+			$this->template->set('page_title', 'Journal Vouchers');
 			$data['voucher_type'] = "journal";
 			$data['voucher_table'] = $this->_show_voucher(4);
 			break;
@@ -55,9 +55,7 @@ class Voucher extends Controller {
 			return;
 			break;
 		}
-		$this->load->view('template/header', $page_data);
-		$this->load->view('voucher/index', $data);
-		$this->load->view('template/footer');
+		$this->template->load('template', 'voucher/index', $data);
 		return;
 	}
 
@@ -117,19 +115,19 @@ class Voucher extends Controller {
 		switch ($voucher_type)
 		{
 		case 'receipt' :
-			$page_data['page_title'] = "New Receipt Voucher";
+			$this->template->set('page_title', 'New Receipt Voucher');
 			$data['voucher_type'] = "receipt";
 			break;
 		case 'payment' :
-			$page_data['page_title'] = "New Payment Voucher";
+			$this->template->set('page_title', 'New Payment Voucher');
 			$data['voucher_type'] = "payment";
 			break;
 		case 'contra' :
-			$page_data['page_title'] = "New Contra Voucher";
+			$this->template->set('page_title', 'New Contra Voucher');
 			$data['voucher_type'] = "contra";
 			break;
 		case 'journal' :
-			$page_data['page_title'] = "New Journal Voucher";
+			$this->template->set('page_title', 'New Journal Voucher');
 			$data['voucher_type'] = "journal";
 			break;
 		default :
@@ -193,9 +191,7 @@ class Voucher extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->load->view('template/header', $page_data);
-			$this->load->view('voucher/add', $data);
-			$this->load->view('template/footer');
+			$this->template->load('template', 'voucher/add', $data);
 		}
 		else
 		{
@@ -220,15 +216,11 @@ class Voucher extends Controller {
 			if ($dr_total != $cr_total)
 			{
 				$this->messages->add('Debit and Credit Total does not match!', 'error');
-				$this->load->view('template/header', $page_data);
-				$this->load->view('voucher/add', $data);
-				$this->load->view('template/footer');
+				$this->template->load('template', 'voucher/add', $data);
 				return;
 			} else if ($dr_total == 0 && $cr_total == 0) {
 				$this->messages->add('Cannot save empty voucher', 'error');
-				$this->load->view('template/header', $page_data);
-				$this->load->view('voucher/add', $data);
-				$this->load->view('template/footer');
+				$this->template->load('template', 'voucher/add', $data);
 				return;
 			}
 
@@ -249,9 +241,7 @@ class Voucher extends Controller {
 			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, draft, type) VALUES (?, ?, ?, 0, ?)", array($data_number, $data_date, $data_narration, $data_type)))
 			{
 				$this->messages->add('Error addding Voucher A/C', 'error');
-				$this->load->view('template/header', $page_data);
-				$this->load->view('voucher/add', $data);
-				$this->load->view('template/footer');
+				$this->template->load('template', 'voucher/add', $data);
 				return;
 			} else {
 				$voucher_id = $this->db->insert_id();
@@ -296,10 +286,7 @@ class Voucher extends Controller {
 			/* Success */
 			$this->messages->add('Voucher added successfully', 'success');
 			redirect('voucher/show/' . $voucher_type);
-
-			$this->load->view('template/header', $page_data);
-			$this->load->view('voucher/add', $data);
-			$this->load->view('template/footer');
+			$this->template->load('template', 'voucher/add', $data);
 		}
 	}
 }

@@ -14,8 +14,8 @@ class Group extends Controller {
 
 	function add()
 	{
-		$page_data['page_title'] = "New Group";
 		$this->load->library('validation');
+		$this->template->set('page_title', 'New Group');
 
 		/* Form fields */
 		$data['group_name'] = array(
@@ -34,9 +34,7 @@ class Group extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->load->view('template/header', $page_data);
-			$this->load->view('group/add', $data);
-			$this->load->view('template/footer');
+			$this->template->load('template', 'group/add', $data);
 		}
 		else
 		{
@@ -46,9 +44,7 @@ class Group extends Controller {
 			if ( ! $this->db->query("INSERT INTO groups (name, parent_id) VALUES (?, ?)", array($data_name, $data_parent_id)))
 			{
 				$this->messages->add('Error addding Group A/C', 'error');
-				$this->load->view('template/header', $page_data);
-				$this->load->view('group/add', $data);
-				$this->load->view('template/footer');
+				$this->template->load('template', 'group/add', $data);
 			} else {
 				$this->messages->add('Group A/C added successfully', 'success');
 				redirect('account');
@@ -59,7 +55,7 @@ class Group extends Controller {
 
 	function edit($id)
 	{
-		$page_data['page_title'] = "Edit Group";
+		$this->template->set('page_title', 'Edit Group');
 
 		/* Checking for valid data */
 		$id = $this->input->xss_clean($id);
@@ -110,9 +106,7 @@ class Group extends Controller {
 				$data['group_name']['value'] = $this->input->post('group_name', TRUE);
 				$data['group_parent_active'] = $this->input->post('group_parent', TRUE);
 			}
-			$this->load->view('template/header', $page_data);
-			$this->load->view('group/edit', $data);
-			$this->load->view('template/footer');
+			$this->template->load('template', 'group/edit', $data);
 		}
 		else
 		{
@@ -123,9 +117,7 @@ class Group extends Controller {
 			if ( ! $this->db->query("UPDATE groups SET name = ?, parent_id = ? WHERE id = ?", array($data_name, $data_parent_id, $data_id)))
 			{
 				$this->messages->add('Error updating Group A/C', 'error');
-				$this->load->view('template/header', $page_data);
-				$this->load->view('group/edit', $data);
-				$this->load->view('template/footer');
+				$this->template->load('template', 'group/edit', $data);
 			} else {
 				$this->messages->add('Group A/C updated successfully', 'success');
 				redirect('account');

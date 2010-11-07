@@ -15,8 +15,8 @@ class Ledger extends Controller {
 
 	function add()
 	{
-		$page_data['page_title'] = "New Ledger";
 		$this->load->library('validation');
+		$this->template->set('page_title', 'New Ledger');
 
 		/* Form fields */
 		$data['ledger_name'] = array(
@@ -44,9 +44,7 @@ class Ledger extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->load->view('template/header', $page_data);
-			$this->load->view('ledger/add', $data);
-			$this->load->view('template/footer');
+			$this->template->load('template', 'ledger/add', $data);
 		}
 		else
 		{
@@ -58,9 +56,7 @@ class Ledger extends Controller {
 			if ( ! $this->db->query("INSERT INTO ledgers (name, group_id, op_balance, op_balance_dc) VALUES (?, ?, ?, ?)", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc)))
 			{
 				$this->messages->add('Error addding Ledger A/C', 'error');
-				$this->load->view('template/header', $page_data);
-				$this->load->view('group/add', $data);
-				$this->load->view('template/footer');
+				$this->template->load('template', 'group/add', $data);
 			} else {
 				$this->messages->add('Ledger A/C added successfully', 'success');
 				redirect('account');
@@ -71,12 +67,13 @@ class Ledger extends Controller {
 
 	function edit($id)
 	{
-		$page_data['page_title'] = "Edit Ledger";
+		$this->template->set('page_title', 'Edit Ledger');
 
 		/* Checking for valid data */
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
-		if ($id < 1) {
+		if ($id < 1)
+		{
 			$this->messages->add('Invalid Ledger A/C', 'error');
 			redirect('account');
 			return;
@@ -129,9 +126,7 @@ class Ledger extends Controller {
 				$data['op_balance']['value'] = $this->input->post('op_balance', TRUE);
 				$data['op_balance_dc'] = $this->input->post('op_balance_dc', TRUE);
 			}
-			$this->load->view('template/header', $page_data);
-			$this->load->view('ledger/edit', $data);
-			$this->load->view('template/footer');
+			$this->template->load('template', 'ledger/edit', $data);
 		}
 		else
 		{
@@ -144,9 +139,7 @@ class Ledger extends Controller {
 			if ( ! $this->db->query("UPDATE ledgers SET name = ?, group_id = ?, op_balance = ?, op_balance_dc = ? WHERE id = ?", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_id)))
 			{
 				$this->messages->add('Error updating Ledger A/C', 'error');
-				$this->load->view('template/header', $page_data);
-				$this->load->view('ledger/edit', $data);
-				$this->load->view('template/footer');
+				$this->template->load('template', 'ledger/edit', $data);
 			} else {
 				$this->messages->add('Ledger A/C updated successfully', 'success');
 				redirect('account');
@@ -160,7 +153,8 @@ class Ledger extends Controller {
 		/* Checking for valid data */
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
-		if ($id < 1) {
+		if ($id < 1)
+		{
 			$this->messages->add('Invalid Ledger A/C', 'error');
 			redirect('account');
 			return;
