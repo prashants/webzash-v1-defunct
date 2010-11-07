@@ -13,6 +13,7 @@
 	echo "<table class=\"generaltable\">";
 	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th><th>Actions</th></tr></thead>";
 
+
 	for ($i = 0; $i < 5; $i++)
 	{
 		$dr_amount = array(
@@ -20,18 +21,18 @@
 			'id' => 'dr_amount[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '15',
-			'value' => '',
+			'value' => ($_POST) ? $dr_amount_p[$i] : '',
 		);
 		$cr_amount = array(
 			'name' => 'cr_amount[' . $i . ']',
 			'id' => 'cr_amount[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '15',
-			'value' => '',
+			'value' => ($_POST) ? $cr_amount_p[$i] : '',
 		);
 		echo "<tr>";
-		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']') . "</td>";
-		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']') . "</td>";
+		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', ($_POST) ? $ledger_dc_p[$i] : '') . "</td>";
+		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', ($_POST) ? $ledger_id_p[$i] : '') . "</td>";
 		echo "<td>" . form_input($dr_amount) . "</td>";
 		echo "<td>" . form_input($cr_amount) . "</td>";
 		echo "<td> - + </td>";

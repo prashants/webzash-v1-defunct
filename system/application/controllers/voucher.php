@@ -169,6 +169,10 @@ class Voucher extends Controller {
 			$data['voucher_number']['value'] = $this->input->post('voucher_number');
 			$data['voucher_date']['value'] = $this->input->post('voucher_date');
 			$data['voucher_narration']['value'] = $this->input->post('voucher_narration');
+			$data['ledger_dc_p'] = $this->input->post('ledger_dc', TRUE);
+			$data['ledger_id_p'] = $this->input->post('ledger_id', TRUE);
+			$data['dr_amount_p'] = $this->input->post('dr_amount', TRUE);
+			$data['cr_amount_p'] = $this->input->post('cr_amount', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
