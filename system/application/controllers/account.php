@@ -29,8 +29,8 @@ class Account extends Controller {
 			$this->tree .= "</td>";
 			$this->tree .= "<td>GROUP</td>";
 			$this->tree .= "<td align=\"right\">-</td>";
-			$this->tree .= "<td>" . anchor('group/edit/' . $group_id , img(array('src' => asset_url() . "/images/icons/edit.png", 'border' => '0', 'alt' => 'Edit group'))) . "</td>";
-			$this->tree .= "<td>" . anchor('group/delete/' . $group_id, img(array('src' => asset_url() . "/images/icons/delete.png", 'border' => '0', 'alt' => 'Delete group')), array('class' => "confirmClick", 'title' => "Delete this group")) . "</td>";
+			$this->tree .= "<td>" . anchor('group/edit/' . $group_id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit group'))) . "</td>";
+			$this->tree .= "<td>" . anchor('group/delete/' . $group_id, img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete group')), array('class' => "confirmClick", 'title' => "Delete this group")) . "</td>";
 			$this->tree .= "</tr>";
 		}
 		$child_group_q = $this->db->query('SELECT * FROM groups WHERE parent_id = ?', array($group_id));
@@ -53,8 +53,8 @@ class Account extends Controller {
 				$this->tree .= "</td>";
 				$this->tree .= "<td>LEDGER</td>";
 				$this->tree .= "<td align=\"right\">" . convert_dc($row->op_balance_dc) . " " . $row->op_balance . "</td>";
-				$this->tree .= "<td>" . anchor('ledger/edit/' . $row->id, img(array('src' => asset_url() . "/images/icons/edit.png", 'border' => '0', 'alt' => 'Edit ledger'))) . "</td>";
-				$this->tree .= "<td>" . anchor('ledger/delete/' . $row->id, img(array('src' => asset_url() . "/images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ledger')), array('class' => "confirmClick", 'title' => "Delete this ledger")) . "</td>";
+				$this->tree .= "<td>" . anchor('ledger/edit/' . $row->id, img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit ledger'))) . "</td>";
+				$this->tree .= "<td>" . anchor('ledger/delete/' . $row->id, img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ledger')), array('class' => "confirmClick", 'title' => "Delete this ledger")) . "</td>";
 					$this->tree .= "</tr>";
 			}
 			$this->tree_counter--;
