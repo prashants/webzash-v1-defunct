@@ -13,9 +13,6 @@ $(document).ready(function() {
 		return false;
 	    }
 	});
-	$('.datepicker').datepicker();
-	$('.datepicker').datepicker("option", "constrainInput", true);
-	$('.datepicker').datepicker("option", "dateFormat", "dd/mm/yy");
 })
 
 
