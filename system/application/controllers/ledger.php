@@ -43,6 +43,7 @@ class Ledger extends Controller {
 
 		if ($this->form_validation->run() == FALSE)
 		{
+			$this->messages->add(validation_errors(), 'error');
 			$this->load->view('template/header', $page_data);
 			$this->load->view('ledger/add', $data);
 			$this->load->view('template/footer');
@@ -56,12 +57,12 @@ class Ledger extends Controller {
 
 			if ( ! $this->db->query("INSERT INTO ledgers (name, group_id, op_balance, op_balance_dc) VALUES (?, ?, ?, ?)", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc)))
 			{
-				$this->session->set_flashdata('error', "Error addding Ledger A/C");
+				$this->messages->add('Error addding Ledger A/C', 'error');
 				$this->load->view('template/header', $page_data);
 				$this->load->view('group/add', $data);
 				$this->load->view('template/footer');
 			} else {
-				$this->session->set_flashdata('message', "Ledger A/C added successfully");
+				$this->messages->add('Ledger A/C added successfully', 'success');
 				redirect('account');
 			}
 		}
@@ -76,7 +77,7 @@ class Ledger extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->session->set_flashdata('error', "Invalid Ledger A/C");
+			$this->messages->add('Invalid Ledger A/C', 'error');
 			redirect('account');
 			return;
 		}
@@ -85,7 +86,7 @@ class Ledger extends Controller {
 		$ledger_data_q = $this->db->query("SELECT * FROM ledgers WHERE id = ?", array($id));
 		if ($ledger_data_q->num_rows() < 1)
 		{
-			$this->session->set_flashdata('error', "Invalid Ledger A/C");
+			$this->messages->add('Invalid Ledger A/C', 'error');
 			redirect('account');
 			return;
 		}
@@ -119,6 +120,7 @@ class Ledger extends Controller {
 
 		if ($this->form_validation->run() == FALSE)
 		{
+			$this->messages->add(validation_errors(), 'error');
 			/* Re-populating form */
 			if ($this->input->post('submit', TRUE))
 			{
@@ -141,12 +143,12 @@ class Ledger extends Controller {
 
 			if ( ! $this->db->query("UPDATE ledgers SET name = ?, group_id = ?, op_balance = ?, op_balance_dc = ? WHERE id = ?", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_id)))
 			{
-				$this->session->set_flashdata('error', "Error updating Ledger A/C");
+				$this->messages->add('Error updating Ledger A/C', 'error');
 				$this->load->view('template/header', $page_data);
 				$this->load->view('ledger/edit', $data);
 				$this->load->view('template/footer');
 			} else {
-				$this->session->set_flashdata('message', "Ledger A/C updated successfully");
+				$this->messages->add('Ledger A/C updated successfully', 'success');
 				redirect('account');
 			}
 		}
@@ -159,14 +161,14 @@ class Ledger extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->session->set_flashdata('error', "Invalid Ledger A/C");
+			$this->messages->add('Invalid Ledger A/C', 'error');
 			redirect('account');
 			return;
 		}
 		$data_present_q = $this->db->query("SELECT * FROM voucher_items WHERE ledger_id = ?", array($id));
 		if ($data_present_q->num_rows() > 0)
 		{
-			$this->session->set_flashdata('error', "Cannot delete non-empty Ledger A/C");
+			$this->messages->add('Cannot delete non-empty Ledger A/C', 'error');
 			redirect('account');
 			return;
 		}
@@ -174,10 +176,10 @@ class Ledger extends Controller {
 		/* Deleting ledger */
 		if ($this->db->query("DELETE FROM ledgers WHERE id = ?", array($id)))
 		{
-			$this->session->set_flashdata('message', "Ledger A/C deleted successfully");
+			$this->messages->add('Ledger A/C deleted successfully', 'success');
 			redirect('account');
 		} else {
-			$this->session->set_flashdata('error', "Error deleting Ledger A/C");
+			$this->messages->add('Error deleting Ledger A/C', 'error');
 			redirect('account');
 		}
 		return;

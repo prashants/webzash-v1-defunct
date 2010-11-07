@@ -4,7 +4,8 @@ class MY_Form_validation extends CI_Form_validation {
 
 	function My_Form_validation()
 	{
-	    parent::CI_Form_validation();
+		parent::CI_Form_validation();
+		parent::set_error_delimiters('<li>', '</li>');
 	}
 
 	/**
@@ -59,11 +60,10 @@ class MY_Form_validation extends CI_Form_validation {
 	{
 		$CI =& get_instance();
 
-		$CI->form_validation->set_message('is_date', '%s is a valid date');
+		$CI->form_validation->set_message('is_date', 'The %s is a invalid date');
 
 		list($d, $m, $y) = explode('/', $str);
 		return checkdate($m , $d, $y) ? TRUE : FALSE;
 	}
 }
-
 ?>

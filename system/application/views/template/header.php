@@ -70,7 +70,10 @@
 						echo "<div id=\"error-box\">";
 						echo "<ul>";
 						foreach ($messages['error'] as $message) {
-							echo ('<li>' . $message . '</li>');
+							if (substr($message, 0, 4) == "<li>")
+								echo ($message);
+							else
+								echo ('<li>' . $message . '</li>');
 						}
 						echo "</ul>";
 						echo "</div>";

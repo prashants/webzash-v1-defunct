@@ -66,7 +66,7 @@ class Voucher extends Controller {
 		$voucher_q = NULL;
 		if ($voucher_type > 5)
 		{
-			$this->session->set_flashdata('error', "Invalid voucher type");
+			$this->messages->add('Invalid voucher type', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else if ($voucher_type > 0) {
