@@ -52,6 +52,8 @@ class Voucher extends Controller {
 		default :
 			$this->session->set_flashdata('error', "Invalid voucher type");
 			redirect('voucher/show/all');
+			return;
+			break;
 		}
 		$this->load->view('template/header', $page_data);
 		$this->load->view('voucher/index', $data);
@@ -93,5 +95,76 @@ class Voucher extends Controller {
 		$html .= "</tbody>";
 		$html .= "</table>";
 		return $html;
+	}
+
+	function add($voucher_type)
+	{
+		switch ($voucher_type)
+		{
+		case 'receipt' :
+			$page_data['page_title'] = "New Receipt Voucher";
+			$data['voucher_type'] = "receipt";
+			break;
+		case 'payment' :
+			$page_data['page_title'] = "New Payment Voucher";
+			$data['voucher_type'] = "payment";
+			break;
+		case 'contra' :
+			$page_data['page_title'] = "New Contra Voucher";
+			$data['voucher_type'] = "contra";
+			break;
+		case 'journal' :
+			$page_data['page_title'] = "New Journal Voucher";
+			$data['voucher_type'] = "journal";
+			break;
+		default :
+			$this->session->set_flashdata('error', "Invalid voucher type");
+			redirect('voucher/show/all');
+			return;
+			break;
+		}
+
+		/* Form fields */
+		$data['voucher_number'] = array(
+			'name' => 'voucher_number',
+			'id' => 'voucher_number',
+			'maxlength' => '11',
+			'size' => '11',
+			'value' => $this->Voucher_model->next_voucher_number(),
+		);
+		$data['voucher_date'] = array(
+			'name' => 'voucher_date',
+			'id' => 'voucher_date',
+			'maxlength' => '11',
+			'size' => '11',
+			'value' => '',
+		);
+		$data['ledger_dc'] = "D";
+		$data['dr_amount'] = array(
+			'name' => 'dr_amount',
+			'id' => 'dr_amount',
+			'maxlength' => '15',
+			'size' => '15',
+			'value' => '',
+		);
+		$data['cr_amount'] = array(
+			'name' => 'dr_amount',
+			'id' => 'dr_amount',
+			'maxlength' => '15',
+			'size' => '15',
+			'value' => '',
+		);
+		$data['voucher_narration'] = array(
+			'name' => 'voucher_narration',
+			'id' => 'voucher_narration',
+			'cols' => '50',
+			'rows' => '4',
+			'value' => '',
+		);
+		$data['voucher_type'] = $voucher_type;
+
+		$this->load->view('template/header', $page_data);
+		$this->load->view('voucher/add', $data);
+		$this->load->view('template/footer');
 	}
 }
