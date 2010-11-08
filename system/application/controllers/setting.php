@@ -57,14 +57,14 @@ class Setting extends Controller {
 			'id' => 'assy_start',
 			'maxlength' => '11',
 			'size' => '11',
-			'value' => ($company_data) ? echo_value($company_data->ay_start) : $default_start,
+			'value' => ($company_data) ? date_mysql_to_php(echo_value($company_data->ay_start)) : $default_start,
 		);
 		$data['assy_end'] = array(
 			'name' => 'assy_end',
 			'id' => 'assy_end',
 			'maxlength' => '11',
 			'size' => '11',
-			'value' => ($company_data) ? echo_value($company_data->ay_end) : $default_end,
+			'value' => ($company_data) ? date_mysql_to_php(echo_value($company_data->ay_end)) : $default_end,
 		);
 		$data['company_currency'] = array(
 			'name' => 'company_currency',
@@ -120,8 +120,8 @@ class Setting extends Controller {
 			$data_assy_end = date_php_to_mysql($this->input->post('assy_end', TRUE));
 			$data_company_currency = $this->input->post('company_currency', TRUE);
 			$data_company_date = $this->input->post('company_date', TRUE);
-			$data_company_timezone = $this->input->post('company_timezone', TRUE);
-
+			$data_company_timezone = $this->input->post('timezones', TRUE); //var_dump($data_company_timezone);
+//var_dump($_POST);
 			/* Verify if current settings exist. If not add new settings */
 			$current = $this->Setting_model->get_current();
 			if ( ! $current)
