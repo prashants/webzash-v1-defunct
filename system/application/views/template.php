@@ -20,7 +20,7 @@
 			Webzash
 		</div>
 		<div id="info">
-			<?php if (isset($page_account_info)) echo $page_account_info ?>
+			<?php echo account_info_str(); ?>
 		</div>
 	</div>
 	<div id="menu">
@@ -28,7 +28,7 @@
 			<li><a href="<?php print base_url(); ?>" title="Dashboard">Dashboard</a></li>
 			<li><?php echo anchor('account', 'Accounts', array('title' => 'Chart of accounts')); ?></li>
 			<li><?php echo anchor('voucher', 'Vouchers', array('title' => 'Vouchers')); ?></li>
-			<li><a href="#">Reports</a></li>
+			<li><?php echo anchor('report', 'Reports', array('title' => 'Reports')); ?></li>
 			<li><?php echo anchor('setting', 'Settings', array('title' => 'Settings')); ?></li>
 		</ul>
 	</div>
