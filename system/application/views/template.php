@@ -29,7 +29,7 @@
 			<li><?php echo anchor('account', 'Accounts', array('title' => 'Chart of accounts')); ?></li>
 			<li><?php echo anchor('voucher', 'Vouchers', array('title' => 'Vouchers')); ?></li>
 			<li><a href="#">Reports</a></li>
-			<li><a href="#">Settings</a></li>
+			<li><?php echo anchor('setting', 'Settings', array('title' => 'Settings')); ?></li>
 		</ul>
 	</div>
 	<div id="content">

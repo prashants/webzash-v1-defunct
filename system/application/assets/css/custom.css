@@ -2,3 +2,24 @@
 	display:inline;
 }
 
+#left-col {
+	background:none repeat scroll 0 0 #FFFFFF;
+	float:left;
+	width:300px;
+}
+
+#right-col {
+	background:none repeat scroll 0 0 #FFFFFF;
+	float:left;
+	width:300px;
+}
+
+.settings-title a {
+	font-size: 110%;
+	text-decoration:underline;
+	color:#000000;
+}
+
+.settings-desc {
+	color:#999999;
+}

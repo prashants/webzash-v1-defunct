@@ -23,5 +23,25 @@ if ( ! function_exists('convert_dc'))
 	}
 }
 
+/**
+ * Return the value of variable is set
+ *
+ * Return the value of varaible is set else return empty string
+ *
+ * @access	public
+ * @param	a varaible
+ * @return	string value
+ */	
+if ( ! function_exists('echo_value'))
+{
+	function echo_value($value = NULL)
+	{
+		if (isset($value))
+			return $value;
+		else
+			return "";
+	}
+}
+
 /* End of file custom_helper.php */
 /* Location: ./system/application/helpers/custom_helper.php */
