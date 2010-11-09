@@ -66,7 +66,7 @@ class Account extends Controller {
 		$html = "";
 		for ($i = 2; $i <= $counter; $i++)
 		{
-			$html .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+			$html .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		}
 		return $html;
 	}
