@@ -15,7 +15,7 @@ class Report extends Controller {
 			'report/balancesheet' => 'Balance Sheet',
 			'report/profitandloss' => 'Profit & Loss',
 			'report/trialbalance' => 'Trial Balance',
-			'report/ledger' => 'Ledger Statement',
+			'report/ledgerst' => 'Ledger Statement',
 
 		);
 		$this->template->set('nav_links', $menu);
@@ -29,7 +29,7 @@ class Report extends Controller {
 			'report/balancesheet' => 'Balance Sheet',
 			'report/profitandloss' => 'Profit & Loss',
 			'report/trialbalance' => 'Trial Balance',
-			'report/ledger' => 'Ledger Statement',
+			'report/ledgerst' => 'Ledger Statement',
 
 		);
 		$this->template->set('nav_links', $menu);
@@ -43,7 +43,7 @@ class Report extends Controller {
 			'report/balancesheet' => 'Balance Sheet',
 			'report/profitandloss' => 'Profit & Loss',
 			'report/trialbalance' => 'Trial Balance',
-			'report/ledger' => 'Ledger Statement',
+			'report/ledgerst' => 'Ledger Statement',
 
 		);
 		$this->template->set('nav_links', $menu);
@@ -57,7 +57,7 @@ class Report extends Controller {
 			'report/balancesheet' => 'Balance Sheet',
 			'report/profitandloss' => 'Profit & Loss',
 			'report/trialbalance' => 'Trial Balance',
-			'report/ledger' => 'Ledger Statement',
+			'report/ledgerst' => 'Ledger Statement',
 
 		);
 		$this->load->library('accountlist');
@@ -65,5 +65,25 @@ class Report extends Controller {
 		$data['a'] = $a;
 		$this->template->set('nav_links', $menu);
 		$this->template->load('template', 'report/trialbalance', $data);
+	}
+
+	function ledgerst($ledger_id = 0)
+	{
+		$this->template->set('page_title', 'Ledger Statement');
+		$menu = array(
+			'report/balancesheet' => 'Balance Sheet',
+			'report/profitandloss' => 'Profit & Loss',
+			'report/trialbalance' => 'Trial Balance',
+			'report/ledgerst' => 'Ledger Statement',
+
+		);
+		if ($_POST)
+		{
+			$ledger_id = $this->input->post('ledger_id', TRUE);
+			redirect('report/ledgerst/' . $ledger_id);
+		}
+		$data['ledger_id'] = $ledger_id;
+		$this->template->set('nav_links', $menu);
+		$this->template->load('template', 'report/ledgerst', $data);
 	}
 }
