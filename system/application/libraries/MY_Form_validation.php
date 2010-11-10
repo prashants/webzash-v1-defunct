@@ -28,6 +28,17 @@ class MY_Form_validation extends CI_Form_validation {
 		return ($row->dupe > 0) ? FALSE : TRUE;
 	}
 
+	function uniquevoucherno($str, $type)
+	{
+		$CI =& get_instance(); //var_dump($str); var_dump($type);  
+
+		$CI->form_validation->set_message('uniquevoucherno', 'The %s that you requested is already in use');
+
+		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM vouchers WHERE number = ? AND type = ?", array((int)$str, (int)$type));
+		$row = $query->row();
+		return ($row->dupe > 0) ? FALSE : TRUE;
+	}
+
 	function uniquewithid($str, $field)
 	{
 		$CI =& get_instance();
