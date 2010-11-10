@@ -71,5 +71,52 @@ if ( ! function_exists('account_info_str'))
 		return $html;
 	}
 }
+
+/**
+ * Return Voucher Type String from Number
+ *
+ * Return the account information
+ *
+ * @access	public
+ * @param	a varaible
+ * @return	string value
+ */	
+if ( ! function_exists('n_to_v'))
+{
+	function n_to_v($type_number)
+	{
+		switch ($type_number)
+		{
+		case 1: return "receipt"; break;
+		case 2: return "payment"; break;
+		case 3: return "contra"; break;
+		case 4: return "journal"; break;
+		}
+	}
+}
+
+/**
+ * Return Number from Voucher Type String
+ *
+ * Return the account information
+ *
+ * @access	public
+ * @param	a varaible
+ * @return	string value
+ */	
+if ( ! function_exists('v_to_n'))
+{
+	function v_to_n($type_string)
+	{
+		switch ($type_string)
+		{
+		case "receipt": return 1; break;
+		case "payment": return 2; break;
+		case "contra": return 3; break;
+		case "journal": return 4; break;
+		}
+	}
+}
+
 /* End of file custom_helper.php */
 /* Location: ./system/application/helpers/custom_helper.php */
