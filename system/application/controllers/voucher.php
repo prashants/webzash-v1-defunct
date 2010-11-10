@@ -143,7 +143,7 @@ class Voucher extends Controller {
 			'id' => 'voucher_number',
 			'maxlength' => '11',
 			'size' => '11',
-			'value' => $this->Voucher_model->next_voucher_number(),
+			'value' => $this->Voucher_model->next_voucher_number($voucher_type),
 		);
 		$data['voucher_date'] = array(
 			'name' => 'voucher_date',
@@ -162,12 +162,12 @@ class Voucher extends Controller {
 		$data['voucher_type'] = $voucher_type;
 
 		/* Form validations */
-		$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural|unique[vouchers.number]');
+		$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural|uniquevoucherno[' . v_to_n($voucher_type) . ']');
 		$this->form_validation->set_rules('voucher_date', 'Voucher Date', 'trim|required|is_date');
 		$this->form_validation->set_rules('voucher_narration', 'trim');
 
 		/* Debit and Credit amount validation */
-		if ($this->input->post('ledger_dc', TRUE))
+		if ($_POST)
 		{
 			foreach ($this->input->post('ledger_dc', TRUE) as $id => $ledger_data)
 			{

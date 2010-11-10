@@ -7,11 +7,10 @@ class Voucher_model extends Model {
 		parent::Model();
 	}
 
-	function next_voucher_number()
+	function next_voucher_number($type_string)
 	{
-		$options = array();
-		$options[0] = "(Please Select)";
-		$last_no_q = $this->db->query('SELECT MAX(number) AS lastno FROM vouchers');
+		$type_number = v_to_n($type_string);
+		$last_no_q = $this->db->query('SELECT MAX(number) AS lastno FROM vouchers WHERE type = ?', $type_number);
 		$row = $last_no_q->row();
 		$last_no = (int)$row->lastno;
 		$last_no++;
