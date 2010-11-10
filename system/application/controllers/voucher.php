@@ -82,7 +82,7 @@ class Voucher extends Controller {
 		{
 			$html .= "<tr class=\"tr-" . $odd_even . "\">";
 			$html .= "<td>" . $row->number . "</td>";
-			$html .= "<td>" . $row->date . "</td>";
+			$html .= "<td>" . date_mysql_to_php($row->date) . "</td>";
 			$html .= "<td>Ledger A/C</td>";
 			$html_voucher_type = "";
 			switch ($row->type)
@@ -92,11 +92,11 @@ class Voucher extends Controller {
 				case 3: $html_voucher_type = "contra"; break;
 				case 4: $html_voucher_type = "journal"; break;
 			}
-			$html .= "<td>" . strtoupper($html_voucher_type) . "</td>";
+			$html .= "<td>" . ucfirst($html_voucher_type) . "</td>";
 			if ($row->draft == 0)
-				$html .= "<td>ACTIVE</td>";
+				$html .= "<td>Active</td>";
 			else
-				$html .= "<td>DFAFT</td>";
+				$html .= "<td>Draft</td>";
 			$html .= "<td>" . $row->dr_total . "</td>";
 			$html .= "<td>" . $row->cr_total . "</td>";
 			$html .= "<td>" . anchor('voucher/edit/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher'))) . "</td>";

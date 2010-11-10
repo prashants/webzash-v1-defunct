@@ -12,7 +12,7 @@ if ($ledger_id != 0)
 $ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ?", array($ledger_id));
 echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 
-echo "<thead><tr><th>Number</th><th>Date</th><th>Draft</th><th>Type</th><th>Dr/Cr</th><th>Amount</th></tr></thead>";
+echo "<thead><tr><th>Number</th><th>Date</th><th>Draft</th><th>Type</th><th></th><th>Amount</th></tr></thead>";
 $odd_even = "odd";
 foreach ($ledgerst_q->result() as $row)
 {
@@ -36,7 +36,7 @@ foreach ($ledgerst_q->result() as $row)
 		}
 		echo "</td>";
 		echo "<td>";
-		echo ($row->ldc == "D") ? "Dr" : "Cr";
+		echo convert_dc($row->ldc);
 		echo "</td>";
 		echo "<td>";
 		echo $row->lamount;

@@ -16,10 +16,7 @@
 		echo "</td>";
 		echo "<td>";
 		list ($opbal_amount, $opbal_type) = $this->Ledger_model->get_op_balance($ledger_id);
-		if ($opbal_type == "C")
-			echo "Cr " . $opbal_amount;
-		else
-			echo "Dr " . $opbal_amount;
+		echo convert_dc($opbal_type) . " " . $opbal_amount;
 		echo "</td>";
 		echo "<td>";
 		$dr_total = $this->Ledger_model->get_dr_total($ledger_id);
