@@ -1,10 +1,10 @@
 <div>
 	<div id="left-col">
 		<div class="settings-title">
-			<?php echo anchor('setting/company', 'Company Settings', 'Company Settings'); ?>
+			<?php echo anchor('setting/account', 'Account Settings', 'Account Settings'); ?>
 		</div>
 		<div class="settings-desc">
-			Setup company details, currency, time.
+			Setup account details, currency, time.
 		</div>
 
 	</div>
