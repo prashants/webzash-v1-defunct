@@ -1,0 +1,21 @@
+Priority - Task - Person responsible
+
+? - Printing Vouchers
+? - Decent Theming
+? - Logo
+? - Website, Hosting, Domain name, etc
+? - Stock voucher
+? - All Voucher entry
+? - All Voucher edit
+? - All Voucher delete
+? - All Vouchers print
+? - Reconcilation
+? - Search
+? - Date wise reports
+? - Dashboard widgets
+? - Account creation
+? - Backup and restore
+? - Labels
+? - Account closing
+? - Installer
+? - User permissions
