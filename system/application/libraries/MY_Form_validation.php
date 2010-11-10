@@ -30,7 +30,7 @@ class MY_Form_validation extends CI_Form_validation {
 
 	function uniquevoucherno($str, $type)
 	{
-		$CI =& get_instance(); //var_dump($str); var_dump($type);  
+		$CI =& get_instance();
 
 		$CI->form_validation->set_message('uniquevoucherno', 'The %s that you requested is already in use');
 
