@@ -8,7 +8,7 @@
 	$profit->init(3);
 	echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 	echo "<thead><tr><th>Income</th><th>Amount</th></tr></thead>";
-	$profit->travel_group(0);
+	$profit->account_st_short(0);
 	echo "</table>";
 	echo "</td>";
 
@@ -17,7 +17,7 @@
 	$loss->init(4);
 	echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 	echo "<thead><tr><th>Expenses</th><th>Amount</th></tr></thead>";
-	$loss->travel_group(0);
+	$loss->account_st_short(0);
 	echo "</table>";
 	echo "</td>";
 

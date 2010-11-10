@@ -63,12 +63,11 @@ class Accountlist
 		}
 	}
 
-	function travel_group($c = 0)
+	function account_st_short($c = 0)
 	{
 		$this->counter = $c;
 		if ($this->id != 0)
 		{
-
 			echo "<tr class=\"group-tr\">";
 			echo "<td class=\"group-td\">";
 			echo $this->print_space($this->counter);
@@ -76,13 +75,11 @@ class Accountlist
 			echo "</td>";
 			echo "<td align=\"right\">" . $this->total . $this->print_space($this->counter) . "</td>";
 			echo "</tr>";
-
-			//echo "<tr><td>" . $this->print_space($this->counter) . $this->id . " - " . $this->name . " - " . $this->total . " - " . $this->counter . "</td></tr>";
 		}
 		foreach ($this->children_groups as $id => $data)
 		{
 			$this->counter++;
-			$data->travel_group($this->counter);
+			$data->account_st_short($this->counter);
 			$this->counter--;
 		}
 		if (count($this->children_ledgers) > 0)

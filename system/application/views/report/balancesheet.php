@@ -9,7 +9,7 @@
 	$asset->init(1);
 	echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 	echo "<thead><tr><th>Assets</th><th>Amount</th></tr></thead>";
-	$asset->travel_group(0);
+	$asset->account_st_short(0);
 	echo "</table>";
 	echo "</td>";
 
@@ -18,7 +18,7 @@
 	$liability->init(2);
 	echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 	echo "<thead><tr><th>Liabilities</th><th>Amount</th></tr></thead>";
-	$liability->travel_group(0);
+	$liability->account_st_short(0);
 	echo "</table>";
 	echo "</td>";
 
