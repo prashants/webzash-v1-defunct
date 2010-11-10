@@ -90,9 +90,9 @@ class Accountlist
 				echo "<tr class=\"ledger-tr\">";
 				echo "<td class=\"ledger-td\">";
 				echo $this->print_space($this->counter);
-				echo "&nbsp;" .  $this->name;
+				echo "&nbsp;" . anchor('report/ledgerst/' . $data['id'], $data['name'], array('title' => $data['name'] . ' Ledger Statement', 'style' => 'color:#000000'));
 				echo "</td>";
-				echo "<td align=\"right\">" . $this->total . $this->print_space($this->counter) . "</td>";
+				echo "<td align=\"right\">" . $data['total'] . $this->print_space($this->counter) . "</td>";
 				echo "</tr>";
 			}
 			$this->counter--;
