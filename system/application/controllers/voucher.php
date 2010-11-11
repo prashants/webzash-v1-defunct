@@ -307,4 +307,44 @@ class Voucher extends Controller {
 		$this->messages->add('Voucher deleted successfully', 'success');
 		redirect('voucher/show/' . $voucher_type);
 	}
+
+	function addrow()
+	{
+		$i = time() + rand  (0, time()) + rand  (0, time()) + rand  (0, time());
+		$dr_amount = array(
+			'name' => 'dr_amount[' . $i . ']',
+			'id' => 'dr_amount[' . $i . ']',
+			'maxlength' => '15',
+			'size' => '15',
+			'value' => '',
+		);
+		$cr_amount = array(
+			'name' => 'cr_amount[' . $i . ']',
+			'id' => 'cr_amount[' . $i . ']',
+			'maxlength' => '15',
+			'size' => '15',
+			'value' => '',
+		);
+
+		echo '<tr>';
+		echo '<td>';
+		echo form_dropdown_dc('ledger_dc[' . $i . ']');
+		echo '</td>';
+		echo '<td>';
+		echo form_input_ledger('ledger_id[' . $i . ']');
+		echo '</td>';
+		echo '<td>';
+		echo form_input($dr_amount);
+		echo '</td>';
+		echo '<td>';
+		echo form_input($cr_amount);
+		echo '</td>';
+		echo '<td>';
+		echo img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addrow'));
+		echo '</td>';
+		echo '<td>';
+		echo img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow'));
+		echo '</td>';
+		echo '</tr>';
+	}
 }

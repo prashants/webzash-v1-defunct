@@ -1,12 +1,19 @@
 <script type="text/javascript">
 $(document).ready(function() {
-	$('table td .deleterow').click(function() {
+	$('table td .deleterow').live('click', function() {
 		$(this).parent().parent().remove();
 	});
-	$('table td .addrow').click(function() {
-		$(this).parent().parent().after('<tr><td></td></tr>');
+
+	$('table td .addrow').live('click', function() {
+		var cur_obj = this;
+		$.ajax({
+			url: <?php echo '\'' . base_url() . 'index.php/voucher/addrow\''; ?>,
+			success: function(data) {
+				$(cur_obj).parent().parent().after(data);
+			}
+		});
 	});
-})
+});
 </script>
 <?php
 	echo form_open('voucher/add/' . $voucher_type);
