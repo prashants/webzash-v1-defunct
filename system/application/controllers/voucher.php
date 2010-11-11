@@ -326,7 +326,7 @@ class Voucher extends Controller {
 			'value' => '',
 		);
 
-		echo '<tr>';
+		echo '<tr class="new-row">';
 		echo '<td>';
 		echo form_dropdown_dc('ledger_dc[' . $i . ']');
 		echo '</td>';

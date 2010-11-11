@@ -26,3 +26,7 @@ tr.tr-odd {
 tr.tr-even {
 	background:none repeat scroll 0 0 #F8FBFC;
 }
+
+tr.new-row {
+	background:none repeat scroll 0 0 #EEEEEE;
+}
