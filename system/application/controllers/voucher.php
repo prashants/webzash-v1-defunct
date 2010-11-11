@@ -84,14 +84,7 @@ class Voucher extends Controller {
 			$html .= "<td>" . $row->number . "</td>";
 			$html .= "<td>" . date_mysql_to_php($row->date) . "</td>";
 			$html .= "<td>Ledger A/C</td>";
-			$html_voucher_type = "";
-			switch ($row->type)
-			{
-				case 1: $html_voucher_type = "receipt"; break;
-				case 2: $html_voucher_type = "payment"; break;
-				case 3: $html_voucher_type = "contra"; break;
-				case 4: $html_voucher_type = "journal"; break;
-			}
+			$html_voucher_type = n_to_v($row->type);
 			$html .= "<td>" . ucfirst($html_voucher_type) . "</td>";
 			if ($row->draft == 0)
 				$html .= "<td>Active</td>";
@@ -100,7 +93,8 @@ class Voucher extends Controller {
 			$html .= "<td>" . $row->dr_total . "</td>";
 			$html .= "<td>" . $row->cr_total . "</td>";
 			$html .= "<td>" . anchor('voucher/edit/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher'))) . "</td>";
-			$html .= "<td>" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher'))) . "</td>";
+			$html .= "<td>" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher"))) . "</td>";
+
 			$html .= "<td>" . anchor('voucher/print/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher'))) . "</td>";
 			$html .= "</tr>";
 			$odd_even = ($odd_even == "odd") ? "even" : "odd";
@@ -288,5 +282,29 @@ class Voucher extends Controller {
 			redirect('voucher/show/' . $voucher_type);
 			$this->template->load('template', 'voucher/add', $data);
 		}
+	}
+
+	function edit($voucher_type, $voucher_id)
+	{
+		$this->messages->add('Voucher edited successfully', 'success');
+		redirect('voucher/show/' . $voucher_type);
+	}
+
+	function delete($voucher_type, $voucher_id)
+	{
+		if ( ! $this->db->query("DELETE FROM voucher_items WHERE voucher_id = ?", array($voucher_id)))
+		{
+			$this->messages->add('Error deleting Voucher - Ledgers entry', 'error');
+			redirect('voucher/' . $voucher_type . '/' . $voucher_id);
+			return;
+		}
+		if ( ! $this->db->query("DELETE FROM vouchers WHERE id = ?", array($voucher_id)))
+		{
+			$this->messages->add('Error deleting Voucher entry', 'error');
+			redirect('voucher/' . $voucher_type . '/' . $voucher_id);
+			return;
+		}
+		$this->messages->add('Voucher deleted successfully', 'success');
+		redirect('voucher/show/' . $voucher_type);
 	}
 }
