@@ -7,7 +7,7 @@ $(document).ready(function() {
 	$('table td .addrow').live('click', function() {
 		var cur_obj = this;
 		$.ajax({
-			url: <?php echo '\'' . base_url() . 'index.php/voucher/addrow\''; ?>,
+			url: <?php echo '\'' . site_url('voucher/addrow') . '\''; ?>,
 			success: function(data) {
 				$(cur_obj).parent().parent().after(data);
 			}
