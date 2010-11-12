@@ -19,6 +19,13 @@ class Ledger_model extends Model {
 		return $options;
 	}
 
+	function get_name($ledger_id)
+	{
+		$ledger_q = $this->db->query('SELECT name FROM ledgers WHERE id = ? LIMIT 1', array($ledger_id));
+		$ledger = $ledger_q->row();
+		return $ledger->name;
+	}
+
 	function get_ledger_balance($ledger_id)
 	{
 		$op_bal_q = $this->db->query('SELECT * FROM ledgers WHERE id = ?', $ledger_id);

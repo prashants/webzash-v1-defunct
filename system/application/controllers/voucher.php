@@ -95,7 +95,7 @@ class Voucher extends Controller {
 			$html .= "<td>" . anchor('voucher/edit/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher'))) . "</td>";
 			$html .= "<td>" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher"))) . "</td>";
 
-			$html .= "<td>" . anchor('voucher/print/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher'))) . "</td>";
+			$html .= "<td>" . anchor('voucher/printhtml/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('target' => '_blank')) . "</td>";
 			$html .= "</tr>";
 			$odd_even = ($odd_even == "odd") ? "even" : "odd";
 		}
@@ -306,6 +306,53 @@ class Voucher extends Controller {
 		}
 		$this->messages->add('Voucher deleted successfully', 'success');
 		redirect('voucher/show/' . $voucher_type);
+	}
+
+	function printhtml($voucher_type, $voucher_id)
+	{
+		$this->load->model('Setting_model');
+		$this->load->model('Ledger_model');
+
+		$account = $this->Setting_model->get_current();
+
+		$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE id = ?", $voucher_id);
+		$voucher = $voucher_q->row();
+
+		echo "<h3>" . ucfirst($voucher_type) . " Voucher</h3>";
+		echo "<p><b>" . $account->name . "</b></p>";
+		echo "<p>" . $account->address . "</p>";
+		echo "<p>Voucher Number : " . $voucher->number . "</p>";
+		echo "<p>Voucher Date : " . date_mysql_to_php($voucher->date) . "</p>";
+		echo "<table border=1>";
+		echo "<thead><tr><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>";
+
+		$ledger_q;
+		if ($voucher_type == "receipt" || $voucher_type == "contra")
+			$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
+		else
+			$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc ASC", $voucher_id);
+	
+		foreach ($ledger_q->result() as $row)
+		{
+			echo "<tr>";
+			echo "<td>" . $this->Ledger_model->get_name($row->ledger_id) . "</td>";
+			if ($row->dc == "D")
+			{
+				echo "<td>" . $row->amount . "</td>";
+				echo "<td>-</td>";
+			} else {
+				echo "<td>-</td>";
+				echo "<td>" . $row->amount . "</td>";
+			}
+			echo "</tr>";
+		}
+		echo "<tr><td><b>TOTAL</b></td><td><b>" . $voucher->dr_total . "</b></td><td><b>" . $voucher->cr_total . "</b></td></tr>";
+		echo "</table>";
+		echo "<p>" . "Narration : " . $voucher->narration . "</p>";
+	}
+
+	function email($voucher_type, $voucher_id)
+	{
 	}
 
 	function addrow()
