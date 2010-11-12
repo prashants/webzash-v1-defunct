@@ -74,7 +74,7 @@ class Voucher extends Controller {
 		}
 
 		$html = "<table border=0 cellpadding=5 class=\"generaltable\">";
-		$html .= "<thead><tr><th>Number</th><th>Date</th><th>Ledger A/C</th><th>Type</th><th>Status</th><th>DR Amount</th><th>CR Amount</th><th colspan=3>Actions</th></tr></thead>";
+		$html .= "<thead><tr><th>Number</th><th>Date</th><th>Ledger A/C</th><th>Type</th><th>Status</th><th>DR Amount</th><th>CR Amount</th><th colspan=4>Actions</th></tr></thead>";
 		$html .= "<tbody>";
 
 		$odd_even = "odd";
@@ -92,10 +92,15 @@ class Voucher extends Controller {
 				$html .= "<td>Draft</td>";
 			$html .= "<td>" . $row->dr_total . "</td>";
 			$html .= "<td>" . $row->cr_total . "</td>";
-			$html .= "<td>" . anchor('voucher/edit/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher'))) . "</td>";
-			$html .= "<td>" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher"))) . "</td>";
 
-			$html .= "<td>" . anchor('voucher/printhtml/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('target' => '_blank')) . "</td>";
+			$html .= "<td>" . anchor('voucher/edit/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
+
+			$html .= "<td>" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
+
+			$html .= "<td>" . anchor('voucher/printhtml/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher', 'target' => '_blank')) . "</td>";
+
+			$html .= "<td>" . anchor('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'target' => '_blank')) . "</td>";
+
 			$html .= "</tr>";
 			$odd_even = ($odd_even == "odd") ? "even" : "odd";
 		}
