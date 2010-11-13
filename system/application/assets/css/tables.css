@@ -30,3 +30,9 @@ tr.tr-even {
 tr.new-row {
 	background:none repeat scroll 0 0 #EEEEEE;
 }
+
+.vouchertable th {
+	background:none repeat scroll 0 0 #0099CC;
+	color:#FFFFFF;
+	font-weight:bold;
+}

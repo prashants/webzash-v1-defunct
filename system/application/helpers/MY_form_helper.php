@@ -63,7 +63,7 @@ if ( ! function_exists('form_input_ledger'))
 
 		if ($extra != '') $extra = ' '.$extra;
 
-		$form = '<select name="'.$name.'"'.$extra.">\n";
+		$form = '<select name="'.$name.'"'.$extra.' class="ledger-dropdown">';
 
 		foreach ($options as $key => $val)
 		{

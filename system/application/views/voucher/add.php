@@ -1,10 +1,11 @@
 <script type="text/javascript">
+
 $(document).ready(function() {
 	/* Calculating Dr and Cr total */
 	$('.dr-item').change(function() {
 		var drTotal = 0;
 		$("table tr .dr-item").each(function() {
-			var curDr = $(this).attr('value')
+			var curDr = $(this).attr('value');
 			curDr = parseFloat(curDr);
 			if (isNaN(curDr))
 				curDr = 0;
@@ -13,7 +14,7 @@ $(document).ready(function() {
 		$("table tr #dr-total").text(drTotal);
 		var crTotal = 0;
 		$("table tr .cr-item").each(function() {
-			var curCr = $(this).attr('value')
+			var curCr = $(this).attr('value');
 			curCr = parseFloat(curCr);
 			if (isNaN(curCr))
 				curCr = 0;
@@ -59,10 +60,14 @@ $(document).ready(function() {
 		}
 	});
 
-	/* Dr - Cr Dropdown changed */
+	/* Dr - Cr dropdown changed */
 	$('.dc-dropdown').change(function() {
 		var drValue = $(this).parent().next().next().children().attr('value');
 		var crValue = $(this).parent().next().next().next().children().attr('value');
+
+		if ($(this).parent().next().children().val() == "0") {
+			return;
+		}
 
 		drValue = parseFloat(drValue);
 		if (isNaN(drValue))
@@ -87,7 +92,23 @@ $(document).ready(function() {
 			$(this).parent().next().next().children().attr('disabled', 'disabled');
 			$(this).parent().next().next().next().children().attr('disabled', '');
 		}
+		$(this).parent().next().next().children().trigger('change');
 		$(this).parent().next().next().next().children().trigger('change');
+	});
+
+	/* Ledger dropdown changed */
+	$('.ledger-dropdown').change(function() {
+		if ($(this).val() == "0") {
+			$(this).parent().next().children().attr('value', "");
+			$(this).parent().next().next().children().attr('value', "");
+			$(this).parent().next().children().attr('disabled', 'disabled');
+			$(this).parent().next().next().children().attr('disabled', 'disabled');
+		} else {
+			$(this).parent().next().children().attr('disabled', '');
+			$(this).parent().next().next().children().attr('disabled', '');
+			$(this).parent().prev().children().trigger('change');
+		}
+		$(this).parent().next().children().trigger('change');
 		$(this).parent().next().next().children().trigger('change');
 	});
 
@@ -107,8 +128,15 @@ $(document).ready(function() {
 		});
 	});
 
+	/* On page load initiate all triggers */
+	$('.dc-dropdown').trigger('change');
+	$('.ledger-dropdown').trigger('change');
+	$('.dr-item:first').trigger('change');
+	$('.cr-item:first').trigger('change');
 });
+
 </script>
+
 <?php
 	echo form_open('voucher/add/' . $voucher_type);
 	echo "<p>";
@@ -121,7 +149,7 @@ $(document).ready(function() {
 	echo form_input_date($voucher_date);
 	echo "</p>";
 
-	echo "<table class=\"generaltable\">";
+	echo "<table class=\"vouchertable\">";
 	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th><th colspan=2>Actions</th></tr></thead>";
 
 
@@ -153,6 +181,7 @@ $(document).ready(function() {
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow')) . "</td>";
 		echo "</tr>";
 	}
+	echo "<tr><td colspan=4><hr /></td><td></td></tr>";
 	echo "<tr id=\"total\"><td colspan=2>TOTAL</td><td id=\"dr-total\">0</td><td id=\"cr-total\">0</td></tr>";
 	echo "</table>";
 
