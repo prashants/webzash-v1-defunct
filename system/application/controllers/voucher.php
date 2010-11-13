@@ -99,9 +99,9 @@ class Voucher extends Controller {
 
 			$html .= "<td>" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
 
-			$html .= "<td>" . anchor('voucher/printhtml/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher', 'target' => '_blank')) . "</td>";
+			$html .= "<td>" . anchor_popup('voucher/printhtml/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
 
-			$html .= "<td>" . anchor('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'target' => '_blank')) . "</td>";
+			$html .= "<td>" . anchor_popup('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '400', 'height' => '200')) . "</td>";
 
 			$html .= "</tr>";
 			$odd_even = ($odd_even == "odd") ? "even" : "odd";
@@ -376,6 +376,50 @@ class Voucher extends Controller {
 
 	function email($voucher_type, $voucher_id)
 	{
+		$this->load->library('email');
+		$data['voucher_type'] = $voucher_type;
+		$data['voucher_id'] = $voucher_id;
+		$data['email_to'] = array(
+			'name' => 'email_to',
+			'id' => 'email_to',
+			'size' => '40',
+			'value' => '',
+		);
+
+		/* Form validations */
+		$this->form_validation->set_rules('email_to', 'Email to', 'trim|valid_emails|required');
+
+		/* Repopulating form */
+		if ($_POST)
+		{
+			$data['email_to']['value'] = $this->input->post('email_to');
+		}
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data['error'] = validation_errors();
+			$this->load->view('voucher/email', $data);
+		}
+		else
+		{
+			$config['protocol']='smtp';
+			$config['smtp_host']='ssl://smtp.googlemail.com';
+			$config['smtp_port']='465';
+			$config['smtp_timeout']='30';
+			// $config['smtp_user']='';
+			// $config['smtp_pass']='';
+			$config['charset']='utf-8';
+			$config['newline']="\r\n";
+			$this->email->initialize($config);
+
+			$this->email->from('', 'Prashant Shah');
+			$this->email->to($this->input->post('email_to'));
+			$this->email->subject(ucfirst($voucher_type) . ' Voucher');
+			$this->email->message('Testing the email class.');
+			$this->email->send();
+			$data['message'] = "Successfully sent email !";
+			$this->load->view('voucher/email', $data);
+		}
 	}
 
 	function addrow()
