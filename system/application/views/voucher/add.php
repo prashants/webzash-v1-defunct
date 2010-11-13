@@ -1,5 +1,96 @@
 <script type="text/javascript">
 $(document).ready(function() {
+	/* Calculating Dr and Cr total */
+	$('.dr-item').change(function() {
+		var drTotal = 0;
+		$("table tr .dr-item").each(function() {
+			var curDr = $(this).attr('value')
+			curDr = parseFloat(curDr);
+			if (isNaN(curDr))
+				curDr = 0;
+			drTotal += curDr;
+		});
+		$("table tr #dr-total").text(drTotal);
+		var crTotal = 0;
+		$("table tr .cr-item").each(function() {
+			var curCr = $(this).attr('value')
+			curCr = parseFloat(curCr);
+			if (isNaN(curCr))
+				curCr = 0;
+			crTotal += curCr;
+		});
+		$("table tr #cr-total").text(crTotal);
+
+		if (drTotal == crTotal) {
+			$("table tr #dr-total").css("background-color", "#FFFF99");
+			$("table tr #cr-total").css("background-color", "#FFFF99");
+		} else {
+			$("table tr #dr-total").css("background-color", "#FFE9E8");
+			$("table tr #cr-total").css("background-color", "#FFE9E8");
+		}
+	});
+
+	$('.cr-item').change(function() {
+		var drTotal = 0;
+		$("table tr .dr-item").each(function() {
+			var curDr = $(this).attr('value')
+			curDr = parseFloat(curDr);
+			if (isNaN(curDr))
+				curDr = 0;
+			drTotal += curDr;
+		});
+		$("table tr #dr-total").text(drTotal);
+		var crTotal = 0;
+		$("table tr .cr-item").each(function() {
+			var curCr = $(this).attr('value')
+			curCr = parseFloat(curCr);
+			if (isNaN(curCr))
+				curCr = 0;
+			crTotal += curCr;
+		});
+		$("table tr #cr-total").text(crTotal);
+
+		if (drTotal == crTotal) {
+			$("table tr #dr-total").css("background-color", "#FFFF99");
+			$("table tr #cr-total").css("background-color", "#FFFF99");
+		} else {
+			$("table tr #dr-total").css("background-color", "#FFE9E8");
+			$("table tr #cr-total").css("background-color", "#FFE9E8");
+		}
+	});
+
+	/* Dr - Cr Dropdown changed */
+	$('.dc-dropdown').change(function() {
+		var drValue = $(this).parent().next().next().children().attr('value');
+		var crValue = $(this).parent().next().next().next().children().attr('value');
+
+		drValue = parseFloat(drValue);
+		if (isNaN(drValue))
+			drValue = 0;
+
+		crValue = parseFloat(crValue);
+		if (isNaN(crValue))
+			crValue = 0;
+
+		if ($(this).attr('value') == "D") {
+			if (drValue == 0 && crValue != 0) {
+				$(this).parent().next().next().children().attr('value', crValue);
+			}
+			$(this).parent().next().next().next().children().attr('value', "");
+			$(this).parent().next().next().next().children().attr('disabled', 'disabled');
+			$(this).parent().next().next().children().attr('disabled', '');
+		} else {
+			if (crValue == 0 && drValue != 0) {
+				$(this).parent().next().next().next().children().attr('value', drValue);
+			}
+			$(this).parent().next().next().children().attr('value', "");
+			$(this).parent().next().next().children().attr('disabled', 'disabled');
+			$(this).parent().next().next().next().children().attr('disabled', '');
+		}
+		$(this).parent().next().next().next().children().trigger('change');
+		$(this).parent().next().next().children().trigger('change');
+	});
+
 	/* Add ledger row */
 	$('table td .deleterow').live('click', function() {
 		$(this).parent().parent().remove();
@@ -16,29 +107,6 @@ $(document).ready(function() {
 		});
 	});
 
-	/* Calculating Dr and Cr total */
-	$('.dr-item').change(function() {
-		var drTotal = 0;
-		$("table tr .dr-item").each(function() {
-			var curDr = $(this).attr('value')
-			curDr = parseFloat(curDr);
-			if (isNaN(curDr))
-				curDr = 0;
-			drTotal += curDr;
-		});
-		$("table tr #dr-total").text(drTotal);
-	});
-	$('.cr-item').change(function() {
-		var crTotal = 0;
-		$("table tr .cr-item").each(function() {
-			var curCr = $(this).attr('value')
-			curCr = parseFloat(curCr);
-			if (isNaN(curCr))
-				curCr = 0;
-			crTotal += curCr;
-		});
-		$("table tr #cr-total").text(crTotal);
-	});
 });
 </script>
 <?php
@@ -85,7 +153,7 @@ $(document).ready(function() {
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow')) . "</td>";
 		echo "</tr>";
 	}
-	echo "<tr><td colspan=2>TOTAL</td><td id=\"dr-total\">0</td><td id=\"cr-total\">0</td><td></td></tr>";
+	echo "<tr id=\"total\"><td colspan=2>TOTAL</td><td id=\"dr-total\">0</td><td id=\"cr-total\">0</td></tr>";
 	echo "</table>";
 
 	echo "<p>";

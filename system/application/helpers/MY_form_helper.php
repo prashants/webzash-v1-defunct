@@ -18,7 +18,7 @@ if ( ! function_exists('form_dropdown_dc'))
 
 		if ($extra != '') $extra = ' '.$extra;
 
-		$form = '<select name="'.$name.'"'.$extra.">\n";
+		$form = '<select name="'.$name.'"'.$extra.' class="dc-dropdown" >';
 
 		foreach ($options as $key => $val)
 		{
