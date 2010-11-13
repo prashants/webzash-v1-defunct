@@ -1,9 +1,11 @@
 <script type="text/javascript">
 $(document).ready(function() {
+	/* Add ledger row */
 	$('table td .deleterow').live('click', function() {
 		$(this).parent().parent().remove();
 	});
 
+	/* Delete ledger row */
 	$('table td .addrow').live('click', function() {
 		var cur_obj = this;
 		$.ajax({
@@ -12,6 +14,30 @@ $(document).ready(function() {
 				$(cur_obj).parent().parent().after(data);
 			}
 		});
+	});
+
+	/* Calculating Dr and Cr total */
+	$('.dr-item').change(function() {
+		var drTotal = 0;
+		$("table tr .dr-item").each(function() {
+			var curDr = $(this).attr('value')
+			curDr = parseFloat(curDr);
+			if (isNaN(curDr))
+				curDr = 0;
+			drTotal += curDr;
+		});
+		$("table tr #dr-total").text(drTotal);
+	});
+	$('.cr-item').change(function() {
+		var crTotal = 0;
+		$("table tr .cr-item").each(function() {
+			var curCr = $(this).attr('value')
+			curCr = parseFloat(curCr);
+			if (isNaN(curCr))
+				curCr = 0;
+			crTotal += curCr;
+		});
+		$("table tr #cr-total").text(crTotal);
 	});
 });
 </script>
@@ -39,6 +65,7 @@ $(document).ready(function() {
 			'maxlength' => '15',
 			'size' => '15',
 			'value' => ($_POST) ? $dr_amount_p[$i] : '',
+			'class' => 'dr-item',
 		);
 		$cr_amount = array(
 			'name' => 'cr_amount[' . $i . ']',
@@ -46,6 +73,7 @@ $(document).ready(function() {
 			'maxlength' => '15',
 			'size' => '15',
 			'value' => ($_POST) ? $cr_amount_p[$i] : '',
+			'class' => 'cr-item',
 		);
 		echo "<tr>";
 		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', ($_POST) ? $ledger_dc_p[$i] : '') . "</td>";
@@ -53,14 +81,11 @@ $(document).ready(function() {
 		echo "<td>" . form_input($dr_amount) . "</td>";
 		echo "<td>" . form_input($cr_amount) . "</td>";
 
-		//echo "<td>" . anchor('group/edit/', img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger'))) . "</td>";
-		//echo "<td>" . anchor('group/delete/', img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow'))) . "</td>";
-
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addrow')) . "</td>";
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow')) . "</td>";
 		echo "</tr>";
 	}
-	echo "<tr><td colspan=2>TOTAL</td><td>0</td><td>0</td><td></td></tr>";
+	echo "<tr><td colspan=2>TOTAL</td><td id=\"dr-total\">0</td><td id=\"cr-total\">0</td><td></td></tr>";
 	echo "</table>";
 
 	echo "<p>";
