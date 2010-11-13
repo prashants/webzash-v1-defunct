@@ -128,6 +128,23 @@ $(document).ready(function() {
 		}
 		$(this).parent().next().children().trigger('change');
 		$(this).parent().next().next().children().trigger('change');
+
+		var ledgerid = $(this).val();
+		var rowid = $(this);
+		$.ajax({
+			url: <?php echo '\'' . site_url('ledger/balance') . '/\''; ?> + ledgerid,
+			success: function(data) {
+				var ledger_bal = parseFloat(data);
+				if (isNaN(ledger_bal))
+					ledger_bal = 0;
+				if (ledger_bal == 0)
+					rowid.parent().next().next().next().next().next().children().text("0");
+				else if (ledger_bal < 0)
+					rowid.parent().next().next().next().next().next().children().text("Cr " + -data);
+				else
+					rowid.parent().next().next().next().next().next().children().text("Dr " + data);
+			}
+		});
 	});
 
 	/* Recalculate Total */
@@ -174,7 +191,7 @@ $(document).ready(function() {
 	echo "</p>";
 
 	echo "<table class=\"vouchertable\">";
-	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th><th colspan=2>Actions</th></tr></thead>";
+	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th><th colspan=2>Actions</th><th colspan=2>Cur Balance</th></tr></thead>";
 
 
 	for ($i = 0; $i < 5; $i++)
@@ -212,6 +229,9 @@ $(document).ready(function() {
 
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addrow')) . "</td>";
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow')) . "</td>";
+
+		echo "<td class=\"ledger-balance\"><div></div></td>";
+
 		echo "</tr>";
 	}
 	echo "<tr><td colspan=4><hr /></td><td></td></tr>";

@@ -178,4 +178,12 @@ class Ledger extends Controller {
 		}
 		return;
 	}
+
+	function balance($ledger_id = 0)
+	{
+		if ($ledger_id > 0)
+			echo $this->Ledger_model->get_ledger_balance($ledger_id);
+		else
+			echo "";
+	}
 }
