@@ -25,9 +25,18 @@ $(document).ready(function() {
 		if (drTotal == crTotal) {
 			$("table tr #dr-total").css("background-color", "#FFFF99");
 			$("table tr #cr-total").css("background-color", "#FFFF99");
+			$("table tr #dr-diff").text("-");
+			$("table tr #cr-diff").text("");
 		} else {
 			$("table tr #dr-total").css("background-color", "#FFE9E8");
 			$("table tr #cr-total").css("background-color", "#FFE9E8");
+			if (drTotal > crTotal) {
+				$("table tr #dr-diff").text("");
+				$("table tr #cr-diff").text(drTotal - crTotal);
+			} else {
+				$("table tr #dr-diff").text(crTotal - drTotal);
+				$("table tr #cr-diff").text("");
+			}
 		}
 	});
 
@@ -54,9 +63,18 @@ $(document).ready(function() {
 		if (drTotal == crTotal) {
 			$("table tr #dr-total").css("background-color", "#FFFF99");
 			$("table tr #cr-total").css("background-color", "#FFFF99");
+			$("table tr #dr-diff").text("-");
+			$("table tr #cr-diff").text("");
 		} else {
 			$("table tr #dr-total").css("background-color", "#FFE9E8");
 			$("table tr #cr-total").css("background-color", "#FFE9E8");
+			if (drTotal > crTotal) {
+				$("table tr #dr-diff").text("");
+				$("table tr #cr-diff").text(drTotal - crTotal);
+			} else {
+				$("table tr #dr-diff").text(crTotal - drTotal);
+				$("table tr #cr-diff").text("");
+			}
 		}
 	});
 
@@ -110,6 +128,12 @@ $(document).ready(function() {
 		}
 		$(this).parent().next().children().trigger('change');
 		$(this).parent().next().next().children().trigger('change');
+	});
+
+	/* Recalculate Total */
+	$('table td .recalculate').live('click', function() {
+		$('.dr-item:first').trigger('change');
+		$('.cr-item:first').trigger('change');
 	});
 
 	/* Add ledger row */
@@ -172,7 +196,16 @@ $(document).ready(function() {
 			'class' => 'cr-item',
 		);
 		echo "<tr>";
-		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', ($_POST) ? $ledger_dc_p[$i] : '') . "</td>";
+
+		if ($voucher_type != "payment" && $i == 0)
+			echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', ($_POST) ? $ledger_dc_p[$i] : 'D') . "</td>";
+		else if ($voucher_type != "payment" && $i != 0)
+			echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', ($_POST) ? $ledger_dc_p[$i] : 'C') . "</td>";
+		else if ($voucher_type == "payment" && $i == 0)
+			echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', ($_POST) ? $ledger_dc_p[$i] : 'C') . "</td>";
+		else if ($voucher_type == "payment" && $i != 0)
+			echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', ($_POST) ? $ledger_dc_p[$i] : 'D') . "</td>";
+
 		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', ($_POST) ? $ledger_id_p[$i] : '') . "</td>";
 		echo "<td>" . form_input($dr_amount) . "</td>";
 		echo "<td>" . form_input($cr_amount) . "</td>";
@@ -182,7 +215,10 @@ $(document).ready(function() {
 		echo "</tr>";
 	}
 	echo "<tr><td colspan=4><hr /></td><td></td></tr>";
-	echo "<tr id=\"total\"><td colspan=2>TOTAL</td><td id=\"dr-total\">0</td><td id=\"cr-total\">0</td></tr>";
+
+	echo "<tr id=\"total\"><td colspan=2>TOTAL</td><td id=\"dr-total\">0</td><td id=\"cr-total\">0</td><td>" . img(array('src' => asset_url() . "images/icons/gear.png", 'border' => '0', 'alt' => 'Recalculate Total', 'class' => 'recalculate', 'title' => 'Recalculate Total')) . "</tr>";
+
+	echo "<tr id=\"difference\"><td colspan=2>DIFFERENCE</td><td id=\"dr-diff\"></td><td id=\"cr-diff\"></td></tr>";
 	echo "</table>";
 
 	echo "<p>";
@@ -205,6 +241,6 @@ $(document).ready(function() {
 	echo "<br /><br />";
 	echo form_submit('submit', 'Create');
 	echo " ";
-	echo anchor('voucher/show/receipt', 'Back', 'Back to Receipt Vouchers');
+	echo anchor('voucher/show/' . $voucher_type, 'Back', array('title' => 'Back to ' . ucfirst($voucher_type) . ' Vouchers'));
 	echo form_close();
 ?>
