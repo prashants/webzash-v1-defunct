@@ -80,7 +80,9 @@ class Voucher extends Controller {
 		$odd_even = "odd";
 		foreach ($voucher_q->result() as $row)
 		{
-			$html .= "<tr class=\"tr-" . $odd_even . "\">";
+			$html .= "<tr class=\"tr-" . $odd_even;
+			$html .= ($row->draft == 1) ? " tr-draft " : "";
+			$html .= "\">";
 			$html .= "<td>" . $row->number . "</td>";
 			$html .= "<td>" . date_mysql_to_php($row->date) . "</td>";
 			$html .= "<td>Ledger A/C</td>";

@@ -27,6 +27,10 @@ tr.tr-even {
 	background:none repeat scroll 0 0 #F8FBFC;
 }
 
+tr.tr-draft {
+	background:none repeat scroll 0 0 #DDDDDD;
+}
+
 tr.new-row {
 	background:none repeat scroll 0 0 #EEEEEE;
 }
