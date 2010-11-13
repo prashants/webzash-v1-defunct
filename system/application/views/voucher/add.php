@@ -136,12 +136,12 @@ $(document).ready(function() {
 		$('.cr-item:first').trigger('change');
 	});
 
-	/* Add ledger row */
+	/* Delete ledger row */
 	$('table td .deleterow').live('click', function() {
 		$(this).parent().parent().remove();
 	});
 
-	/* Delete ledger row */
+	/* Add ledger row */
 	$('table td .addrow').live('click', function() {
 		var cur_obj = this;
 		$.ajax({
