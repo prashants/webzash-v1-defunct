@@ -71,17 +71,16 @@ $(document).ready(function() {
 
 	echo "<p>";
 	echo form_fieldset('Options', array('class' => "fieldset-auto-width"));
-	echo form_checkbox('draft', 1) . "Create as Draft";
+	echo form_checkbox('voucher_draft', 1, echo_value($voucher_draft, FALSE)) . "Draft";
 	echo "<br /><br />";
-	echo form_checkbox('print', 1) . "Print";
+	echo form_checkbox('voucher_print', 1, echo_value($voucher_print, FALSE)) . "Print";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	echo form_checkbox('email', 1) . "Email";
+	echo form_checkbox('voucher_email', 1, echo_value($voucher_email, FALSE)) . "Email";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	echo form_checkbox('pdf', 1) . "Download PDF";
+	echo form_checkbox('voucher_pdf', 1, echo_value($voucher_pdf, FALSE)) . "Download PDF";
 	echo form_fieldset_close();
 	echo "</p>";
 	echo "<br /><br />";
-
 	echo form_submit('submit', 'Create');
 	echo " ";
 	echo anchor('voucher/show/receipt', 'Back', 'Back to Receipt Vouchers');

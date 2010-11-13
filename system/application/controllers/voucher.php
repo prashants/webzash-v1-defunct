@@ -159,6 +159,10 @@ class Voucher extends Controller {
 			'value' => '',
 		);
 		$data['voucher_type'] = $voucher_type;
+		$data['voucher_draft'] = FALSE;
+		$data['voucher_print'] = FALSE;
+		$data['voucher_email'] = FALSE;
+		$data['voucher_pdf'] = FALSE;
 
 		/* Form validations */
 		$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural|uniquevoucherno[' . v_to_n($voucher_type) . ']');
@@ -181,6 +185,11 @@ class Voucher extends Controller {
 			$data['voucher_number']['value'] = $this->input->post('voucher_number');
 			$data['voucher_date']['value'] = $this->input->post('voucher_date');
 			$data['voucher_narration']['value'] = $this->input->post('voucher_narration');
+			$data['voucher_draft'] = $this->input->post('voucher_draft');
+			$data['voucher_print'] = $this->input->post('voucher_print');
+			$data['voucher_email'] = $this->input->post('voucher_email');
+			$data['voucher_pdf'] = $this->input->post('voucher_pdf');
+
 			$data['ledger_dc_p'] = $this->input->post('ledger_dc', TRUE);
 			$data['ledger_id_p'] = $this->input->post('ledger_id', TRUE);
 			$data['dr_amount_p'] = $this->input->post('dr_amount', TRUE);
@@ -227,6 +236,13 @@ class Voucher extends Controller {
 			$data_number = $this->input->post('voucher_number', TRUE);
 			$data_date = $this->input->post('voucher_date', TRUE);
 			$data_narration = $this->input->post('voucher_narration', TRUE);
+
+			$data_draft = $this->input->post('voucher_draft');
+			if ($data_draft == "1")
+				$data_draft = "1";
+			else
+				$data_draft = "0";
+
 			$data_type = 0;
 			switch ($voucher_type)
 			{
@@ -237,7 +253,7 @@ class Voucher extends Controller {
 			}
 			$data_date = date_php_to_mysql($data_date); // Converting date to MySQL
 			$voucher_id = NULL;
-			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, draft, type) VALUES (?, ?, ?, 0, ?)", array($data_number, $data_date, $data_narration, $data_type)))
+			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, draft, type) VALUES (?, ?, ?, ?, ?)", array($data_number, $data_date, $data_narration, $data_draft, $data_type)))
 			{
 				$this->messages->add('Error addding Voucher A/C', 'error');
 				$this->template->load('template', 'voucher/add', $data);

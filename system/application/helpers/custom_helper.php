@@ -34,12 +34,12 @@ if ( ! function_exists('convert_dc'))
  */	
 if ( ! function_exists('echo_value'))
 {
-	function echo_value($value = NULL)
+	function echo_value($value = NULL, $default = "")
 	{
 		if (isset($value))
 			return $value;
 		else
-			return "";
+			return $default;
 	}
 }
 
