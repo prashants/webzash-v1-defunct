@@ -307,10 +307,233 @@ class Voucher extends Controller {
 		}
 	}
 
-	function edit($voucher_type, $voucher_id)
+	function edit($voucher_type, $voucher_id = 0)
 	{
-		$this->messages->add('Voucher edited successfully', 'success');
-		redirect('voucher/show/' . $voucher_type);
+		switch ($voucher_type)
+		{
+		case 'receipt' :
+			$this->template->set('page_title', 'Edit Receipt Voucher');
+			break;
+		case 'payment' :
+			$this->template->set('page_title', 'Edit Payment Voucher');
+			break;
+		case 'contra' :
+			$this->template->set('page_title', 'Edit Contra Voucher');
+			break;
+		case 'journal' :
+			$this->template->set('page_title', 'Edit Journal Voucher');
+			break;
+		default :
+			$this->messages->add('Invalid voucher type', 'error');
+			redirect('voucher/show/all');
+			return;
+			break;
+		}
+
+		/* Load current voucher details */
+		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id))
+		{
+			$this->messages->add('Invalid Voucher', 'error');
+			redirect('voucher/show/' . $voucher_type);
+		}
+
+		/* Form fields - Voucher */
+		$data['voucher_number'] = array(
+			'name' => 'voucher_number',
+			'id' => 'voucher_number',
+			'maxlength' => '11',
+			'size' => '11',
+			'value' => $cur_voucher->number,
+		);
+		$data['voucher_date'] = array(
+			'name' => 'voucher_date',
+			'id' => 'voucher_date',
+			'maxlength' => '11',
+			'size' => '11',
+			'value' => date_mysql_to_php($cur_voucher->date),
+		);
+		$data['voucher_narration'] = array(
+			'name' => 'voucher_narration',
+			'id' => 'voucher_narration',
+			'cols' => '50',
+			'rows' => '4',
+			'value' => $cur_voucher->narration,
+		);
+		$data['voucher_type'] = $voucher_type;
+		$data['voucher_id'] = $voucher_id;
+		$data['voucher_draft'] = ($cur_voucher->draft == 0) ? FALSE : TRUE;
+		$data['voucher_print'] = FALSE;
+		$data['voucher_email'] = FALSE;
+		$data['voucher_pdf'] = FALSE;
+
+		/* Load current ledger details */
+		$cur_ledgers_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ?", array($voucher_id));
+		if ($cur_ledgers_q->num_rows <= 0)
+		{
+			$this->messages->add('No Ledger A/C\'s found!', 'error');
+		}
+		$counter = 0;
+		foreach ($cur_ledgers_q->result() as $row)
+		{
+			$data['ledger'][$counter]['ledger_dc'] = $row->dc;
+			$data['ledger'][$counter]['ledger_id'] = $row->ledger_id;
+			if ($row->dc == "D")
+			{
+				$data['ledger'][$counter]['ledger_dr'] = $row->amount;
+				$data['ledger'][$counter]['ledger_cr'] = "";
+			} else {
+				$data['ledger'][$counter]['ledger_dr'] = "";
+				$data['ledger'][$counter]['ledger_cr'] = $row->amount;
+			}
+			$counter++;
+		}
+		/* Two extra rows */
+		$data['ledger'][$counter]['ledger_dc'] = 'D';
+		$data['ledger'][$counter]['ledger_id'] = 0;
+		$data['ledger'][$counter]['ledger_dr'] = "";
+		$data['ledger'][$counter]['ledger_cr'] = "";
+		$counter++;
+		$data['ledger'][$counter]['ledger_dc'] = 'D';
+		$data['ledger'][$counter]['ledger_id'] = 0;
+		$data['ledger'][$counter]['ledger_dr'] = "";
+		$data['ledger'][$counter]['ledger_cr'] = "";
+		$counter++;
+
+		/* Form validations */
+		$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural|uniquevouchernowithid[' . v_to_n($voucher_type) . '.' . $voucher_id . ']');
+		$this->form_validation->set_rules('voucher_date', 'Voucher Date', 'trim|required|is_date');
+		$this->form_validation->set_rules('voucher_narration', 'trim');
+
+		/* Debit and Credit amount validation */
+		if ($_POST)
+		{
+			foreach ($this->input->post('ledger_dc', TRUE) as $id => $ledger_data)
+			{
+				$this->form_validation->set_rules('dr_amount[' . $id . ']', 'Debit Amount', 'trim|currency');
+				$this->form_validation->set_rules('cr_amount[' . $id . ']', 'Credit Amount', 'trim|currency');
+			}
+		}
+
+		/* Repopulating form */
+		if ($_POST)
+		{
+			$data['voucher_number']['value'] = $this->input->post('voucher_number');
+			$data['voucher_date']['value'] = $this->input->post('voucher_date');
+			$data['voucher_narration']['value'] = $this->input->post('voucher_narration');
+			$data['voucher_draft'] = $this->input->post('voucher_draft');
+			$data['voucher_print'] = $this->input->post('voucher_print');
+			$data['voucher_email'] = $this->input->post('voucher_email');
+			$data['voucher_pdf'] = $this->input->post('voucher_pdf');
+
+			$data['ledger_dc_p'] = $this->input->post('ledger_dc', TRUE);
+			$data['ledger_id_p'] = $this->input->post('ledger_id', TRUE);
+			$data['dr_amount_p'] = $this->input->post('dr_amount', TRUE);
+			$data['cr_amount_p'] = $this->input->post('cr_amount', TRUE);
+		}
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this->messages->add(validation_errors(), 'error');
+			$this->template->load('template', 'voucher/edit', $data);
+		} else	{
+			/* Checking for Debit and Credit Total */
+			$data_all_ledger_id = $this->input->post('ledger_id', TRUE);
+			$data_all_ledger_dc = $this->input->post('ledger_dc', TRUE);
+			$data_all_dr_amount = $this->input->post('dr_amount', TRUE);
+			$data_all_cr_amount = $this->input->post('cr_amount', TRUE);
+			$dr_total = 0;
+			$cr_total = 0;
+			foreach ($data_all_ledger_dc as $id => $ledger_data)
+			{
+				if ($data_all_ledger_id[$id] < 1)
+					continue;
+				if ($data_all_ledger_dc[$id] == "D")
+				{
+					$dr_total += $data_all_dr_amount[$id];
+				} else {
+					$cr_total += $data_all_cr_amount[$id];
+				}
+			}
+			if ($dr_total != $cr_total)
+			{
+				$this->messages->add('Debit and Credit Total does not match!', 'error');
+				$this->template->load('template', 'voucher/edit', $data);
+				return;
+			} else if ($dr_total == 0 && $cr_total == 0) {
+				$this->messages->add('Cannot save empty voucher', 'error');
+				$this->template->load('template', 'voucher/edit', $data);
+				return;
+			}
+
+			/* Updating main voucher */
+			$data_number = $this->input->post('voucher_number', TRUE);
+			$data_date = $this->input->post('voucher_date', TRUE);
+			$data_narration = $this->input->post('voucher_narration', TRUE);
+
+			$data_draft = $this->input->post('voucher_draft');
+			if ($data_draft == "1")
+				$data_draft = "1";
+			else
+				$data_draft = "0";
+
+			$data_type = 0;
+			switch ($voucher_type)
+			{
+				case "receipt": $data_type = 1; break;
+				case "payment": $data_type = 2; break;
+				case "contra": $data_type = 3; break;
+				case "journal": $data_type = 4; break;
+			}
+			$data_date = date_php_to_mysql($data_date); // Converting date to MySQL
+
+			if ( ! $this->db->query("UPDATE vouchers SET number = ?, date = ?, narration = ?, draft = ? WHERE id = ?", array($data_number, $data_date, $data_narration, $data_draft, $voucher_id)))
+			{
+				$this->messages->add('Error updating Voucher A/C', 'error');
+				$this->template->load('template', 'voucher/edit', $data);
+				return;
+			} return;
+
+			/* Adding ledger accounts */
+			$data_all_ledger_dc = $this->input->post('ledger_dc', TRUE);
+			$data_all_ledger_id = $this->input->post('ledger_id', TRUE);
+			$data_all_dr_amount = $this->input->post('dr_amount', TRUE);
+			$data_all_cr_amount = $this->input->post('cr_amount', TRUE);
+
+			$dr_total = 0;
+			$cr_total = 0;
+			foreach ($data_all_ledger_dc as $id => $ledger_data)
+			{
+				$data_ledger_dc = $data_all_ledger_dc[$id];
+				$data_ledger_id = $data_all_ledger_id[$id];
+				if ($data_ledger_id < 1)
+					continue;
+				$data_amount = 0;
+				if ($data_all_ledger_dc[$id] == "D")
+				{
+					$data_amount = $data_all_dr_amount[$id];
+					$dr_total += $data_all_dr_amount[$id];
+				} else {
+					$data_amount = $data_all_cr_amount[$id];
+					$cr_total += $data_all_cr_amount[$id];
+				}
+
+				if ( ! $this->db->query("INSERT INTO voucher_items (voucher_id, ledger_id, amount, dc) VALUES (?, ?, ?, ?)", array($voucher_id, $data_ledger_id, $data_amount, $data_ledger_dc)))
+				{
+					$this->messages->add('Error addding Ledger A/C ' . $data_ledger_id, 'error');
+				}
+			}
+
+			/* Updating Debit and Credit Total in vouchers table */
+			if ( ! $this->db->query("UPDATE vouchers SET dr_total = ?, cr_total = ? WHERE id = ?", array($dr_total, $cr_total, $voucher_id)))
+			{
+				$this->messages->add('Error updating voucher total', 'error');
+			}
+
+			/* Success */
+			$this->messages->add('Voucher updated successfully', 'success');
+			redirect('voucher/show/' . $voucher_type);
+		}
+		return;
 	}
 
 	function delete($voucher_type, $voucher_id)

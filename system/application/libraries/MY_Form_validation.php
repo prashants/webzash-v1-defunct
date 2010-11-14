@@ -19,7 +19,7 @@ class MY_Form_validation extends CI_Form_validation {
 	function unique($str, $field)
 	{
 		$CI =& get_instance();
-		list($table, $column) = explode('.', $field, 2);
+		list ($table, $column) = explode('.', $field, 2);
 
 		$CI->form_validation->set_message('unique', 'The %s that you requested is already in use');
 
@@ -35,6 +35,18 @@ class MY_Form_validation extends CI_Form_validation {
 		$CI->form_validation->set_message('uniquevoucherno', 'The %s that you requested is already in use');
 
 		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM vouchers WHERE number = ? AND type = ?", array((int)$str, (int)$type));
+		$row = $query->row();
+		return ($row->dupe > 0) ? FALSE : TRUE;
+	}
+
+	function uniquevouchernowithid($str, $field)
+	{
+		$CI =& get_instance();
+
+		list ($type, $id) = explode('.', $field, 2);
+		$CI->form_validation->set_message('uniquevouchernowithid', 'The %s that you requested is already in use');
+
+		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM vouchers WHERE number = ? AND type = ? AND id != ?", array((int)$str, (int)$type, $id));
 		$row = $query->row();
 		return ($row->dupe > 0) ? FALSE : TRUE;
 	}
