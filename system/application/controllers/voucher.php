@@ -432,6 +432,7 @@ class Voucher extends Controller {
 			'size' => '15',
 			'value' => '',
 			'class' => 'dr-item',
+			'disabled' => 'disabled',
 		);
 		$cr_amount = array(
 			'name' => 'cr_amount[' . $i . ']',
@@ -440,6 +441,7 @@ class Voucher extends Controller {
 			'size' => '15',
 			'value' => '',
 			'class' => 'cr-item',
+			'disabled' => 'disabled',
 		);
 
 		echo '<tr class="new-row">';

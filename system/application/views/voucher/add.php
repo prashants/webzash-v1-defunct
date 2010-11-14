@@ -2,7 +2,7 @@
 
 $(document).ready(function() {
 	/* Calculating Dr and Cr total */
-	$('.dr-item').change(function() {
+	$('.dr-item').live('change', function() {
 		var drTotal = 0;
 		$("table tr .dr-item").each(function() {
 			var curDr = $(this).attr('value');
@@ -40,7 +40,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('.cr-item').change(function() {
+	$('.cr-item').live('change', function() {
 		var drTotal = 0;
 		$("table tr .dr-item").each(function() {
 			var curDr = $(this).attr('value')
@@ -79,7 +79,7 @@ $(document).ready(function() {
 	});
 
 	/* Dr - Cr dropdown changed */
-	$('.dc-dropdown').change(function() {
+	$('.dc-dropdown').live('change', function() {
 		var drValue = $(this).parent().next().next().children().attr('value');
 		var crValue = $(this).parent().next().next().next().children().attr('value');
 
@@ -115,7 +115,7 @@ $(document).ready(function() {
 	});
 
 	/* Ledger dropdown changed */
-	$('.ledger-dropdown').change(function() {
+	$('.ledger-dropdown').live('change', function() {
 		if ($(this).val() == "0") {
 			$(this).parent().next().children().attr('value', "");
 			$(this).parent().next().next().children().attr('value', "");
