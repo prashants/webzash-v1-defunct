@@ -117,19 +117,15 @@ class Voucher extends Controller {
 		{
 		case 'receipt' :
 			$this->template->set('page_title', 'New Receipt Voucher');
-			$data['voucher_type'] = "receipt";
 			break;
 		case 'payment' :
 			$this->template->set('page_title', 'New Payment Voucher');
-			$data['voucher_type'] = "payment";
 			break;
 		case 'contra' :
 			$this->template->set('page_title', 'New Contra Voucher');
-			$data['voucher_type'] = "contra";
 			break;
 		case 'journal' :
 			$this->template->set('page_title', 'New Journal Voucher');
-			$data['voucher_type'] = "journal";
 			break;
 		default :
 			$this->messages->add('Invalid voucher type', 'error');
@@ -151,7 +147,7 @@ class Voucher extends Controller {
 			'id' => 'voucher_date',
 			'maxlength' => '11',
 			'size' => '11',
-			'value' => '01/11/2010',
+			'value' => date_today_php(),
 		);
 		$data['voucher_narration'] = array(
 			'name' => 'voucher_narration',
@@ -192,10 +188,23 @@ class Voucher extends Controller {
 			$data['voucher_email'] = $this->input->post('voucher_email');
 			$data['voucher_pdf'] = $this->input->post('voucher_pdf');
 
-			$data['ledger_dc_p'] = $this->input->post('ledger_dc', TRUE);
-			$data['ledger_id_p'] = $this->input->post('ledger_id', TRUE);
-			$data['dr_amount_p'] = $this->input->post('dr_amount', TRUE);
-			$data['cr_amount_p'] = $this->input->post('cr_amount', TRUE);
+			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
+			$data['ledger_id'] = $this->input->post('ledger_id', TRUE);
+			$data['dr_amount'] = $this->input->post('dr_amount', TRUE);
+			$data['cr_amount'] = $this->input->post('cr_amount', TRUE);
+		} else {
+			for ($count = 0; $count <= 5; $count++)
+			{
+				if ($count == 0 && $voucher_type == "payment")
+					$data['ledger_dc'][$count] = "C";
+				else if ($count == 1 && $voucher_type != "payment")
+					$data['ledger_dc'][$count] = "C";
+				else
+					$data['ledger_dc'][$count] = "D";
+				$data['ledger_id'][$count] = 0;
+				$data['dr_amount'][$count] = "";
+				$data['cr_amount'][$count] = "";
+			}
 		}
 
 		if ($this->form_validation->run() == FALSE)
