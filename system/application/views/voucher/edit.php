@@ -251,7 +251,7 @@ $(document).ready(function() {
 	echo form_fieldset_close();
 	echo "</p>";
 	echo "<br /><br />";
-	echo form_submit('submit', 'Create');
+	echo form_submit('submit', 'Update');
 	echo " ";
 	echo anchor('voucher/show/' . $voucher_type, 'Back', array('title' => 'Back to ' . ucfirst($voucher_type) . ' Vouchers'));
 	echo form_close();
