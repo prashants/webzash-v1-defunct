@@ -384,28 +384,28 @@ class Voucher extends Controller {
 		$counter = 0;
 		foreach ($cur_ledgers_q->result() as $row)
 		{
-			$data['ledger'][$counter]['ledger_dc'] = $row->dc;
-			$data['ledger'][$counter]['ledger_id'] = $row->ledger_id;
+			$data['ledger_dc'][$counter] = $row->dc;
+			$data['ledger_id'][$counter] = $row->ledger_id;
 			if ($row->dc == "D")
 			{
-				$data['ledger'][$counter]['ledger_dr'] = $row->amount;
-				$data['ledger'][$counter]['ledger_cr'] = "";
+				$data['dr_amount'][$counter] = $row->amount;
+				$data['cr_amount'][$counter] = "";
 			} else {
-				$data['ledger'][$counter]['ledger_dr'] = "";
-				$data['ledger'][$counter]['ledger_cr'] = $row->amount;
+				$data['dr_amount'][$counter] = "";
+				$data['cr_amount'][$counter] = $row->amount;
 			}
 			$counter++;
 		}
 		/* Two extra rows */
-		$data['ledger'][$counter]['ledger_dc'] = 'D';
-		$data['ledger'][$counter]['ledger_id'] = 0;
-		$data['ledger'][$counter]['ledger_dr'] = "";
-		$data['ledger'][$counter]['ledger_cr'] = "";
+		$data['ledger_dc'][$counter] = 'D';
+		$data['ledger_id'][$counter] = 0;
+		$data['dr_amount'][$counter] = "";
+		$data['cr_amount'][$counter] = "";
 		$counter++;
-		$data['ledger'][$counter]['ledger_dc'] = 'D';
-		$data['ledger'][$counter]['ledger_id'] = 0;
-		$data['ledger'][$counter]['ledger_dr'] = "";
-		$data['ledger'][$counter]['ledger_cr'] = "";
+		$data['ledger_dc'][$counter] = 'D';
+		$data['ledger_id'][$counter] = 0;
+		$data['dr_amount'][$counter] = "";
+		$data['cr_amount'][$counter] = "";
 		$counter++;
 
 		/* Form validations */

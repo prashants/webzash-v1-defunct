@@ -193,32 +193,31 @@ $(document).ready(function() {
 	echo "<table class=\"vouchertable\">";
 	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th><th colspan=2>Actions</th><th colspan=2>Cur Balance</th></tr></thead>";
 
-
-	foreach ($ledger as $i => $row)
+	foreach ($ledger_dc as $i => $ledger)
 	{
-		$dr_amount = array(
+		$dr_amount_item = array(
 			'name' => 'dr_amount[' . $i . ']',
 			'id' => 'dr_amount[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '15',
-			'value' => ($_POST) ? $dr_amount_p[$i] : $row['ledger_dr'],
+			'value' => isset($dr_amount[$i]) ? $dr_amount[$i] : "",
 			'class' => 'dr-item',
 		);
-		$cr_amount = array(
+		$cr_amount_item = array(
 			'name' => 'cr_amount[' . $i . ']',
 			'id' => 'cr_amount[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '15',
-			'value' => ($_POST) ? $cr_amount_p[$i] : $row['ledger_cr'],
+			'value' => isset($cr_amount[$i]) ? $cr_amount[$i] : "",
 			'class' => 'cr-item',
 		);
 		echo "<tr>";
 
-		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', ($_POST) ? $ledger_dc_p[$i] : $row['ledger_dc']) . "</td>";
+		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', isset($ledger_dc[$i]) ? $ledger_dc[$i] : "D") . "</td>";
 
-		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', ($_POST) ? $ledger_id_p[$i] : $row['ledger_id']) . "</td>";
-		echo "<td>" . form_input($dr_amount) . "</td>";
-		echo "<td>" . form_input($cr_amount) . "</td>";
+		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0) . "</td>";
+		echo "<td>" . form_input($dr_amount_item) . "</td>";
+		echo "<td>" . form_input($cr_amount_item) . "</td>";
 
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addrow')) . "</td>";
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow')) . "</td>";
@@ -252,7 +251,7 @@ $(document).ready(function() {
 	echo form_fieldset_close();
 	echo "</p>";
 	echo "<br /><br />";
-	echo form_submit('submit', 'Update');
+	echo form_submit('submit', 'Create');
 	echo " ";
 	echo anchor('voucher/show/' . $voucher_type, 'Back', array('title' => 'Back to ' . ucfirst($voucher_type) . ' Vouchers'));
 	echo form_close();
