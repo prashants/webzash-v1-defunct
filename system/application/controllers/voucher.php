@@ -310,7 +310,7 @@ class Voucher extends Controller {
 			}
 
 			/* Success */
-			$this->messages->add('Voucher added successfully', 'success');
+			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . $data_number . ' added successfully', 'success');
 			redirect('voucher/show/' . $voucher_type);
 			$this->template->load('template', 'voucher/add', $data);
 		}
@@ -375,38 +375,41 @@ class Voucher extends Controller {
 		$data['voucher_email'] = FALSE;
 		$data['voucher_pdf'] = FALSE;
 
-		/* Load current ledger details */
-		$cur_ledgers_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ?", array($voucher_id));
-		if ($cur_ledgers_q->num_rows <= 0)
+		/* Load current ledger details if not $_POST */
+		if ( ! $_POST)
 		{
-			$this->messages->add('No Ledger A/C\'s found!', 'error');
-		}
-		$counter = 0;
-		foreach ($cur_ledgers_q->result() as $row)
-		{
-			$data['ledger_dc'][$counter] = $row->dc;
-			$data['ledger_id'][$counter] = $row->ledger_id;
-			if ($row->dc == "D")
+			$cur_ledgers_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ?", array($voucher_id));
+			if ($cur_ledgers_q->num_rows <= 0)
 			{
-				$data['dr_amount'][$counter] = $row->amount;
-				$data['cr_amount'][$counter] = "";
-			} else {
-				$data['dr_amount'][$counter] = "";
-				$data['cr_amount'][$counter] = $row->amount;
+				$this->messages->add('No Ledger A/C\'s found!', 'error');
 			}
+			$counter = 0;
+			foreach ($cur_ledgers_q->result() as $row)
+			{
+				$data['ledger_dc'][$counter] = $row->dc;
+				$data['ledger_id'][$counter] = $row->ledger_id;
+				if ($row->dc == "D")
+				{
+					$data['dr_amount'][$counter] = $row->amount;
+					$data['cr_amount'][$counter] = "";
+				} else {
+					$data['dr_amount'][$counter] = "";
+					$data['cr_amount'][$counter] = $row->amount;
+				}
+				$counter++;
+			}
+			/* Two extra rows */
+			$data['ledger_dc'][$counter] = 'D';
+			$data['ledger_id'][$counter] = 0;
+			$data['dr_amount'][$counter] = "";
+			$data['cr_amount'][$counter] = "";
+			$counter++;
+			$data['ledger_dc'][$counter] = 'D';
+			$data['ledger_id'][$counter] = 0;
+			$data['dr_amount'][$counter] = "";
+			$data['cr_amount'][$counter] = "";
 			$counter++;
 		}
-		/* Two extra rows */
-		$data['ledger_dc'][$counter] = 'D';
-		$data['ledger_id'][$counter] = 0;
-		$data['dr_amount'][$counter] = "";
-		$data['cr_amount'][$counter] = "";
-		$counter++;
-		$data['ledger_dc'][$counter] = 'D';
-		$data['ledger_id'][$counter] = 0;
-		$data['dr_amount'][$counter] = "";
-		$data['cr_amount'][$counter] = "";
-		$counter++;
 
 		/* Form validations */
 		$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural|uniquevouchernowithid[' . v_to_n($voucher_type) . '.' . $voucher_id . ']');
@@ -434,10 +437,10 @@ class Voucher extends Controller {
 			$data['voucher_email'] = $this->input->post('voucher_email');
 			$data['voucher_pdf'] = $this->input->post('voucher_pdf');
 
-			$data['ledger_dc_p'] = $this->input->post('ledger_dc', TRUE);
-			$data['ledger_id_p'] = $this->input->post('ledger_id', TRUE);
-			$data['dr_amount_p'] = $this->input->post('dr_amount', TRUE);
-			$data['cr_amount_p'] = $this->input->post('cr_amount', TRUE);
+			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
+			$data['ledger_id'] = $this->input->post('ledger_id', TRUE);
+			$data['dr_amount'] = $this->input->post('dr_amount', TRUE);
+			$data['cr_amount'] = $this->input->post('cr_amount', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -500,8 +503,14 @@ class Voucher extends Controller {
 				$this->messages->add('Error updating Voucher A/C', 'error');
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
-			} return;
+			}
 
+			/* TODO : Deleting all old ledger data, Bad solution */
+			if ( ! $this->db->query("DELETE FROM voucher_items WHERE voucher_id = ?", array($voucher_id)))
+			{
+				$this->messages->add('Error deleting old Ledger A/C\'s', 'error');
+			}
+			
 			/* Adding ledger accounts */
 			$data_all_ledger_dc = $this->input->post('ledger_dc', TRUE);
 			$data_all_ledger_id = $this->input->post('ledger_id', TRUE);
@@ -528,7 +537,7 @@ class Voucher extends Controller {
 
 				if ( ! $this->db->query("INSERT INTO voucher_items (voucher_id, ledger_id, amount, dc) VALUES (?, ?, ?, ?)", array($voucher_id, $data_ledger_id, $data_amount, $data_ledger_dc)))
 				{
-					$this->messages->add('Error addding Ledger A/C ' . $data_ledger_id, 'error');
+					$this->messages->add('Error updating Ledger A/C ' . $data_ledger_id, 'error');
 				}
 			}
 
@@ -539,7 +548,7 @@ class Voucher extends Controller {
 			}
 
 			/* Success */
-			$this->messages->add('Voucher updated successfully', 'success');
+			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . $data_number . ' updated successfully', 'success');
 			redirect('voucher/show/' . $voucher_type);
 		}
 		return;

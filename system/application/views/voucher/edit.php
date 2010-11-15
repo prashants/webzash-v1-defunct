@@ -253,6 +253,8 @@ $(document).ready(function() {
 	echo "<br /><br />";
 	echo form_submit('submit', 'Update');
 	echo " ";
+	echo anchor('voucher/edit/' . $voucher_type . "/" . $voucher_id, 'Reload', array('title' => 'Reload ' . ucfirst($voucher_type) . ' Voucher Original Data'));
+	echo " | ";
 	echo anchor('voucher/show/' . $voucher_type, 'Back', array('title' => 'Back to ' . ucfirst($voucher_type) . ' Vouchers'));
 	echo form_close();
 ?>
