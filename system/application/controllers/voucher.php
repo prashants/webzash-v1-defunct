@@ -5,6 +5,7 @@ class Voucher extends Controller {
 	{
 		parent::Controller();
 		$this->load->model('Voucher_model');
+		$this->load->model('Ledger_model');
 	}
 
 	function index()
@@ -80,12 +81,25 @@ class Voucher extends Controller {
 		$odd_even = "odd";
 		foreach ($voucher_q->result() as $row)
 		{
+			$ledger_type = ($row->type == 2) ? "C" : "D";
+			$ledger_q = $this->db->query("SELECT ledgers.name as name FROM voucher_items join ledgers on voucher_items.ledger_id = ledgers.id WHERE voucher_items.voucher_id = ? AND voucher_items.dc = ?", array($row->id, $ledger_type));
+			$ledger_multiple = ($ledger_q->num_rows() > 1) ? TRUE : FALSE;
+			$ledger = $ledger_q->row();
+
 			$html .= "<tr class=\"tr-" . $odd_even;
 			$html .= ($row->draft == 1) ? " tr-draft " : "";
 			$html .= "\">";
 			$html .= "<td>" . $row->number . "</td>";
 			$html .= "<td>" . date_mysql_to_php($row->date) . "</td>";
-			$html .= "<td>Ledger A/C</td>";
+
+			$html .= "<td>";
+			if ($ledger)
+				if ($ledger_multiple)
+					$html .= "(" . $ledger->name . ")";
+				else
+					$html .= $ledger->name;
+			$html .= "</td>";
+
 			$html_voucher_type = n_to_v($row->type);
 			$html .= "<td>" . ucfirst($html_voucher_type) . "</td>";
 			if ($row->draft == 0)
