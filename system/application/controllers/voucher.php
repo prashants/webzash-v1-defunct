@@ -63,16 +63,58 @@ class Voucher extends Controller {
 	function _show_voucher($voucher_type = NULL)
 	{
 		$voucher_q = NULL;
+
+		/* Pagination setup */
+		$this->load->library('pagination');
+		$page_count = $this->uri->segment(4);
+		if ( ! $page_count) $page_count = "0";
+		$voucher_type_link = "";
+		switch ($voucher_type)
+		{
+			case 1: $voucher_type_link = "receipt"; break;
+			case 2: $voucher_type_link = "payment"; break;
+			case 3: $voucher_type_link = "contra"; break;
+			case 4: $voucher_type_link = "journal"; break;
+			default: $voucher_type_link = "all"; break;
+		}
+		$config['base_url'] = site_url('voucher/show/' . $voucher_type_link);
+		$config['num_links'] = 10;
+		$config['per_page'] = 10;
+		$config['uri_segment'] = 4;
+		$config['full_tag_open'] = '<ul id="pagination-flickr">';
+		$config['full_close_open'] = '</ul>';
+		$config['num_tag_open'] = '<li>';
+		$config['num_tag_close'] = '</li>';
+		$config['cur_tag_open'] = '<li class="active">';
+		$config['cur_tag_close'] = '</li>';
+		$config['next_link'] = 'Next &#187;';
+		$config['next_tag_open'] = '<li class="next">';
+		$config['next_tag_close'] = '</li>';
+		$config['prev_link'] = '&#171; Previous';
+		$config['prev_tag_open'] = '<li class="previous">';
+		$config['prev_tag_close'] = '</li>';
+		$config['first_link'] = 'First';
+		$config['first_tag_open'] = '<li class="first">';
+		$config['first_tag_close'] = '</li>';
+		$config['last_link'] = 'Last';
+		$config['last_tag_open'] = '<li class="last">';
+		$config['last_tag_close'] = '</li>';
+
 		if ($voucher_type > 5)
 		{
 			$this->messages->add('Invalid voucher type', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else if ($voucher_type > 0) {
-			$voucher_q = $this->db->query('SELECT * FROM vouchers WHERE type = ? ORDER BY date DESC, number DESC', array($voucher_type));
+			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE type = ? ORDER BY date DESC, number DESC LIMIT ${page_count}, 10", array($voucher_type));
+			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE type = ?", array($voucher_type))->num_rows();
 		} else {
-			$voucher_q = $this->db->query('SELECT * FROM vouchers ORDER BY date DESC, number DESC');
+			$voucher_q = $this->db->query("SELECT * FROM vouchers ORDER BY date DESC, number DESC LIMIT ${page_count}, 10");
+			$config['total_rows'] = $this->db->count_all('vouchers');
 		}
+
+		/* Pagination initializing */
+		$this->pagination->initialize($config);
 
 		$html = "<table border=0 cellpadding=5 class=\"generaltable\">";
 		$html .= "<thead><tr><th>Number</th><th>Date</th><th>Ledger A/C</th><th>Type</th><th>Status</th><th>DR Amount</th><th>CR Amount</th><th colspan=4>Actions</th></tr></thead>";
