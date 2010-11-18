@@ -66,7 +66,8 @@ class Voucher extends Controller {
 
 		/* Pagination setup */
 		$this->load->library('pagination');
-		$page_count = $this->uri->segment(4);
+		$page_count = (int)$this->uri->segment(4);
+		$page_count = $this->input->xss_clean($page_count);
 		if ( ! $page_count) $page_count = "0";
 		$voucher_type_link = "";
 		switch ($voucher_type)
