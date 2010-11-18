@@ -30,7 +30,7 @@
 	$expense->init(4);
 	$pandl = $income->total - $expense->total;
 
-	echo "<tr>";
+	echo "<tr style=\"background-color:#F8F8F8;\">";
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"vouchertable\" width=\"450\">";
 	echo "<tr valign=\"top\">";
@@ -81,5 +81,6 @@
 	echo "</tr>";
 	echo "</table>";
 	echo "</td>";
+	echo "</tr>";
 	echo "</table>";
 ?>
