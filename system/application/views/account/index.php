@@ -1,5 +1,3 @@
-<?php print $account_list; ?>
-
 <?php
 	$this->load->library('accountlist');
 
