@@ -39,7 +39,7 @@ $this->pagination->initialize($config);
 
 if ($ledger_id != 0)
 {
-$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? LIMIT ${page_count}, 10", array($ledger_id));
+$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date DESC, vouchers.number DESC LIMIT ${page_count}, 10", array($ledger_id));
 
 echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 
