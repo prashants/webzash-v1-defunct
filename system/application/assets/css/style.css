@@ -152,6 +152,10 @@ body {
 	clear:both;
 }
 
+.bold {
+	font-weight:bold;
+}
+
 #message-box {
 	border:solid 1px #787878;
 	background:#F0F0F0;

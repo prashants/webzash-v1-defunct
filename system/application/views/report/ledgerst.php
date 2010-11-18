@@ -7,16 +7,49 @@ echo " ";
 echo form_submit('submit', 'Show');
 echo "</p>";
 echo form_close();
+
+/* Pagination */
+$page_count = (int)$this->uri->segment(4);
+$page_count = $this->input->xss_clean($page_count);
+if ( ! $page_count) $page_count = "0";
+$config['base_url'] = site_url('report/ledgerst/' . $ledger_id);
+$config['num_links'] = 10;
+$config['per_page'] = 10;
+$config['uri_segment'] = 4;
+$config['total_rows'] = $this->db->query('SELECT * FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ?', array($ledger_id))->num_rows();
+$config['full_tag_open'] = '<ul id="pagination-flickr">';
+$config['full_close_open'] = '</ul>';
+$config['num_tag_open'] = '<li>';
+$config['num_tag_close'] = '</li>';
+$config['cur_tag_open'] = '<li class="active">';
+$config['cur_tag_close'] = '</li>';
+$config['next_link'] = 'Next &#187;';
+$config['next_tag_open'] = '<li class="next">';
+$config['next_tag_close'] = '</li>';
+$config['prev_link'] = '&#171; Previous';
+$config['prev_tag_open'] = '<li class="previous">';
+$config['prev_tag_close'] = '</li>';
+$config['first_link'] = 'First';
+$config['first_tag_open'] = '<li class="first">';
+$config['first_tag_close'] = '</li>';
+$config['last_link'] = 'Last';
+$config['last_tag_open'] = '<li class="last">';
+$config['last_tag_close'] = '</li>';
+$this->pagination->initialize($config);
+
 if ($ledger_id != 0)
 {
-$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ?", array($ledger_id));
+$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? LIMIT ${page_count}, 10", array($ledger_id));
+
 echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 
-echo "<thead><tr><th>Number</th><th>Date</th><th>Draft</th><th>Type</th><th></th><th>Amount</th></tr></thead>";
+echo "<thead><tr><th>Number</th><th>Date</th><th>Status</th><th>Type</th><th></th><th>Amount</th></tr></thead>";
 $odd_even = "odd";
 foreach ($ledgerst_q->result() as $row)
 {
-		echo "<tr class=\"tr-" . $odd_even . "\">";
+		echo "<tr class=\"tr-" . $odd_even;
+		echo ($row->vdraft == 1) ? " tr-draft " : "";
+		echo "\">";
 		echo "<td>";
 		echo $row->vid;
 		echo "</td>";
@@ -24,7 +57,7 @@ foreach ($ledgerst_q->result() as $row)
 		echo date_mysql_to_php($row->vdate);
 		echo "</td>";
 		echo "<td>";
-		echo $row->vdraft;
+		echo ($row->vdraft == 1) ? "Draft" : "Active";
 		echo "</td>";
 		echo "<td>";
 		switch ($row->vtype)
@@ -41,33 +74,11 @@ foreach ($ledgerst_q->result() as $row)
 		echo "<td>";
 		echo $row->lamount;
 		echo "</td>";
-		/*
-		echo "<td>";
-		list ($opbal_amount, $opbal_type) = $this->Ledger_model->get_op_balance($ledger_id);
-		if ($opbal_type == "C")
-			echo "Cr " . $opbal_amount;
-		else
-			echo "Dr " . $opbal_amount;
-		echo "</td>";
-		echo "<td>";
-		$dr_total = $this->Ledger_model->get_dr_total($ledger_id);
-		if ($dr_total)
-		{
-			echo $dr_total;
-			$temp_dr_total += $dr_total;
-		}
-		echo "</td>";
-		echo "<td>";
-		$cr_total = $this->Ledger_model->get_cr_total($ledger_id);
-		if ($cr_total)
-		{
-			echo $cr_total;
-			$temp_cr_total += $cr_total;
-		}
-		echo "</td>";*/
 		echo "</tr>";
 		$odd_even = ($odd_even == "odd") ? "even" : "odd";
 }
 echo "</table>";
 }
 ?>
+
+<div id="pagination-container"><?php echo $this->pagination->create_links(); ?></div>

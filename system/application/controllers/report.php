@@ -69,6 +69,9 @@ class Report extends Controller {
 
 	function ledgerst($ledger_id = 0)
 	{
+		/* Pagination setup */
+		$this->load->library('pagination');
+
 		$this->template->set('page_title', 'Ledger Statement');
 		$menu = array(
 			'report/balancesheet' => 'Balance Sheet',
