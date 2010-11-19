@@ -8,7 +8,7 @@
 	echo "<p>";
 	echo form_label('Parent group', 'group_parent');
 	echo "<br />";
-	echo form_dropdown('group_parent', $group_parent, isset($group_parent_active) ? $group_parent_active : '');
+	echo form_dropdown('group_parent', $group_parent, $group_parent_active);
 	echo "</p>";
 	echo form_hidden('group_id', $group_id);
 	echo form_submit('submit', 'Update');

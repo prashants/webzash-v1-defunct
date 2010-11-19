@@ -23,13 +23,21 @@ class Group extends Controller {
 			'id' => 'group_name',
 			'maxlength' => '100',
 			'size' => '40',
-			'value' => $this->input->post('group_name'),
+			'value' => '',
 		);
 		$data['group_parent'] = $this->Group_model->get_all_groups();
+		$data['group_parent_active'] = 0;
 
 		/* Form validations */
 		$this->form_validation->set_rules('group_name', 'Group name', 'trim|required|min_length[2]|max_length[100]|unique[groups.name]');
 		$this->form_validation->set_rules('group_parent', 'Parent group', 'trim|required|is_natural_no_zero');
+
+		/* Re-populating form */
+		if ($_POST)
+		{
+			$data['group_name']['value'] = $this->input->post('group_name', TRUE);
+			$data['group_parent_active'] = $this->input->post('group_parent', TRUE);
+		}
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -100,15 +108,17 @@ class Group extends Controller {
 		$this->form_validation->set_rules('group_name', 'Group name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[groups.name.' . $id . ']');
 		$this->form_validation->set_rules('group_parent', 'Parent group', 'trim|required|is_natural_no_zero');
 
+
+		/* Re-populating form */
+		if ($_POST)
+		{
+			$data['group_name']['value'] = $this->input->post('group_name', TRUE);
+			$data['group_parent_active'] = $this->input->post('group_parent', TRUE);
+		}
+
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			/* Re-populating form */
-			if ($this->input->post('submit', TRUE))
-			{
-				$data['group_name']['value'] = $this->input->post('group_name', TRUE);
-				$data['group_parent_active'] = $this->input->post('group_parent', TRUE);
-			}
 			$this->template->load('template', 'group/edit', $data);
 		}
 		else

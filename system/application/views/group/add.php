@@ -8,7 +8,7 @@
 	echo "<p>";
 	echo form_label('Parent group', 'group_parent');
 	echo "<br />";
-	echo form_dropdown('group_parent', $group_parent);
+	echo form_dropdown('group_parent', $group_parent, $group_parent_active);
 	echo "</p>";
 	echo form_submit('submit', 'Create');
 	echo " ";
