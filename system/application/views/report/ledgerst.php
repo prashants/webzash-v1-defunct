@@ -39,12 +39,27 @@ $this->pagination->initialize($config);
 
 if ($ledger_id != 0)
 {
-$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date DESC, vouchers.number DESC LIMIT ${page_count}, 10", array($ledger_id));
+$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT ${page_count}, 10", array($ledger_id));
 
 echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 
-echo "<thead><tr><th>Number</th><th>Date</th><th>Status</th><th>Type</th><th></th><th>Amount</th></tr></thead>";
+echo "<thead><tr><th>Number</th><th>Date</th><th>Status</th><th>Type</th><th>Dr Amount</th><th>Cr Amount</th><th>Total Amount</th></tr></thead>";
 $odd_even = "odd";
+
+$cur_balance = 0;
+if ($page_count <= 0)
+{
+	list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id);
+	if ($optype == "D")
+	{
+		echo "<tr class=\"tr-balance\"><td colspan=4>Opening Balance</td><td>" . convert_dc($optype) . " " . $opbalance . "</td><td></td><td></td></tr>";
+		$cur_balance += $opbalance;
+	} else {
+		echo "<tr class=\"tr-balance\"><td colspan=4>Opening Balance</td><td></td><td>" . convert_dc($optype) . " " . $opbalance . "</td><td></td></tr>";
+		$cur_balance -= $opbalance;
+	}
+}
+
 foreach ($ledgerst_q->result() as $row)
 {
 		echo "<tr class=\"tr-" . $odd_even;
@@ -68,14 +83,43 @@ foreach ($ledgerst_q->result() as $row)
 			case 4: echo "Journal"; break;
 		}
 		echo "</td>";
+		if ($row->ldc == "D")
+		{
+			if ($row->vdraft == 0)
+				$cur_balance += $row->lamount;
+			echo "<td>";
+			echo convert_dc($row->ldc);
+			echo " ";
+			echo $row->lamount;
+			echo "</td>";
+			echo "<td></td>";
+		} else {
+			if ($row->vdraft == 0)
+				$cur_balance -= $row->lamount;
+			echo "<td></td>";
+			echo "<td>";
+			echo convert_dc($row->ldc);
+			echo " ";
+			echo $row->lamount;
+			echo "</td>";
+		}
 		echo "<td>";
-		echo convert_dc($row->ldc);
-		echo "</td>";
-		echo "<td>";
-		echo $row->lamount;
+		if ($row->vdraft == 0)
+			echo ($cur_balance < 0) ? "Cr " . $cur_balance :  "Dr " . $cur_balance;
+		else
+			echo "-";
 		echo "</td>";
 		echo "</tr>";
 		$odd_even = ($odd_even == "odd") ? "even" : "odd";
+}
+/* Closing Balance */
+if ($cur_balance < 0)
+{
+	echo "<tr class=\"tr-balance\"><td colspan=4>Closing Balance</td><td></td><td>Cr " .  -$cur_balance . "</td><td></td></tr>";
+	$cur_balance += $opbalance;
+} else {
+	echo "<tr class=\"tr-balance\"><td colspan=4>Closing Balance</td><td>Dr " . $cur_balance . "<td></td></td><td></td></tr>";
+	$cur_balance -= $opbalance;
 }
 echo "</table>";
 }
