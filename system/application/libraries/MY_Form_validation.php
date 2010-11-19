@@ -74,9 +74,19 @@ class MY_Form_validation extends CI_Form_validation {
 	function currency($str)
 	{
 		$CI =& get_instance();
+		if (preg_match('/^[\-]/', $str))
+		{
+			$CI->form_validation->set_message('currency', '%s cannot be negative');
+			return FALSE;
+		}
 
-		$CI->form_validation->set_message('currency', '%s must be a valid amount. Maximum 2 decimal places is allowed');
-		return preg_match('/^[\-+]?[0-9]*\.?[0-9]{0,2}$/', $str) ? TRUE : FALSE;
+		if (preg_match('/^[0-9]*\.?[0-9]{0,2}$/', $str))
+		{
+			return TRUE;
+		} else {
+			$CI->form_validation->set_message('currency', '%s must be a valid amount. Maximum 2 decimal places is allowed');
+			return FALSE;
+		}
 	}
 
 	function is_date($str)
