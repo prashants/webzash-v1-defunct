@@ -102,6 +102,7 @@ class Accountlist
 		}
 	}
 
+	/* Display chart of accounts view */
 	function account_st_main($c = 0)
 	{
 		$this->counter = $c;
@@ -114,7 +115,19 @@ class Accountlist
 			echo "</td>";
 			echo "<td>Group A/C</td>";
 			echo "<td>-</td>";
-			echo "<td>" . $this->total . "</td>";
+
+			echo "<td>";
+			if ($this->total == 0)
+			{
+				echo "0";
+			} else if ($this->total > 0)
+			{
+				echo "Dr " . $this->total;
+			} else {
+				echo "Cr " . -$this->total;
+			}
+			echo "</td>";
+
 			echo "<td>" . anchor('group/edit/' . $this->id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit group')), array('title' => "Edit Group")) . "</td>";
 			echo "<td>" . anchor('group/delete/' . $this->id, img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete group')), array('class' => "confirmClick", 'title' => "Delete Group")) . "</td>";
 			echo "</tr>";
@@ -142,7 +155,18 @@ class Accountlist
 				echo $data['opbalance'];
 				echo "</td>";
 
-				echo "<td>" . $data['total'] . "</td>";
+				echo "<td>";
+				if ($data['total'] == 0)
+				{
+					echo "0";
+				} else if ($data['total'] > 0)
+				{
+					echo "Dr " . $data['total'];
+				} else {
+					echo "Cr " . -$data['total'];
+				}
+				echo "</td>";
+
 				echo "<td>" . anchor('ledger/edit/' . $data['id'], img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit Ledger')), array('title' => "Edit Ledger")) . "</td>";
 				echo "<td>" . anchor('ledger/delete/' . $data['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Ledger')), array('class' => "confirmClick", 'title' => "Delete Ledger")) . "</td>";
 				echo "</tr>";
