@@ -41,11 +41,14 @@ class Group extends Controller {
 			$data_name = $this->input->post('group_name', TRUE);
 			$data_parent_id = $this->input->post('group_parent', TRUE);
 
+			$this->db->trans_start();
 			if ( ! $this->db->query("INSERT INTO groups (name, parent_id) VALUES (?, ?)", array($data_name, $data_parent_id)))
 			{
+				$this->db->trans_rollback();
 				$this->messages->add('Error addding Group A/C', 'error');
 				$this->template->load('template', 'group/add', $data);
 			} else {
+				$this->db->trans_complete();
 				$this->messages->add('Group A/C added successfully', 'success');
 				redirect('account');
 			}
@@ -114,11 +117,14 @@ class Group extends Controller {
 			$data_parent_id = $this->input->post('group_parent', TRUE);
 			$data_id = $id;
 
+			$this->db->trans_start();
 			if ( ! $this->db->query("UPDATE groups SET name = ?, parent_id = ? WHERE id = ?", array($data_name, $data_parent_id, $data_id)))
 			{
+				$this->db->trans_rollback();
 				$this->messages->add('Error updating Group A/C', 'error');
 				$this->template->load('template', 'group/edit', $data);
 			} else {
+				$this->db->trans_complete();
 				$this->messages->add('Group A/C updated successfully', 'success');
 				redirect('account');
 			}
@@ -157,12 +163,15 @@ class Group extends Controller {
 		}
 
 		/* Deleting group */
-		if ($this->db->query("DELETE FROM groups WHERE id = ?", array($id)))
+		$this->db->trans_start();
+		if ( ! $this->db->query("DELETE FROM groups WHERE id = ?", array($id)))
 		{
-			$this->messages->add('Group A/C deleted successfully', 'success');
+			$this->db->trans_rollback();
+			$this->messages->add('Error deleting Group A/C', 'success');
 			redirect('account');
 		} else {
-			$this->messages->add('Error deleting Group A/C', 'success');
+			$this->db->trans_complete();
+			$this->messages->add('Group A/C deleted successfully', 'success');
 			redirect('account');
 		}
 		return;
