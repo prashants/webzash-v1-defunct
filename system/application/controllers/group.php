@@ -53,11 +53,11 @@ class Group extends Controller {
 			if ( ! $this->db->query("INSERT INTO groups (name, parent_id) VALUES (?, ?)", array($data_name, $data_parent_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding Group A/C', 'error');
+				$this->messages->add('Error addding ' . $data_name . ' - Group A/C', 'error');
 				$this->template->load('template', 'group/add', $data);
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Group A/C added successfully', 'success');
+				$this->messages->add($data_name . ' - Group A/C added successfully', 'success');
 				redirect('account');
 			}
 		}
@@ -131,11 +131,11 @@ class Group extends Controller {
 			if ( ! $this->db->query("UPDATE groups SET name = ?, parent_id = ? WHERE id = ?", array($data_name, $data_parent_id, $data_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating Group A/C', 'error');
+				$this->messages->add('Error updating ' . $data_name . ' - Group A/C', 'error');
 				$this->template->load('template', 'group/edit', $data);
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Group A/C updated successfully', 'success');
+				$this->messages->add($data_name . ' - Group A/C updated successfully', 'success');
 				redirect('account');
 			}
 		}

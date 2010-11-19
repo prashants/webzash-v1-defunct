@@ -68,11 +68,11 @@ class Ledger extends Controller {
 			if ( ! $this->db->query("INSERT INTO ledgers (name, group_id, op_balance, op_balance_dc) VALUES (?, ?, ?, ?)", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding Ledger A/C', 'error');
+				$this->messages->add('Error addding ' . $data_name . ' - Ledger A/C', 'error');
 				$this->template->load('template', 'group/add', $data);
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Ledger A/C added successfully', 'success');
+				$this->messages->add($data_name . ' - Ledger A/C added successfully', 'success');
 				redirect('account');
 			}
 		}
@@ -155,11 +155,11 @@ class Ledger extends Controller {
 			if ( ! $this->db->query("UPDATE ledgers SET name = ?, group_id = ?, op_balance = ?, op_balance_dc = ? WHERE id = ?", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating Ledger A/C', 'error');
+				$this->messages->add('Error updating ' . $data_name . ' - Ledger A/C', 'error');
 				$this->template->load('template', 'ledger/edit', $data);
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Ledger A/C updated successfully', 'success');
+				$this->messages->add($data_name . ' - Ledger A/C updated successfully', 'success');
 				redirect('account');
 			}
 		}
