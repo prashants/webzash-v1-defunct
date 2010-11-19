@@ -12,7 +12,7 @@
 		if ($ledger_id == 0) continue;
 		echo "<tr class=\"tr-" . $odd_even . "\">";
 		echo "<td>";
-		echo $ledger_name;
+		echo  anchor('report/ledgerst/' . $ledger_id, $ledger_name, array('title' => $ledger_name . ' Ledger Statement', 'style' => 'color:#000000'));
 		echo "</td>";
 		echo "<td>";
 		list ($opbal_amount, $opbal_type) = $this->Ledger_model->get_op_balance($ledger_id);
@@ -24,6 +24,8 @@
 		{
 			echo $dr_total;
 			$temp_dr_total += $dr_total;
+		} else {
+			echo "0";
 		}
 		echo "</td>";
 		echo "<td>";
@@ -32,11 +34,13 @@
 		{
 			echo $cr_total;
 			$temp_cr_total += $cr_total;
+		} else {
+			echo "0";
 		}
 		echo "</td>";
 		echo "</tr>";
 		$odd_even = ($odd_even == "odd") ? "even" : "odd";
 	}
-	echo "<tr><td>TOTAL</td><td></td><td>" . $temp_dr_total . "</td><td>" . $temp_cr_total . "</td></tr>";
+	echo "<tr style=\"background-color:#F8F8F8;\"><td>TOTAL</td><td></td><td>Dr " . $temp_dr_total . "</td><td>Cr " . $temp_cr_total . "</td></tr>";
 	echo "</table>";
 ?>
