@@ -24,7 +24,7 @@ class Ledger extends Controller {
 			'id' => 'ledger_name',
 			'maxlength' => '100',
 			'size' => '40',
-			'value' => $this->input->post('ledger_name'),
+			'value' => '',
 		);
 		$data['ledger_group_id'] = $this->Group_model->get_all_groups();
 		$data['op_balance'] = array(
@@ -32,14 +32,25 @@ class Ledger extends Controller {
 			'id' => 'op_balance',
 			'maxlength' => '15',
 			'size' => '15',
-			'value' => $this->input->post('op_balance'),
+			'value' => '',
 		);
+		$data['ledger_group_active'] = 0;
+		$data['op_balance_dc'] = "D";
 
 		/* Form validations */
 		$this->form_validation->set_rules('ledger_name', 'Ledger name', 'trim|required|min_length[2]|max_length[100]|unique[ledgers.name]');
 		$this->form_validation->set_rules('ledger_group_id', 'Parent group', 'trim|required|is_natural_no_zero');
 		$this->form_validation->set_rules('op_balance', 'Opening balance', 'trim|currency');
 		$this->form_validation->set_rules('op_balance_dc', 'Opening balance type', 'trim|required|is_dc');
+
+		/* Re-populating form */
+		if ($_POST)
+		{
+			$data['ledger_name']['value'] = $this->input->post('ledger_name', TRUE);
+			$data['op_balance']['value'] = $this->input->post('op_balance', TRUE);
+			$data['ledger_group_active'] = $this->input->post('ledger_group_id', TRUE);
+			$data['op_balance_dc'] = $this->input->post('op_balance_dc', TRUE);
+		}
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -53,11 +64,14 @@ class Ledger extends Controller {
 			$data_op_balance = $this->input->post('op_balance', TRUE);
 			$data_op_balance_dc = $this->input->post('op_balance_dc', TRUE);
 
+			$this->db->trans_start();
 			if ( ! $this->db->query("INSERT INTO ledgers (name, group_id, op_balance, op_balance_dc) VALUES (?, ?, ?, ?)", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc)))
 			{
+				$this->db->trans_rollback();
 				$this->messages->add('Error addding Ledger A/C', 'error');
 				$this->template->load('template', 'group/add', $data);
 			} else {
+				$this->db->trans_complete();
 				$this->messages->add('Ledger A/C added successfully', 'success');
 				redirect('account');
 			}
@@ -97,8 +111,7 @@ class Ledger extends Controller {
 			'size' => '40',
 			'value' => $ledger_data->name,
 		);
-		$data['ledger_group'] = $this->Group_model->get_all_groups();
-		$data['ledger_group_active'] = $ledger_data->group_id;
+		$data['ledger_group_id'] = $this->Group_model->get_all_groups();
 		$data['op_balance'] = array(
 			'name' => 'op_balance',
 			'id' => 'op_balance',
@@ -106,41 +119,46 @@ class Ledger extends Controller {
 			'size' => '15',
 			'value' => $ledger_data->op_balance,
 		);
+		$data['ledger_group_active'] = $ledger_data->group_id;
 		$data['op_balance_dc'] = $ledger_data->op_balance_dc;
 		$data['ledger_id'] = $id;
 
 		/* Form validations */
 		$this->form_validation->set_rules('ledger_name', 'Ledger name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[ledgers.name.' . $id . ']');
-		$this->form_validation->set_rules('ledger_group', 'Parent group', 'trim|required|is_natural_no_zero');
+		$this->form_validation->set_rules('ledger_group_id', 'Parent group', 'trim|required|is_natural_no_zero');
 		$this->form_validation->set_rules('op_balance', 'Opening balance', 'trim|currency');
 		$this->form_validation->set_rules('op_balance_dc', 'Opening balance type', 'trim|required|is_dc');
+
+		/* Re-populating form */
+		if ($_POST)
+		{
+			$data['ledger_name']['value'] = $this->input->post('ledger_name', TRUE);
+			$data['ledger_group_active'] = $this->input->post('ledger_group_id', TRUE);
+			$data['op_balance']['value'] = $this->input->post('op_balance', TRUE);
+			$data['op_balance_dc'] = $this->input->post('op_balance_dc', TRUE);
+		}
 
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			/* Re-populating form */
-			if ($this->input->post('submit', TRUE))
-			{
-				$data['ledger_name']['value'] = $this->input->post('ledger_name', TRUE);
-				$data['ledger_group_active'] = $this->input->post('ledger_group', TRUE);
-				$data['op_balance']['value'] = $this->input->post('op_balance', TRUE);
-				$data['op_balance_dc'] = $this->input->post('op_balance_dc', TRUE);
-			}
 			$this->template->load('template', 'ledger/edit', $data);
 		}
 		else
 		{
 			$data_name = $this->input->post('ledger_name', TRUE);
-			$data_group_id = $this->input->post('ledger_group', TRUE);
+			$data_group_id = $this->input->post('ledger_group_id', TRUE);
 			$data_op_balance = $this->input->post('op_balance', TRUE);
 			$data_op_balance_dc = $this->input->post('op_balance_dc', TRUE);
 			$data_id = $id;
 
+			$this->db->trans_start();
 			if ( ! $this->db->query("UPDATE ledgers SET name = ?, group_id = ?, op_balance = ?, op_balance_dc = ? WHERE id = ?", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_id)))
 			{
+				$this->db->trans_rollback();
 				$this->messages->add('Error updating Ledger A/C', 'error');
 				$this->template->load('template', 'ledger/edit', $data);
 			} else {
+				$this->db->trans_complete();
 				$this->messages->add('Ledger A/C updated successfully', 'success');
 				redirect('account');
 			}
@@ -168,12 +186,15 @@ class Ledger extends Controller {
 		}
 
 		/* Deleting ledger */
-		if ($this->db->query("DELETE FROM ledgers WHERE id = ?", array($id)))
+		$this->db->trans_start();
+		if ( ! $this->db->query("DELETE FROM ledgers WHERE id = ?", array($id)))
 		{
-			$this->messages->add('Ledger A/C deleted successfully', 'success');
+			$this->db->trans_rollback();
+			$this->messages->add('Error deleting Ledger A/C', 'error');
 			redirect('account');
 		} else {
-			$this->messages->add('Error deleting Ledger A/C', 'error');
+			$this->db->trans_complete();
+			$this->messages->add('Ledger A/C deleted successfully', 'success');
 			redirect('account');
 		}
 		return;

@@ -8,12 +8,12 @@
 	echo "<p>";
 	echo form_label('Parent group', 'ledger_group_id');
 	echo "<br />";
-	echo form_dropdown('ledger_group', $ledger_group, isset($ledger_group_active) ? $ledger_group_active : '');
+	echo form_dropdown('ledger_group_id', $ledger_group_id, $ledger_group_active);
 	echo "</p>";
 	echo "<p>";
 	echo form_label('Opening balance', 'op_balance');
 	echo "<br />";
-	echo form_dropdown_dc('op_balance_dc', isset($op_balance_dc) ? $op_balance_dc : '');
+	echo form_dropdown_dc('op_balance_dc', $op_balance_dc);
 	echo " ";
 	echo form_input($op_balance);
 	echo "</p>";
