@@ -623,18 +623,22 @@ class Voucher extends Controller {
 
 	function delete($voucher_type, $voucher_id)
 	{
+		$this->db->trans_start();
 		if ( ! $this->db->query("DELETE FROM voucher_items WHERE voucher_id = ?", array($voucher_id)))
 		{
+			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Voucher - Ledgers entry', 'error');
 			redirect('voucher/' . $voucher_type . '/' . $voucher_id);
 			return;
 		}
 		if ( ! $this->db->query("DELETE FROM vouchers WHERE id = ?", array($voucher_id)))
 		{
+			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Voucher entry', 'error');
 			redirect('voucher/' . $voucher_type . '/' . $voucher_id);
 			return;
 		}
+		$this->db->trans_complete();
 		$this->messages->add('Voucher deleted successfully', 'success');
 		redirect('voucher/show/' . $voucher_type);
 	}
