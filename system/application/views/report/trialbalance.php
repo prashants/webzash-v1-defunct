@@ -3,7 +3,7 @@
 	$temp_cr_total = 0;
 
 	echo "<table border=0 cellpadding=5 class=\"generaltable\">";
-	echo "<thead><tr><th>Ledger A/C</th><th>O/P Balance</th><th>Dr Total</th><th>Cr Total</th></tr></thead>";
+	echo "<thead><tr><th>Ledger A/C</th><th>O/P Balance</th><th>C/L Balance</th><th>Dr Total</th><th>Cr Total</th></tr></thead>";
 	$this->load->model('Ledger_model');
 	$all_ledgers = $this->Ledger_model->get_all_ledgers();
 	$odd_even = "odd";
@@ -18,6 +18,15 @@
 		list ($opbal_amount, $opbal_type) = $this->Ledger_model->get_op_balance($ledger_id);
 		echo convert_dc($opbal_type) . " " . $opbal_amount;
 		echo "</td>";
+
+		echo "<td>";
+		$clbal_amount = $this->Ledger_model->get_ledger_balance($ledger_id);
+		if ($clbal_amount < 0)
+			echo "Cr " . -$clbal_amount;
+		else
+			echo "Dr " . $clbal_amount;
+		echo "</td>";
+
 		echo "<td>";
 		$dr_total = $this->Ledger_model->get_dr_total($ledger_id);
 		if ($dr_total)
@@ -41,6 +50,6 @@
 		echo "</tr>";
 		$odd_even = ($odd_even == "odd") ? "even" : "odd";
 	}
-	echo "<tr style=\"background-color:#F8F8F8;\"><td>TOTAL</td><td></td><td>Dr " . $temp_dr_total . "</td><td>Cr " . $temp_cr_total . "</td></tr>";
+	echo "<tr style=\"background-color:#F8F8F8;\"><td colspan=3>TOTAL</td><td>Dr " . $temp_dr_total . "</td><td>Cr " . $temp_cr_total . "</td></tr>";
 	echo "</table>";
 ?>
