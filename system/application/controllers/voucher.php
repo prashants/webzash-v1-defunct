@@ -321,8 +321,11 @@ class Voucher extends Controller {
 			}
 			$data_date = date_php_to_mysql($data_date); // Converting date to MySQL
 			$voucher_id = NULL;
+
+			$this->db->trans_start();
 			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, draft, type) VALUES (?, ?, ?, ?, ?)", array($data_number, $data_date, $data_narration, $data_draft, $data_type)))
 			{
+				$this->db->trans_rollback();
 				$this->messages->add('Error addding Voucher A/C', 'error');
 				$this->template->load('template', 'voucher/add', $data);
 				return;
@@ -356,17 +359,24 @@ class Voucher extends Controller {
 
 				if ( ! $this->db->query("INSERT INTO voucher_items (voucher_id, ledger_id, amount, dc) VALUES (?, ?, ?, ?)", array($voucher_id, $data_ledger_id, $data_amount, $data_ledger_dc)))
 				{
+					$this->db->trans_rollback();
 					$this->messages->add('Error addding Ledger A/C ' . $data_ledger_id, 'error');
+					$this->template->load('template', 'voucher/add', $data);
+					return;
 				}
 			}
 
 			/* Updating Debit and Credit Total in vouchers table */
 			if ( ! $this->db->query("UPDATE vouchers SET dr_total = ?, cr_total = ? WHERE id = ?", array($dr_total, $cr_total, $voucher_id)))
 			{
+				$this->db->trans_rollback();
 				$this->messages->add('Error updating voucher total', 'error');
+				$this->template->load('template', 'voucher/add', $data);
+				return;
 			}
 
 			/* Success */
+			$this->db->trans_complete();
 			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . $data_number . ' added successfully', 'success');
 			redirect('voucher/show/' . $voucher_type);
 			$this->template->load('template', 'voucher/add', $data);
