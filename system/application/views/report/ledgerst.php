@@ -52,10 +52,10 @@ if ($page_count <= 0)
 	list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id);
 	if ($optype == "D")
 	{
-		echo "<tr class=\"tr-balance\"><td colspan=4>Opening Balance</td><td>" . convert_dc($optype) . " " . $opbalance . "</td><td></td><td></td></tr>";
+		echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>" . convert_dc($optype) . " " . $opbalance . "</td></tr>";
 		$cur_balance += $opbalance;
 	} else {
-		echo "<tr class=\"tr-balance\"><td colspan=4>Opening Balance</td><td></td><td>" . convert_dc($optype) . " " . $opbalance . "</td><td></td></tr>";
+		echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>" . convert_dc($optype) . " " . $opbalance . "</td></tr>";
 		$cur_balance -= $opbalance;
 	}
 } else {
@@ -85,9 +85,9 @@ if ($page_count <= 0)
 	/* Show new current total */
 	if ($cur_balance < 0)
 	{
-		echo "<tr class=\"tr-balance\"><td colspan=4>Opening Balance</td><td></td><td>Cr " . $cur_balance . "</td><td></td></tr>";
+		echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>Cr " . convert_cur(-$cur_balance) . "</td></tr>";
 	} else {
-		echo "<tr class=\"tr-balance\"><td colspan=4>Opening Balance</td><td>Dr " . $cur_balance . "</td><td></td><td></td></tr>";
+		echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
 	}
 }
 
@@ -146,9 +146,9 @@ foreach ($ledgerst_q->result() as $row)
 /* Closing Balance */
 if ($cur_balance < 0)
 {
-	echo "<tr class=\"tr-balance\"><td colspan=4>Closing Balance</td><td></td><td>Cr " .  convert_cur(-$cur_balance) . "</td><td></td></tr>";
+	echo "<tr class=\"tr-balance\"><td colspan=6>Closing Balance</td><td>Cr " .  convert_cur(-$cur_balance) . "</td></tr>";
 } else {
-	echo "<tr class=\"tr-balance\"><td colspan=4>Closing Balance</td><td>Dr " . convert_cur($cur_balance) . "<td></td></td><td></td></tr>";
+	echo "<tr class=\"tr-balance\"><td colspan=6>Closing Balance</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
 }
 echo "</table>";
 
