@@ -136,7 +136,7 @@ foreach ($ledgerst_q->result() as $row)
 		}
 		echo "<td>";
 		if ($row->vdraft == 0)
-			echo ($cur_balance < 0) ? "Cr " . -$cur_balance :  "Dr " . $cur_balance;
+			echo ($cur_balance < 0) ? "Cr " . convert_cur(-$cur_balance) :  "Dr " . convert_cur($cur_balance);
 		else
 			echo "-";
 		echo "</td>";
@@ -146,9 +146,9 @@ foreach ($ledgerst_q->result() as $row)
 /* Closing Balance */
 if ($cur_balance < 0)
 {
-	echo "<tr class=\"tr-balance\"><td colspan=4>Closing Balance</td><td></td><td>Cr " .  -$cur_balance . "</td><td></td></tr>";
+	echo "<tr class=\"tr-balance\"><td colspan=4>Closing Balance</td><td></td><td>Cr " .  convert_cur(-$cur_balance) . "</td><td></td></tr>";
 } else {
-	echo "<tr class=\"tr-balance\"><td colspan=4>Closing Balance</td><td>Dr " . $cur_balance . "<td></td></td><td></td></tr>";
+	echo "<tr class=\"tr-balance\"><td colspan=4>Closing Balance</td><td>Dr " . convert_cur($cur_balance) . "<td></td></td><td></td></tr>";
 }
 echo "</table>";
 
@@ -160,9 +160,9 @@ if ($optype == "D")
 else
 	echo "<tr class=\"tr-odd\"><td>Opening Balance</td><td>Cr " . $opbalance . "</td></tr>";
 if ($cur_balance < 0)
-	echo "<tr class=\"tr-odd\"><td>Closing Balance</td><td>Cr " . number_format(-$cur_balance, 2, '.', '') . "</td></tr>";
+	echo "<tr class=\"tr-odd\"><td>Closing Balance</td><td>Cr " . convert_cur(-$cur_balance) . "</td></tr>";
 else
-	echo "<tr class=\"tr-odd\"><td>Closing Balance</td><td>Dr " . number_format($cur_balance, 2, '.', '') . "</td></tr>";
+	echo "<tr class=\"tr-odd\"><td>Closing Balance</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
 echo "</table>";
 
 }

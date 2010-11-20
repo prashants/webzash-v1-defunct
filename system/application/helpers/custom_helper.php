@@ -23,6 +23,14 @@ if ( ! function_exists('convert_dc'))
 	}
 }
 
+if ( ! function_exists('convert_cur'))
+{
+	function convert_cur($amount)
+	{
+		return number_format($amount, 2, '.', '');
+	}
+}
+
 /**
  * Return the value of variable is set
  *

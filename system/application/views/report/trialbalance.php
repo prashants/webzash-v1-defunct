@@ -22,9 +22,9 @@
 		echo "<td>";
 		$clbal_amount = $this->Ledger_model->get_ledger_balance($ledger_id);
 		if ($clbal_amount < 0)
-			echo "Cr " . -$clbal_amount;
+			echo "Cr " . convert_cur(-$clbal_amount);
 		else
-			echo "Dr " . $clbal_amount;
+			echo "Dr " . convert_cur($clbal_amount);
 		echo "</td>";
 
 		echo "<td>";
@@ -50,6 +50,6 @@
 		echo "</tr>";
 		$odd_even = ($odd_even == "odd") ? "even" : "odd";
 	}
-	echo "<tr style=\"background-color:#F8F8F8;\"><td colspan=3>TOTAL</td><td>Dr " . $temp_dr_total . "</td><td>Cr " . $temp_cr_total . "</td></tr>";
+	echo "<tr style=\"background-color:#F8F8F8;\"><td colspan=3>TOTAL</td><td>Dr " . convert_cur($temp_dr_total) . "</td><td>Cr " . convert_cur($temp_cr_total) . "</td></tr>";
 	echo "</table>";
 ?>
