@@ -97,7 +97,7 @@ foreach ($ledgerst_q->result() as $row)
 		echo ($row->vdraft == 1) ? " tr-draft " : "";
 		echo "\">";
 		echo "<td>";
-		echo $row->vid;
+		echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $row->vnumber, array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
 		echo "</td>";
 		echo "<td>";
 		echo date_mysql_to_php($row->vdate);
@@ -106,13 +106,7 @@ foreach ($ledgerst_q->result() as $row)
 		echo ($row->vdraft == 1) ? "Draft" : "Active";
 		echo "</td>";
 		echo "<td>";
-		switch ($row->vtype)
-		{
-			case 1: echo "Receipt"; break;
-			case 2: echo "Payment"; break;
-			case 3: echo "Contra"; break;
-			case 4: echo "Journal"; break;
-		}
+		echo ucfirst(n_to_v($row->vtype));
 		echo "</td>";
 		if ($row->ldc == "D")
 		{
@@ -151,7 +145,7 @@ if ($cur_balance < 0)
 	echo "<tr class=\"tr-balance\"><td colspan=6>Closing Balance</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
 }
 echo "</table>";
-
+echo "<br />";
 /* Ledger Summary */
 echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 echo "<thead><tr><th colspan=2>Ledger A/C Summary</th></tr></thead>";
