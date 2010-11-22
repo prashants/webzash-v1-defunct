@@ -118,7 +118,7 @@ class Voucher extends Controller {
 		$this->pagination->initialize($config);
 
 		$html = "<table border=0 cellpadding=5 class=\"generaltable\">";
-		$html .= "<thead><tr><th>Number</th><th>Date</th><th>Ledger A/C</th><th>Type</th><th>Status</th><th>DR Amount</th><th>CR Amount</th><th colspan=4>Actions</th></tr></thead>";
+		$html .= "<thead><tr><th>Number</th><th>Date</th><th>Ledger A/C</th><th>Type</th><th>Status</th><th>DR Amount</th><th>CR Amount</th><th colspan=5>Actions</th></tr></thead>";
 		$html .= "<tbody>";
 
 		$odd_even = "odd";
@@ -152,6 +152,8 @@ class Voucher extends Controller {
 			$html .= "<td>" . $row->dr_total . "</td>";
 			$html .= "<td>" . $row->cr_total . "</td>";
 
+			$html .= "<td>" . anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/view.png", 'border' => '0', 'alt' => 'View ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
+
 			$html .= "<td>" . anchor('voucher/edit/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
 
 			$html .= "<td>" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
@@ -166,6 +168,46 @@ class Voucher extends Controller {
 		$html .= "</tbody>";
 		$html .= "</table>";
 		return $html;
+	}
+
+	function view($voucher_type, $voucher_id = 0)
+	{
+		switch ($voucher_type)
+		{
+		case 'receipt' :
+			$this->template->set('page_title', 'View Receipt Voucher');
+			break;
+		case 'payment' :
+			$this->template->set('page_title', 'View Payment Voucher');
+			break;
+		case 'contra' :
+			$this->template->set('page_title', 'View Contra Voucher');
+			break;
+		case 'journal' :
+			$this->template->set('page_title', 'View Journal Voucher');
+			break;
+		default :
+			$this->messages->add('Invalid voucher type', 'error');
+			redirect('voucher/show/all');
+			return;
+			break;
+		}
+
+		/* Load current voucher details */
+		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id))
+		{
+			$this->messages->add('Invalid Voucher', 'error');
+			redirect('voucher/show/' . $voucher_type);
+		}
+		/* Load current voucher details */
+		if ( ! $cur_voucher_ledgers = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY id ASC", array($voucher_id)))
+		{
+			$this->messages->add('Voucher has no associated ledger data', 'error');
+		}
+		$data['cur_voucher'] = $cur_voucher;
+		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
+		$data['voucher_type'] = $voucher_type;
+		$this->template->load('template', 'voucher/view', $data);
 	}
 
 	function add($voucher_type)
