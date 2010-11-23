@@ -14,14 +14,17 @@
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/custom.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/hoverIntent.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/superfish.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/supersubs.js"></script>
 
 <script type="text/javascript">
-
-// initialise plugins
-jQuery(function(){
-	jQuery('ul.sf-menu').superfish();
+/* Loading JQuery Superfish menu */
+$(document).ready(function(){ 
+	$("ul.sf-menu").supersubs({ 
+		minWidth:12,
+		maxWidth:27,
+		extraWidth: 1
+	}).superfish(); // call supersubs first, then superfish, so that subs are 
 });
-
 </script>
 
 </head>
@@ -54,6 +57,12 @@ jQuery(function(){
 			</li>
 			<li>
 				<?php echo anchor('report', 'Reports', array('title' => 'Reports')); ?>
+				<ul>
+					<li><?php echo anchor('report/balancesheet', 'Balance Sheet', array('title' => 'Balance Sheet')); ?></li>
+					<li><?php echo anchor('report/profitandloss', 'Profit & Loss', array('title' => 'Profit & Loss')); ?></li>
+					<li><?php echo anchor('report/trialbalance', 'Trial Balance', array('title' => 'Trial Balance')); ?></li>
+					<li><?php echo anchor('report/ledgerst', 'Ledger Statement', array('title' => 'Ledger Statement')); ?></li>
+				</ul>
 			</li>
 			<li>
 				<?php echo anchor('setting', 'Settings', array('title' => 'Settings', 'class' => 'last')); ?>
