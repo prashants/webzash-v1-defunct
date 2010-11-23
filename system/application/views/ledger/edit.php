@@ -17,6 +17,9 @@
 	echo " ";
 	echo form_input($op_balance);
 	echo "</p>";
+	echo "<p>";
+	echo form_checkbox('ledger_type_cashbank', 1, $ledger_type_cashbank) . " Cash / Bank Account";
+	echo "</p>";
 	echo form_hidden('ledger_id', $ledger_id);
 	echo form_submit('submit', 'Update');
 	echo " ";

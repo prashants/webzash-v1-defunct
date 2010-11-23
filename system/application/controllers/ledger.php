@@ -36,6 +36,7 @@ class Ledger extends Controller {
 		);
 		$data['ledger_group_active'] = 0;
 		$data['op_balance_dc'] = "D";
+		$data['ledger_type_cashbank'] = FALSE;
 
 		/* Form validations */
 		$this->form_validation->set_rules('ledger_name', 'Ledger name', 'trim|required|min_length[2]|max_length[100]|unique[ledgers.name]');
@@ -50,6 +51,7 @@ class Ledger extends Controller {
 			$data['op_balance']['value'] = $this->input->post('op_balance', TRUE);
 			$data['ledger_group_active'] = $this->input->post('ledger_group_id', TRUE);
 			$data['op_balance_dc'] = $this->input->post('op_balance_dc', TRUE);
+			$data['ledger_type_cashbank'] = $this->input->post('ledger_type_cashbank', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -63,9 +65,15 @@ class Ledger extends Controller {
 			$data_group_id = $this->input->post('ledger_group_id', TRUE);
 			$data_op_balance = $this->input->post('op_balance', TRUE);
 			$data_op_balance_dc = $this->input->post('op_balance_dc', TRUE);
+			$data_ledger_type_cashbank_value = $this->input->post('ledger_type_cashbank', TRUE);
+			$data_ledger_type_cashbank = "N";
+			if ($data_ledger_type_cashbank_value == "1")
+			{
+				$data_ledger_type_cashbank = "B";
+			}
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("INSERT INTO ledgers (name, group_id, op_balance, op_balance_dc) VALUES (?, ?, ?, ?)", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc)))
+			if ( ! $this->db->query("INSERT INTO ledgers (name, group_id, op_balance, op_balance_dc, type) VALUES (?, ?, ?, ?, ?)", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_ledger_type_cashbank)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding ' . $data_name . ' - Ledger A/C', 'error');
@@ -122,6 +130,10 @@ class Ledger extends Controller {
 		$data['ledger_group_active'] = $ledger_data->group_id;
 		$data['op_balance_dc'] = $ledger_data->op_balance_dc;
 		$data['ledger_id'] = $id;
+		if ($ledger_data->type == "B")
+			$data['ledger_type_cashbank'] = TRUE;
+		else
+			$data['ledger_type_cashbank'] = FALSE;
 
 		/* Form validations */
 		$this->form_validation->set_rules('ledger_name', 'Ledger name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[ledgers.name.' . $id . ']');
@@ -136,6 +148,7 @@ class Ledger extends Controller {
 			$data['ledger_group_active'] = $this->input->post('ledger_group_id', TRUE);
 			$data['op_balance']['value'] = $this->input->post('op_balance', TRUE);
 			$data['op_balance_dc'] = $this->input->post('op_balance_dc', TRUE);
+			$data['ledger_type_cashbank'] = $this->input->post('ledger_type_cashbank', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -150,9 +163,15 @@ class Ledger extends Controller {
 			$data_op_balance = $this->input->post('op_balance', TRUE);
 			$data_op_balance_dc = $this->input->post('op_balance_dc', TRUE);
 			$data_id = $id;
+			$data_ledger_type_cashbank_value = $this->input->post('ledger_type_cashbank', TRUE);
+			$data_ledger_type_cashbank = "N";
+			if ($data_ledger_type_cashbank_value == "1")
+			{
+				$data_ledger_type_cashbank = "B";
+			}
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE ledgers SET name = ?, group_id = ?, op_balance = ?, op_balance_dc = ? WHERE id = ?", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_id)))
+			if ( ! $this->db->query("UPDATE ledgers SET name = ?, group_id = ?, op_balance = ?, op_balance_dc = ?, type = ? WHERE id = ?", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_ledger_type_cashbank, $data_id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating ' . $data_name . ' - Ledger A/C', 'error');
