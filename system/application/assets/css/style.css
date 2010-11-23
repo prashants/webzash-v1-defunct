@@ -83,44 +83,6 @@ body {
 	text-align:center;
 }
 
-/* MENU */
-#menu {
-	background:none repeat scroll 0 0 #0099CC;
-	height:26px;
-	padding:5px 0 0 18px;
-	position:relative;
-	text-align:left;
-	color:#FFFFFF;
-}
-
-#menu ul#nav
-{
-	list-style:none;
-	padding:0;
-	margin:0;
-}
-
-#menu ul#nav li
-{
-	float:left;
-	margin:0 18px 0 0;
-}
-
-#menu ul#nav li a
-{
-	text-decoration:none;
-	color:#FFFFFF;
-	font-size:120%;
-	font-weight:bold;
-}
-
-#menu ul#nav li a:hover
-{
-	text-decoration:none;
-	background-color:#00AAEE;
-	color:#FFFFFF;
-}
-
 /* PAGE MENU */
 #content #main ul#main-links-nav
 {

@@ -6,11 +6,23 @@
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/style.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/tables.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/custom.css">
+<link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/menu.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/jquery.datepick.css">
 
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.datepick.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/custom.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/hoverIntent.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/superfish.js"></script>
+
+<script type="text/javascript">
+
+// initialise plugins
+jQuery(function(){
+	jQuery('ul.sf-menu').superfish();
+});
+
+</script>
 
 </head>
 <body>
@@ -24,12 +36,28 @@
 		</div>
 	</div>
 	<div id="menu">
-		<ul id="nav">
-			<li><a href="<?php print base_url(); ?>" title="Dashboard">Dashboard</a></li>
-			<li><?php echo anchor('account', 'Accounts', array('title' => 'Chart of accounts')); ?></li>
-			<li><?php echo anchor('voucher', 'Vouchers', array('title' => 'Vouchers')); ?></li>
-			<li><?php echo anchor('report', 'Reports', array('title' => 'Reports')); ?></li>
-			<li><?php echo anchor('setting', 'Settings', array('title' => 'Settings')); ?></li>
+		<ul class="sf-menu">
+			<li class="current">
+				<a href="<?php print base_url(); ?>" title="Dashboard">Dashboard</a>
+			</li>
+			<li>
+				<?php echo anchor('account', 'Accounts', array('title' => 'Chart of accounts')); ?>
+			</li>
+			<li>
+				<?php echo anchor('voucher', 'Vouchers', array('title' => 'Vouchers')); ?>
+				<ul>
+					<li><?php echo anchor('voucher/show/receipt', 'Receipt', array('title' => 'Receipt Vouchers')); ?></li>
+					<li><?php echo anchor('voucher/show/payment', 'Payment', array('title' => 'Payment Vouchers')); ?></li>
+					<li><?php echo anchor('voucher/show/contra', 'Contra', array('title' => 'Contra Vouchers')); ?></li>
+					<li><?php echo anchor('voucher/show/journal', 'Journal', array('title' => 'Journal Vouchers')); ?></li>
+				</ul>
+			</li>
+			<li>
+				<?php echo anchor('report', 'Reports', array('title' => 'Reports')); ?>
+			</li>
+			<li>
+				<?php echo anchor('setting', 'Settings', array('title' => 'Settings', 'class' => 'last')); ?>
+			</li>
 		</ul>
 	</div>
 	<div id="content">
