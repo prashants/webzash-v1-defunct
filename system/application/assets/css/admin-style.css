@@ -1,0 +1,169 @@
+body {
+	background:none repeat scroll 0 0 #DDDDDD;
+	color:#333333;
+	font:12px/1.5em "Helvetica Neue","Lucida Grande","Helvetica Neue",Arial,sans-serif;
+	margin:0;
+	min-width:950px;
+	padding:0;
+	text-align:center;
+}
+
+#container {
+	margin:0 auto 0;
+	min-width:950px;
+	text-align:left;
+}
+
+#header {
+	background:none repeat scroll 0 0 #FFFFFF;
+	height:90px;
+	margin:0;
+	position:relative;
+	text-align:left;
+}
+
+#header #logo {
+	padding:35px 0 0 18px;
+	font-size:400%;		
+	float:left;
+	width:70%;
+}
+
+#header #admin {
+	color:#000000;
+	font-size:120%;
+	display:block;
+	position:absolute;
+	background:none repeat scroll 0 0 #E5F1F4;
+	padding:0 15px 5px 15px;
+	-moz-border-radius:0 0 5px 5px;
+	margin:0 0 0 500px;
+}
+
+#content #main {
+	background:none repeat scroll 0 0 #FFFFFF;
+	position:relative;
+	padding:10px 18px 10px 18px;
+	min-height:400px;
+}
+
+#content #sidebar {
+	background:none repeat scroll 0 0 #EEEEEE;
+	float:left;
+	width:20%;
+}
+
+#content #main #main-title {
+	font-size:150%;
+	padding:10px 0 10px 0;
+}
+
+#content #main  #main-content {
+	padding:10px 0 10px 0;
+	font-size:120%;
+}
+
+#footer {
+	color:#555555;
+	font-size:100%;
+	margin:9px 20px 18px 20px;
+	text-align:center;
+}
+
+#footer {
+	color:#555555;
+	font-size:100%;
+	text-align:center;
+}
+
+
+#footer a {
+	color:#555555;
+	font-size:100%;
+	text-align:center;
+}
+
+/* MENU */
+#menu {
+	background:none repeat scroll 0 0 #FF0000;
+	height:5px;
+	padding:0 0 0 18px;
+}
+
+/* PAGE MENU */
+#content #main ul#main-links-nav
+{
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+
+#content #main ul#main-links-nav li
+{
+	float:left;
+	margin:0 18px 0 0;
+}
+
+#content #main ul#main-links-nav li a
+{
+	text-decoration:underline;
+	color:#000000;
+	font-size:100%;
+}
+
+#content #main ul#main-links-nav li a:hover
+{
+	color:#AAAAAA;
+}
+
+/* COMMON */
+.clear {
+	clear:both;
+}
+
+.bold {
+	font-weight:bold;
+}
+
+#message-box {
+	border:solid 1px #787878;
+	background:#F0F0F0;
+	color:#222222;
+	padding:0 10px 0 10px;
+	margin:0 0 10px 0;
+	text-align:left;
+}
+
+#error-box {
+	border:solid 1px #C34A2C;
+	background:#FFBABA;
+	color:#222222;
+	padding:0 10px 0 10px;
+	margin:0 0 10px 0;
+	text-align:left;
+}
+
+#success-box {
+	border:solid 1px #FFEC8B;
+	background:#FFF8C6;
+	color:#222222;
+	padding:0 10px 0 10px;
+	margin:0 0 10px 0;
+	text-align:left;
+}
+
+/* NOT SO COMMON */
+.voucher-add-links {
+	margin:0 0 10px 0;
+}
+
+.voucher-add-links a {
+	text-decoration:underline;
+	color:#000000;
+	font-size:90%;
+}
+
+.voucher-add-links a:hover
+{
+	color:#AAAAAA;
+}

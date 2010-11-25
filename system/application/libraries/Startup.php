@@ -15,6 +15,10 @@ class Startup
 		$CI =& get_instance();
 		$CI->db->trans_strict(FALSE);
 
+		/* Skip checking if accessing admin section*/
+		if ($CI->uri->segment(1) == "admin")
+			return;
+
 		/* Checking for valid database */
 		$table_names = array('settings', 'groups', 'ledgers', 'vouchers', 'voucher_items');
 		foreach ($table_names as $id => $tbname)
