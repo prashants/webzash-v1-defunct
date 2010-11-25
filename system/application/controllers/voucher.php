@@ -742,7 +742,10 @@ class Voucher extends Controller {
 
 	function email($voucher_type, $voucher_id)
 	{
+		$this->load->model('Setting_model');
+		$this->load->model('Ledger_model');
 		$this->load->library('email');
+
 		$data['voucher_type'] = $voucher_type;
 		$data['voucher_id'] = $voucher_id;
 		$data['email_to'] = array(
@@ -768,6 +771,47 @@ class Voucher extends Controller {
 		}
 		else
 		{
+			$account = $this->Setting_model->get_current();
+
+			/* Loading Voucher */
+			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE id = ?", $voucher_id);
+			$voucher = $voucher_q->row();
+
+			/* Preparing message */
+			$message = "";
+			$message .= "<h3>" . ucfirst($voucher_type) . " Voucher</h3>";
+			$message .= "<p><b>" . $account->name . "</b></p>";
+			$message .= "<p>" . $account->address . "</p>";
+			$message .= "<p>Voucher Number : " . $voucher->number . "</p>";
+			$message .= "<p>Voucher Date : " . date_mysql_to_php($voucher->date) . "</p>";
+			$message .= "<table border=1>";
+			$message .= "<thead><tr><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>";
+
+			$ledger_q;
+			if ($voucher_type == "receipt" || $voucher_type == "contra")
+				$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
+			else
+				$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc ASC", $voucher_id);
+	
+			foreach ($ledger_q->result() as $row)
+			{
+				$message .=  "<tr>";
+				$message .=  "<td>" . $this->Ledger_model->get_name($row->ledger_id) . "</td>";
+				if ($row->dc == "D")
+				{
+					$message .=  "<td>" . $row->amount . "</td>";
+					$message .=  "<td>-</td>";
+				} else {
+					$message .=  "<td>-</td>";
+					$message .=  "<td>" . $row->amount . "</td>";
+				}
+				$message .=  "</tr>";
+			}
+			$message .=  "<tr><td><b>TOTAL</b></td><td><b>" . $voucher->dr_total . "</b></td><td><b>" . $voucher->cr_total . "</b></td></tr>";
+			$message .=  "</table>";
+			$message .=  "<p>" . "Narration : " . $voucher->narration . "</p>";
+
+			/* Sending email */
 			$config['protocol']='smtp';
 			$config['smtp_host']='ssl://smtp.googlemail.com';
 			$config['smtp_port']='465';
@@ -776,12 +820,13 @@ class Voucher extends Controller {
 			// $config['smtp_pass']='';
 			$config['charset']='utf-8';
 			$config['newline']="\r\n";
+			$config['mailtype'] = "html";
 			$this->email->initialize($config);
 
 			$this->email->from('', 'Prashant Shah');
 			$this->email->to($this->input->post('email_to'));
-			$this->email->subject(ucfirst($voucher_type) . ' Voucher');
-			$this->email->message('Testing the email class.');
+			$this->email->subject(ucfirst($voucher_type) . ' Voucher No. ' . $voucher->number);
+			$this->email->message($message);
 			$this->email->send();
 			$data['message'] = "Successfully sent email !";
 			$this->load->view('voucher/email', $data);
