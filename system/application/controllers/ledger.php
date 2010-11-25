@@ -15,7 +15,6 @@ class Ledger extends Controller {
 
 	function add()
 	{
-		$this->load->library('validation');
 		$this->template->set('page_title', 'New Ledger');
 
 		/* Form fields */
