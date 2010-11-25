@@ -38,7 +38,13 @@ $(document).ready(function(){
 			<?php echo anchor('admin', 'Administer', array('title' => "Administer", 'style' => 'color:#000000; text-decoration:none')); ?>
 		</div>
 		<div id="info">
-			<?php echo account_info_str(); ?>
+			<?php
+				echo $this->config->item('account_name');
+				echo "<br />";
+				echo date_mysql_to_php($this->config->item('account_ay_start'));
+				echo " - ";
+				echo date_mysql_to_php($this->config->item('account_ay_end'));
+			?>
 		</div>
 	</div>
 	<div id="menu">
