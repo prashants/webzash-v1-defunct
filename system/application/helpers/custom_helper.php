@@ -69,9 +69,8 @@ if ( ! function_exists('account_info_str'))
 		$company_q = $CI->db->query('SELECT * FROM settings WHERE id = 1');
 		if ($company_info = $company_q->row())
 		{
-			$html .= "Account Name : " . $company_info->name;
+			$html .= $company_info->name;
 			$html .= "<br />";
-			$html .= "Assessment Period : ";
 			$html .= date_mysql_to_php($company_info->ay_start);
 			$html .= " - ";
 			$html .= date_mysql_to_php($company_info->ay_end);

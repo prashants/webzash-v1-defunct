@@ -34,6 +34,9 @@ $(document).ready(function(){
 		<div id="logo">
 			Webzash
 		</div>
+		<div id="admin">
+			<?php echo anchor('admin', 'Administer', array('title' => "Administer", 'style' => 'color:#000000; text-decoration:none')); ?>
+		</div>
 		<div id="info">
 			<?php echo account_info_str(); ?>
 		</div>

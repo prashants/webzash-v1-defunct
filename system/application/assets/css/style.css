@@ -29,6 +29,17 @@ body {
 	width:70%;
 }
 
+#header #admin {
+	color:#000000;
+	font-size:120%;
+	display:block;
+	position:absolute;
+	background:none repeat scroll 0 0 #E5F1F4;
+	padding:0 15px 5px 15px;
+	-moz-border-radius:0 0 5px 5px;
+	margin:0 0 0 500px;
+}
+
 #header #info {
 	color:#000000;
 	display:block;
