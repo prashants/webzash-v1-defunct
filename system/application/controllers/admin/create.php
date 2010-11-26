@@ -180,16 +180,41 @@ class Create extends Controller {
 			/* Setting database */
 			$dsn = "mysql://${data_database_username}:${data_database_password}@${data_database_host}:${data_database_port}/${data_database_name}";
 			$newacc = $this->load->database($dsn, TRUE);
+			$conn_error = $newacc->_error_message();
+
+			/* Creating database if it does not exist */
+			if ($this->input->post('create_database', TRUE) == "1")
+			{
+				if ((substr($conn_error, 0, 16) == "Unknown database"))
+				{
+					$this->load->dbforge();
+					if ($this->dbforge->create_database($data_database_name))
+					{
+						$this->messages->add("New database created", 'success');
+						/* Retrying to connect to new database */
+						$newacc = $this->load->database($dsn, TRUE);
+						$conn_error = $newacc->_error_message();
+					} else {
+						$this->messages->add("Cannot create database", 'error');
+						$this->template->load('admin_template', 'admin/create', $data);
+						return;
+					}
+				}
+			}
+
 			if ( ! $newacc->conn_id)
 			{
-				$this->messages->add("Cannot connect to database", 'error');
+				$this->messages->add("Cannot connecting to database", 'error');
 				$this->template->load('admin_template', 'admin/create', $data);
-			}  else if ($newacc->_error_message() != "") {
-				$this->messages->add("Error connect to database. " . $newacc->_error_message(), 'error');
+				return;
+			}  else if ($conn_error != "") {
+				$this->messages->add("Error connecting to database. " . $newacc->_error_message(), 'error');
 				$this->template->load('admin_template', 'admin/create', $data);
+				return;
 			} else if ($newacc->query("SHOW TABLES")->num_rows() > 0) {
 				$this->messages->add("Selected database in not empty", 'error');
 				$this->template->load('admin_template', 'admin/create', $data);
+				return;
 			} else {
 				/* Executing the database setup script */
 				$setup_account = read_file('system/application/controllers/admin/database.sql');
@@ -206,6 +231,7 @@ class Create extends Controller {
 				$newacc->query("INSERT INTO settings (id, label, name, address, email, ay_start, ay_end, currency_symbol, date_format, timezone, database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, "", $data_account_name, $data_account_address, $data_account_email, $data_assy_start, $data_assy_end, $data_account_currency, $data_account_date, $data_account_timezone, 1));
 				$this->messages->add("Successfully created webzash account", 'success');
 				redirect('admin');
+				return;
 			}
 		}
 	}
