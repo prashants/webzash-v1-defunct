@@ -167,3 +167,12 @@ body {
 {
 	color:#AAAAAA;
 }
+
+#current-active-account {
+	border:solid 1px #787878;
+	background:#F0F0F0;
+	color:#222222;
+	padding:10px;
+	margin:0 0 10px 0;
+	text-align:left;
+}
