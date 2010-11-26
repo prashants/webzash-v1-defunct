@@ -9,6 +9,7 @@ class Create extends Controller {
 	
 	function index()
 	{
+		$this->load->helper('file');
 		$this->template->set('page_title', 'Create new webzash account');
 
 		/* Form fields */
@@ -190,8 +191,21 @@ class Create extends Controller {
 				$this->messages->add("Selected database in not empty", 'error');
 				$this->template->load('admin_template', 'admin/create', $data);
 			} else {
-				$this->messages->add("Connect to database", 'success');
-				$this->template->load('admin_template', 'admin/create', $data);
+				/* Executing the database setup script */
+				$setup_account = read_file('system/application/controllers/admin/database.sql');
+				$setup_account_array = explode(";", $setup_account);
+				foreach($setup_account_array as $row)
+				{
+					if (strlen($row) < 5)
+						continue;
+					$newacc->query($row);
+					if ($newacc->_error_message() != "")
+						$this->messages->add($newacc->_error_message(), 'error');
+				}
+				/* Adding the account settings */
+				$newacc->query("INSERT INTO settings (id, label, name, address, email, ay_start, ay_end, currency_symbol, date_format, timezone, database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, "", $data_account_name, $data_account_address, $data_account_email, $data_assy_start, $data_assy_end, $data_account_currency, $data_account_date, $data_account_timezone, 1));
+				$this->messages->add("Successfully created webzash account", 'success');
+				redirect('admin');
 			}
 		}
 	}
