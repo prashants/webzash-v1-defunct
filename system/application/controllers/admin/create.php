@@ -4,7 +4,7 @@ class Create extends Controller {
 
 	function Create()
 	{
-		parent::Controller();	
+		parent::Controller();
 	}
 	
 	function index()
@@ -104,7 +104,7 @@ class Create extends Controller {
 			'id' => 'database_host',
 			'maxlength' => '100',
 			'size' => '40',
-			'value' => 'locahost',
+			'value' => 'localhost',
 		);
 
 		$data['database_port'] = array(
@@ -124,6 +124,11 @@ class Create extends Controller {
 		$this->form_validation->set_rules('account_date', 'Date', 'trim|max_length[30]');
 		$this->form_validation->set_rules('account_timezone', 'Timezone', 'trim|max_length[6]');
 
+
+		$this->form_validation->set_rules('database_name', 'Database Name', 'trim|required');
+
+		$this->form_validation->set_rules('database_username', 'Database Username', 'trim|required');
+
 		/* Repopulating form */
 		if ($_POST)
 		{
@@ -136,11 +141,11 @@ class Create extends Controller {
 			$data['account_date']['value'] = $this->input->post('account_date', TRUE);
 			$data['account_timezone'] = $this->input->post('account_timezone', TRUE);
 
-			$data['database_name'] = $this->input->post('database_name', TRUE);
-			$data['database_username'] = $this->input->post('database_username', TRUE);
-			$data['database_password'] = $this->input->post('database_password', TRUE);
-			$data['database_host'] = $this->input->post('database_host', TRUE);
-			$data['database_port'] = $this->input->post('database_port', TRUE);
+			$data['database_name']['value'] = $this->input->post('database_name', TRUE);
+			$data['database_username']['value'] = $this->input->post('database_username', TRUE);
+			$data['database_password']['value'] = $this->input->post('database_password', TRUE);
+			$data['database_host']['value'] = $this->input->post('database_host', TRUE);
+			$data['database_port']['value'] = $this->input->post('database_port', TRUE);
 		}
 
 		/* Validating form */
@@ -166,7 +171,28 @@ class Create extends Controller {
 			$data_database_host = $this->input->post('database_host', TRUE);
 			$data_database_port = $this->input->post('database_port', TRUE);
 
-			/* Creating database */
+			if ($data_database_host == "")
+				$data_database_host = "localhost";
+			if ($data_database_port == "")
+				$data_database_port = "3306";
+
+			/* Setting database */
+			$dsn = "mysql://${data_database_username}:${data_database_password}@${data_database_host}:${data_database_port}/${data_database_name}";
+			$newacc = $this->load->database($dsn, TRUE);
+			if ( ! $newacc->conn_id)
+			{
+				$this->messages->add("Cannot connect to database", 'error');
+				$this->template->load('admin_template', 'admin/create', $data);
+			}  else if ($newacc->_error_message() != "") {
+				$this->messages->add("Error connect to database. " . $newacc->_error_message(), 'error');
+				$this->template->load('admin_template', 'admin/create', $data);
+			} else if ($newacc->query("SHOW TABLES")->num_rows() > 0) {
+				$this->messages->add("Selected database in not empty", 'error');
+				$this->template->load('admin_template', 'admin/create', $data);
+			} else {
+				$this->messages->add("Connect to database", 'success');
+				$this->template->load('admin_template', 'admin/create', $data);
+			}
 		}
 	}
 }
