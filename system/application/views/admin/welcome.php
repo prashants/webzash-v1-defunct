@@ -14,7 +14,7 @@
 		</div>
 		<div class="settings-container">
 			<div class="settings-title">
-				<?php echo anchor('admin', 'Manage Accounts', array('title' => 'Manage existing accounts')); ?>
+				<?php echo anchor('admin/manage', 'Manage Accounts', array('title' => 'Manage existing accounts')); ?>
 			</div>
 			<div class="settings-desc">
 				Manage existing webzash accounts
