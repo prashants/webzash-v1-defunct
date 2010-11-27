@@ -15,6 +15,9 @@ class Manage extends Controller {
 
 		$active_accounts = read_file('system/application/controllers/admin/activeaccount.inc');
 		$data['accounts'] = explode(';', $active_accounts);
+		if (count($data['accounts']) > 1)
+			array_pop($data['accounts']);
+
 		$this->template->load('admin_template', 'admin/manage/index', $data);
 		return;
 	}
@@ -93,7 +96,7 @@ class Manage extends Controller {
 			$data_database_host = $this->input->post('database_host', TRUE);
 			$data_database_port = $this->input->post('database_port', TRUE);
 
-			$con_string = "mysql://${data_database_username}:${data_database_password}@${data_database_host}:${data_database_port}/${data_database_name};\n";
+			$con_string = "mysql://${data_database_username}:${data_database_password}@${data_database_host}:${data_database_port}/${data_database_name};";
 
 			/* Writing the connection string to end of file - writing in 'a' append mode */
 			if ( ! write_file('system/application/controllers/admin/activeaccount.inc', $con_string, 'a'))

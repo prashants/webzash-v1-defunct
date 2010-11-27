@@ -4,7 +4,7 @@ class Welcome extends Controller {
 
 	function Welcome()
 	{
-		parent::Controller();	
+		parent::Controller();
 	}
 	
 	function index()
@@ -23,12 +23,12 @@ class Welcome extends Controller {
 				$data['current_account'] .= "<b>" . $account_d->name . "</b>";
 				$data['current_account'] .= " from " . "<b>" . date_mysql_to_php($account_d->ay_start) . "</b>";
 				$data['current_account'] .= " to " . "<b>" . date_mysql_to_php($account_d->ay_end) . "</b>";
-				$data['current_account'] .= " (change active account)";
+				$data['current_account'] .= "( " . anchor('admin/active', 'change active account', array('title' => 'Activate a existing account', 'style' => 'color:#000000')) . " )";
 			}
 		}
 
 		if ($data['current_account'] == "")
-			$data['current_account'] = "No account is currently active. You can " .anchor('admin/create', 'create', array('title' => 'Create a new account', 'style' => 'color:#000000')) . " a new account or activate an existing account";
+			$data['current_account'] = "No account is currently active. You can " . anchor('admin/create', 'create', array('title' => 'Create a new account', 'style' => 'color:#000000')) . " a new account or " . anchor('admin/active', 'activate', array('title' => 'Activate a existing account', 'style' => 'color:#000000')) . " an existing account";
 
 		$this->template->load('admin_template', 'admin/welcome', $data);
 	}

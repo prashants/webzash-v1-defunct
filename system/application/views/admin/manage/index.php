@@ -5,8 +5,6 @@ echo "<tbody>";
 $odd_even = "odd";
 foreach ($accounts as $id => $row)
 {
-	if (strlen($row) < 5)
-		continue;
 	echo "<tr class=\"tr-" . $odd_even;
 	echo "\">";
 	echo "<td>";
