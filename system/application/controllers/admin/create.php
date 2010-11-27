@@ -115,6 +115,7 @@ class Create extends Controller {
 			'size' => '40',
 			'value' => '3306',
 		);
+
 		/* Form validations */
 		$this->form_validation->set_rules('account_name', 'Account Name', 'trim|required|min_length[2]|max_length[100]');
 		$this->form_validation->set_rules('account_address', 'Account Address', 'trim|max_length[255]');
@@ -133,9 +134,9 @@ class Create extends Controller {
 		/* Repopulating form */
 		if ($_POST)
 		{
-			$data['account_name']['value'] = $this->input->post('account_name');
-			$data['account_address']['value'] = $this->input->post('account_address');
-			$data['account_email']['value'] = $this->input->post('account_email');
+			$data['account_name']['value'] = $this->input->post('account_name', TRUE);
+			$data['account_address']['value'] = $this->input->post('account_address', TRUE);
+			$data['account_email']['value'] = $this->input->post('account_email', TRUE);
 			$data['assy_start']['value'] = $this->input->post('assy_start', TRUE);
 			$data['assy_end']['value'] = $this->input->post('assy_end', TRUE);
 			$data['account_currency']['value'] = $this->input->post('account_currency', TRUE);
@@ -157,9 +158,9 @@ class Create extends Controller {
 		}
 		else
 		{
-			$data_account_name = $this->input->post('account_name');
-			$data_account_address = $this->input->post('account_address');
-			$data_account_email = $this->input->post('account_email');
+			$data_account_name = $this->input->post('account_name', TRUE);
+			$data_account_address = $this->input->post('account_address', TRUE);
+			$data_account_email = $this->input->post('account_email', TRUE);
 			$data_assy_start = date_php_to_mysql($this->input->post('assy_start', TRUE));
 			$data_assy_end = date_php_to_mysql($this->input->post('assy_end', TRUE));
 			$data_account_currency = $this->input->post('account_currency', TRUE);
