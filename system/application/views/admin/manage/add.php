@@ -33,6 +33,6 @@
 
 	echo form_submit('submit', 'Add');
 	echo " ";
-	echo anchor('admin/manage', 'Back', 'Back to active account list');
+	echo anchor('admin/manage', 'Back', array('title' => 'Back to active account list'));
 	echo form_close();
 ?>

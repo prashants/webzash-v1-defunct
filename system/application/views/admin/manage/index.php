@@ -20,4 +20,6 @@ foreach ($accounts as $id => $row)
 }
 echo "</tbody>";
 echo "</table>";
+echo "<br />";
+echo anchor('admin', 'Back', array('title' => 'Back to admin'));
 ?>
