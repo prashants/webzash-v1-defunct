@@ -47,6 +47,8 @@ echo "<thead><tr><th>Number</th><th>Date</th><th>Status</th><th>Type</th><th>Dr 
 $odd_even = "odd";
 
 $cur_balance = 0;
+$clbalance = $this->Ledger_model->get_ledger_balance($ledger_id); /* Final Closing Balance */
+
 if ($page_count <= 0)
 {
 	list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id);
@@ -137,15 +139,18 @@ foreach ($ledgerst_q->result() as $row)
 		echo "</tr>";
 		$odd_even = ($odd_even == "odd") ? "even" : "odd";
 }
-/* Closing Balance */
+
+/* Current Page Closing Balance */
 if ($cur_balance < 0)
 {
 	echo "<tr class=\"tr-balance\"><td colspan=6>Closing Balance</td><td>Cr " .  convert_cur(-$cur_balance) . "</td></tr>";
 } else {
 	echo "<tr class=\"tr-balance\"><td colspan=6>Closing Balance</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
 }
+
 echo "</table>";
 echo "<br />";
+
 /* Ledger Summary */
 echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 echo "<thead><tr><th colspan=2>Ledger A/C Summary</th></tr></thead>";
@@ -154,9 +159,9 @@ if ($optype == "D")
 else
 	echo "<tr class=\"tr-odd\"><td>Opening Balance</td><td>Cr " . $opbalance . "</td></tr>";
 if ($cur_balance < 0)
-	echo "<tr class=\"tr-odd\"><td>Closing Balance</td><td>Cr " . convert_cur(-$cur_balance) . "</td></tr>";
+	echo "<tr class=\"tr-odd\"><td>Closing Balance</td><td>Cr " . convert_cur(-$clbalance) . "</td></tr>";
 else
-	echo "<tr class=\"tr-odd\"><td>Closing Balance</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
+	echo "<tr class=\"tr-odd\"><td>Closing Balance</td><td>Dr " . convert_cur($clbalance) . "</td></tr>";
 echo "</table>";
 
 }
