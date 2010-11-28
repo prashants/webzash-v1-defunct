@@ -449,7 +449,7 @@ class Voucher extends Controller {
 		}
 
 		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id))
+		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
 			$this->messages->add('Invalid Voucher', 'error');
 			redirect('voucher/show/' . $voucher_type);
@@ -677,6 +677,13 @@ class Voucher extends Controller {
 
 	function delete($voucher_type, $voucher_id)
 	{
+		/* Load current voucher details */
+		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
+		{
+			$this->messages->add('Invalid Voucher', 'error');
+			redirect('voucher/show/' . $voucher_type);
+		}
+
 		$this->db->trans_start();
 		if ( ! $this->db->query("DELETE FROM voucher_items WHERE voucher_id = ?", array($voucher_id)))
 		{
@@ -704,14 +711,18 @@ class Voucher extends Controller {
 
 		$account = $this->Setting_model->get_current();
 
-		$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE id = ?", $voucher_id);
-		$voucher = $voucher_q->row();
+		/* Load current voucher details */
+		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
+		{
+			$this->messages->add('Invalid Voucher', 'error');
+			redirect('voucher/show/' . $voucher_type);
+		}
 
 		echo "<h3>" . ucfirst($voucher_type) . " Voucher</h3>";
 		echo "<p><b>" . $account->name . "</b></p>";
 		echo "<p>" . $account->address . "</p>";
-		echo "<p>Voucher Number : " . $voucher->number . "</p>";
-		echo "<p>Voucher Date : " . date_mysql_to_php($voucher->date) . "</p>";
+		echo "<p>Voucher Number : " . $cur_voucher->number . "</p>";
+		echo "<p>Voucher Date : " . date_mysql_to_php($cur_voucher->date) . "</p>";
 		echo "<table border=1>";
 		echo "<thead><tr><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>";
 
@@ -735,9 +746,9 @@ class Voucher extends Controller {
 			}
 			echo "</tr>";
 		}
-		echo "<tr><td><b>TOTAL</b></td><td><b>" . $voucher->dr_total . "</b></td><td><b>" . $voucher->cr_total . "</b></td></tr>";
+		echo "<tr><td><b>TOTAL</b></td><td><b>" . $cur_voucher->dr_total . "</b></td><td><b>" . $cur_voucher->cr_total . "</b></td></tr>";
 		echo "</table>";
-		echo "<p>" . "Narration : " . $voucher->narration . "</p>";
+		echo "<p>" . "Narration : " . $cur_voucher->narration . "</p>";
 	}
 
 	function email($voucher_type, $voucher_id)
@@ -745,6 +756,15 @@ class Voucher extends Controller {
 		$this->load->model('Setting_model');
 		$this->load->model('Ledger_model');
 		$this->load->library('email');
+
+		$account = $this->Setting_model->get_current();
+
+		/* Load current voucher details */
+		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
+		{
+			$this->messages->add('Invalid Voucher', 'error');
+			redirect('voucher/show/' . $voucher_type);
+		}
 
 		$data['voucher_type'] = $voucher_type;
 		$data['voucher_id'] = $voucher_id;
@@ -771,19 +791,14 @@ class Voucher extends Controller {
 		}
 		else
 		{
-			$account = $this->Setting_model->get_current();
-
-			/* Loading Voucher */
-			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE id = ?", $voucher_id);
-			$voucher = $voucher_q->row();
 
 			/* Preparing message */
 			$message = "";
 			$message .= "<h3>" . ucfirst($voucher_type) . " Voucher</h3>";
-			$message .= "<p><b>" . $account->name . "</b></p>";
-			$message .= "<p>" . $account->address . "</p>";
-			$message .= "<p>Voucher Number : " . $voucher->number . "</p>";
-			$message .= "<p>Voucher Date : " . date_mysql_to_php($voucher->date) . "</p>";
+			$message .= "<p><b>" . $cur_voucher->name . "</b></p>";
+			$message .= "<p>" . $cur_voucher->address . "</p>";
+			$message .= "<p>Voucher Number : " . $cur_voucher->number . "</p>";
+			$message .= "<p>Voucher Date : " . date_mysql_to_php($cur_voucher->date) . "</p>";
 			$message .= "<table border=1>";
 			$message .= "<thead><tr><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>";
 
@@ -807,9 +822,9 @@ class Voucher extends Controller {
 				}
 				$message .=  "</tr>";
 			}
-			$message .=  "<tr><td><b>TOTAL</b></td><td><b>" . $voucher->dr_total . "</b></td><td><b>" . $voucher->cr_total . "</b></td></tr>";
+			$message .=  "<tr><td><b>TOTAL</b></td><td><b>" . $cur_voucher->dr_total . "</b></td><td><b>" . $cur_voucher->cr_total . "</b></td></tr>";
 			$message .=  "</table>";
-			$message .=  "<p>" . "Narration : " . $voucher->narration . "</p>";
+			$message .=  "<p>" . "Narration : " . $cur_voucher->narration . "</p>";
 
 			/* Sending email */
 			$config['protocol']='smtp';
@@ -825,7 +840,7 @@ class Voucher extends Controller {
 
 			$this->email->from('', 'Prashant Shah');
 			$this->email->to($this->input->post('email_to'));
-			$this->email->subject(ucfirst($voucher_type) . ' Voucher No. ' . $voucher->number);
+			$this->email->subject(ucfirst($voucher_type) . ' Voucher No. ' . $cur_voucher->number);
 			$this->email->message($message);
 			$this->email->send();
 			$data['message'] = "Successfully sent email !";
