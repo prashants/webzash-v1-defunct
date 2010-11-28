@@ -19,16 +19,33 @@ class Startup
 		if ($CI->uri->segment(1) == "admin")
 			return;
 
-		/* Checking for valid database */
-		$table_names = array('settings', 'groups', 'ledgers', 'vouchers', 'voucher_items');
-		foreach ($table_names as $id => $tbname)
+		/* Checking for valid database connection */
+		if ($CI->db->conn_id)
 		{
-			$valid_db_q = mysql_query('DESC ' . $tbname);
-			if ( ! $valid_db_q)
+			/* Checking for valid database name, username, password */
+			if ($CI->db->query("SHOW TABLES"))
 			{
-				$CI->messages->add('Invalid Webzash database', 'error');
+				/* Check for valid webzash database */
+				$table_names = array('settings', 'groups', 'ledgers', 'vouchers', 'voucher_items');
+				foreach ($table_names as $id => $tbname)
+				{
+					$valid_db_q = mysql_query('DESC ' . $tbname);
+					if ( ! $valid_db_q)
+					{
+						$CI->messages->add('Invalid Webzash database', 'error');
+						redirect('admin');
+						return;
+					}
+				}
+			} else {
+				$CI->messages->add('Invalid database connection settings. Please check whether the provided database name, username and password is valid', 'error');
 				redirect('admin');
+				return;
 			}
+		} else {
+			$CI->messages->add('Cannot connect to database server. Please check whether database server is running', 'error');
+			redirect('admin');
+			return;
 		}
 
 		/* Loading company data */
