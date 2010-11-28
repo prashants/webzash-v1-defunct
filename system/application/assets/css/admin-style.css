@@ -106,14 +106,18 @@ body {
 
 #content #main ul#main-links-nav li a
 {
-	text-decoration:underline;
 	color:#000000;
 	font-size:100%;
+	background-color:#EEE;
+	border:1px solid;
+	border-color: #696 #363 #363 #696;
+	padding:3px;
+	text-decoration:none;
 }
 
 #content #main ul#main-links-nav li a:hover
 {
-	color:#AAAAAA;
+	color:#444444;
 }
 
 /* COMMON */

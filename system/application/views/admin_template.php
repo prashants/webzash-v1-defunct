@@ -53,7 +53,7 @@ $(document).ready(function(){
 				<?php if (isset($nav_links)) {
 					echo "<ul id=\"main-links-nav\">";
 					foreach ($nav_links as $link => $title) {
-						echo "<li>" . anchor($link, $title, $title) . "</li>";
+						echo "<li>" . anchor($link, $title, array('title' => $title, 'class' => 'nav-links-item')) . "</li>";
 					}
 					echo "</ul>";
 				} ?>
