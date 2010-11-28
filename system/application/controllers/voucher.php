@@ -194,7 +194,7 @@ class Voucher extends Controller {
 		}
 
 		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id))
+		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
 			$this->messages->add('Invalid Voucher', 'error');
 			redirect('voucher/show/' . $voucher_type);

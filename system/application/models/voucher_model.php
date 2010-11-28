@@ -17,9 +17,9 @@ class Voucher_model extends Model {
 		return $last_no;
 	}
 
-	function get_voucher($voucher_id)
+	function get_voucher($voucher_id, $voucher_type_string)
 	{
-		$voucher_q = $this->db->query('SELECT * FROM vouchers WHERE id = ? LIMIT 1', $voucher_id);
+		$voucher_q = $this->db->query('SELECT * FROM vouchers WHERE id = ? AND type = ? LIMIT 1', array($voucher_id, v_to_n($voucher_type_string)));
 		$row = $voucher_q->row();
 		return $row;
 	}
