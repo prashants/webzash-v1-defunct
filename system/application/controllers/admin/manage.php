@@ -5,6 +5,7 @@ class Manage extends Controller {
 	function Manage()
 	{
 		parent::Controller();
+		return;
 	}
 	
 	function index()
@@ -112,6 +113,7 @@ class Manage extends Controller {
 
 			
 		}
+		return;
 	}
 }
 

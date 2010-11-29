@@ -5,12 +5,14 @@ class Setting extends Controller {
 	{
 		parent::Controller();
 		$this->load->model('Setting_model');
+		return;
 	}
 
 	function index()
 	{
 		$this->template->set('page_title', 'Settings');
 		$this->template->load('template', 'setting/index');
+		return;
 	}
 
 	function account()
@@ -110,6 +112,7 @@ class Setting extends Controller {
 		{
 			$this->messages->add(validation_errors(), 'error');
 			$this->template->load('template', 'setting/account', $data);
+			return;
 		}
 		else
 		{
@@ -148,5 +151,6 @@ class Setting extends Controller {
 			redirect('setting');
 			return;
 		}
+		return;
 	}
 }

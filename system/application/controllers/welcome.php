@@ -4,13 +4,15 @@ class Welcome extends Controller {
 
 	function Welcome()
 	{
-		parent::Controller();	
+		parent::Controller();
+		return;
 	}
 	
 	function index()
 	{
 		$this->template->set('page_title', 'Welcome to Webzash');
 		$this->template->load('template', 'welcome_message');
+		return;
 	}
 }
 

@@ -6,6 +6,7 @@ class Report extends Controller {
 	{
 		parent::Controller();
 		$this->load->model('Ledger_model');
+		return;
 	}
 	
 	function index()
@@ -20,6 +21,7 @@ class Report extends Controller {
 		);
 		$this->template->set('nav_links', $menu);
 		$this->template->load('template', 'report/index');
+		return;
 	}
 
 	function balancesheet($period = NULL)
@@ -34,6 +36,7 @@ class Report extends Controller {
 		);
 		$this->template->set('nav_links', $menu);
 		$this->template->load('template', 'report/balancesheet');
+		return;
 	}
 
 	function profitandloss($period = NULL)
@@ -48,6 +51,7 @@ class Report extends Controller {
 		);
 		$this->template->set('nav_links', $menu);
 		$this->template->load('template', 'report/profitandloss');
+		return;
 	}
 
 	function trialbalance($period = NULL)
@@ -65,6 +69,7 @@ class Report extends Controller {
 		$data['a'] = $a;
 		$this->template->set('nav_links', $menu);
 		$this->template->load('template', 'report/trialbalance', $data);
+		return;
 	}
 
 	function ledgerst($ledger_id = 0)
@@ -88,5 +93,6 @@ class Report extends Controller {
 		$data['ledger_id'] = $ledger_id;
 		$this->template->set('nav_links', $menu);
 		$this->template->load('template', 'report/ledgerst', $data);
+		return;
 	}
 }

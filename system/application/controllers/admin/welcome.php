@@ -5,6 +5,7 @@ class Welcome extends Controller {
 	function Welcome()
 	{
 		parent::Controller();
+		return;
 	}
 	
 	function index()
@@ -57,6 +58,7 @@ class Welcome extends Controller {
 			$data['current_account'] = "No account is currently active. You can " . anchor('admin/create', 'create', array('title' => 'Create a new account', 'style' => 'color:#000000')) . " a new account or " . anchor('admin/active', 'activate', array('title' => 'Activate a existing account', 'style' => 'color:#000000')) . " an existing account";
 
 		$this->template->load('admin_template', 'admin/welcome', $data);
+		return;
 	}
 }
 

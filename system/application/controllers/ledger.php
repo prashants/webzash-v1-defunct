@@ -6,11 +6,13 @@ class Ledger extends Controller {
 		parent::Controller();
 		$this->load->model('Ledger_model');
 		$this->load->model('Group_model');
+		return;
 	}
 
 	function index()
 	{
 		redirect('ledger/add');
+		return;
 	}
 
 	function add()
@@ -57,6 +59,7 @@ class Ledger extends Controller {
 		{
 			$this->messages->add(validation_errors(), 'error');
 			$this->template->load('template', 'ledger/add', $data);
+			return;
 		}
 		else
 		{
@@ -77,10 +80,12 @@ class Ledger extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding ' . $data_name . ' - Ledger A/C', 'error');
 				$this->template->load('template', 'group/add', $data);
+				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add($data_name . ' - Ledger A/C added successfully', 'success');
 				redirect('account');
+				return;
 			}
 		}
 		return;
@@ -154,6 +159,7 @@ class Ledger extends Controller {
 		{
 			$this->messages->add(validation_errors(), 'error');
 			$this->template->load('template', 'ledger/edit', $data);
+			return;
 		}
 		else
 		{
@@ -175,10 +181,12 @@ class Ledger extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating ' . $data_name . ' - Ledger A/C', 'error');
 				$this->template->load('template', 'ledger/edit', $data);
+				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add($data_name . ' - Ledger A/C updated successfully', 'success');
 				redirect('account');
+				return;
 			}
 		}
 		return;
@@ -210,10 +218,12 @@ class Ledger extends Controller {
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Ledger A/C', 'error');
 			redirect('account');
+			return;
 		} else {
 			$this->db->trans_complete();
 			$this->messages->add('Ledger A/C deleted successfully', 'success');
 			redirect('account');
+			return;
 		}
 		return;
 	}
@@ -224,5 +234,6 @@ class Ledger extends Controller {
 			echo $this->Ledger_model->get_ledger_balance($ledger_id);
 		else
 			echo "";
+		return;
 	}
 }

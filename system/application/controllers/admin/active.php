@@ -5,6 +5,7 @@ class Active extends Controller {
 	function Active()
 	{
 		parent::Controller();
+		return;
 	}
 	
 	function index()
@@ -17,6 +18,7 @@ class Active extends Controller {
 		if (count($data['accounts']) > 1)
 			array_pop($data['accounts']);
 		$this->template->load('admin_template', 'admin/active', $data);
+		return;
 	}
 }
 

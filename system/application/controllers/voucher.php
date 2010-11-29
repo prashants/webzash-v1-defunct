@@ -6,6 +6,7 @@ class Voucher extends Controller {
 		parent::Controller();
 		$this->load->model('Voucher_model');
 		$this->load->model('Ledger_model');
+		return;
 	}
 
 	function index()
@@ -198,6 +199,7 @@ class Voucher extends Controller {
 		{
 			$this->messages->add('Invalid Voucher', 'error');
 			redirect('voucher/show/' . $voucher_type);
+			return;
 		}
 		/* Load current voucher details */
 		if ( ! $cur_voucher_ledgers = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY id ASC", array($voucher_id)))
@@ -208,6 +210,7 @@ class Voucher extends Controller {
 		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
 		$data['voucher_type'] = $voucher_type;
 		$this->template->load('template', 'voucher/view', $data);
+		return;
 	}
 
 	function add($voucher_type)
@@ -310,6 +313,7 @@ class Voucher extends Controller {
 		{
 			$this->messages->add(validation_errors(), 'error');
 			$this->template->load('template', 'voucher/add', $data);
+			return;
 		}
 		else
 		{
@@ -422,7 +426,9 @@ class Voucher extends Controller {
 			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . $data_number . ' added successfully', 'success');
 			redirect('voucher/show/' . $voucher_type);
 			$this->template->load('template', 'voucher/add', $data);
+			return;
 		}
+		return;
 	}
 
 	function edit($voucher_type, $voucher_id = 0)
@@ -453,6 +459,7 @@ class Voucher extends Controller {
 		{
 			$this->messages->add('Invalid Voucher', 'error');
 			redirect('voucher/show/' . $voucher_type);
+			return;
 		}
 
 		/* Form fields - Voucher */
@@ -671,6 +678,7 @@ class Voucher extends Controller {
 			$this->db->trans_complete();
 			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . $data_number . ' updated successfully', 'success');
 			redirect('voucher/show/' . $voucher_type);
+			return;
 		}
 		return;
 	}
@@ -682,6 +690,7 @@ class Voucher extends Controller {
 		{
 			$this->messages->add('Invalid Voucher', 'error');
 			redirect('voucher/show/' . $voucher_type);
+			return;
 		}
 
 		$this->db->trans_start();
@@ -702,6 +711,7 @@ class Voucher extends Controller {
 		$this->db->trans_complete();
 		$this->messages->add('Voucher deleted successfully', 'success');
 		redirect('voucher/show/' . $voucher_type);
+		return;
 	}
 
 	function printhtml($voucher_type, $voucher_id)
@@ -716,6 +726,7 @@ class Voucher extends Controller {
 		{
 			$this->messages->add('Invalid Voucher', 'error');
 			redirect('voucher/show/' . $voucher_type);
+			return;
 		}
 
 		echo "<h3>" . ucfirst($voucher_type) . " Voucher</h3>";
@@ -749,6 +760,7 @@ class Voucher extends Controller {
 		echo "<tr><td><b>TOTAL</b></td><td><b>" . $cur_voucher->dr_total . "</b></td><td><b>" . $cur_voucher->cr_total . "</b></td></tr>";
 		echo "</table>";
 		echo "<p>" . "Narration : " . $cur_voucher->narration . "</p>";
+		return;
 	}
 
 	function email($voucher_type, $voucher_id)
@@ -764,6 +776,7 @@ class Voucher extends Controller {
 		{
 			$this->messages->add('Invalid Voucher', 'error');
 			redirect('voucher/show/' . $voucher_type);
+			return;
 		}
 
 		$data['voucher_type'] = $voucher_type;
@@ -788,6 +801,7 @@ class Voucher extends Controller {
 		{
 			$data['error'] = validation_errors();
 			$this->load->view('voucher/email', $data);
+			return;
 		}
 		else
 		{
@@ -845,7 +859,9 @@ class Voucher extends Controller {
 			$this->email->send();
 			$data['message'] = "Successfully sent email !";
 			$this->load->view('voucher/email', $data);
+			return;
 		}
+		return;
 	}
 
 	function addrow()
@@ -890,5 +906,6 @@ class Voucher extends Controller {
 		echo img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow'));
 		echo '</td>';
 		echo '</tr>';
+		return;
 	}
 }

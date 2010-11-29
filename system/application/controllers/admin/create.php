@@ -5,6 +5,7 @@ class Create extends Controller {
 	function Create()
 	{
 		parent::Controller();
+		return;
 	}
 	
 	function index()
@@ -155,6 +156,7 @@ class Create extends Controller {
 		{
 			$this->messages->add(validation_errors(), 'error');
 			$this->template->load('admin_template', 'admin/create', $data);
+			return;
 		}
 		else
 		{
@@ -235,6 +237,7 @@ class Create extends Controller {
 				return;
 			}
 		}
+		return;
 	}
 }
 

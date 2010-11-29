@@ -5,11 +5,13 @@ class Group extends Controller {
 	{
 		parent::Controller();
 		$this->load->model('Group_model');
+		return;
 	}
 
 	function index()
 	{
 		redirect('group/add');
+		return;
 	}
 
 	function add()
@@ -43,6 +45,7 @@ class Group extends Controller {
 		{
 			$this->messages->add(validation_errors(), 'error');
 			$this->template->load('template', 'group/add', $data);
+			return;
 		}
 		else
 		{
@@ -55,10 +58,12 @@ class Group extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding ' . $data_name . ' - Group A/C', 'error');
 				$this->template->load('template', 'group/add', $data);
+				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add($data_name . ' - Group A/C added successfully', 'success');
 				redirect('account');
+				return;
 			}
 		}
 		return;
@@ -120,6 +125,7 @@ class Group extends Controller {
 		{
 			$this->messages->add(validation_errors(), 'error');
 			$this->template->load('template', 'group/edit', $data);
+			return;
 		}
 		else
 		{
@@ -133,10 +139,12 @@ class Group extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating ' . $data_name . ' - Group A/C', 'error');
 				$this->template->load('template', 'group/edit', $data);
+				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add($data_name . ' - Group A/C updated successfully', 'success');
 				redirect('account');
+				return;
 			}
 		}
 		return;
@@ -179,10 +187,12 @@ class Group extends Controller {
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Group A/C', 'success');
 			redirect('account');
+			return;
 		} else {
 			$this->db->trans_complete();
 			$this->messages->add('Group A/C deleted successfully', 'success');
 			redirect('account');
+			return;
 		}
 		return;
 	}
