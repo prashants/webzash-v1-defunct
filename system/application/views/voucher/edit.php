@@ -131,20 +131,24 @@ $(document).ready(function() {
 
 		var ledgerid = $(this).val();
 		var rowid = $(this);
-		$.ajax({
-			url: <?php echo '\'' . site_url('ledger/balance') . '/\''; ?> + ledgerid,
-			success: function(data) {
-				var ledger_bal = parseFloat(data);
-				if (isNaN(ledger_bal))
-					ledger_bal = 0;
-				if (ledger_bal == 0)
-					rowid.parent().next().next().next().next().next().children().text("0");
-				else if (ledger_bal < 0)
-					rowid.parent().next().next().next().next().next().children().text("Cr " + -data);
-				else
-					rowid.parent().next().next().next().next().next().children().text("Dr " + data);
-			}
-		});
+		if (ledgerid > 0) {
+			$.ajax({
+				url: <?php echo '\'' . site_url('ledger/balance') . '/\''; ?> + ledgerid,
+				success: function(data) {
+					var ledger_bal = parseFloat(data);
+					if (isNaN(ledger_bal))
+						ledger_bal = 0;
+					if (ledger_bal == 0)
+						rowid.parent().next().next().next().next().next().children().text("0");
+					else if (ledger_bal < 0)
+						rowid.parent().next().next().next().next().next().children().text("Cr " + -data);
+					else
+						rowid.parent().next().next().next().next().next().children().text("Dr " + data);
+				}
+			});
+		} else {
+			rowid.parent().next().next().next().next().next().children().text("");
+		}
 	});
 
 	/* Recalculate Total */
