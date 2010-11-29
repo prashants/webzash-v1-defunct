@@ -279,13 +279,13 @@ class Voucher extends Controller {
 		/* Repopulating form */
 		if ($_POST)
 		{
-			$data['voucher_number']['value'] = $this->input->post('voucher_number');
-			$data['voucher_date']['value'] = $this->input->post('voucher_date');
-			$data['voucher_narration']['value'] = $this->input->post('voucher_narration');
-			$data['voucher_draft'] = $this->input->post('voucher_draft');
-			$data['voucher_print'] = $this->input->post('voucher_print');
-			$data['voucher_email'] = $this->input->post('voucher_email');
-			$data['voucher_pdf'] = $this->input->post('voucher_pdf');
+			$data['voucher_number']['value'] = $this->input->post('voucher_number', TRUE);
+			$data['voucher_date']['value'] = $this->input->post('voucher_date', TRUE);
+			$data['voucher_narration']['value'] = $this->input->post('voucher_narration', TRUE);
+			$data['voucher_draft'] = $this->input->post('voucher_draft', TRUE);
+			$data['voucher_print'] = $this->input->post('voucher_print', TRUE);
+			$data['voucher_email'] = $this->input->post('voucher_email', TRUE);
+			$data['voucher_pdf'] = $this->input->post('voucher_pdf', TRUE);
 
 			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
 			$data['ledger_id'] = $this->input->post('ledger_id', TRUE);
@@ -347,7 +347,7 @@ class Voucher extends Controller {
 			$data_date = $this->input->post('voucher_date', TRUE);
 			$data_narration = $this->input->post('voucher_narration', TRUE);
 
-			$data_draft = $this->input->post('voucher_draft');
+			$data_draft = $this->input->post('voucher_draft', TRUE);
 			if ($data_draft == "1")
 				$data_draft = "1";
 			else
@@ -538,13 +538,13 @@ class Voucher extends Controller {
 		/* Repopulating form */
 		if ($_POST)
 		{
-			$data['voucher_number']['value'] = $this->input->post('voucher_number');
-			$data['voucher_date']['value'] = $this->input->post('voucher_date');
-			$data['voucher_narration']['value'] = $this->input->post('voucher_narration');
-			$data['voucher_draft'] = $this->input->post('voucher_draft');
-			$data['voucher_print'] = $this->input->post('voucher_print');
-			$data['voucher_email'] = $this->input->post('voucher_email');
-			$data['voucher_pdf'] = $this->input->post('voucher_pdf');
+			$data['voucher_number']['value'] = $this->input->post('voucher_number', TRUE);
+			$data['voucher_date']['value'] = $this->input->post('voucher_date', TRUE);
+			$data['voucher_narration']['value'] = $this->input->post('voucher_narration', TRUE);
+			$data['voucher_draft'] = $this->input->post('voucher_draft', TRUE);
+			$data['voucher_print'] = $this->input->post('voucher_print', TRUE);
+			$data['voucher_email'] = $this->input->post('voucher_email', TRUE);
+			$data['voucher_pdf'] = $this->input->post('voucher_pdf', TRUE);
 
 			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
 			$data['ledger_id'] = $this->input->post('ledger_id', TRUE);
@@ -591,7 +591,7 @@ class Voucher extends Controller {
 			$data_date = $this->input->post('voucher_date', TRUE);
 			$data_narration = $this->input->post('voucher_narration', TRUE);
 
-			$data_draft = $this->input->post('voucher_draft');
+			$data_draft = $this->input->post('voucher_draft', TRUE);
 			if ($data_draft == "1")
 				$data_draft = "1";
 			else
@@ -781,7 +781,7 @@ class Voucher extends Controller {
 		/* Repopulating form */
 		if ($_POST)
 		{
-			$data['email_to']['value'] = $this->input->post('email_to');
+			$data['email_to']['value'] = $this->input->post('email_to', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -839,7 +839,7 @@ class Voucher extends Controller {
 			$this->email->initialize($config);
 
 			$this->email->from('', 'Prashant Shah');
-			$this->email->to($this->input->post('email_to'));
+			$this->email->to($this->input->post('email_to', TRUE));
 			$this->email->subject(ucfirst($voucher_type) . ' Voucher No. ' . $cur_voucher->number);
 			$this->email->message($message);
 			$this->email->send();
