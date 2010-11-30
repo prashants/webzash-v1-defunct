@@ -17,13 +17,6 @@ class Voucher extends Controller {
 
 	function show($voucher_type)
 	{
-		$this->template->set('nav_links', array(
-			'voucher/show/all' => 'All',
-			'voucher/show/receipt' => 'Receipt',
-			'voucher/show/payment' => 'Payment',
-			'voucher/show/contra' => 'Contra',
-			'voucher/show/journal' => 'Journal',
-		));
 		switch ($voucher_type)
 		{
 		case 'all' :
@@ -33,21 +26,25 @@ class Voucher extends Controller {
 			break;
 		case 'receipt' :
 			$this->template->set('page_title', 'Receipt Vouchers');
+			$this->template->set('nav_links', array('voucher/add/receipt' => 'New Receipt Voucher'));
 			$data['voucher_type'] = "receipt";
 			$data['voucher_table'] = $this->_show_voucher(1);
 			break;
 		case 'payment' :
 			$this->template->set('page_title', 'Payment Vouchers');
+			$this->template->set('nav_links', array('voucher/add/payment' => 'New Payment Voucher'));
 			$data['voucher_type'] = "payment";
 			$data['voucher_table'] = $this->_show_voucher(2);
 			break;
 		case 'contra' :
 			$this->template->set('page_title', 'Contra Vouchers');
+			$this->template->set('nav_links', array('voucher/add/contra' => 'New Contra Voucher'));
 			$data['voucher_type'] = "contra";
 			$data['voucher_table'] = $this->_show_voucher(3);
 			break;
 		case 'journal' :
 			$this->template->set('page_title', 'Journal Vouchers');
+			$this->template->set('nav_links', array('voucher/add/journal' => 'New Journal Voucher'));
 			$data['voucher_type'] = "journal";
 			$data['voucher_table'] = $this->_show_voucher(4);
 			break;
