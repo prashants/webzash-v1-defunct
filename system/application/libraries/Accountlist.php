@@ -184,7 +184,7 @@ class Accountlist
 		$html = "";
 		for ($i = 1; $i <= $count; $i++)
 		{
-			$html .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+			$html .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		}
 		return $html;
 	}
