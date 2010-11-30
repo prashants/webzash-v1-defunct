@@ -42,9 +42,13 @@ class Ledger_model extends Model {
 
 	function get_op_balance($ledger_id)
 	{
-		$op_bal_q = $this->db->query('SELECT * FROM ledgers WHERE id = ? LIMIT 1', $ledger_id);
-		$op_bal = $op_bal_q->row();
-		return array($op_bal->op_balance, $op_bal->op_balance_dc);
+		if ($op_bal_q = $this->db->query('SELECT * FROM ledgers WHERE id = ? LIMIT 1', $ledger_id))
+		{
+			$op_bal = $op_bal_q->row();
+			return array($op_bal->op_balance, $op_bal->op_balance_dc);
+		} else {
+			return array(0, "D");
+		}
 	}
 
 	/* Return debit total as positive value */
