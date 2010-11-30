@@ -28,30 +28,36 @@
 	$income->init(3);
 	$expense = new Accountlist();
 	$expense->init(4);
-	$pandl = $income->total - $expense->total;
+
+	$income_total = -$income->total;
+	$expense_total = $expense->total;
+
+	$pandl = $income_total - $expense_total;
 
 	echo "<tr style=\"background-color:#F8F8F8;\">";
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"vouchertable\" width=\"450\">";
 	echo "<tr valign=\"top\">";
-	echo "<td class=\"bold\">LIABILITY TOTAL</td>";
-	echo "<td align=\"right\" class=\"bold\">" . $liability->total . "</td>";
-	if ($pandl < 0)
+	echo "<td class=\"bold\">Liability Total</td>";
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur($liability->total) . "</td>";
+
+	/* If Profit then Liability side, If Loss then Asset side */
+	if ($pandl > 0)
 	{
 		echo "<tr valign=\"top\">";
-		echo "<td class=\"bold\">LOSS B/F</td>";
-		echo "<td align=\"right\" class=\"bold\">" . -$pandl . "</td>";
+		echo "<td class=\"bold\">Profit & Loss A/C</td>";
+		echo "<td align=\"right\" class=\"bold\">" . convert_cur($pandl) . "</td>";
 		echo "</tr>";
 	} else {
 		echo "<tr>";
 		echo "<td>&nbsp;</td>";
 		echo "<td>&nbsp;</td>";
 		echo "</tr>";
-
 	}
+
 	echo "<tr valign=\"top\">";
-	echo "<td class=\"bold\">TOTAL</td>";
-	echo "<td align=\"right\" class=\"bold\">" . ($liability->total + $expense->total) . "</td>";
+	echo "<td class=\"bold\">Total</td>";
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur(($liability->total + $pandl)) . "</td>";
 	echo "</tr>";
 	echo "</table>";
 	echo "</td>";
@@ -59,25 +65,27 @@
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"vouchertable\" width=\"450\">";
 	echo "<tr valign=\"top\">";
-	echo "<td class=\"bold\">ASSET TOTAL</td>";
-	echo "<td align=\"right\" class=\"bold\">" . $asset->total . "</td>";
+	echo "<td class=\"bold\">Asset Total</td>";
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur($asset->total) . "</td>";
 	echo "</tr>";
+
+	/* If Profit then Liability side, If Loss then Asset side */
 	if ($pandl > 0)
 	{
-		echo "<tr valign=\"top\">";
-		echo "<td class=\"bold\">PROFIT B/F</td>";
-		echo "<td align=\"right\" class=\"bold\">" . $pandl . "</td>";
-		echo "</tr>";
-	} else {
 		echo "<tr>";
 		echo "<td>&nbsp;</td>";
 		echo "<td>&nbsp;</td>";
 		echo "</tr>";
-
+	} else {
+		echo "<tr valign=\"top\">";
+		echo "<td class=\"bold\">Profit & Loss A/C</td>";
+		echo "<td align=\"right\" class=\"bold\">" . convert_cur(-$pandl) . "</td>";
+		echo "</tr>";
 	}
+
 	echo "<tr valign=\"top\">";
-	echo "<td class=\"bold\">TOTAL</td>";
-	echo "<td align=\"right\" class=\"bold\">" . ($asset->total + $income->total) . "</td>";
+	echo "<td class=\"bold\">Total</td>";
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur($asset->total + (-$pandl)) . "</td>";
 	echo "</tr>";
 	echo "</table>";
 	echo "</td>";
