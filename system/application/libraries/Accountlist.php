@@ -76,7 +76,7 @@ class Accountlist
 			echo $this->print_space($this->counter);
 			echo "&nbsp;" .  $this->name;
 			echo "</td>";
-			echo "<td align=\"right\">" . $this->total . $this->print_space($this->counter) . "</td>";
+			echo "<td align=\"right\">" . convert_cur($this->total) . $this->print_space($this->counter) . "</td>";
 			echo "</tr>";
 		}
 		foreach ($this->children_groups as $id => $data)
@@ -95,7 +95,7 @@ class Accountlist
 				echo $this->print_space($this->counter);
 				echo "&nbsp;" . anchor('report/ledgerst/' . $data['id'], $data['name'], array('title' => $data['name'] . ' Ledger Statement', 'style' => 'color:#000000'));
 				echo "</td>";
-				echo "<td align=\"right\">" . $data['total'] . $this->print_space($this->counter) . "</td>";
+				echo "<td align=\"right\">" . convert_cur($data['total']) . $this->print_space($this->counter) . "</td>";
 				echo "</tr>";
 			}
 			$this->counter--;
@@ -119,12 +119,12 @@ class Accountlist
 			echo "<td>";
 			if ($this->total == 0)
 			{
-				echo "0";
+				echo "0.00";
 			} else if ($this->total > 0)
 			{
-				echo "Dr " . $this->total;
+				echo "Dr " . convert_cur($this->total);
 			} else {
-				echo "Cr " . -$this->total;
+				echo "Cr " . convert_cur(-$this->total);
 			}
 			echo "</td>";
 
@@ -151,19 +151,24 @@ class Accountlist
 				echo "<td>Ledger A/C</td>";
 
 				echo "<td>";
-				echo ($data['optype'] == "D") ? "Dr " : "Cr ";
-				echo $data['opbalance'];
+				if ($data['opbalance'] == 0)
+				{
+					echo "0.00";
+				} else {
+					echo ($data['optype'] == "D") ? "Dr " : "Cr ";
+					echo convert_cur($data['opbalance']);
+				}
 				echo "</td>";
 
 				echo "<td>";
 				if ($data['total'] == 0)
 				{
-					echo "0";
+					echo "0.00";
 				} else if ($data['total'] > 0)
 				{
-					echo "Dr " . $data['total'];
+					echo "Dr " . convert_cur($data['total']);
 				} else {
-					echo "Cr " . -$data['total'];
+					echo "Cr " . convert_cur(-$data['total']);
 				}
 				echo "</td>";
 
