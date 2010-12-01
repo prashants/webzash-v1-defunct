@@ -1,7 +1,3 @@
-.fieldset-auto-width {
-	display:inline;
-}
-
 #left-col {
 	background:none repeat scroll 0 0 #FFFFFF;
 	float:left;
@@ -85,3 +81,16 @@ ul#pagination-flickr {
 #pagination-flickr a:hover{
 	border:solid 1px #666666;
 }
+
+/* Fieldset */
+.fieldset-auto-width {
+	display:inline;
+	padding:10px;
+}
+
+.fieldset-auto-width legend {
+	border: 1px solid #0099CC;
+	background:#E5F1F4;
+	padding:4px;
+}
+
