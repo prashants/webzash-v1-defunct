@@ -56,7 +56,7 @@
 		{
 			$total += $pandl;
 			echo "<tr valign=\"top\">";
-			echo "<td class=\"bold\">Profit & Loss A/C</td>";
+			echo "<td class=\"bold\">Profit & Loss A/C (Net Profit)</td>";
 			echo "<td align=\"right\" class=\"bold\">" . convert_cur($pandl) . "</td>";
 			echo "</tr>";
 		} else {
@@ -115,7 +115,7 @@
 		} else {
 			$total += -$pandl;
 			echo "<tr valign=\"top\">";
-			echo "<td class=\"bold\">Profit & Loss A/C</td>";
+			echo "<td class=\"bold\">Profit & Loss A/C (Net Loss)</td>";
 			echo "<td align=\"right\" class=\"bold\">" . convert_cur(-$pandl) . "</td>";
 			echo "</tr>";
 		}
@@ -144,6 +144,7 @@
 	echo "<td align=\"right\" class=\"bold\">" . convert_cur($total) . "</td>";
 	echo "</tr>";
 	echo "</table>";
+
 	echo "</td>";
 	echo "</tr>";
 	echo "</table>";

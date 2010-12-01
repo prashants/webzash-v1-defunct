@@ -76,7 +76,17 @@ class Accountlist
 			echo $this->print_space($this->counter);
 			echo "&nbsp;" .  $this->name;
 			echo "</td>";
-			echo "<td align=\"right\">" . convert_cur($this->total) . $this->print_space($this->counter) . "</td>";
+
+			echo "<td align=\"right\">";
+			if ($this->total == 0)
+				echo "0";
+			else if ($this->total < 0)
+				echo "Cr " . convert_cur(-$this->total);
+			else
+				echo "Dr " . convert_cur($this->total);
+			echo $this->print_space($this->counter);
+			echo "</td>";
+
 			echo "</tr>";
 		}
 		foreach ($this->children_groups as $id => $data)
@@ -95,7 +105,17 @@ class Accountlist
 				echo $this->print_space($this->counter);
 				echo "&nbsp;" . anchor('report/ledgerst/' . $data['id'], $data['name'], array('title' => $data['name'] . ' Ledger Statement', 'style' => 'color:#000000'));
 				echo "</td>";
-				echo "<td align=\"right\">" . convert_cur($data['total']) . $this->print_space($this->counter) . "</td>";
+
+				echo "<td align=\"right\">";
+				if ($data['total'] == 0)
+					echo "0";
+				else if ($data['total'] < 0)
+					echo "Cr " . convert_cur(-$data['total']);
+				else
+					echo "Dr " . convert_cur($data['total']);
+				echo $this->print_space($this->counter);
+				echo "</td>";
+
 				echo "</tr>";
 			}
 			$this->counter--;
