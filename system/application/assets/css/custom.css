@@ -101,4 +101,6 @@ ul#pagination-flickr {
 	text-decoration:none;
 	margin:0 5px 0 1px;
 	padding:3px;
+	-moz-border-radius:5px;
+	border-radius:5px;
 }
