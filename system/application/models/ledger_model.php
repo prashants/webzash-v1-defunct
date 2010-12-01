@@ -51,6 +51,24 @@ class Ledger_model extends Model {
 		}
 	}
 
+	function get_diff_op_balance()
+	{
+		/* Calculating difference in Opening Balance */
+		$total_op = 0;
+		$ledgers_q = $this->db->query("SELECT * FROM ledgers ORDER BY id");
+		foreach ($ledgers_q->result() as $row)
+		{
+			list ($opbalance, $optype) = $this->get_op_balance($row->id);
+			if ($optype == "D")
+			{
+				$total_op += $opbalance;
+			} else {
+				$total_op -= $opbalance;
+			}
+		}
+		return $total_op;
+	}
+
 	/* Return debit total as positive value */
 	function get_dr_total($ledger_id)
 	{
