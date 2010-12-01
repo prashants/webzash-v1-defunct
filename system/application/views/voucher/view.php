@@ -42,7 +42,16 @@ if ($cur_voucher->dr_total != $cur_voucher->cr_total)
 </p>
 <p>
 Status : <span class="bold"><?php echo ($cur_voucher->draft == 0) ? "Active" : "Draft"; ?></span>
-<br /><br />
+</p>
+<p>
+Tag : 
+<?php
+$cur_voucher_tag = $this->Tag_model->show_voucher_tag($cur_voucher->tag_id);
+if ($cur_voucher_tag == "")
+	echo "None";
+else
+	echo $cur_voucher_tag;
+?>
 </p>
 <?php 
 	echo anchor('voucher/show/' . $voucher_type, 'Back', array('title' => 'Back to ' . ucfirst($voucher_type) . ' Vouchers'));
