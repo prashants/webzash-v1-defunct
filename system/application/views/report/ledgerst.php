@@ -44,17 +44,14 @@
 		$clbalance = $this->Ledger_model->get_ledger_balance($ledger_id); /* Final Closing Balance */
 
 		/* Ledger Summary */
-		echo "<table border=0 cellpadding=5 class=\"generaltable\">";
-		echo "<thead><tr><th colspan=2>Ledger A/C Summary</th></tr></thead>";
 		if ($optype == "D")
-			echo "<tr class=\"tr-odd\"><td>Opening Balance</td><td>Dr " . $opbalance . "</td></tr>";
+			echo "<b>Opening Balance : </b>Dr " . $opbalance . "<br />";
 		else
-			echo "<tr class=\"tr-odd\"><td>Opening Balance</td><td>Cr " . $opbalance . "</td></tr>";
+			echo "<b>Opening Balance : </b>Cr " . $opbalance . "<br />";
 		if ($clbalance < 0)
-			echo "<tr class=\"tr-odd\"><td>Closing Balance</td><td>Cr " . convert_cur(-$clbalance) . "</td></tr>";
+			echo "<b>Closing Balance &nbsp;: </b>Cr " . convert_cur(-$clbalance) . "<br />";
 		else
-			echo "<tr class=\"tr-odd\"><td>Closing Balance</td><td>Dr " . convert_cur($clbalance) . "</td></tr>";
-		echo "</table>";
+			echo "<b>Closing Balance &nbsp;: </b>Dr " . convert_cur($clbalance) . "<br />";
 		echo "<br />";
 
 		$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT ${page_count}, 10", array($ledger_id));
