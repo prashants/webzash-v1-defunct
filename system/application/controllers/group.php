@@ -29,6 +29,7 @@ class Group extends Controller {
 		);
 		$data['group_parent'] = $this->Group_model->get_all_groups();
 		$data['group_parent_active'] = 0;
+		$data['affects_gross'] = 0;
 
 		/* Form validations */
 		$this->form_validation->set_rules('group_name', 'Group name', 'trim|required|min_length[2]|max_length[100]|unique[groups.name]');
@@ -39,6 +40,7 @@ class Group extends Controller {
 		{
 			$data['group_name']['value'] = $this->input->post('group_name', TRUE);
 			$data['group_parent_active'] = $this->input->post('group_parent', TRUE);
+			$data['affects_gross'] = $this->input->post('affects_gross', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -52,8 +54,20 @@ class Group extends Controller {
 			$data_name = $this->input->post('group_name', TRUE);
 			$data_parent_id = $this->input->post('group_parent', TRUE);
 
+			/* Only if Income or Expense can affect gross profit loss calculation */
+			$data_affects_gross = $this->input->post('affects_gross', TRUE);
+			if ($data_parent_id == "3" || $data_parent_id == "4")
+			{
+				if ($data_affects_gross == "1")
+					$data_affects_gross = 1;
+				else
+					$data_affects_gross = 0;
+			} else {
+				$data_affects_gross = 0;
+			}
+
 			$this->db->trans_start();
-			if ( ! $this->db->query("INSERT INTO groups (name, parent_id) VALUES (?, ?)", array($data_name, $data_parent_id)))
+			if ( ! $this->db->query("INSERT INTO groups (name, parent_id, affects_gross) VALUES (?, ?, ?)", array($data_name, $data_parent_id, $data_affects_gross)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding ' . $data_name . ' - Group A/C', 'error');
@@ -108,6 +122,7 @@ class Group extends Controller {
 		$data['group_parent'] = $this->Group_model->get_all_groups($id);
 		$data['group_parent_active'] = $group_data->parent_id;
 		$data['group_id'] = $id;
+		$data['affects_gross'] = $group_data->affects_gross;
 
 		/* Form validations */
 		$this->form_validation->set_rules('group_name', 'Group name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[groups.name.' . $id . ']');
@@ -119,6 +134,7 @@ class Group extends Controller {
 		{
 			$data['group_name']['value'] = $this->input->post('group_name', TRUE);
 			$data['group_parent_active'] = $this->input->post('group_parent', TRUE);
+			$data['affects_gross'] = $this->input->post('affects_gross', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -133,8 +149,20 @@ class Group extends Controller {
 			$data_parent_id = $this->input->post('group_parent', TRUE);
 			$data_id = $id;
 
+			/* Only if Income or Expense can affect gross profit loss calculation */
+			$data_affects_gross = $this->input->post('affects_gross', TRUE);
+			if ($data_parent_id == "3" || $data_parent_id == "4")
+			{
+				if ($data_affects_gross == "1")
+					$data_affects_gross = 1;
+				else
+					$data_affects_gross = 0;
+			} else {
+				$data_affects_gross = 0;
+			}
+
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE groups SET name = ?, parent_id = ? WHERE id = ?", array($data_name, $data_parent_id, $data_id)))
+			if ( ! $this->db->query("UPDATE groups SET name = ?, parent_id = ?, affects_gross = ? WHERE id = ?", array($data_name, $data_parent_id, $data_affects_gross, $data_id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating ' . $data_name . ' - Group A/C', 'error');

@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS groups (
   id int(11) NOT NULL AUTO_INCREMENT,
   parent_id int(11) NOT NULL,
   name varchar(100) NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE KEY id (id)
+  affects_gross int(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS ledgers (
@@ -13,9 +13,7 @@ CREATE TABLE IF NOT EXISTS ledgers (
   op_balance decimal(15,2) NOT NULL DEFAULT '0.00',
   op_balance_dc char(1) NOT NULL,
   type char(1) NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE KEY id (id),
-  UNIQUE KEY id_2 (id)
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS settings (
@@ -53,18 +51,19 @@ CREATE TABLE IF NOT EXISTS voucher_items (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
-INSERT INTO groups (id, parent_id, name) VALUES (1, 0, 'Asset');
-INSERT INTO groups (id, parent_id, name) VALUES (2, 0, 'Liability');
-INSERT INTO groups (id, parent_id, name) VALUES (3, 0, 'Income');
-INSERT INTO groups (id, parent_id, name) VALUES (4, 0, 'Expense');
-INSERT INTO groups (id, parent_id, name) VALUES (5, 1, 'Fixed assets');
-INSERT INTO groups (id, parent_id, name) VALUES (6, 1, 'Current assets');
-INSERT INTO groups (id, parent_id, name) VALUES (7, 2, 'Capital A/c');
-INSERT INTO groups (id, parent_id, name) VALUES (8, 2, 'Current Liabilities');
-INSERT INTO groups (id, parent_id, name) VALUES (9, 2, 'Borrowings');
-INSERT INTO groups (id, parent_id, name) VALUES (10, 3, 'Sales');
-INSERT INTO groups (id, parent_id, name) VALUES (11, 3, 'Direct Income');
-INSERT INTO groups (id, parent_id, name) VALUES (12, 3, 'Indirect Income');
-INSERT INTO groups (id, parent_id, name) VALUES (13, 4, 'Purchase');
-INSERT INTO groups (id, parent_id, name) VALUES (14, 4, 'Direct Expenses');
-INSERT INTO groups (id, parent_id, name) VALUES (15, 4, 'Indirect Expenses');
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (1, 0, 'Assets', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (2, 0, 'Liabilities', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (3, 0, 'Incomes', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (4, 0, 'Expenses', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (5, 1, 'Fixed assets', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (6, 1, 'Current assets', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (7, 1, 'Investments', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (8, 2, 'Capital A/C', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (9, 2, 'Current Liabilities', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (10, 2, 'Loans (Liability)', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (11, 3, 'Direct Incomes', 1);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (12, 4, 'Direct Expenses', 1);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (13, 3, 'Indirect Incomes', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (14, 4, 'Indirect Expenses', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (15, 3, 'Sales', 1);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (16, 4, 'Purchases', 1);
