@@ -11,17 +11,24 @@
 	{
 		if ($ledger_id == 0) continue;
 		echo "<tr class=\"tr-" . $odd_even . "\">";
+
 		echo "<td>";
 		echo  anchor('report/ledgerst/' . $ledger_id, $ledger_name, array('title' => $ledger_name . ' Ledger Statement', 'style' => 'color:#000000'));
 		echo "</td>";
+
 		echo "<td>";
 		list ($opbal_amount, $opbal_type) = $this->Ledger_model->get_op_balance($ledger_id);
-		echo convert_dc($opbal_type) . " " . $opbal_amount;
+		if ($opbal_amount == 0)
+			echo "0";
+		else
+			echo convert_dc($opbal_type) . " " . $opbal_amount;
 		echo "</td>";
 
 		echo "<td>";
 		$clbal_amount = $this->Ledger_model->get_ledger_balance($ledger_id);
-		if ($clbal_amount < 0)
+		if ($clbal_amount == 0)
+			echo "0";
+		else if ($clbal_amount < 0)
 			echo "Cr " . convert_cur(-$clbal_amount);
 		else
 			echo "Dr " . convert_cur($clbal_amount);

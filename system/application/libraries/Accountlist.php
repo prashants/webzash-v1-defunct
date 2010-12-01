@@ -119,7 +119,7 @@ class Accountlist
 			echo "<td>";
 			if ($this->total == 0)
 			{
-				echo "0.00";
+				echo "0";
 			} else if ($this->total > 0)
 			{
 				echo "Dr " . convert_cur($this->total);
@@ -153,7 +153,7 @@ class Accountlist
 				echo "<td>";
 				if ($data['opbalance'] == 0)
 				{
-					echo "0.00";
+					echo "0";
 				} else {
 					echo ($data['optype'] == "D") ? "Dr " : "Cr ";
 					echo convert_cur($data['opbalance']);
@@ -163,7 +163,7 @@ class Accountlist
 				echo "<td>";
 				if ($data['total'] == 0)
 				{
-					echo "0.00";
+					echo "0";
 				} else if ($data['total'] > 0)
 				{
 					echo "Dr " . convert_cur($data['total']);
