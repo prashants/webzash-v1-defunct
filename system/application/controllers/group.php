@@ -213,7 +213,7 @@ class Group extends Controller {
 		if ( ! $this->db->query("DELETE FROM groups WHERE id = ?", array($id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Group A/C', 'success');
+			$this->messages->add('Error deleting Group A/C', 'error');
 			redirect('account');
 			return;
 		} else {

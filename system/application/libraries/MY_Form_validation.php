@@ -98,5 +98,17 @@ class MY_Form_validation extends CI_Form_validation {
 		list($d, $m, $y) = explode('/', $str);
 		return checkdate($m , $d, $y) ? TRUE : FALSE;
 	}
+
+	function is_hex($str)
+	{
+		$CI =& get_instance();
+
+		$CI->form_validation->set_message('is_hex', 'The %s is a invalid value');
+
+		if (preg_match('/^[0-9A-Fa-f]*$/', $str))
+			return TRUE;
+		else
+			return FALSE;
+	}
 }
 ?>

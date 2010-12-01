@@ -26,7 +26,14 @@
 		</div>
 	</div>
 	<div id="right-col">
-
+		<div class="settings-container">
+			<div class="settings-title">
+				<?php echo anchor('tag', 'Tags', array('title' => 'Tags')); ?>
+			</div>
+			<div class="settings-desc">
+				Manage Voucher Tags
+			</div>
+		</div>
 	</div>
 </div>
 <div class="clear">
