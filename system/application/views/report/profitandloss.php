@@ -7,7 +7,7 @@
 	echo "<td>";
 	$expense->init(4);
 	echo "<table border=0 cellpadding=5 class=\"generaltable\" width=\"450\">";
-	echo "<thead><tr><th>Expense</th><th>Amount</th></tr></thead>";
+	echo "<thead><tr><th>Expenses</th><th>Amount</th></tr></thead>";
 	$expense->account_st_short(0);
 	echo "</table>";
 	echo "</td>";

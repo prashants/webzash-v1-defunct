@@ -135,18 +135,7 @@ class Accountlist
 			echo "</td>";
 			echo "<td>Group A/C</td>";
 			echo "<td>-</td>";
-
-			echo "<td>";
-			if ($this->total == 0)
-			{
-				echo "0";
-			} else if ($this->total > 0)
-			{
-				echo "Dr " . convert_cur($this->total);
-			} else {
-				echo "Cr " . convert_cur(-$this->total);
-			}
-			echo "</td>";
+			echo "<td>-</td>";
 
 			echo "<td>" . anchor('group/edit/' . $this->id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit group')), array('title' => "Edit Group")) . "</td>";
 			echo "<td>" . anchor('group/delete/' . $this->id, img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete group')), array('class' => "confirmClick", 'title' => "Delete Group")) . "</td>";
