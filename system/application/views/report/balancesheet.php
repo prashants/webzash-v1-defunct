@@ -48,6 +48,7 @@
 	echo "<tr valign=\"top\">";
 	echo "<td class=\"bold\">Liability Total</td>";
 	echo "<td align=\"right\" class=\"bold\">" . convert_cur($liability_total) . "</td>";
+	echo "</tr>";
 
 	/* If Profit then Liability side, If Loss then Asset side */
 	if ($pandl != 0)

@@ -3,49 +3,179 @@
 	echo "<table>";
 	echo "<tr valign=\"top\">";
 
-	$expense = new Accountlist();
-	echo "<td>";
-	$expense->init(4);
-	echo "<table border=0 cellpadding=5 class=\"generaltable\" width=\"450\">";
-	echo "<thead><tr><th>Expenses</th><th>Amount</th></tr></thead>";
-	$expense->account_st_short(0);
-	echo "</table>";
-	echo "</td>";
-	$expense_total = $expense->total;
+	/**********************************************************************/
+	/*********************** GROSS CALCULATIONS ***************************/
+	/**********************************************************************/
 
-	$income = new Accountlist();
+	/* Gross P/L : Expenses */
+	$gross_expense_total = 0;
+	$gross_expense_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 4 AND affects_gross = 1");
 	echo "<td>";
-	$income->init(3);
 	echo "<table border=0 cellpadding=5 class=\"generaltable\" width=\"450\">";
-	echo "<thead><tr><th>Income</th><th>Amount</th></tr></thead>";
-	$income->account_st_short(0);
+	echo "<thead><tr><th>Gross Expenses</th><th>Amount</th></tr></thead>";
+	foreach ($gross_expense_list_q->result() as $row)
+	{
+		$gross_expense = new Accountlist();
+		$gross_expense->init($row->id);
+		$gross_expense->account_st_short(0);
+		$gross_expense_total += $gross_expense->total;
+	}
 	echo "</table>";
 	echo "</td>";
-	$income_total = -$income->total;
+
+	/* Gross P/L : Incomes */
+	$gross_income_total = 0;
+	$gross_income_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 3 AND affects_gross = 1");
+	echo "<td>";
+	echo "<table border=0 cellpadding=5 class=\"generaltable\" width=\"450\">";
+	echo "<thead><tr><th>Gross Incomes</th><th>Amount</th></tr></thead>";
+	foreach ($gross_income_list_q->result() as $row)
+	{
+		$gross_income = new Accountlist();
+		$gross_income->init($row->id);
+		$gross_income->account_st_short(0);
+		$gross_income_total += $gross_income->total;
+	}
+	echo "</table>";
+	echo "</td>";
+	$gross_income_total = -$gross_income_total; /* Converting to positive value since Cr */
 
 	echo "</tr>";
 
-	$pandl = $income_total - $expense_total;
+	/* Calculating Gross P/L */
+	$grosspl = $gross_income_total - $gross_expense_total;
 
+	/* Showing Gross P/L : Expenses */
+	$grosstotal = $gross_expense_total;
 	echo "<tr style=\"background-color:#F8F8F8;\">";
 	echo "<td>";
+	echo "<table border=0 cellpadding=5 class=\"vouchertable\" width=\"450\">";
+	echo "<tr valign=\"top\">";
+	echo "<td class=\"bold\">Total Gross Expenses</td>";
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur($gross_expense_total) . "</td>";
+	echo "</tr>";
+	if ($grosspl > 0)
+	{
+		$grosstotal += $grosspl;
+		echo "<tr valign=\"top\">";
+		echo "<td class=\"bold\">Gross Profit C/O</td>";
+		echo "<td align=\"right\" class=\"bold\">" . convert_cur($grosspl) . "</td>";
+		echo "</tr>";
+	} else if ($grosspl < 0) {
+		echo "<tr>";
+		echo "<td>&nbsp;</td>";
+		echo "<td>&nbsp;</td>";
+		echo "</tr>";
 
-	/* Expense side */
+	}
+	echo "<tr valign=\"top\" class=\"tr-balance\">";
+	echo "<td class=\"bold\">Total</td>";
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur($grosstotal) . "</td>";
+	echo "</tr>";
+	echo "</table>";
+	echo "</td>";
 
-	$total = $expense_total;
+	/* Showing Gross P/L : Incomes  */
+	$grosstotal = $gross_income_total;
+	echo "<td>";
+	echo "<table border=0 cellpadding=5 class=\"vouchertable\" width=\"450\">";
+	echo "<tr valign=\"top\">";
+	echo "<td class=\"bold\">Total Gross Incomes</td>";
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur($gross_income_total) . "</td>";
+	echo "</tr>";
+	if ($grosspl > 0)
+	{
+		echo "<tr>";
+		echo "<td>&nbsp;</td>";
+		echo "<td>&nbsp;</td>";
+		echo "</tr>";
+	} else if ($grosspl < 0) {
+		$grosstotal += -$grosspl;
+		echo "<tr valign=\"top\">";
+		echo "<td class=\"bold\">Gross Loss C/O</td>";
+		echo "<td align=\"right\" class=\"bold\">" . convert_cur(-$grosspl) . "</td>";
+		echo "</tr>";
+	}
+	echo "<tr valign=\"top\" class=\"tr-balance\">";
+	echo "<td class=\"bold\">Total</td>";
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur($grosstotal) . "</td>";
+	echo "</tr>";
+	echo "</table>";
+	echo "</td>";
+	echo "</tr>";
 
+	/**********************************************************************/
+	/************************* NET CALCULATIONS ***************************/
+	/**********************************************************************/
+
+	/* Net P/L : Expenses */
+	$net_expense_total = 0;
+	$net_expense_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 4 AND affects_gross != 1");
+	echo "<td>";
+	echo "<table border=0 cellpadding=5 class=\"generaltable\" width=\"450\">";
+	echo "<thead><tr><th>Expenses</th><th>Amount</th></tr></thead>";
+	foreach ($net_expense_list_q->result() as $row)
+	{
+		$net_expense = new Accountlist();
+		$net_expense->init($row->id);
+		$net_expense->account_st_short(0);
+		$net_expense_total += $net_expense->total;
+	}
+	echo "</table>";
+	echo "</td>";
+
+	/* Net P/L : Incomes */
+	$net_income_total = 0;
+	$net_income_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 3 AND affects_gross != 1");
+	echo "<td>";
+	echo "<table border=0 cellpadding=5 class=\"generaltable\" width=\"450\">";
+	echo "<thead><tr><th>Incomes</th><th>Amount</th></tr></thead>";
+	foreach ($net_income_list_q->result() as $row)
+	{
+		$net_income = new Accountlist();
+		$net_income->init($row->id);
+		$net_income->account_st_short(0);
+		$net_income_total += $net_income->total;
+	}
+	echo "</table>";
+	echo "</td>";
+	$net_income_total = -$net_income_total; /* Converting to positive value since Cr */
+
+	echo "</tr>";
+
+	/* Calculating Net P/L */
+	$netpl = $net_income_total - $net_expense_total + $grosspl;
+
+	/* Showing Net P/L : Expenses */
+	$nettotal = $net_expense_total;
+	echo "<tr style=\"background-color:#F8F8F8;\">";
+	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"vouchertable\" width=\"450\">";
 	echo "<tr valign=\"top\">";
 	echo "<td class=\"bold\">Total Expenses</td>";
-	echo "<td align=\"right\" class=\"bold\">" . convert_cur($expense_total) . "</td>";
-	if ($pandl > 0)
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur($nettotal) . "</td>";
+	echo "</tr>";
+	if ($grosspl > 0)
 	{
-		$total += $pandl;
+		echo "<tr>";
+		echo "<td>&nbsp;</td>";
+		echo "<td>&nbsp;</td>";
+		echo "</tr>";
+	} else if ($grosspl < 0) {
+		$nettotal += -$grosspl;
+		echo "<tr valign=\"top\">";
+		echo "<td class=\"bold\">Gross Loss B/F</td>";
+		echo "<td align=\"right\" class=\"bold\">" . convert_cur(-$grosspl) . "</td>";
+		echo "</tr>";
+	}
+	if ($netpl > 0)
+	{
+		$nettotal += $netpl;
 		echo "<tr valign=\"top\">";
 		echo "<td class=\"bold\">Net Profit</td>";
-		echo "<td align=\"right\" class=\"bold\">" . convert_cur($pandl) . "</td>";
+		echo "<td align=\"right\" class=\"bold\">" . convert_cur($netpl) . "</td>";
 		echo "</tr>";
-	} else {
+	} else if ($netpl < 0) {
 		echo "<tr>";
 		echo "<td>&nbsp;</td>";
 		echo "<td>&nbsp;</td>";
@@ -54,41 +184,53 @@
 	}
 	echo "<tr valign=\"top\" class=\"tr-balance\">";
 	echo "<td class=\"bold\">Total</td>";
-	echo "<td align=\"right\" class=\"bold\">" . convert_cur($total) . "</td>";
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur($nettotal) . "</td>";
 	echo "</tr>";
 	echo "</table>";
 	echo "</td>";
 
-	/* Income side */
-
-	$total = $income_total;
-
+	/* Showing Net P/L : Incomes */
+	$nettotal = $net_income_total;
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"vouchertable\" width=\"450\">";
 	echo "<tr valign=\"top\">";
-	echo "<td class=\"bold\">Total Income</td>";
-	echo "<td align=\"right\" class=\"bold\">" . convert_cur($income_total) . "</td>";
+	echo "<td class=\"bold\">Total Incomes</td>";
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur($nettotal) . "</td>";
 	echo "</tr>";
-	if ($pandl > 0)
+	if ($grosspl > 0)
+	{
+		$nettotal += $grosspl;
+		echo "<tr valign=\"top\">";
+		echo "<td class=\"bold\">Gross Profit B/F</td>";
+		echo "<td align=\"right\" class=\"bold\">" . convert_cur($grosspl) . "</td>";
+		echo "</tr>";
+
+	} else if ($grosspl < 0) {
+		echo "<tr>";
+		echo "<td>&nbsp;</td>";
+		echo "<td>&nbsp;</td>";
+		echo "</tr>";
+	}
+	if ($netpl > 0)
 	{
 		echo "<tr>";
 		echo "<td>&nbsp;</td>";
 		echo "<td>&nbsp;</td>";
 		echo "</tr>";
-	} else {
-		$total += -$pandl;
+	} else if ($netpl < 0) {
+		$nettotal += -$netpl;
 		echo "<tr valign=\"top\">";
 		echo "<td class=\"bold\">Net Loss</td>";
-		echo "<td align=\"right\" class=\"bold\">" . convert_cur(-$pandl) . "</td>";
+		echo "<td align=\"right\" class=\"bold\">" . convert_cur(-$netpl) . "</td>";
 		echo "</tr>";
 	}
 	echo "<tr valign=\"top\" class=\"tr-balance\">";
 	echo "<td class=\"bold\">Total</td>";
-	echo "<td align=\"right\" class=\"bold\">" . convert_cur($total) . "</td>";
+	echo "<td align=\"right\" class=\"bold\">" . convert_cur($nettotal) . "</td>";
 	echo "</tr>";
 	echo "</table>";
-
 	echo "</td>";
+
 	echo "</tr>";
 	echo "</table>";
 ?>
