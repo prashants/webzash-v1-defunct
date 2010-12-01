@@ -255,6 +255,13 @@ $(document).ready(function() {
 	echo form_fieldset_close();
 	echo "</p>";
 	echo "<br /><br />";
+
+	echo "<p>";
+	echo form_label('Tag', 'voucher_tag');
+	echo " ";
+	echo form_dropdown('voucher_tag', $voucher_tags, $voucher_tag);
+	echo "</p>";
+
 	echo form_submit('submit', 'Create');
 	echo " ";
 	echo anchor('voucher/show/' . $voucher_type, 'Back', array('title' => 'Back to ' . ucfirst($voucher_type) . ' Vouchers'));

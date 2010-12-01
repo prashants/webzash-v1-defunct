@@ -255,6 +255,13 @@ $(document).ready(function() {
 	echo form_fieldset_close();
 	echo "</p>";
 	echo "<br /><br />";
+
+	echo "<p>";
+	echo form_label('Tag', 'voucher_tag');
+	echo " ";
+	echo form_dropdown('voucher_tag', $voucher_tags, $voucher_tag);
+	echo "</p>";
+
 	echo form_submit('submit', 'Update');
 	echo " ";
 	echo anchor('voucher/edit/' . $voucher_type . "/" . $voucher_id, 'Reload', array('title' => 'Reload ' . ucfirst($voucher_type) . ' Voucher Original Data'));

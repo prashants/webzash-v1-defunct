@@ -94,3 +94,11 @@ ul#pagination-flickr {
 	padding:4px;
 }
 
+/* Tags */
+.tags {
+	font-size:10px;
+	font-weight:bold;
+	text-decoration:none;
+	margin:0 5px 0 1px;
+	padding:3px;
+}

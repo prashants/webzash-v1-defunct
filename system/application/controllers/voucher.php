@@ -6,6 +6,7 @@ class Voucher extends Controller {
 		parent::Controller();
 		$this->load->model('Voucher_model');
 		$this->load->model('Ledger_model');
+		$this->load->model('Tag_model');
 		return;
 	}
 
@@ -134,6 +135,7 @@ class Voucher extends Controller {
 			$html .= "<td>" . date_mysql_to_php($row->date) . "</td>";
 
 			$html .= "<td>";
+			$html .= $this->Tag_model->show_voucher_tag($row->tag_id);
 			if ($ledger)
 				if ($ledger_multiple)
 					$html .= "(" . $ledger->name . ")";
@@ -260,11 +262,14 @@ class Voucher extends Controller {
 		$data['voucher_print'] = FALSE;
 		$data['voucher_email'] = FALSE;
 		$data['voucher_pdf'] = FALSE;
+		$data['voucher_tags'] = $this->Tag_model->get_all_tags();
+		$data['voucher_tag'] = 0;
 
 		/* Form validations */
 		$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural|uniquevoucherno[' . v_to_n($voucher_type) . ']');
 		$this->form_validation->set_rules('voucher_date', 'Voucher Date', 'trim|required|is_date');
 		$this->form_validation->set_rules('voucher_narration', 'trim');
+		$this->form_validation->set_rules('voucher_tag', 'Tag', 'trim|is_natural');
 
 		/* Debit and Credit amount validation */
 		if ($_POST)
@@ -286,6 +291,7 @@ class Voucher extends Controller {
 			$data['voucher_print'] = $this->input->post('voucher_print', TRUE);
 			$data['voucher_email'] = $this->input->post('voucher_email', TRUE);
 			$data['voucher_pdf'] = $this->input->post('voucher_pdf', TRUE);
+			$data['voucher_tag'] = $this->input->post('voucher_tag', TRUE);
 
 			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
 			$data['ledger_id'] = $this->input->post('ledger_id', TRUE);
@@ -347,6 +353,7 @@ class Voucher extends Controller {
 			$data_number = $this->input->post('voucher_number', TRUE);
 			$data_date = $this->input->post('voucher_date', TRUE);
 			$data_narration = $this->input->post('voucher_narration', TRUE);
+			$data_tag = $this->input->post('voucher_tag', TRUE);
 
 			$data_draft = $this->input->post('voucher_draft', TRUE);
 			if ($data_draft == "1")
@@ -366,7 +373,7 @@ class Voucher extends Controller {
 			$voucher_id = NULL;
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, draft, type) VALUES (?, ?, ?, ?, ?)", array($data_number, $data_date, $data_narration, $data_draft, $data_type)))
+			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, draft, type, tag_id) VALUES (?, ?, ?, ?, ?, ?)", array($data_number, $data_date, $data_narration, $data_draft, $data_type, $data_tag)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Voucher A/C', 'error');
@@ -487,6 +494,8 @@ class Voucher extends Controller {
 		$data['voucher_print'] = FALSE;
 		$data['voucher_email'] = FALSE;
 		$data['voucher_pdf'] = FALSE;
+		$data['voucher_tag'] = $cur_voucher->tag_id;
+		$data['voucher_tags'] = $this->Tag_model->get_all_tags();
 
 		/* Load current ledger details if not $_POST */
 		if ( ! $_POST)
@@ -528,6 +537,7 @@ class Voucher extends Controller {
 		$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural|uniquevouchernowithid[' . v_to_n($voucher_type) . '.' . $voucher_id . ']');
 		$this->form_validation->set_rules('voucher_date', 'Voucher Date', 'trim|required|is_date');
 		$this->form_validation->set_rules('voucher_narration', 'trim');
+		$this->form_validation->set_rules('voucher_tag', 'Tag', 'trim|is_natural');
 
 		/* Debit and Credit amount validation */
 		if ($_POST)
@@ -549,6 +559,7 @@ class Voucher extends Controller {
 			$data['voucher_print'] = $this->input->post('voucher_print', TRUE);
 			$data['voucher_email'] = $this->input->post('voucher_email', TRUE);
 			$data['voucher_pdf'] = $this->input->post('voucher_pdf', TRUE);
+			$data['voucher_tag'] = $this->input->post('voucher_tag', TRUE);
 
 			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
 			$data['ledger_id'] = $this->input->post('ledger_id', TRUE);
@@ -594,6 +605,7 @@ class Voucher extends Controller {
 			$data_number = $this->input->post('voucher_number', TRUE);
 			$data_date = $this->input->post('voucher_date', TRUE);
 			$data_narration = $this->input->post('voucher_narration', TRUE);
+			$data_tag = $this->input->post('voucher_tag', TRUE);
 
 			$data_draft = $this->input->post('voucher_draft', TRUE);
 			if ($data_draft == "1")
@@ -612,7 +624,7 @@ class Voucher extends Controller {
 			$data_date = date_php_to_mysql($data_date); // Converting date to MySQL
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE vouchers SET number = ?, date = ?, narration = ?, draft = ? WHERE id = ?", array($data_number, $data_date, $data_narration, $data_draft, $voucher_id)))
+			if ( ! $this->db->query("UPDATE vouchers SET number = ?, date = ?, narration = ?, draft = ?, tag_id = ? WHERE id = ?", array($data_number, $data_date, $data_narration, $data_draft, $data_tag, $voucher_id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Voucher A/C', 'error');
