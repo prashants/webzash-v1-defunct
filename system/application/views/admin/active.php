@@ -4,7 +4,7 @@
 	echo "<p>";
 	echo "Currently available accounts";
 	echo "<br />";
-	echo form_dropdown('accounts', $accounts);
+	echo form_dropdown('account', $accounts, $account);
 	echo "</p>";
 
 	echo "<p>";

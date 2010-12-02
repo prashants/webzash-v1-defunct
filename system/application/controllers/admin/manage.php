@@ -14,10 +14,21 @@ class Manage extends Controller {
 		$this->template->set('page_title', 'Manage webzash accounts');
 		$this->template->set('nav_links', array('admin/manage/add' => 'New account'));
 
-		$active_accounts = read_file('system/application/controllers/admin/activeaccount.inc');
-		$data['accounts'] = explode(';', $active_accounts);
-		if (count($data['accounts']) > 1)
-			array_pop($data['accounts']);
+		/* Getting list of files in the config/accounts directory */
+		$accounts_list = get_filenames('system/application/config/accounts');
+		$data['accounts'] = array();
+		if ($accounts_list)
+		{
+			foreach ($accounts_list as $row)
+			{
+				/* Only include file ending with .ini */
+				if (substr($row, -4) == ".ini")
+				{
+					$ini_label = substr($row, 0, -4);
+					$data['accounts'][$ini_label] = $ini_label;
+				}
+			}
+		}
 
 		$this->template->load('admin_template', 'admin/manage/index', $data);
 		return;
@@ -101,6 +112,7 @@ class Manage extends Controller {
 		else
 		{
 			$data_database_label = $this->input->post('database_label', TRUE);
+			$data_database_label = strtolower($data_database_label);
 			$data_database_host = $this->input->post('database_host', TRUE);
 			$data_database_port = $this->input->post('database_port', TRUE);
 			$data_database_name = $this->input->post('database_name', TRUE);

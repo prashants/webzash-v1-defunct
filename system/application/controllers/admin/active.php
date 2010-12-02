@@ -8,9 +8,18 @@ class Active extends Controller {
 		return;
 	}
 	
-	function index()
+	function index($url_label_name = NULL)
 	{
 		$this->template->set('page_title', 'Change Active Account');
+
+		/* If label specified in URL */
+		if ($url_label_name)
+		{
+			$url_label_name = $this->input->xss_clean($url_label_name);
+			$data['account'] = $url_label_name;
+		} else {
+			$data['account'] = "";
+		}
 
 		/* Getting list of files in the config/accounts directory */
 		$accounts_list = get_filenames('system/application/config/accounts');
@@ -29,25 +38,32 @@ class Active extends Controller {
 		}
 
 		/* Form validations */
-		$this->form_validation->set_rules('accounts', 'Accounts', 'trim|required');
+		if ( ! $url_label_name)
+		{
+			$this->form_validation->set_rules('account', 'Account', 'trim|required');
+		}
 
 		/* Repopulating form */
 		if ($_POST)
 		{
 			/* Unsetting all database configutaion */
 			$this->session->unset_userdata('db_active_label');
+			$data['account'] = $this->input->post('account', TRUE);
 		}
 
-		/* Validating form */
-		if ($this->form_validation->run() == FALSE)
+		/* Validating form : only if label name is not set from URL */
+		if ($this->form_validation->run() == FALSE &&  ( ! $url_label_name))
 		{
 			$this->messages->add(validation_errors(), 'error');
 			$this->template->load('admin_template', 'admin/active', $data);
 			return;
-		}
-		else
-		{
-			$db_label = $this->input->post('accounts', TRUE);
+		} else {
+			if ($url_label_name)
+			{
+				$db_label = $this->input->xss_clean($url_label_name);
+			} else {
+				$db_label = $this->input->post('account', TRUE);
+			}
 			$ini_file = "system/application/config/accounts/" . $db_label . ".ini";
 
 			/* Check if database ini file exists */
