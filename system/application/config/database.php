@@ -37,13 +37,13 @@
 $active_group = "default";
 $active_record = TRUE;
 
-$db['default']['hostname'] = "localhost";
-$db['default']['username'] = "root";
+$db['default']['hostname'] = "";
+$db['default']['username'] = "";
 $db['default']['password'] = "";
-$db['default']['database'] = "wz_webzash";
+$db['default']['database'] = "";
 $db['default']['dbdriver'] = "mysql";
 $db['default']['dbprefix'] = "";
-$db['default']['pconnect'] = TRUE;
+$db['default']['pconnect'] = FALSE;
 $db['default']['db_debug'] = FALSE;
 $db['default']['cache_on'] = FALSE;
 $db['default']['cachedir'] = "";

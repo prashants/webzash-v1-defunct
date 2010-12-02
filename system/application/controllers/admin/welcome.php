@@ -14,6 +14,25 @@ class Welcome extends Controller {
 
 		$data['current_account'] = "";
 
+		/* Fetching database label details from session */
+		if ($this->session->userdata('db_settings'))
+		{
+			$db_config['hostname'] = $this->session->userdata('db_hostname');
+			$db_config['hostname'] .= ":" . $this->session->userdata('db_port');
+			$db_config['database'] = $this->session->userdata('db_name');
+			$db_config['username'] = $this->session->userdata('db_username');
+			$db_config['password'] = $this->session->userdata('db_password');
+			$db_config['dbdriver'] = "mysql";
+			$db_config['dbprefix'] = "";
+			$db_config['pconnect'] = FALSE;
+			$db_config['db_debug'] = FALSE;
+			$db_config['cache_on'] = FALSE;
+			$db_config['cachedir'] = "";
+			$db_config['char_set'] = "utf8";
+			$db_config['dbcollat'] = "utf8_general_ci";
+			$this->load->database($db_config, FALSE, TRUE);
+		}
+
 		/* Checking for valid database connection */
 		if ($this->db->conn_id)
 		{

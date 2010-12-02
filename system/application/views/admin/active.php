@@ -1,4 +1,5 @@
 <?php
+echo form_open('admin/active');
 
 echo "<p>";
 echo form_dropdown('accounts', $accounts);

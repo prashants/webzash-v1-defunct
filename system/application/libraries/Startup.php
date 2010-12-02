@@ -19,6 +19,28 @@ class Startup
 		if ($CI->uri->segment(1) == "admin")
 			return;
 
+		/* Fetching database label details from session */
+		if ($CI->session->userdata('db_settings'))
+		{
+			$db_config['hostname'] = $CI->session->userdata('db_hostname');
+			$db_config['hostname'] .= ":" . $CI->session->userdata('db_port');
+			$db_config['database'] = $CI->session->userdata('db_name');
+			$db_config['username'] = $CI->session->userdata('db_username');
+			$db_config['password'] = $CI->session->userdata('db_password');
+			$db_config['dbdriver'] = "mysql";
+			$db_config['dbprefix'] = "";
+			$db_config['pconnect'] = FALSE;
+			$db_config['db_debug'] = FALSE;
+			$db_config['cache_on'] = FALSE;
+			$db_config['cachedir'] = "";
+			$db_config['char_set'] = "utf8";
+			$db_config['dbcollat'] = "utf8_general_ci";
+			$CI->load->database($db_config, FALSE, TRUE);
+		} else {
+			$CI->messages->add('Please select a Webzash database', 'error');
+			redirect('admin');
+		}
+
 		/* Checking for valid database connection */
 		if ($CI->db->conn_id)
 		{
@@ -26,7 +48,7 @@ class Startup
 			if ($CI->db->query("SHOW TABLES"))
 			{
 				/* Check for valid webzash database */
-				$table_names = array('settings', 'groups', 'ledgers', 'vouchers', 'voucher_items');
+				$table_names = array('settings', 'groups', 'ledgers', 'vouchers', 'voucher_items', 'tags');
 				foreach ($table_names as $id => $tbname)
 				{
 					$valid_db_q = mysql_query('DESC ' . $tbname);
