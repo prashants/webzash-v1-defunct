@@ -19,14 +19,68 @@ class Startup
 		if ($CI->uri->segment(1) == "admin")
 			return;
 
-		/* Fetching database label details from session */
-		if ($CI->session->userdata('db_settings'))
+		/* Reading database settings ini file */
+		if ($CI->session->userdata('db_active_label'))
 		{
-			$db_config['hostname'] = $CI->session->userdata('db_hostname');
-			$db_config['hostname'] .= ":" . $CI->session->userdata('db_port');
-			$db_config['database'] = $CI->session->userdata('db_name');
-			$db_config['username'] = $CI->session->userdata('db_username');
-			$db_config['password'] = $CI->session->userdata('db_password');
+			/* Fetching database label details from session */
+			$db_active_label = $CI->session->userdata('db_active_label');
+			$ini_file = "system/application/config/accounts/" . $db_active_label . ".ini";
+
+			/* Check if database ini file exists */
+			if ( ! get_file_info($ini_file))
+			{
+				$CI->messages->add("Account setting file is missing", 'error');
+				redirect('admin');
+				return;
+			}
+
+			/* Parsing database ini file */
+			$active_accounts = parse_ini_file($ini_file);
+			if ( ! $active_accounts)
+			{
+				$CI->messages->add("Invalid account setting file", 'error');
+				redirect('admin');
+				return;
+			}
+
+			/* Check if all needed variables are set in ini file */
+			if ( ! isset($active_accounts['db_hostname']))
+			{
+				$CI->messages->add("Hostname missing from account setting file", 'error');
+				redirect('admin');
+				return;
+			}
+			if ( ! isset($active_accounts['db_port']))
+			{
+				$CI->messages->add("Port missing from account setting file. Default MySQL port is 3306", 'error');
+				redirect('admin');
+				return;
+			}
+			if ( ! isset($active_accounts['db_name']))
+			{
+				$CI->messages->add("Database name missing from account setting file", 'error');
+				redirect('admin');
+				return;
+			}
+			if ( ! isset($active_accounts['db_username']))
+			{
+				$CI->messages->add("Database username missing from account setting file", 'error');
+				redirect('admin');
+				return;
+			}
+			if ( ! isset($active_accounts['db_password']))
+			{
+				$CI->messages->add("Database password missing from account setting file", 'error');
+				redirect('admin');
+				return;
+			}
+
+			/* Preparing database settings */
+			$db_config['hostname'] = $active_accounts['db_hostname'];
+			$db_config['hostname'] .= ":" . $active_accounts['db_port'];
+			$db_config['database'] = $active_accounts['db_name'];
+			$db_config['username'] = $active_accounts['db_username'];
+			$db_config['password'] = $active_accounts['db_password'];
 			$db_config['dbdriver'] = "mysql";
 			$db_config['dbprefix'] = "";
 			$db_config['pconnect'] = FALSE;

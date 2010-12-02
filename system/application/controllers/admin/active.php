@@ -10,7 +10,6 @@ class Active extends Controller {
 	
 	function index()
 	{
-		$this->load->helper('file');
 		$this->template->set('page_title', 'Change Active Account');
 
 		/* Getting list of files in the config/accounts directory */
@@ -36,15 +35,7 @@ class Active extends Controller {
 		if ($_POST)
 		{
 			/* Unsetting all database configutaion */
-			$active_db = array(
-				'db_settings' => FALSE,
-				'db_hostname' => "",
-				'db_port' => "",
-				'db_name' => "",
-				'db_username' => "",
-				'db_password' => ""
-			);
-			$this->session->set_userdata($active_db);
+			$this->session->unset_userdata('db_active_label');
 		}
 
 		/* Validating form */
@@ -76,17 +67,41 @@ class Active extends Controller {
 				return;
 			}
 
+			/* Check if all needed variables are set in ini file */
+			if ( ! isset($active_accounts['db_hostname']))
+			{
+				$this->messages->add("Hostname missing from account setting file", 'error');
+				$this->template->load('admin_template', 'admin/active', $data);
+				return;
+			}
+			if ( ! isset($active_accounts['db_port']))
+			{
+				$this->messages->add("Port missing from account setting file. Default MySQL port is 3306", 'error');
+				$this->template->load('admin_template', 'admin/active', $data);
+				return;
+			}
+			if ( ! isset($active_accounts['db_name']))
+			{
+				$this->messages->add("Database name missing from account setting file", 'error');
+				$this->template->load('admin_template', 'admin/active', $data);
+				return;
+			}
+			if ( ! isset($active_accounts['db_username']))
+			{
+				$this->messages->add("Database username missing from account setting file", 'error');
+				$this->template->load('admin_template', 'admin/active', $data);
+				return;
+			}
+			if ( ! isset($active_accounts['db_password']))
+			{
+				$this->messages->add("Database password missing from account setting file", 'error');
+				$this->template->load('admin_template', 'admin/active', $data);
+				return;
+			}
+
 			/* Setting new account database details in session */
-			$active_db = array(
-				'db_settings' => TRUE,
-				'db_hostname' => $active_accounts['db_hostname'],
-				'db_port' => $active_accounts['db_port'],
-				'db_name' => $active_accounts['db_name'],
-				'db_username' => $active_accounts['db_username'],
-				'db_password' => $active_accounts['db_password']
-			);
-			$this->session->set_userdata($active_db);
-			$this->messages->add("Active account changed successfully", 'success');
+			$this->session->set_userdata('db_active_label', $db_label);
+			$this->messages->add("Active account settings changed", 'success');
 			redirect('admin');
 		}
 		return;
