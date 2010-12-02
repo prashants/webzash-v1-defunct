@@ -3,6 +3,8 @@
 <head>
 <title>Webzash<?php if (isset($page_title)) echo ' | ' . $page_title; ?></title>
 
+<?php echo link_tag(asset_url() . 'images/favicon.ico', 'shortcut icon', 'image/ico'); ?>
+
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/style.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/tables.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/custom.css">
