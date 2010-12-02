@@ -136,7 +136,7 @@ class Manage extends Controller {
 			/* Writing the connection string to end of file - writing in 'a' append mode */
 			if ( ! write_file($ini_file, $con_details))
 			{
-				$this->messages->add("Failed to add account. Please check if \"" . $ini_file . "\" file is writable", 'error');
+				$this->messages->add("Failed to add account settings file. Please check if \"" . $ini_file . "\" file is writable", 'error');
 				$this->messages->add("You can manually create a text file \"" . $ini_file . "\" with the following content :<br /><br />" . $con_details_html, 'error');
 				$this->template->load('admin_template', 'admin/manage/add', $data);
 				return;
@@ -145,8 +145,6 @@ class Manage extends Controller {
 				redirect('admin/manage');
 				return;
 			}
-
-			
 		}
 		return;
 	}

@@ -2,6 +2,12 @@
 	echo form_open('admin/create');
 
 	echo "<p>";
+	echo form_label('Label', 'account_label');
+	echo "<br />";
+	echo form_input($account_label);
+	echo "</p>";
+
+	echo "<p>";
 	echo form_label('Account Name', 'account_name');
 	echo "<br />";
 	echo form_input($account_name);
@@ -50,10 +56,10 @@
 	echo "</p>";
 
 	echo "<p>";
-	echo form_fieldset('Database Settings', array('style' => "width:500px;"));
+	echo form_fieldset('Database Settings', array('class' => "fieldset-auto-width", 'style' => "width:500px;"));
 
 	echo "<p>";
-	echo form_checkbox('create_database', 1, FALSE) . " Create database if it does not exists";
+	echo form_checkbox('create_database', 1, $create_database) . " Create database if it does not exists";
 	echo "</p>";
 
 	echo "<p>";

@@ -26,6 +26,13 @@ class Create extends Controller {
 		}
 
 		/* Form fields */
+		$data['account_label'] = array(
+			'name' => 'account_label',
+			'id' => 'account_label',
+			'maxlength' => '30',
+			'size' => '30',
+			'value' => '',
+		);
 		$data['account_name'] = array(
 			'name' => 'account_name',
 			'id' => 'account_name',
@@ -116,8 +123,10 @@ class Create extends Controller {
 			'size' => '40',
 			'value' => '3306',
 		);
+		$data['create_database'] = FALSE;
 
 		/* Form validations */
+		$this->form_validation->set_rules('account_label', 'Label', 'trim|required|min_length[2]|max_length[30]|alpha_numeric');
 		$this->form_validation->set_rules('account_name', 'Account Name', 'trim|required|min_length[2]|max_length[100]');
 		$this->form_validation->set_rules('account_address', 'Account Address', 'trim|max_length[255]');
 		$this->form_validation->set_rules('account_email', 'Account Email', 'trim|valid_email');
@@ -129,12 +138,12 @@ class Create extends Controller {
 
 
 		$this->form_validation->set_rules('database_name', 'Database Name', 'trim|required');
-
 		$this->form_validation->set_rules('database_username', 'Database Username', 'trim|required');
 
 		/* Repopulating form */
 		if ($_POST)
 		{
+			$data['account_label']['value'] = $this->input->post('account_label', TRUE);
 			$data['account_name']['value'] = $this->input->post('account_name', TRUE);
 			$data['account_address']['value'] = $this->input->post('account_address', TRUE);
 			$data['account_email']['value'] = $this->input->post('account_email', TRUE);
@@ -144,6 +153,7 @@ class Create extends Controller {
 			$data['account_date']['value'] = $this->input->post('account_date', TRUE);
 			$data['account_timezone'] = $this->input->post('account_timezone', TRUE);
 
+			$data['create_database'] = $this->input->post('create_database', TRUE);
 			$data['database_name']['value'] = $this->input->post('database_name', TRUE);
 			$data['database_username']['value'] = $this->input->post('database_username', TRUE);
 			$data['database_password']['value'] = $this->input->post('database_password', TRUE);
@@ -160,6 +170,8 @@ class Create extends Controller {
 		}
 		else
 		{
+			$data_account_label = $this->input->post('account_label', TRUE);
+			$data_account_label = strtolower($data_account_label);
 			$data_account_name = $this->input->post('account_name', TRUE);
 			$data_account_address = $this->input->post('account_address', TRUE);
 			$data_account_email = $this->input->post('account_email', TRUE);
@@ -169,11 +181,21 @@ class Create extends Controller {
 			$data_account_date = $this->input->post('account_date', TRUE);
 			$data_account_timezone = $this->input->post('timezones', TRUE);
 
+			$data_database_host = $this->input->post('database_host', TRUE);
+			$data_database_port = $this->input->post('database_port', TRUE);
 			$data_database_name = $this->input->post('database_name', TRUE);
 			$data_database_username = $this->input->post('database_username', TRUE);
 			$data_database_password = $this->input->post('database_password', TRUE);
-			$data_database_host = $this->input->post('database_host', TRUE);
-			$data_database_port = $this->input->post('database_port', TRUE);
+
+			$ini_file = "system/application/config/accounts/" . $data_account_label . ".ini";
+
+			/* Check if database ini file exists */
+			if (get_file_info($ini_file))
+			{
+				$this->messages->add("Account with same label already exists", 'error');
+				$this->template->load('admin_template', 'admin/create', $data);
+				return;
+			}
 
 			if ($data_database_host == "")
 				$data_database_host = "localhost";
@@ -190,8 +212,7 @@ class Create extends Controller {
 			{
 				if ((substr($conn_error, 0, 16) == "Unknown database"))
 				{
-					$this->load->dbforge();
-					if ($this->dbforge->create_database($data_database_name))
+					if ($newacc->query("CREATE DATABASE " . $data_database_name))
 					{
 						$this->messages->add("New database created", 'success');
 						/* Retrying to connect to new database */
@@ -230,9 +251,25 @@ class Create extends Controller {
 					if ($newacc->_error_message() != "")
 						$this->messages->add($newacc->_error_message(), 'error');
 				}
+
 				/* Adding the account settings */
 				$newacc->query("INSERT INTO settings (id, label, name, address, email, ay_start, ay_end, currency_symbol, date_format, timezone, database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, "", $data_account_name, $data_account_address, $data_account_email, $data_assy_start, $data_assy_end, $data_account_currency, $data_account_date, $data_account_timezone, 1));
 				$this->messages->add("Successfully created webzash account", 'success');
+
+				/* Adding account settings to file. Code copied from manage controller */
+				$con_details = '[database]\ndb_hostname = "' . $data_database_host . '"\ndb_port = "' . $data_database_port . '"\ndb_name = "' . $data_database_name . '"\ndb_username = "' . $data_database_username . '"\ndb_password = "' . $data_database_password . '"\n';
+
+				$con_details_html = '[database]<br />db_hostname = "' . $data_database_host . '"<br />db_port = "' . $data_database_port . '"<br />db_name = "' . $data_database_name . '"<br />db_username = "' . $data_database_username . '"<br />db_password = "' . $data_database_password . '"<br />';
+
+				/* Writing the connection string to end of file - writing in 'a' append mode */
+				if ( ! write_file($ini_file, $con_details))
+				{
+					$this->messages->add("Failed to add account settings file. Please check if \"" . $ini_file . "\" file is writable", 'error');
+					$this->messages->add("You can manually create a text file \"" . $ini_file . "\" with the following content :<br /><br />" . $con_details_html, 'error');
+				} else {
+					$this->messages->add("Successfully added webzash account settings file to list of active accounts", 'success');
+				}
+
 				redirect('admin');
 				return;
 			}
