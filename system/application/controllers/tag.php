@@ -10,6 +10,7 @@ class Tag extends Controller {
 	
 	function index()
 	{
+		$this->load->model('Tag_model');
 		$this->template->set('page_title', 'Tags');
 		$this->template->set('nav_links', array('tag/add' => 'New Tag'));
 		$this->template->load('template', 'tag/index');

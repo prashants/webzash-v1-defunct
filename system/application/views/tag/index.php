@@ -8,7 +8,7 @@
 	{
 		echo "<tr class=\"tr-" . $odd_even. "\">";
 		echo "<td>" . $row->title . "</td>";
-		echo "<td style=\"color:#" . $row->color . "; background-color:#" . $row->background . ";\">" . $row->title . "</td>";
+		echo "<td>" . $this->Tag_model->show_voucher_tag($row->id) . "</td>";
 
 		echo "<td>" . anchor('tag/edit/' . $row->id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit Tag')), array('title' => 'Edit Tag')) . "</td>";
 
