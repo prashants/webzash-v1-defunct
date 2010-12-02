@@ -2,6 +2,14 @@
 	echo form_open('admin/manage/add');
 
 	echo "<p>";
+	echo form_label('Label', 'database_label');
+	echo "<br />";
+	echo form_input($database_label);
+	echo "<br />";
+	echo "<span class=\"form-help-text\">Example : prashant0708</span>";
+	echo "</p>";
+
+	echo "<p>";
 	echo form_label('Database Name', 'database_name');
 	echo "<br />";
 	echo form_input($database_name);

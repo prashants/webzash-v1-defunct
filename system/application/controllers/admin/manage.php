@@ -25,10 +25,17 @@ class Manage extends Controller {
 
 	function add()
 	{
-		$this->load->helper('file');
 		$this->template->set('page_title', 'Add a webzash account');
 
 		/* Form fields */
+		$data['database_label'] = array(
+			'name' => 'database_label',
+			'id' => 'database_label',
+			'maxlength' => '30',
+			'size' => '30',
+			'value' => '',
+		);
+
 		$data['database_name'] = array(
 			'name' => 'database_name',
 			'id' => 'database_name',
@@ -72,6 +79,7 @@ class Manage extends Controller {
 		/* Repopulating form */
 		if ($_POST)
 		{
+			$data['database_label']['value'] = $this->input->post('database_label', TRUE);
 			$data['database_name']['value'] = $this->input->post('database_name', TRUE);
 			$data['database_username']['value'] = $this->input->post('database_username', TRUE);
 			$data['database_password']['value'] = $this->input->post('database_password', TRUE);
@@ -80,6 +88,7 @@ class Manage extends Controller {
 		}
 
 		/* Form validations */
+		$this->form_validation->set_rules('database_label', 'Label', 'trim|required|min_length[2]|max_length[30]|alpha_numeric');
 		$this->form_validation->set_rules('database_name', 'Database Name', 'trim|required');
 
 		/* Validating form */
@@ -91,18 +100,32 @@ class Manage extends Controller {
 		}
 		else
 		{
+			$data_database_label = $this->input->post('database_label', TRUE);
+			$data_database_host = $this->input->post('database_host', TRUE);
+			$data_database_port = $this->input->post('database_port', TRUE);
 			$data_database_name = $this->input->post('database_name', TRUE);
 			$data_database_username = $this->input->post('database_username', TRUE);
 			$data_database_password = $this->input->post('database_password', TRUE);
-			$data_database_host = $this->input->post('database_host', TRUE);
-			$data_database_port = $this->input->post('database_port', TRUE);
 
-			$con_string = "mysql://${data_database_username}:${data_database_password}@${data_database_host}:${data_database_port}/${data_database_name};";
+			$ini_file = "system/application/config/accounts/" . $data_database_label . ".ini";
+
+			/* Check if database ini file exists */
+			if (get_file_info($ini_file))
+			{
+				$this->messages->add("Account with same label already exists", 'error');
+				$this->template->load('admin_template', 'admin/manage/add', $data);
+				return;
+			}
+
+			$con_details = '[database]\ndb_hostname = "' . $data_database_host . '"\ndb_port = "' . $data_database_port . '"\ndb_name = "' . $data_database_name . '"\ndb_username = "' . $data_database_username . '"\ndb_password = "' . $data_database_password . '"\n';
+
+			$con_details_html = '[database]<br />db_hostname = "' . $data_database_host . '"<br />db_port = "' . $data_database_port . '"<br />db_name = "' . $data_database_name . '"<br />db_username = "' . $data_database_username . '"<br />db_password = "' . $data_database_password . '"<br />';
 
 			/* Writing the connection string to end of file - writing in 'a' append mode */
-			if ( ! write_file('system/application/controllers/admin/activeaccount.inc', $con_string, 'a'))
+			if ( ! write_file($ini_file, $con_details))
 			{
-				$this->messages->add('Failed to add account. Please check if file is writable', 'error');
+				$this->messages->add("Failed to add account. Please check if \"" . $ini_file . "\" file is writable", 'error');
+				$this->messages->add("You can manually create a text file \"" . $ini_file . "\" with the following content :<br /><br />" . $con_details_html, 'error');
 				$this->template->load('admin_template', 'admin/manage/add', $data);
 				return;
 			} else {
