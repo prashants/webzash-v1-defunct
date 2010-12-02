@@ -1,4 +1,9 @@
 <?php
+echo "<p>";
+echo "<b>Currently active account : </b>";
+echo $this->session->userdata('db_active_label');
+echo "</p>";
+
 echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 echo "<thead><tr><th>Label</th><th>Hostname</th><th>Port</th><th>Database</th><th>Username</th><th>Actions</th></tr></thead>";
 echo "<tbody>";
@@ -22,6 +27,8 @@ foreach ($accounts as $label)
 	}
 
 	echo "<tr class=\"tr-" . $odd_even;
+	if ($this->session->userdata('db_active_label') == $label)
+		echo " tr-draft";
 	echo "\">";
 	echo "<td>";
 	echo $label;
