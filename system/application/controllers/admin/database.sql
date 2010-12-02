@@ -51,6 +51,14 @@ CREATE TABLE IF NOT EXISTS voucher_items (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
+CREATE TABLE IF NOT EXISTS tags (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  title varchar(50) NOT NULL,
+  color varchar(6) NOT NULL,
+  background varchar(6) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (1, 0, 'Assets', 0);
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (2, 0, 'Liabilities', 0);
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (3, 0, 'Incomes', 0);
