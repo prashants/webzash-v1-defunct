@@ -26,7 +26,7 @@
 		</div>
 		<div class="settings-container">
 			<div class="settings-title">
-				<?php echo anchor('setting', 'Print Settings', array('title' => 'Print Settings')); ?>
+				<?php echo anchor('setting/printer', 'Printer Settings', array('title' => 'Printer  Settings')); ?>
 			</div>
 			<div class="settings-desc">
 				Setup printing options for vouchers, reports, etc.

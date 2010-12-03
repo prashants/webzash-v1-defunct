@@ -32,6 +32,16 @@ CREATE TABLE IF NOT EXISTS settings (
   email_port int(5) NOT NULL,
   email_username varchar(255) NOT NULL,
   email_password varchar(255) NOT NULL,
+  print_paper_height float NOT NULL,
+  print_paper_width float NOT NULL,
+  print_margin_top float NOT NULL,
+  print_margin_bottom float NOT NULL,
+  print_margin_left float NOT NULL,
+  print_margin_right float NOT NULL,
+  print_orientation varchar(1) NOT NULL,
+  print_page_format varchar(1) NOT NULL,
+  print_page_layout text NOT NULL,
+  print_logo varchar(255) NOT NULL,
   database_version int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 

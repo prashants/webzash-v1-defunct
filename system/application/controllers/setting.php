@@ -536,6 +536,215 @@ class Setting extends Controller {
 			return;
 		}
 		return;
+	}
 
+	function printer()
+	{
+		$this->template->set('page_title', 'Printer Settings');
+		$account_data = $this->Setting_model->get_current();
+
+		/* Form fields */
+		$data['paper_height'] = array(
+			'name' => 'paper_height',
+			'id' => 'paper_height',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+		$data['paper_width'] = array(
+			'name' => 'paper_width',
+			'id' => 'paper_width',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+		$data['margin_top'] = array(
+			'name' => 'margin_top',
+			'id' => 'margin_top',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+		$data['margin_bottom'] = array(
+			'name' => 'margin_bottom',
+			'id' => 'margin_bottom',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+		$data['margin_left'] = array(
+			'name' => 'margin_left',
+			'id' => 'margin_left',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+		$data['margin_right'] = array(
+			'name' => 'margin_right',
+			'id' => 'margin_right',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+		$data['orientation_potrait'] = array(
+			'name' => 'orientation',
+			'id' => 'orientation_potrait',
+			'value' => 'P',
+			'checked' => TRUE,
+		);
+		$data['orientation_landscape'] = array(
+			'name' => 'orientation',
+			'id' => 'orientation_landscape',
+			'value' => 'L',
+			'checked' => FALSE,
+		);
+		$data['output_format_html'] = array(
+			'name' => 'output_format',
+			'id' => 'output_format_html',
+			'value' => 'H',
+			'checked' => TRUE,
+		);
+		$data['output_format_text'] = array(
+			'name' => 'output_format',
+			'id' => 'output_format_text',
+			'value' => 'T',
+			'checked' => FALSE,
+		);
+		$data['page_layout'] = array(
+			'name' => 'page_layout',
+			'id' => 'page_layout',
+			'rows' => 10,
+			'cols' => 80,
+			'value' => '',
+		);
+		$data['logo'] = array(
+			'name' => 'logo',
+			'id' => 'logo',
+			'maxlength' => '100',
+			'size' => '40',
+			'value' => '',
+		);
+
+		if ($account_data)
+		{
+			$data['paper_height']['value'] = ($account_data->print_paper_height) ? echo_value($account_data->print_paper_height) : '';
+			$data['paper_width']['value'] = ($account_data->print_paper_width) ? echo_value($account_data->print_paper_width) : '';
+			$data['margin_top']['value'] = ($account_data->print_margin_top) ? echo_value($account_data->print_margin_top) : '';
+			$data['margin_bottom']['value'] = ($account_data->print_margin_bottom) ? echo_value($account_data->print_margin_bottom) : '';
+			$data['margin_left']['value'] = ($account_data->print_margin_left) ? echo_value($account_data->print_margin_left) : '';
+			$data['margin_right']['value'] = ($account_data->print_margin_right) ? echo_value($account_data->print_margin_right) : '';
+			$data['page_layout']['value'] = ($account_data->print_page_layout) ? echo_value($account_data->print_page_layout) : '';
+			$data['logo']['value'] = ($account_data->print_logo) ? echo_value($account_data->print_logo) : '';
+			if ($account_data->print_orientation)
+			{
+				if ($account_data->print_orientation == "P")
+				{
+					$data['orientation_potrait']['checked'] = TRUE;
+					$data['orientation_landscape']['checked'] = FALSE;
+				} else {
+					$data['orientation_potrait']['checked'] = FALSE;
+					$data['orientation_landscape']['checked'] = TRUE;
+				}
+			}
+			if ($account_data->print_page_format)
+			{
+				if ($account_data->print_page_format == "H")
+				{
+					$data['output_format_html']['checked'] = TRUE;
+					$data['output_format_text']['checked'] = FALSE;
+				} else {
+					$data['output_format_html']['checked'] = FALSE;
+					$data['output_format_text']['checked'] = TRUE;
+				}
+			}
+		}
+
+		/* Form validations */
+		$this->form_validation->set_rules('paper_height', 'Paper Height', 'trim|required|numeric');
+		$this->form_validation->set_rules('paper_width', 'Paper Width', 'trim|required|numeric');
+		$this->form_validation->set_rules('margin_top', 'Top Margin', 'trim|required|numeric');
+		$this->form_validation->set_rules('margin_bottom', 'Bottom Margin', 'trim|required|numeric');
+		$this->form_validation->set_rules('margin_left', 'Left Margin', 'trim|required|numeric');
+		$this->form_validation->set_rules('margin_right', 'Right Margin', 'trim|required|numeric');
+		$this->form_validation->set_rules('page_layout', 'Page Layout', 'trim|min_length[2]');
+		$this->form_validation->set_rules('logo', 'Logo Path', 'trim');
+
+		/* Repopulating form */
+		if ($_POST)
+		{
+			$data['paper_height']['value'] = $this->input->post('paper_height', TRUE);
+			$data['paper_width']['value'] = $this->input->post('paper_width', TRUE);
+			$data['margin_top']['value'] = $this->input->post('margin_top', TRUE);
+			$data['margin_bottom']['value'] = $this->input->post('margin_bottom', TRUE);
+			$data['margin_left']['value'] = $this->input->post('margin_left', TRUE);
+			$data['margin_right']['value'] = $this->input->post('margin_right', TRUE);
+			$data['page_layout']['value'] = $this->input->post('page_layout', TRUE);
+			$data['logo']['value'] = $this->input->post('logo', TRUE);
+
+			$data['orientation'] = $this->input->post('orientation', TRUE);
+			if ($data['orientation'] == "P")
+			{
+				$data['orientation_potrait']['checked'] = TRUE;
+				$data['orientation_landscape']['checked'] = FALSE;
+			} else {
+				$data['orientation_potrait']['checked'] = FALSE;
+				$data['orientation_landscape']['checked'] = TRUE;
+			}
+			$data['output_format'] = $this->input->post('output_format', TRUE);
+			if ($data['output_format'] == "H")
+			{
+				$data['output_format_html']['checked'] = TRUE;
+				$data['output_format_text']['checked'] = FALSE;
+			} else {
+				$data['output_format_html']['checked'] = FALSE;
+				$data['output_format_text']['checked'] = TRUE;
+			}
+		}
+
+		/* Validating form */
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this->messages->add(validation_errors(), 'error');
+			$this->template->load('template', 'setting/printer', $data);
+			return;
+		}
+		else
+		{
+			$data_paper_height = $this->input->post('paper_height', TRUE);
+			$data_paper_width = $this->input->post('paper_width', TRUE);
+			$data_margin_top = $this->input->post('margin_top', TRUE);
+			$data_margin_bottom = $this->input->post('margin_bottom', TRUE);
+			$data_margin_left = $this->input->post('margin_left', TRUE);
+			$data_margin_right = $this->input->post('margin_right', TRUE);
+			$data_page_layout = $this->input->post('page_layout', TRUE);
+			$data_logo = $this->input->post('logo', TRUE);
+
+			if ($this->input->post('orientation', TRUE) == "P")
+			{
+				$data_orientation = "P";
+			} else {
+				$data_orientation = "L";
+			}
+			if ($this->input->post('output_format', TRUE) == "H")
+			{
+				$data_output_format = "H";
+			} else {
+				$data_output_format = "T";
+			}
+
+			/* Update settings */
+			if ( ! $this->db->query("UPDATE settings SET print_paper_height = ?, print_paper_width = ?, print_margin_top = ?, print_margin_bottom = ?, print_margin_left = ?, print_margin_right = ?, print_orientation = ?, print_page_format = ?, print_page_layout = ?, print_logo = ? WHERE id = 1", array($data_paper_height, $data_paper_width, $data_margin_top, $data_margin_bottom, $data_margin_left, $data_margin_right, $data_orientation, $data_output_format,  $data_page_layout, $data_logo)))
+			{
+				$this->messages->add('Error updating printer settings', 'error');
+				$this->template->load('template', 'setting/printer');
+				return;
+			}
+
+			/* Success */
+			$this->messages->add('Printer settings updated successfully', 'success');
+			redirect('setting');
+			return;
+		}
+		return;
 	}
 }
