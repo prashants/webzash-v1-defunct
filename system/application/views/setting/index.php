@@ -10,6 +10,14 @@
 		</div>
 		<div class="settings-container">
 			<div class="settings-title">
+				<?php echo anchor('setting/cf', 'C / F Account', array('title' => 'Carry Forward Account')); ?>
+			</div>
+			<div class="settings-desc">
+				Carry forward account for next year
+			</div>
+		</div>
+		<div class="settings-container">
+			<div class="settings-title">
 				<?php echo anchor('setting', 'Print Settings', array('title' => 'Print Settings')); ?>
 			</div>
 			<div class="settings-desc">
