@@ -13,7 +13,7 @@
 				<?php echo anchor('setting/cf', 'C / F Account', array('title' => 'Carry Forward Account')); ?>
 			</div>
 			<div class="settings-desc">
-				Carry forward account for next year
+				Carry forward account to next year
 			</div>
 		</div>
 		<div class="settings-container">
