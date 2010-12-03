@@ -257,7 +257,7 @@ class Create extends Controller {
 				$this->messages->add("Successfully created webzash account", 'success');
 
 				/* Adding account settings to file. Code copied from manage controller */
-				$con_details = '[database]\ndb_hostname = "' . $data_database_host . '"\ndb_port = "' . $data_database_port . '"\ndb_name = "' . $data_database_name . '"\ndb_username = "' . $data_database_username . '"\ndb_password = "' . $data_database_password . '"\n';
+				$con_details = "[database]" . "\r\n" . "db_hostname = \"" . $data_database_host . "\"" . "\r\n" . "db_port = \"" . $data_database_port . "\"" . "\r\n" . "db_name = \"" . $data_database_name . "\"" . "\r\n" . "db_username = \"" . $data_database_username . "\"" . "\r\n" . "db_password = \"" . $data_database_password . "\"" . "\r\n";
 
 				$con_details_html = '[database]<br />db_hostname = "' . $data_database_host . '"<br />db_port = "' . $data_database_port . '"<br />db_name = "' . $data_database_name . '"<br />db_username = "' . $data_database_username . '"<br />db_password = "' . $data_database_password . '"<br />';
 
