@@ -21,4 +21,15 @@ class Group_model extends Model {
 		}
 		return $options;
 	}
+
+	function get_ledger_groups()
+	{
+		$options = array();
+		$group_parent_q = $this->db->query('SELECT * FROM groups WHERE id > 4 ORDER BY name');
+		foreach ($group_parent_q->result() as $row)
+		{
+			$options[$row->id] = $row->name;
+		}
+		return $options;
+	}
 }

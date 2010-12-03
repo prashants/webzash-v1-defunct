@@ -27,7 +27,7 @@ class Ledger extends Controller {
 			'size' => '40',
 			'value' => '',
 		);
-		$data['ledger_group_id'] = $this->Group_model->get_all_groups();
+		$data['ledger_group_id'] = $this->Group_model->get_ledger_groups();
 		$data['op_balance'] = array(
 			'name' => 'op_balance',
 			'id' => 'op_balance',
@@ -69,6 +69,14 @@ class Ledger extends Controller {
 			$data_op_balance_dc = $this->input->post('op_balance_dc', TRUE);
 			$data_ledger_type_cashbank_value = $this->input->post('ledger_type_cashbank', TRUE);
 			$data_ledger_type_cashbank = "N";
+
+			if ($data_group_id < 5)
+			{
+				$this->messages->add("Invalid parent group", 'error');
+				$this->template->load('template', 'ledger/add', $data);
+				return;
+			}
+
 			if ($data_ledger_type_cashbank_value == "1")
 			{
 				$data_ledger_type_cashbank = "B";
@@ -123,7 +131,7 @@ class Ledger extends Controller {
 			'size' => '40',
 			'value' => $ledger_data->name,
 		);
-		$data['ledger_group_id'] = $this->Group_model->get_all_groups();
+		$data['ledger_group_id'] = $this->Group_model->get_ledger_groups();
 		$data['op_balance'] = array(
 			'name' => 'op_balance',
 			'id' => 'op_balance',
@@ -170,6 +178,14 @@ class Ledger extends Controller {
 			$data_id = $id;
 			$data_ledger_type_cashbank_value = $this->input->post('ledger_type_cashbank', TRUE);
 			$data_ledger_type_cashbank = "N";
+
+			if ($data_group_id < 5)
+			{
+				$this->messages->add("Invalid parent group", 'error');
+				$this->template->load('template', 'ledger/add', $data);
+				return;
+			}
+
 			if ($data_ledger_type_cashbank_value == "1")
 			{
 				$data_ledger_type_cashbank = "B";
