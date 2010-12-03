@@ -157,6 +157,7 @@ class Setting extends Controller {
 	function cf()
 	{
 		$this->load->helper('file');
+		$this->load->model('Ledger_model');
 		$this->template->set('page_title', 'Carry forward account');
 
 		/* Form fields */
@@ -276,8 +277,13 @@ class Setting extends Controller {
 			$data_account_label = $this->input->post('account_label', TRUE);
 			$data_account_label = strtolower($data_account_label);
 			$data_account_name = $this->input->post('account_name', TRUE);
+			$data_account_address = $this->config->item('account_address');
+			$data_account_email = $this->config->item('account_email');
 			$data_assy_start = date_php_to_mysql($this->input->post('assy_start', TRUE));
 			$data_assy_end = date_php_to_mysql($this->input->post('assy_end', TRUE));
+			$data_account_currency = $this->config->item('account_currency_symbol');
+			$data_account_date = $this->config->item('account_date_format');
+			$data_account_timezone = $this->config->item('account_timezone');
 
 			$data_database_host = $this->input->post('database_host', TRUE);
 			$data_database_port = $this->input->post('database_port', TRUE);
@@ -339,7 +345,7 @@ class Setting extends Controller {
 				return;
 			} else {
 				/* Executing the database setup script */
-				$setup_account = read_file('system/application/controllers/admin/database.sql');
+				$setup_account = read_file('system/application/controllers/admin/carryforward.sql');
 				$setup_account_array = explode(";", $setup_account);
 				foreach($setup_account_array as $row)
 				{
@@ -355,11 +361,61 @@ class Setting extends Controller {
 				$this->messages->add("Successfully created webzash account", 'success');
 
 				/* Adding account settings to file. Code copied from manage controller */
-				$con_details = '[database]\ndb_hostname = "' . $data_database_host . '"\ndb_port = "' . $data_database_port . '"\ndb_name = "' . $data_database_name . '"\ndb_username = "' . $data_database_username . '"\ndb_password = "' . $data_database_password . '"\n';
+				$con_details = "[database]" . "\r\n" . "db_hostname = \"" . $data_database_host . "\"" . "\r\n" . "db_port = \"" . $data_database_port . "\"" . "\r\n" . "db_name = \"" . $data_database_name . "\"" . "\r\n" . "db_username = \"" . $data_database_username . "\"" . "\r\n" . "db_password = \"" . $data_database_password . "\"" . "\r\n";
 
 				$con_details_html = '[database]<br />db_hostname = "' . $data_database_host . '"<br />db_port = "' . $data_database_port . '"<br />db_name = "' . $data_database_name . '"<br />db_username = "' . $data_database_username . '"<br />db_password = "' . $data_database_password . '"<br />';
 
-				/* Importing the C/F Values */
+				/**************** Importing the C/F Values : START ***************/
+
+				$cf_status = TRUE;
+				/* Importing Groups */
+				$group_q = $this->db->query("SELECT * FROM groups ORDER BY id");
+				foreach ($group_q->result() as $row)
+				{
+					if ( ! $newacc->query("INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (?, ?, ?, ?)", array($row->id, $row->parent_id, $row->name, $row->affects_gross)))
+					{
+						$this->messages->add("Failed to add group " . $row->name, 'error');
+						$cf_status = FALSE;
+					}
+				}
+
+				/* Importing Ledgers */
+				$ledger_q = $this->db->query("SELECT * FROM ledgers ORDER BY id");
+				foreach ($ledger_q->result() as $row)
+				{
+					/* Calculating closing balance for previous year */
+					$cl_balance = $this->Ledger_model->get_ledger_balance($row->id);
+					if ($cl_balance < 0)
+					{
+						$op_balance = -$cl_balance;
+						$op_balance_dc = "C";
+					} else {
+						$op_balance = $cl_balance;
+						$op_balance_dc = "D";
+					}
+
+					if ( ! $newacc->query("INSERT INTO ledgers (id, group_id, name, op_balance, op_balance_dc, type) VALUES (?, ?, ?, ?, ?, ?)", array($row->id, $row->group_id, $row->name, $op_balance, $op_balance_dc, $row->type)))
+					{
+						$this->messages->add("Failed to add ledger " . $row->name, 'error');
+						$cf_status = FALSE;
+					}
+				}
+
+				/* Importing Tags */
+				$tag_q = $this->db->query("SELECT * FROM tags ORDER BY id");
+				foreach ($tag_q->result() as $row)
+				{
+					if ( ! $newacc->query("INSERT INTO tags (id, title, color, background) VALUES (?, ?, ?, ?)", array($row->id, $row->title, $row->color, $row->background)))
+					{
+						$this->messages->add("Failed to add tag " . $row->title, 'error');
+						$cf_status = FALSE;
+					}
+				}
+
+				if ($cf_status)
+					$this->messages->add("Successfully carry forward to new account", 'success');
+				else
+					$this->messages->add("Error in carry forward to new account", 'error');
 
 				/* Writing the connection string to end of file - writing in 'a' append mode */
 				if ( ! write_file($ini_file, $con_details))
@@ -370,7 +426,7 @@ class Setting extends Controller {
 					$this->messages->add("Successfully added webzash account settings file to list of active accounts", 'success');
 				}
 
-				redirect('settings');
+				redirect('setting');
 				return;
 			}
 		}
