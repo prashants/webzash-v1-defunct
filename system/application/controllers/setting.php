@@ -20,7 +20,6 @@ class Setting extends Controller {
 		$this->template->set('page_title', 'Account Settings');
 		$account_data = $this->Setting_model->get_current();
 
-
 		$default_start = '01/04/';
 		$default_end = '31/03/';
 		if (date('n') > 3)
@@ -284,6 +283,11 @@ class Setting extends Controller {
 			$data_account_currency = $this->config->item('account_currency_symbol');
 			$data_account_date = $this->config->item('account_date_format');
 			$data_account_timezone = $this->config->item('account_timezone');
+			$data_account_email_protocol = $this->config->item('account_email_protocol');
+			$data_account_email_host = $this->config->item('account_email_host');
+			$data_account_email_port = $this->config->item('account_email_port');
+			$data_account_email_username = $this->config->item('account_email_username');
+			$data_account_email_password = $this->config->item('account_email_password');
 
 			$data_database_host = $this->input->post('database_host', TRUE);
 			$data_database_port = $this->input->post('database_port', TRUE);
@@ -357,7 +361,8 @@ class Setting extends Controller {
 				}
 
 				/* Adding the account settings */
-				$newacc->query("INSERT INTO settings (id, label, name, address, email, ay_start, ay_end, currency_symbol, date_format, timezone, database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, "", $data_account_name, $data_account_address, $data_account_email, $data_assy_start, $data_assy_end, $data_account_currency, $data_account_date, $data_account_timezone, 1));
+				$newacc->query("INSERT INTO settings (id, label, name, address, email, ay_start, ay_end, currency_symbol, date_format, timezone, email_protocol, email_host, email_port, email_username, email_password,  database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, "", $data_account_name, $data_account_address, $data_account_email, $data_assy_start, $data_assy_end, $data_account_currency, $data_account_date, $data_account_timezone, $data_account_email_protocol, $data_account_email_host, $data_account_email_port, $data_account_email_username, $data_account_email_password, 1));
+
 				$this->messages->add("Successfully created webzash account", 'success');
 
 				/* Adding account settings to file. Code copied from manage controller */
@@ -431,5 +436,106 @@ class Setting extends Controller {
 			}
 		}
 		return;
+	}
+
+	function email()
+	{
+		$this->template->set('page_title', 'Email Settings');
+		$account_data = $this->Setting_model->get_current();
+
+		/* Form fields */
+		$data['email_protocol_options'] = array(
+			'mail' => 'mail',
+			'sendmail' => 'sendmail',
+			'smtp' => 'smtp'
+		);
+		$data['email_host'] = array(
+			'name' => 'email_host',
+			'id' => 'email_host',
+			'maxlength' => '100',
+			'size' => '40',
+			'value' => '',
+		);
+		$data['email_port'] = array(
+			'name' => 'email_port',
+			'id' => 'email_port',
+			'maxlength' => '5',
+			'size' => '5',
+			'value' => '',
+		);
+		$data['email_username'] = array(
+			'name' => 'email_username',
+			'id' => 'email_username',
+			'maxlength' => '100',
+			'size' => '40',
+			'value' => '',
+		);
+		$data['email_password'] = array(
+			'name' => 'email_password',
+			'id' => 'email_password',
+			'maxlength' => '100',
+			'size' => '40',
+			'value' => '',
+		);
+
+		if ($account_data)
+		{
+			$data['email_protocol'] = ($account_data->email_protocol) ? echo_value($account_data->email_protocol) : 'smtp';
+			$data['email_host']['value'] = ($account_data->email_host) ? echo_value($account_data->email_host) : '';
+			$data['email_port']['value'] = ($account_data->email_port) ? echo_value($account_data->email_port) : '';
+			$data['email_username']['value'] = ($account_data->email_username) ? echo_value($account_data->email_username) : '';
+		}
+
+		/* Form validations */
+		$this->form_validation->set_rules('email_protocol', 'Email Protocol', 'trim|required|min_length[2]|max_length[10]');
+		$this->form_validation->set_rules('email_host', 'Mail Server Hostname', 'trim|max_length[255]');
+		$this->form_validation->set_rules('email_port', 'Mail Server Port', 'trim|is_natural');
+		$this->form_validation->set_rules('email_username', 'Email Username', 'trim|max_length[255]');
+		$this->form_validation->set_rules('email_password', 'Email Password', 'trim|max_length[255]');
+
+		/* Repopulating form */
+		if ($_POST)
+		{
+			$data['email_protocol'] = $this->input->post('email_protocol', TRUE);
+			$data['email_host']['value'] = $this->input->post('email_host', TRUE);
+			$data['email_port']['value'] = $this->input->post('email_port', TRUE);
+			$data['email_username']['value'] = $this->input->post('email_username', TRUE);
+			$data['email_password']['value'] = $this->input->post('email_password', TRUE);
+		}
+
+		/* Validating form */
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this->messages->add(validation_errors(), 'error');
+			$this->template->load('template', 'setting/email', $data);
+			return;
+		}
+		else
+		{
+			$data_email_protocol = $this->input->post('email_protocol', TRUE);
+			$data_email_host = $this->input->post('email_host', TRUE);
+			$data_email_port = $this->input->post('email_port', TRUE);
+			$data_email_username = $this->input->post('email_username', TRUE);
+			$data_email_password = $this->input->post('email_password', TRUE);
+
+			/* if password is blank then use the current password */
+			if ($data_email_password == "")
+				$data_email_password = $account_data->email_password;
+
+			/* Update settings */
+			if ( ! $this->db->query("UPDATE settings SET email_protocol = ?, email_host = ?, email_port = ?, email_username = ?, email_password = ? WHERE id = 1", array($data_email_protocol, $data_email_host, $data_email_port, $data_email_username, $data_email_password)))
+			{
+				$this->messages->add('Error updating settings', 'error');
+				$this->template->load('template', 'setting/email', $data);
+				return;
+			}
+
+			/* Success */
+			$this->messages->add('Email settings updated successfully', 'success');
+			redirect('setting');
+			return;
+		}
+		return;
+
 	}
 }

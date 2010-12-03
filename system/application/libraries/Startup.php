@@ -124,21 +124,26 @@ class Startup
 			return;
 		}
 
-		/* Loading company data */
-		$company_q = $CI->db->query('SELECT * FROM settings WHERE id = 1');
-		if ( ! ($company_d = $company_q->row()))
+		/* Loading account data */
+		$account_q = $CI->db->query('SELECT * FROM settings WHERE id = 1');
+		if ( ! ($account_d = $account_q->row()))
 		{
 			$CI->messages->add('Please select valid account', 'error');
 			redirect('admin');
 		}
-		$CI->config->set_item('account_name', $company_d->name);
-		$CI->config->set_item('account_address', $company_d->address);
-		$CI->config->set_item('account_email', $company_d->email);
-		$CI->config->set_item('account_ay_start', $company_d->ay_start);
-		$CI->config->set_item('account_ay_end', $company_d->ay_end);
-		$CI->config->set_item('account_currency_symbol', $company_d->currency_symbol);
-		$CI->config->set_item('account_date_format', $company_d->date_format);
-		$CI->config->set_item('account_timezone', $company_d->timezone);
+		$CI->config->set_item('account_name', $account_d->name);
+		$CI->config->set_item('account_address', $account_d->address);
+		$CI->config->set_item('account_email', $account_d->email);
+		$CI->config->set_item('account_ay_start', $account_d->ay_start);
+		$CI->config->set_item('account_ay_end', $account_d->ay_end);
+		$CI->config->set_item('account_currency_symbol', $account_d->currency_symbol);
+		$CI->config->set_item('account_date_format', $account_d->date_format);
+		$CI->config->set_item('account_timezone', $account_d->timezone);
+		$CI->config->set_item('account_email_protocol', $account_d->email_protocol);
+		$CI->config->set_item('account_email_host', $account_d->email_host);
+		$CI->config->set_item('account_email_port', $account_d->email_port);
+		$CI->config->set_item('account_email_username', $account_d->email_username);
+		$CI->config->set_item('account_email_password', $account_d->email_password);
 	}
 }
 

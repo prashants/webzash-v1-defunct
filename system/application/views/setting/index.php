@@ -18,18 +18,18 @@
 		</div>
 		<div class="settings-container">
 			<div class="settings-title">
-				<?php echo anchor('setting', 'Print Settings', array('title' => 'Print Settings')); ?>
+				<?php echo anchor('setting/email', 'Email Settings', array('title' => 'Email Settings')); ?>
 			</div>
 			<div class="settings-desc">
-				Setup printing options for vouchers, reports, etc.
+				Setup outgoing email
 			</div>
 		</div>
 		<div class="settings-container">
 			<div class="settings-title">
-				<?php echo anchor('setting', 'Email Settings', array('title' => 'Email Settings')); ?>
+				<?php echo anchor('setting', 'Print Settings', array('title' => 'Print Settings')); ?>
 			</div>
 			<div class="settings-desc">
-				Setup outgoing email
+				Setup printing options for vouchers, reports, etc.
 			</div>
 		</div>
 	</div>
