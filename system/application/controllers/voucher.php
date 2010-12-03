@@ -160,7 +160,7 @@ class Voucher extends Controller {
 
 			$html .= "<td>" . anchor_popup('voucher/printhtml/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
 
-			$html .= "<td>" . anchor_popup('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '400', 'height' => '200')) . "</td>";
+			$html .= "<td>" . anchor_popup('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '500', 'height' => '300')) . "</td>";
 
 			$html .= "</tr>";
 			$odd_even = ($odd_even == "odd") ? "even" : "odd";
@@ -818,8 +818,8 @@ class Voucher extends Controller {
 			/* Preparing message */
 			$message = "";
 			$message .= "<h3>" . ucfirst($voucher_type) . " Voucher</h3>";
-			$message .= "<p><b>" . $cur_voucher->name . "</b></p>";
-			$message .= "<p>" . $cur_voucher->address . "</p>";
+			$message .= "<p><b>" . $this->config->item('account_name') . "</b></p>";
+			$message .= "<p>" . $this->config->item('account_address') . "</p>";
 			$message .= "<p>Voucher Number : " . $cur_voucher->number . "</p>";
 			$message .= "<p>Voucher Date : " . date_mysql_to_php($cur_voucher->date) . "</p>";
 			$message .= "<table border=1>";
@@ -850,23 +850,27 @@ class Voucher extends Controller {
 			$message .=  "<p>" . "Narration : " . $cur_voucher->narration . "</p>";
 
 			/* Sending email */
-			$config['protocol']='smtp';
-			$config['smtp_host']='ssl://smtp.googlemail.com';
-			$config['smtp_port']='465';
-			$config['smtp_timeout']='30';
-			// $config['smtp_user']='';
-			// $config['smtp_pass']='';
-			$config['charset']='utf-8';
-			$config['newline']="\r\n";
+			$config['protocol'] = $this->config->item('account_email_protocol');
+			$config['smtp_host'] = $this->config->item('account_email_host');
+			$config['smtp_port'] = $this->config->item('account_email_port');
+			$config['smtp_timeout'] = '30';
+			$config['smtp_user'] = $this->config->item('account_email_username');
+			$config['smtp_pass'] = $this->config->item('account_email_password');
+			$config['charset'] = 'utf-8';
+			$config['newline'] = "\r\n";
 			$config['mailtype'] = "html";
 			$this->email->initialize($config);
 
-			$this->email->from('', 'Prashant Shah');
+			$this->email->from('', 'Webzash');
 			$this->email->to($this->input->post('email_to', TRUE));
 			$this->email->subject(ucfirst($voucher_type) . ' Voucher No. ' . $cur_voucher->number);
 			$this->email->message($message);
-			$this->email->send();
-			$data['message'] = "Successfully sent email !";
+			if ($this->email->send())
+			{
+				$data['message'] = "Successfully sent email !";
+			} else {
+				$data['error'] = "Error sending email. Please check you email settings";
+			}
 			$this->load->view('voucher/email', $data);
 			return;
 		}

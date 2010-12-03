@@ -37,6 +37,9 @@
 	}
 
 	echo form_open('voucher/email/' . $voucher_type . "/" . $voucher_id);
+
+	echo "Emailing " . ucfirst($voucher_type) . " Voucher No. " . $voucher_id . "<br />";
+
 	echo "<p>";
 	echo form_label('Email to', 'email_to');
 	echo "<br />";
