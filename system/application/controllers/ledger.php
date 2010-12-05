@@ -1,4 +1,5 @@
 <?php
+
 class Ledger extends Controller {
 
 	function Ledger()
@@ -253,3 +254,6 @@ class Ledger extends Controller {
 		return;
 	}
 }
+
+/* End of file ledger.php */
+/* Location: ./system/application/controllers/ledger.php */

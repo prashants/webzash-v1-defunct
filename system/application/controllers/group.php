@@ -1,4 +1,5 @@
 <?php
+
 class Group extends Controller {
 
 	function Group()
@@ -225,3 +226,6 @@ class Group extends Controller {
 		return;
 	}
 }
+
+/* End of file group.php */
+/* Location: ./system/application/controllers/group.php */

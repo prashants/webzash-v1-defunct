@@ -1,4 +1,5 @@
 <?php
+
 class Setting extends Controller {
 
 	function Setting()
@@ -748,3 +749,6 @@ class Setting extends Controller {
 		return;
 	}
 }
+
+/* End of file setting.php */
+/* Location: ./system/application/controllers/setting.php */

@@ -1,4 +1,5 @@
 <?php
+
 class Voucher extends Controller {
 
 	function Voucher()
@@ -922,3 +923,6 @@ class Voucher extends Controller {
 		return;
 	}
 }
+
+/* End of file voucher.php */
+/* Location: ./system/application/controllers/voucher.php */

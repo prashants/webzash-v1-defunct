@@ -1,4 +1,5 @@
 <?php
+
 class Report extends Controller {
 	var $acc_array;
 	var $account_counter;
@@ -56,3 +57,6 @@ class Report extends Controller {
 		return;
 	}
 }
+
+/* End of file report.php */
+/* Location: ./system/application/controllers/report.php */

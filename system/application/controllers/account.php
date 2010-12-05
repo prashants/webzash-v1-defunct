@@ -1,4 +1,5 @@
 <?php
+
 class Account extends Controller {
 	function index()
 	{
@@ -19,3 +20,6 @@ class Account extends Controller {
 		return;
 	}
 }
+
+/* End of file account.php */
+/* Location: ./system/application/controllers/account.php */
