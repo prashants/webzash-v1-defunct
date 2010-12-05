@@ -28,26 +28,16 @@
 				Manage existing webzash accounts
 			</div>
 		</div>
-
-		<div class="settings-container">
-			<div class="settings-title">
-				<?php echo anchor('admin', 'Backup', array('title' => 'Backup')); ?>
-			</div>
-			<div class="settings-desc">
-				Backup a existing webzash account
-			</div>
-		</div>
-		<div class="settings-container">
-			<div class="settings-title">
-				<?php echo anchor('admin', 'Restore', array('title' => 'Restore')); ?>
-			</div>
-			<div class="settings-desc">
-				Restore from a existing backup
-			</div>
-		</div>
 	</div>
 	<div id="right-col">
-
+		<div class="settings-container">
+			<div class="settings-title">
+				<?php echo anchor('admin/gensetting', 'General Settings', array('title' => 'General Application Settings')); ?>
+			</div>
+			<div class="settings-desc">
+				General application settings
+			</div>
+		</div>
 	</div>
 </div>
 <div class="clear">
