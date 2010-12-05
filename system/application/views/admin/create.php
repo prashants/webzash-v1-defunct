@@ -101,6 +101,7 @@
 	echo form_submit('submit', 'Create');
 	echo " ";
 	echo anchor('admin', 'Back', array('title' => 'Back to admin'));
-	echo form_close();
 	echo "</p>";
+
+	echo form_close();
 

@@ -49,5 +49,6 @@
 	echo "<p>";
 	echo form_submit('submit', 'Send Email');
 	echo "</p>";
+
 	echo form_close();
 

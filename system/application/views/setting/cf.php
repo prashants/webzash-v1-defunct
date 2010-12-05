@@ -71,6 +71,7 @@
 	echo form_submit('submit', 'Carrfy forward');
 	echo " ";
 	echo anchor('setting', 'Back', array('title' => 'Back to settings'));
-	echo form_close();
 	echo "</p>";
+
+	echo form_close();
 

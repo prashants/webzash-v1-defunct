@@ -39,8 +39,11 @@
 	echo form_input($database_port);
 	echo "</p>";
 
+	echo "<p>";
 	echo form_submit('submit', 'Add');
 	echo " ";
 	echo anchor('admin/manage', 'Back', array('title' => 'Back to active account list'));
+	echo "</p>";
+
 	echo form_close();
 

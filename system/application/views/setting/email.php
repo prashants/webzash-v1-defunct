@@ -33,8 +33,11 @@
 	echo "<span class=\"form-help-text\">Leave empty if you dont not want to change password</span>";
 	echo "</p>";
 
+	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
 	echo anchor('setting', 'Back', 'Back to Settings');
+	echo "</p>";
+
 	echo form_close();
 

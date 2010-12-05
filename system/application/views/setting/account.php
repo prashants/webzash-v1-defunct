@@ -49,8 +49,11 @@
 	echo timezone_menu($account_timezone);
 	echo "</p>";
 
+	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
 	echo anchor('setting', 'Back', 'Back to Settings');
+	echo "</p>";
+
 	echo form_close();
 

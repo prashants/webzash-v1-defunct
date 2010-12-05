@@ -262,10 +262,13 @@ $(document).ready(function() {
 	echo form_dropdown('voucher_tag', $voucher_tags, $voucher_tag);
 	echo "</p>";
 
+	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
 	echo anchor('voucher/edit/' . $voucher_type . "/" . $voucher_id, 'Reload', array('title' => 'Reload ' . ucfirst($voucher_type) . ' Voucher Original Data'));
 	echo " | ";
 	echo anchor('voucher/show/' . $voucher_type, 'Back', array('title' => 'Back to ' . ucfirst($voucher_type) . ' Vouchers'));
+	echo "</p>";
+
 	echo form_close();
 

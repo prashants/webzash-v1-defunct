@@ -19,8 +19,11 @@
 	echo "#" . form_input($tag_background);
 	echo "</p>";
 
+	echo "<p>";
 	echo form_submit('submit', 'Create');
 	echo " ";
 	echo anchor('tag', 'Back', 'Back to Tags');
+	echo "</p>";
+
 	echo form_close();
 
