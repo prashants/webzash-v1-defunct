@@ -108,4 +108,4 @@
 	echo anchor('setting', 'Back', array('title' => 'Back to settings'));
 	echo form_close();
 	echo "</p>";
-?>
+

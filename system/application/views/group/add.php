@@ -30,4 +30,4 @@ $(document).ready(function() {
 	echo " ";
 	echo anchor('account', 'Back', 'Back to Chart of Accounts');
 	echo form_close();
-?>
+

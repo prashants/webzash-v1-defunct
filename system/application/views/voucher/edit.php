@@ -268,4 +268,4 @@ $(document).ready(function() {
 	echo " | ";
 	echo anchor('voucher/show/' . $voucher_type, 'Back', array('title' => 'Back to ' . ucfirst($voucher_type) . ' Vouchers'));
 	echo form_close();
-?>
+

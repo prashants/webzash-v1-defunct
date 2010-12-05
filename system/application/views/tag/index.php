@@ -20,4 +20,4 @@
 	echo "</table>";
 	echo "<br />";
 	echo anchor('setting', 'Back', array('title' => 'Back to Settings'));
-?>
+

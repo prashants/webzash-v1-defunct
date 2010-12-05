@@ -37,4 +37,4 @@
 	echo " ";
 	echo anchor('setting', 'Back', 'Back to Settings');
 	echo form_close();
-?>
+

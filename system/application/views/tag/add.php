@@ -23,4 +23,4 @@
 	echo " ";
 	echo anchor('tag', 'Back', 'Back to Tags');
 	echo form_close();
-?>
+

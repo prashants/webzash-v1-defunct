@@ -18,4 +18,4 @@
 	echo anchor('admin', 'Back', array('title' => 'Back to admin'));
 	echo form_close();
 	echo "</p>";
-?>
+

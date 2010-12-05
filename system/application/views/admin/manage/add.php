@@ -43,4 +43,4 @@
 	echo " ";
 	echo anchor('admin/manage', 'Back', array('title' => 'Back to active account list'));
 	echo form_close();
-?>
+
