@@ -32,6 +32,14 @@
 				Setup printing options for vouchers, reports, etc.
 			</div>
 		</div>
+		<div class="settings-container">
+			<div class="settings-title">
+				<?php echo anchor('setting/backup', 'Download Backup', array('title' => 'Download Backup')); ?>
+			</div>
+			<div class="settings-desc">
+				Download backup of current accounts data
+			</div>
+		</div>
 	</div>
 	<div id="right-col">
 		<div class="settings-container">

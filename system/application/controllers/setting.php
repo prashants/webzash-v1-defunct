@@ -748,6 +748,29 @@ class Setting extends Controller {
 		}
 		return;
 	}
+
+	function backup()
+	{
+		$this->load->dbutil();
+		$this->load->helper('download');
+		$backup_filename = "backup" . date("dmYHis") . ".gz";
+
+		/* Backup your entire database and assign it to a variable */
+		$backup_data =& $this->dbutil->backup();
+
+		/* Write the backup file to server */
+		if ( ! write_file('system/application/backups/' . $backup_filename, $backup_data))
+		{
+			$this->messages->add('Error saving backup file to server.' . ' Please check if "system/application/backups/" folder is writable', 'error');
+			redirect('setting');
+			return;
+		}
+
+		/* Send the file to your desktop */
+		force_download($backup_filename, $backup_data);
+		redirect('setting');
+		return;
+	}
 }
 
 /* End of file setting.php */
