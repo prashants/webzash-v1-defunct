@@ -78,9 +78,12 @@ class Voucher extends Controller {
 			case 4: $voucher_type_link = "journal"; break;
 			default: $voucher_type_link = "all"; break;
 		}
+
+		/* Pagination configuration */
+		$pagination_counter = $this->config->item('row_count');
 		$config['base_url'] = site_url('voucher/show/' . $voucher_type_link);
 		$config['num_links'] = 10;
-		$config['per_page'] = 10;
+		$config['per_page'] = $pagination_counter;
 		$config['uri_segment'] = 4;
 		$config['full_tag_open'] = '<ul id="pagination-flickr">';
 		$config['full_close_open'] = '</ul>';
@@ -107,10 +110,10 @@ class Voucher extends Controller {
 			redirect('voucher/show/all');
 			return;
 		} else if ($voucher_type > 0) {
-			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE type = ? ORDER BY date DESC, number DESC LIMIT ${page_count}, 10", array($voucher_type));
+			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE type = ? ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}", array($voucher_type));
 			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE type = ?", array($voucher_type))->num_rows();
 		} else {
-			$voucher_q = $this->db->query("SELECT * FROM vouchers ORDER BY date DESC, number DESC LIMIT ${page_count}, 10");
+			$voucher_q = $this->db->query("SELECT * FROM vouchers ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}");
 			$config['total_rows'] = $this->db->count_all('vouchers');
 		}
 

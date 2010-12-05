@@ -8,14 +8,15 @@
 	echo "</p>";
 	echo form_close();
 
-	/* Pagination */
+	/* Pagination configuration */
+	$pagination_counter = $this->config->item('row_count');
 	$page_count = (int)$this->uri->segment(4);
 	$page_count = $this->input->xss_clean($page_count);
 	if ( ! $page_count)
 		$page_count = "0";
 	$config['base_url'] = site_url('report/ledgerst/' . $ledger_id);
 	$config['num_links'] = 10;
-	$config['per_page'] = 10;
+	$config['per_page'] = $pagination_counter;
 	$config['uri_segment'] = 4;
 	$config['total_rows'] = $this->db->query('SELECT * FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ?', array($ledger_id))->num_rows();
 	$config['full_tag_open'] = '<ul id="pagination-flickr">';
@@ -54,7 +55,7 @@
 			echo "<b>Closing Balance &nbsp;: </b>Dr " . convert_cur($clbalance) . "<br />";
 		echo "<br />";
 
-		$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT ${page_count}, 10", array($ledger_id));
+		$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT ${page_count}, ${pagination_counter}", array($ledger_id)); echo $this->db->last_query();
 
 		echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 
@@ -75,8 +76,6 @@
 				$cur_balance -= $opbalance;
 			}
 		} else {
-			$prev_page_counter = $page_count - 1;
-
 			/* Opening balance */
 			if ($optype == "D")
 			{
@@ -86,7 +85,7 @@
 			}
 
 			/* Calculating previous balance */
-			$prevbal_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT 0, ${prev_page_counter}", array($ledger_id));
+			$prevbal_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT 0, ${page_count}", array($ledger_id)); echo $this->db->last_query();
 			foreach ($prevbal_q->result() as $row )
 			{
 				if ($row->vdraft == 1)
