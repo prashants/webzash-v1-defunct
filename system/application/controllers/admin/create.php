@@ -212,7 +212,7 @@ class Create extends Controller {
 			{
 				if ((substr($conn_error, 0, 16) == "Unknown database"))
 				{
-					if ($newacc->query("CREATE DATABASE " . $data_database_name))
+					if ($newacc->query("CREATE DATABASE " . mysql_real_escape_string($data_database_name)))
 					{
 						$this->messages->add("New database created", 'success');
 						/* Retrying to connect to new database */
