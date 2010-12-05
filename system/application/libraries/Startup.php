@@ -144,6 +144,25 @@ class Startup
 		$CI->config->set_item('account_email_port', $account_d->email_port);
 		$CI->config->set_item('account_email_username', $account_d->email_username);
 		$CI->config->set_item('account_email_password', $account_d->email_password);
+
+		/************** Load general application settings *************/
+		$setting_ini_file = "system/application/config/general.ini";
+		$CI->config->set_item('row_count', 20);
+
+		/* Check if general application settings ini file exists */
+		if (get_file_info($setting_ini_file))
+		{
+			/* Parsing general application settings ini file */
+			$cur_setting = parse_ini_file($setting_ini_file);
+			if ($cur_setting)
+			{
+				if (isset($cur_setting['row_count']))
+				{
+					$CI->config->set_item('row_count', $cur_setting['row_count']);
+				}
+			}
+		}
+		return;
 	}
 }
 
