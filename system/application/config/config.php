@@ -11,7 +11,21 @@
 |	http://example.com/
 |
 */
-$config['base_url']	= "http://localhost/webzash/";
+// $config['base_url']	= "http://localhost/webzash/";
+
+/*
+|--------------------------------------------------------------------------
+| Base Site URL : Auto configuration
+|--------------------------------------------------------------------------
+|
+| Automatically configure base_url. Works with both http and https
+| Taken fom http://codeigniter.com/wiki/Automatic_configbase_url/
+|
+*/
+
+$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+$config['base_url'] .= "://".$_SERVER['HTTP_HOST'];
+$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 
 /*
 |--------------------------------------------------------------------------
