@@ -59,7 +59,7 @@
 
 		echo "<table border=0 cellpadding=5 class=\"generaltable\">";
 
-		echo "<thead><tr><th>Number</th><th>Date</th><th>Status</th><th>Type</th><th>Dr Amount</th><th>Cr Amount</th><th>  Balance</th></tr></thead>";
+		echo "<thead><tr><th>Date</th><th>Number</th><th>Status</th><th>Type</th><th>Dr Amount</th><th>Cr Amount</th><th>  Balance</th></tr></thead>";
 		$odd_even = "odd";
 
 		$cur_balance = 0;
@@ -112,10 +112,10 @@
 			echo ($row->vdraft == 1) ? " tr-draft " : "";
 			echo "\">";
 			echo "<td>";
-			echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $row->vnumber, array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
+			echo date_mysql_to_php($row->vdate);
 			echo "</td>";
 			echo "<td>";
-			echo date_mysql_to_php($row->vdate);
+			echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $row->vnumber, array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
 			echo "</td>";
 			echo "<td>";
 			echo ($row->vdraft == 1) ? "Draft" : "Active";

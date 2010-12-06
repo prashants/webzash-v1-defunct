@@ -121,7 +121,7 @@ class Voucher extends Controller {
 		$this->pagination->initialize($config);
 
 		$html = "<table border=0 cellpadding=5 class=\"generaltable\">";
-		$html .= "<thead><tr><th>Number</th><th>Date</th><th>Ledger A/C</th><th>Type</th><th>Status</th><th>DR Amount</th><th>CR Amount</th><th colspan=5>Actions</th></tr></thead>";
+		$html .= "<thead><tr><th>Date</th><th>Number</th><th>Ledger A/C</th><th>Type</th><th>Status</th><th>DR Amount</th><th>CR Amount</th><th colspan=5>Actions</th></tr></thead>";
 		$html .= "<tbody>";
 
 		$odd_even = "odd";
@@ -135,8 +135,9 @@ class Voucher extends Controller {
 			$html .= "<tr class=\"tr-" . $odd_even;
 			$html .= ($row->draft == 1) ? " tr-draft " : "";
 			$html .= "\">";
-			$html .= "<td>" . $row->number . "</td>";
+
 			$html .= "<td>" . date_mysql_to_php($row->date) . "</td>";
+			$html .= "<td>" . $row->number . "</td>";
 
 			$html .= "<td>";
 			$html .= $this->Tag_model->show_voucher_tag($row->tag_id);
