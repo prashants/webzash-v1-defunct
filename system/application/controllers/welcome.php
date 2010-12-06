@@ -49,7 +49,7 @@ class Welcome extends Controller {
 
 		$expense = new Accountlist();
 		$expense->init(4);
-		$data['expense_total'] = $expense->total; var_dump($data);
+		$data['expense_total'] = $expense->total;
 		
 		$this->template->load('template', 'welcome_message', $data);
 		return;
