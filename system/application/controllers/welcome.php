@@ -20,7 +20,7 @@ class Welcome extends Controller {
 
 		/* Bank and Cash Ledger accounts */
 		$bank_q = $this->db->get_where('ledgers', array('type' => 'B'));
-		if ($bank_q->num_rows() > 1)
+		if ($bank_q->num_rows() > 0)
 		{
 			foreach ($bank_q->result() as $row)
 			{
