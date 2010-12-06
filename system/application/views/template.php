@@ -10,6 +10,7 @@
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/custom.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/menu.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/jquery.datepick.css">
+<link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/tufte-graph.css">
 
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.datepick.js"></script>
@@ -17,10 +18,13 @@
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/hoverIntent.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/superfish.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/supersubs.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/raphael.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.enumerable.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.tufte-graph.js"></script>
 
 <script type="text/javascript">
 /* Loading JQuery Superfish menu */
-$(document).ready(function(){ 
+$(document).ready(function() {
 	$("ul.sf-menu").supersubs({ 
 		minWidth:12,
 		maxWidth:27,
