@@ -82,54 +82,73 @@ jQuery(document).ready(function () {
 </script>
 
 <h3>&lt;This is beta software not meant for production use !&gt;</h3>
-<div>
-	<div>Welcome back, <strong><?php echo $this->config->item('account_name');?></strong></div>
-	<br />
-	<div>You have <?php echo $draft_count;?> draft voucher(s)</div>
-	<br />
-	<?php
-		if ($bank_cash_account)
-		{
-			echo "<table>";
-			echo "<tbody>";
-			foreach ($bank_cash_account as $id => $row)
-			{
-				echo "<tr>";
-				echo "<td>" . anchor('report/ledgerst/' . $row['id'], $row['name'], array('title' => $row['name'] . ' Statement')) . "</td>";
-				echo "<td>";
-				if ($row['balance'] == 0)
-					echo "0";
-				else if ($row['balance'] > 0)
-					echo "Dr " . $row['balance'];
-				else
-					echo "Cr " . -$row['balance'];
-				echo "</td>";
-				echo "</tr>";
-			}
-			echo "</tbody>";
-			echo "</table>";
-		} else {
-			echo "You have not created any bank or cash account";
-		}
-	?>
+<div id="dashboard-summary">
+	<div id="dashboard-welcome-back" class="dashboard-item">
+		<div class="dashboard-title">Account Summary</div>
+		<div class="dashboard-content">
+			<div>Welcome back, <strong><?php echo $this->config->item('account_name');?> !</strong></div>
+			<div id="dashboard-draft">You have <?php echo $draft_count;?> draft voucher(s)</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div id="dashboard-cash-bank" class="dashboard-item">
+		<div class="dashboard-title">Bank and Cash A/C's</div>
+		<div class="dashboard-content">
+			<?php
+				if ($bank_cash_account)
+				{
+					echo "<table class=\"dashboard-cashbank-table\">";
+					echo "<tbody>";
+					foreach ($bank_cash_account as $id => $row)
+					{
+						echo "<tr>";
+						echo "<td>" . anchor('report/ledgerst/' . $row['id'], $row['name'], array('title' => $row['name'] . ' Statement')) . "</td>";
+						echo "<td>";
+						if ($row['balance'] == 0)
+							echo "0";
+						else if ($row['balance'] > 0)
+							echo "Dr " . $row['balance'];
+						else
+							echo "Cr " . -$row['balance'];
+						echo "</td>";
+						echo "</tr>";
+					}
+					echo "</tbody>";
+					echo "</table>";
+				} else {
+					echo "You have not created any bank or cash account";
+				}
+			?>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div>
+		<table border="0">
+			<tbody>
+				<tr>
+					<td width="300">
+						<div id="income-expense" class="graph">
+							<div id="income-expense-graph-header"><h4>Incomes Vs Expenses</h4></div>
+							<div id="income-expense-graph-data"></div>
+						</div>
+					</td>
+					<td width="300">
+						<div id="asset-liability" class="graph">
+							<div id="asset-liability-graph-header"><h4>Assets Vs Liabilities</h4></div>
+							<div id="asset-liability-graph-data""></div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
-<div>
-	<table border="0">
-		<tbody>
-			<tr>
-				<td width="300">
-					<div id="income-expense" class="graph">
-						<div id="income-expense-graph-header"><h4>Incomes Vs Expenses</h4></div>
-						<div id="income-expense-graph-data"></div>
-					</div>
-				</td>
-				<td width="300">
-					<div id="asset-liability" class="graph">
-						<div id="asset-liability-graph-header"><h4>Assets Vs Liabilities</h4></div>
-						<div id="asset-liability-graph-data""></div>
-					</div>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+<div id="dashboard-log">
+	<div id="dashboard-recent-log" class="dashboard-log-item">
+		<div class="dashboard-log-title">Recent Activity</div>
+		<div class="dashboard-log-content">
+			Hello World !
+		</div>
+	</div>
 </div>
+<div class="clear"></div>

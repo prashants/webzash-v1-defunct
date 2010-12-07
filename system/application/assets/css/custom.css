@@ -110,3 +110,55 @@ ul#pagination-flickr {
 	font-weight:italic;
 }
 
+/********************************* DASHBOARD **********************************/
+
+#dashboard-summary {
+	width:500px;
+	float:left;
+}
+
+.dashboard-item {
+	-moz-border-radius:3px 3px 3px 3px;
+	border-radius:3px 3px 3px 3px;
+	float:left;
+	border: 1px solid #BBBBBB;
+	margin-bottom:20px;
+	width:500px;
+}
+
+.dashboard-title {
+	color: #464646;
+	background-color:#EEEEEE;
+	padding:8px;
+	font-weight:bold;
+}
+
+.dashboard-content {
+	padding:8px;
+}
+
+#dashboard-log {
+	float:left;
+	width:450px;
+	margin-left:20px;
+}
+
+.dashboard-log-item {
+	-moz-border-radius:3px 3px 3px 3px;
+	border-radius:3px 3px 3px 3px;
+	float:left;
+	border: 1px solid #BBBBBB;
+	margin-bottom:20px;
+	width:440px;
+}
+
+.dashboard-log-title {
+	color: #464646;
+	background-color:#EEEEEE;
+	padding:8px;
+	font-weight:bold;
+}
+
+.dashboard-log-content {
+	padding:8px;
+}

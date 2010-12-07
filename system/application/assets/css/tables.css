@@ -99,3 +99,18 @@
 .account-table .td-actions {
 	padding-right: 8px;
 }
+
+.dashboard-cashbank-table {
+	border-collapse: collapse;
+	text-align: left;
+}
+
+.dashboard-cashbank-table td
+{
+	padding: 8px 8px 8px 20px;
+}
+
+.dashboard-cashbank-table td a
+{
+	color: #000000;
+}
