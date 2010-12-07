@@ -13,6 +13,8 @@ class Welcome extends Controller {
 		$this->load->model('Ledger_model');
 		$this->load->library('accountlist');
 		$this->template->set('page_title', 'Welcome to Webzash');
+		$this->template->set('add_css', array("tufte-graph.css"));
+		$this->template->set('add_javascript', array("raphael.js", "jquery.enumerable.js", "jquery.tufte-graph.js"));
 
 		/* Draft voucher count */
 		$draft_q = $this->db->get_where('vouchers', array('draft' => 1));

@@ -10,7 +10,16 @@
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/custom.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/menu.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/jquery.datepick.css">
-<link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/tufte-graph.css">
+<?php
+/* Dynamically adding css files from controllers */
+if (isset($add_css))
+{
+	foreach ($add_css as $id => $row)
+	{
+		echo "<link type=\"text/css\" rel=\"stylesheet\" href=\"" . asset_url() . "css/" . $row ."\">";
+	}
+}
+?>
 
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.datepick.js"></script>
@@ -18,9 +27,16 @@
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/hoverIntent.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/superfish.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/supersubs.js"></script>
-<script type="text/javascript" src="<?php echo asset_url(); ?>js/raphael.js"></script>
-<script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.enumerable.js"></script>
-<script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.tufte-graph.js"></script>
+<?php
+/* Dynamically adding javascript files from controllers */
+if (isset($add_javascript))
+{
+	foreach ($add_javascript as $id => $row)
+	{
+		echo "<script type=\"text/javascript\" src=\"" . asset_url() . "js/" . $row ."\"></script>";
+	}
+}
+?>
 
 <script type="text/javascript">
 /* Loading JQuery Superfish menu */
