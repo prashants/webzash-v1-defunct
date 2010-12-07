@@ -45,21 +45,27 @@
 		$clbalance = $this->Ledger_model->get_ledger_balance($ledger_id); /* Final Closing Balance */
 
 		/* Ledger Summary */
+		echo "<table class=\"ledger-summary\">";
+		echo "<tr>";
 		if ($optype == "D")
-			echo "<b>Opening Balance : </b>Dr " . $opbalance . "<br />";
+			echo "<td><b>Opening Balance</b></td><td>Dr " . $opbalance . "</td>";
 		else
-			echo "<b>Opening Balance : </b>Cr " . $opbalance . "<br />";
+			echo "<td><b>Opening Balance</b></td><td>Cr " . $opbalance . "</td>";
+		echo "</tr>";
+		echo "<tr>";
 		if ($clbalance < 0)
-			echo "<b>Closing Balance &nbsp;: </b>Cr " . convert_cur(-$clbalance) . "<br />";
+			echo "<td><b>Closing Balance</b></td><td>Cr " . convert_cur(-$clbalance) . "</td>";
 		else
-			echo "<b>Closing Balance &nbsp;: </b>Dr " . convert_cur($clbalance) . "<br />";
+			echo "<td><b>Closing Balance</b></td><td>Dr " . convert_cur($clbalance) . "</td>";
+		echo "</tr>";
+		echo "</table>";
 		echo "<br />";
 
 		$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT ${page_count}, ${pagination_counter}", array($ledger_id));
 
-		echo "<table border=0 cellpadding=5 class=\"generaltable\">";
+		echo "<table border=0 cellpadding=5 class=\"simple-table ledgerst-table\">";
 
-		echo "<thead><tr><th>Date</th><th>Number</th><th>Status</th><th>Type</th><th>Dr Amount</th><th>Cr Amount</th><th>  Balance</th></tr></thead>";
+		echo "<thead><tr><th>DATE</th><th>NUMBER</th><th>STATUS</th><th>TYPE</th><th>DR AMOUNT</th><th>CR AMOUNT</th><th>BALANCE</th></tr></thead>";
 		$odd_even = "odd";
 
 		$cur_balance = 0;
@@ -100,9 +106,9 @@
 			/* Show new current total */
 			if ($cur_balance < 0)
 			{
-				echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>Cr " . convert_cur(-$cur_balance) . "</td></tr>";
+				echo "<tr class=\"tr-balance\"><td colspan=6>Opening</td><td>Cr " . convert_cur(-$cur_balance) . "</td></tr>";
 			} else {
-				echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
+				echo "<tr class=\"tr-balance\"><td colspan=6>Opening</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
 			}
 		}
 
@@ -156,9 +162,9 @@
 		/* Current Page Closing Balance */
 		if ($cur_balance < 0)
 		{
-			echo "<tr class=\"tr-balance\"><td colspan=6>Closing Balance</td><td>Cr " .  convert_cur(-$cur_balance) . "</td></tr>";
+			echo "<tr class=\"tr-balance\"><td colspan=6>Closing</td><td>Cr " .  convert_cur(-$cur_balance) . "</td></tr>";
 		} else {
-			echo "<tr class=\"tr-balance\"><td colspan=6>Closing Balance</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
+			echo "<tr class=\"tr-balance\"><td colspan=6>Closing</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
 		}
 
 		echo "</table>";

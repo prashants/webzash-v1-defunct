@@ -49,27 +49,26 @@
 /******************************* SIMPLE TABLE *********************************/
 /******************************************************************************/
 
-.simple-table
-{
-	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size: 13px;
-	border-collapse: collapse;
-	text-align: left;
+.simple-table {
+	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size:13px;
+	border-collapse:collapse;
+	text-align:left;
 }
-.simple-table th
-{
-	font-weight: normal;
-	color: #000000;
-	padding: 5px 8px;
-	border-bottom: 1px solid #999999;
-	border-top: 1px solid #999999;
+
+.simple-table th {
+	font-weight:normal;
+	color:#000000;
+	padding:5px 8px;
+	border-bottom:1px solid #999999;
+	border-top:1px solid #999999;
 	background-color:#EEEEEE;
 }
-.simple-table td
-{
-	border-bottom: 1px solid #BBBBBB;
-	color: #000000;
-	padding: 8px 8px 8px 8px;
+
+.simple-table td {
+	border-bottom:1px solid #BBBBBB;
+	color:#000000;
+	padding:8px 8px 8px 8px;
 }
 
 .simple-table tr.tr-draft {
@@ -113,12 +112,35 @@
 	text-align: left;
 }
 
-.dashboard-cashbank-table td
-{
+.dashboard-cashbank-table td {
 	padding: 8px 8px 8px 20px;
 }
 
-.dashboard-cashbank-table td a
-{
+.dashboard-cashbank-table td a {
 	color: #000000;
+}
+
+.ledgerst-table td {
+	padding-right: 20px;
+}
+
+.ledgerst-table .tr-balance {
+	font-weight:bold;
+}
+
+.ledger-summary {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 13px;
+	border-collapse: collapse;
+	text-align: left;
+	border: 1px solid #BBBBBB;
+	background-color:#FFFFCC;
+}
+
+.ledger-summary tr {
+	border: 1px solid #BBBBBB;
+}
+
+.ledger-summary td {
+	padding: 8px 8px 8px 8px;
 }
