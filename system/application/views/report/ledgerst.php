@@ -65,7 +65,7 @@
 
 		echo "<table border=0 cellpadding=5 class=\"simple-table ledgerst-table\">";
 
-		echo "<thead><tr><th>DATE</th><th>NO.</th><th>LEDGER NAME</th><th>STATUS</th><th>TYPE</th><th>DR AMOUNT</th><th>CR AMOUNT</th><th>BALANCE</th></tr></thead>";
+		echo "<thead><tr><th>Date</th><th>No.</th><th>Ledger Name</th><th>Status</th><th>Type</th><th>Dr Amount</th><th>Cr Amount</th><th>Balance</th></tr></thead>";
 		$odd_even = "odd";
 
 		$cur_balance = 0;
