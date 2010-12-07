@@ -19,10 +19,14 @@ class Voucher extends Controller {
 
 	function show($voucher_type)
 	{
+		$this->load->model('Tag_model');
+		$data['tag_id'] = 0;
 		if ($voucher_type == "tag")
 		{
-			$tag_id = (int)$this->uri->segment(4);	
+			$tag_id = (int)$this->uri->segment(4);
+			$data['tag_id'] = $tag_id;
 		}
+
 		switch ($voucher_type)
 		{
 		case 'all' :
@@ -54,7 +58,6 @@ class Voucher extends Controller {
 			$data['voucher_type'] = "";
 			break;
 		case 'tag' :
-			$this->load->model('Tag_model');
 			$tag_name = $this->Tag_model->tag_name($tag_id);
 			$this->template->set('page_title', 'Vouchers Tagged "' . $tag_name . '"');
 			$data['voucher_type'] = "";

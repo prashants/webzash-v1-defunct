@@ -162,3 +162,40 @@ ul#pagination-flickr {
 .dashboard-log-content {
 	padding:8px;
 }
+
+/******************************* TAGS *****************************************/
+#tag-sidebar {
+	float:right;
+	text-align:left;
+	width:120px;
+	border:1px solid #999999;	
+}
+
+#tag-sidebar .tag-title {
+	background-color:#EEEEEE;
+	font-weight:bold;
+	border-bottom:1px solid #999999;
+	padding:8px 8px 2px 8px;
+}
+
+#tag-sidebar .tag-title a {
+	font-weight:normal;
+	text-decoration:none;
+	font-size:12px;
+	color:#FF0000;
+}
+
+#tag-sidebar ul {
+	list-style:none;
+	margin:0;
+	padding:10px 10px 10px 10px;
+}
+
+#tag-sidebar ul li {
+	padding-bottom:5px;
+}
+
+#tag-sidebar ul li a.tag-active {
+	color:#0000FF;
+	text-decoration:none;
+}
