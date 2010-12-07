@@ -80,6 +80,10 @@
 	background-color:#FFFFE6;
 }
 
+.simple-table tr.tr-total {
+	background-color:#FFFFE6;
+}
+
 .simple-table a.red-link {
 	color:#FF0000;
 }
@@ -98,6 +102,10 @@
 
 .account-table .td-actions {
 	padding-right: 8px;
+}
+
+.trial-balance-table td {
+	padding-right: 20px;
 }
 
 .dashboard-cashbank-table {

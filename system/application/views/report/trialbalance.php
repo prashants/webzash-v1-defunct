@@ -2,7 +2,7 @@
 	$temp_dr_total = 0;
 	$temp_cr_total = 0;
 
-	echo "<table border=0 cellpadding=5 class=\"generaltable\">";
+	echo "<table border=0 cellpadding=5 class=\"simple-table trial-balance-table\">";
 	echo "<thead><tr><th>Ledger A/C</th><th>O/P Balance</th><th>C/L Balance</th><th>Dr Total</th><th>Cr Total</th></tr></thead>";
 	$this->load->model('Ledger_model');
 	$all_ledgers = $this->Ledger_model->get_all_ledgers();
@@ -57,6 +57,11 @@
 		echo "</tr>";
 		$odd_even = ($odd_even == "odd") ? "even" : "odd";
 	}
-	echo "<tr style=\"background-color:#F8F8F8;\"><td colspan=3>TOTAL</td><td>Dr " . convert_cur($temp_dr_total) . "</td><td>Cr " . convert_cur($temp_cr_total) . "</td></tr>";
+	echo "<tr class=\"tr-total\"><td colspan=3>TOTAL ";
+	if ($temp_dr_total == $temp_cr_total)
+		echo "<img src=\"" . asset_url() . "images/icons/match.png\">";
+	else
+		echo "<img src=\"" . asset_url() . "images/icons/nomatch.png\">";
+	echo "</td><td>Dr " . convert_cur($temp_dr_total) . "</td><td>Cr " . convert_cur($temp_cr_total) . "</td></tr>";
 	echo "</table>";
 
