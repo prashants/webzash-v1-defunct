@@ -19,6 +19,10 @@ class Voucher extends Controller {
 
 	function show($voucher_type)
 	{
+		if ($voucher_type == "tag")
+		{
+			$tag_id = (int)$this->uri->segment(4);	
+		}
 		switch ($voucher_type)
 		{
 		case 'all' :
@@ -49,6 +53,12 @@ class Voucher extends Controller {
 			$this->template->set('page_title', 'Draft Vouchers');
 			$data['voucher_type'] = "";
 			break;
+		case 'tag' :
+			$this->load->model('Tag_model');
+			$tag_name = $this->Tag_model->tag_name($tag_id);
+			$this->template->set('page_title', 'Vouchers Tagged "' . $tag_name . '"');
+			$data['voucher_type'] = "";
+			break;
 		default :
 			$this->messages->add('Invalid voucher type', 'error');
 			redirect('voucher/show/all');
@@ -62,17 +72,28 @@ class Voucher extends Controller {
 
 		/* Pagination setup */
 		$this->load->library('pagination');
-		$page_count = (int)$this->uri->segment(4);
+
+		if ($voucher_type == "tag")
+			$page_count = (int)$this->uri->segment(5);
+		else
+			$page_count = (int)$this->uri->segment(4);
+
 		$page_count = $this->input->xss_clean($page_count);
 		if ( ! $page_count)
 			$page_count = "0";
 
 		/* Pagination configuration */
+		if ($voucher_type == "tag")
+		{
+			$config['base_url'] = site_url('voucher/show/' . $voucher_type. "/" . $tag_id);
+			$config['uri_segment'] = 5;
+		} else {
+			$config['base_url'] = site_url('voucher/show/' . $voucher_type);
+			$config['uri_segment'] = 4;
+		}
 		$pagination_counter = $this->config->item('row_count');
-		$config['base_url'] = site_url('voucher/show/' . $voucher_type);
 		$config['num_links'] = 10;
 		$config['per_page'] = $pagination_counter;
-		$config['uri_segment'] = 4;
 		$config['full_tag_open'] = '<ul id="pagination-flickr">';
 		$config['full_close_open'] = '</ul>';
 		$config['num_tag_open'] = '<li>';
@@ -100,6 +121,9 @@ class Voucher extends Controller {
 		} else if ($voucher_type == "draft") {
 			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE draft = 1 ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}");
 			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE draft = 1")->num_rows();
+		}  else if ($voucher_type == "tag") {
+			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE tag_id = ? ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}", array($tag_id));
+			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE tag_id = ?", array($tag_id))->num_rows();
 		} else if ($voucher_type_int > 0) {
 			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE type = ? ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}", array($voucher_type_int));
 			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE type = ?", array($voucher_type_int))->num_rows();
