@@ -64,7 +64,7 @@ ul#pagination-flickr {
 	border:solid 1px #FFFFFF;
 }
 #pagination-flickr .active{
-	color:#ff0084;
+	color:#000000;
 	font-weight:bold;
 	display:block;
 	float:left;

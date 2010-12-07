@@ -120,13 +120,15 @@ class Voucher extends Controller {
 		/* Pagination initializing */
 		$this->pagination->initialize($config);
 
-		$html = "<table border=0 cellpadding=5 class=\"generaltable\">";
-		$html .= "<thead><tr><th>Date</th><th>Number</th><th>Ledger A/C</th><th>Type</th><th>Status</th><th>DR Amount</th><th>CR Amount</th><th colspan=5>Actions</th></tr></thead>";
+		$html = "<table border=0 cellpadding=5 class=\"simple-table\">";
+		$html .= "<thead><tr><th>Date</th><th>No</th><th>Ledger A/C</th><th>Type</th><th>Status</th><th>DR Amount</th><th>CR Amount</th><th></th></tr></thead>";
 		$html .= "<tbody>";
 
 		$odd_even = "odd";
 		foreach ($voucher_q->result() as $row)
 		{
+			$html_voucher_type = n_to_v($row->type);
+
 			$ledger_type = ($row->type == 2) ? "C" : "D";
 			$ledger_q = $this->db->query("SELECT ledgers.name as name FROM voucher_items join ledgers on voucher_items.ledger_id = ledgers.id WHERE voucher_items.voucher_id = ? AND voucher_items.dc = ?", array($row->id, $ledger_type));
 			$ledger_multiple = ($ledger_q->num_rows() > 1) ? TRUE : FALSE;
@@ -137,18 +139,17 @@ class Voucher extends Controller {
 			$html .= "\">";
 
 			$html .= "<td>" . date_mysql_to_php($row->date) . "</td>";
-			$html .= "<td>" . $row->number . "</td>";
+			$html .= "<td>" . anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, $row->number, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'blue-link')) . "</td>";
 
 			$html .= "<td>";
 			$html .= $this->Tag_model->show_voucher_tag($row->tag_id);
 			if ($ledger)
 				if ($ledger_multiple)
-					$html .= "(" . $ledger->name . ")";
+					$html .= anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, "( " . $ledger->name . " )", array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'blue-link'));
 				else
-					$html .= $ledger->name;
+					$html .= anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, $ledger->name, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'blue-link'));
 			$html .= "</td>";
 
-			$html_voucher_type = n_to_v($row->type);
 			$html .= "<td>" . ucfirst($html_voucher_type) . "</td>";
 			if ($row->draft == 0)
 				$html .= "<td>Active</td>";
@@ -157,15 +158,13 @@ class Voucher extends Controller {
 			$html .= "<td>" . $row->dr_total . "</td>";
 			$html .= "<td>" . $row->cr_total . "</td>";
 
-			$html .= "<td>" . anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/view.png", 'border' => '0', 'alt' => 'View ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
+			$html .= "<td>" . anchor('voucher/edit/' . strtolower($html_voucher_type) . "/" . $row->id , "Edit", array('title' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'red-link')) . " ";
 
-			$html .= "<td>" . anchor('voucher/edit/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
+			$html .= " &nbsp;" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Delete  ' . ucfirst($html_voucher_type) . ' Voucher')) . " ";
 
-			$html .= "<td>" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Delete  ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
+			$html .= " &nbsp;" . anchor_popup('voucher/printhtml/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')) . " ";
 
-			$html .= "<td>" . anchor_popup('voucher/printhtml/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
-
-			$html .= "<td>" . anchor_popup('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '500', 'height' => '300')) . "</td>";
+			$html .= " &nbsp;" . anchor_popup('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '500', 'height' => '300')) . "</td>";
 
 			$html .= "</tr>";
 			$odd_even = ($odd_even == "odd") ? "even" : "odd";

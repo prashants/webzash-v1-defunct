@@ -19,23 +19,23 @@
 	background:none repeat scroll 0 0 #F8FBFC;
 }
 
-tr.tr-odd {
+.generaltable tr.tr-odd {
 	background:none repeat scroll 0 0 #E5F1F4;
 }
 
-tr.tr-even {
+.generaltable tr.tr-even {
 	background:none repeat scroll 0 0 #F8FBFC;
 }
 
-tr.tr-balance {
+.generaltable tr.tr-balance {
 	background:none repeat scroll 0 0 #FFF8C6;
 }
 
-tr.tr-draft {
+.generaltable tr.tr-draft {
 	background:none repeat scroll 0 0 #DDDDDD;
 }
 
-tr.new-row {
+.generaltable tr.new-row {
 	background:none repeat scroll 0 0 #EEEEEE;
 }
 
@@ -43,4 +43,44 @@ tr.new-row {
 	background:none repeat scroll 0 0 #0099CC;
 	color:#FFFFFF;
 	font-weight:bold;
+}
+
+/******************************************************************************/
+/******************************* SIMPLE TABLE *********************************/
+/******************************************************************************/
+
+.simple-table
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	border-collapse: collapse;
+	text-align: left;
+}
+.simple-table th
+{
+	font-size: 12px;
+	font-weight: normal;
+	color: #000000;
+	padding: 5px 8px;
+	border-bottom: 1px solid #999999;
+	border-top: 1px solid #999999;
+	background-color:#EEEEEE;
+}
+.simple-table td
+{
+	border-bottom: 1px solid #BBBBBB;
+	color: #000000;
+	padding: 8px 8px 8px 8px;
+}
+
+.simple-table tr.tr-draft {
+	background-color:#FAF8CC;
+}
+
+.simple-table a.red-link {
+	color:#FF0000;
+}
+
+.simple-table a.blue-link {
+	color:#1A2745;
 }
