@@ -65,7 +65,7 @@
 
 		echo "<table border=0 cellpadding=5 class=\"simple-table ledgerst-table\">";
 
-		echo "<thead><tr><th>DATE</th><th>NUMBER</th><th>STATUS</th><th>TYPE</th><th>DR AMOUNT</th><th>CR AMOUNT</th><th>BALANCE</th></tr></thead>";
+		echo "<thead><tr><th>DATE</th><th>NO.</th><th>LEDGER NAME</th><th>STATUS</th><th>TYPE</th><th>DR AMOUNT</th><th>CR AMOUNT</th><th>BALANCE</th></tr></thead>";
 		$odd_even = "odd";
 
 		$cur_balance = 0;
@@ -75,10 +75,10 @@
 			/* Opening balance */
 			if ($optype == "D")
 			{
-				echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>" . convert_dc($optype) . " " . $opbalance . "</td></tr>";
+				echo "<tr class=\"tr-balance\"><td colspan=7>Opening Balance</td><td>" . convert_dc($optype) . " " . $opbalance . "</td></tr>";
 				$cur_balance += $opbalance;
 			} else {
-				echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>" . convert_dc($optype) . " " . $opbalance . "</td></tr>";
+				echo "<tr class=\"tr-balance\"><td colspan=7>Opening Balance</td><td>" . convert_dc($optype) . " " . $opbalance . "</td></tr>";
 				$cur_balance -= $opbalance;
 			}
 		} else {
@@ -106,9 +106,9 @@
 			/* Show new current total */
 			if ($cur_balance < 0)
 			{
-				echo "<tr class=\"tr-balance\"><td colspan=6>Opening</td><td>Cr " . convert_cur(-$cur_balance) . "</td></tr>";
+				echo "<tr class=\"tr-balance\"><td colspan=7>Opening</td><td>Cr " . convert_cur(-$cur_balance) . "</td></tr>";
 			} else {
-				echo "<tr class=\"tr-balance\"><td colspan=6>Opening</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
+				echo "<tr class=\"tr-balance\"><td colspan=7>Opening</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
 			}
 		}
 
@@ -123,6 +123,39 @@
 			echo "<td>";
 			echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $row->vnumber, array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
 			echo "</td>";
+
+			/* Getting opposite Ledger name */
+			echo "<td>";
+			if ($row->ldc == "D")
+			{
+
+				if ($opp_voucher_name_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? AND dc = ?",  array($row->vid, "C")))
+				{
+					$opp_voucher_name_d = $opp_voucher_name_q->row();
+					$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
+					if ($opp_voucher_name_q->num_rows() > 1)
+					{
+						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
+					} else {
+						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
+					}
+				}
+			} else {
+				if ($opp_voucher_name_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? AND dc = ?",  array($row->vid, "D")))
+				{
+					$opp_voucher_name_d = $opp_voucher_name_q->row();
+					$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
+					if ($opp_voucher_name_q->num_rows() > 1)
+					{
+						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
+					} else {
+						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
+					}
+				}
+
+			}
+			echo "</td>";
+
 			echo "<td>";
 			echo ($row->vdraft == 1) ? "Draft" : "Active";
 			echo "</td>";
@@ -162,9 +195,9 @@
 		/* Current Page Closing Balance */
 		if ($cur_balance < 0)
 		{
-			echo "<tr class=\"tr-balance\"><td colspan=6>Closing</td><td>Cr " .  convert_cur(-$cur_balance) . "</td></tr>";
+			echo "<tr class=\"tr-balance\"><td colspan=7>Closing</td><td>Cr " .  convert_cur(-$cur_balance) . "</td></tr>";
 		} else {
-			echo "<tr class=\"tr-balance\"><td colspan=6>Closing</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
+			echo "<tr class=\"tr-balance\"><td colspan=7>Closing</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
 		}
 
 		echo "</table>";
