@@ -85,6 +85,7 @@ $(document).ready(function() {
 					<li><?php echo anchor('voucher/show/payment', 'Payment', array('title' => 'Payment Vouchers')); ?></li>
 					<li><?php echo anchor('voucher/show/contra', 'Contra', array('title' => 'Contra Vouchers')); ?></li>
 					<li><?php echo anchor('voucher/show/journal', 'Journal', array('title' => 'Journal Vouchers')); ?></li>
+					<li><?php echo anchor('voucher/show/draft', 'Draft', array('title' => 'Draft Vouchers')); ?></li>
 				</ul>
 			</li>
 			<li>

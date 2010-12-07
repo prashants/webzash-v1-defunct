@@ -24,31 +24,30 @@ class Voucher extends Controller {
 		case 'all' :
 			$this->template->set('page_title', 'All Vouchers');
 			$data['voucher_type'] = "";
-			$data['voucher_table'] = $this->_show_voucher();
 			break;
 		case 'receipt' :
 			$this->template->set('page_title', 'Receipt Vouchers');
 			$this->template->set('nav_links', array('voucher/add/receipt' => 'New Receipt Voucher'));
 			$data['voucher_type'] = "receipt";
-			$data['voucher_table'] = $this->_show_voucher(1);
 			break;
 		case 'payment' :
 			$this->template->set('page_title', 'Payment Vouchers');
 			$this->template->set('nav_links', array('voucher/add/payment' => 'New Payment Voucher'));
 			$data['voucher_type'] = "payment";
-			$data['voucher_table'] = $this->_show_voucher(2);
 			break;
 		case 'contra' :
 			$this->template->set('page_title', 'Contra Vouchers');
 			$this->template->set('nav_links', array('voucher/add/contra' => 'New Contra Voucher'));
 			$data['voucher_type'] = "contra";
-			$data['voucher_table'] = $this->_show_voucher(3);
 			break;
 		case 'journal' :
 			$this->template->set('page_title', 'Journal Vouchers');
 			$this->template->set('nav_links', array('voucher/add/journal' => 'New Journal Voucher'));
 			$data['voucher_type'] = "journal";
-			$data['voucher_table'] = $this->_show_voucher(4);
+			break;
+		case 'draft' :
+			$this->template->set('page_title', 'Draft Vouchers');
+			$data['voucher_type'] = "";
 			break;
 		default :
 			$this->messages->add('Invalid voucher type', 'error');
@@ -56,32 +55,21 @@ class Voucher extends Controller {
 			return;
 			break;
 		}
-		$this->template->load('template', 'voucher/index', $data);
-		return;
-	}
 
-	function _show_voucher($voucher_type = NULL)
-	{
+		$voucher_type_int = v_to_n($voucher_type);
+
 		$voucher_q = NULL;
 
 		/* Pagination setup */
 		$this->load->library('pagination');
 		$page_count = (int)$this->uri->segment(4);
 		$page_count = $this->input->xss_clean($page_count);
-		if ( ! $page_count) $page_count = "0";
-		$voucher_type_link = "";
-		switch ($voucher_type)
-		{
-			case 1: $voucher_type_link = "receipt"; break;
-			case 2: $voucher_type_link = "payment"; break;
-			case 3: $voucher_type_link = "contra"; break;
-			case 4: $voucher_type_link = "journal"; break;
-			default: $voucher_type_link = "all"; break;
-		}
+		if ( ! $page_count)
+			$page_count = "0";
 
 		/* Pagination configuration */
 		$pagination_counter = $this->config->item('row_count');
-		$config['base_url'] = site_url('voucher/show/' . $voucher_type_link);
+		$config['base_url'] = site_url('voucher/show/' . $voucher_type);
 		$config['num_links'] = 10;
 		$config['per_page'] = $pagination_counter;
 		$config['uri_segment'] = 4;
@@ -104,14 +92,17 @@ class Voucher extends Controller {
 		$config['last_tag_open'] = '<li class="last">';
 		$config['last_tag_close'] = '</li>';
 
-		if ($voucher_type > 5)
+		if ($voucher_type_int > 5)
 		{
 			$this->messages->add('Invalid voucher type', 'error');
 			redirect('voucher/show/all');
 			return;
-		} else if ($voucher_type > 0) {
-			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE type = ? ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}", array($voucher_type));
-			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE type = ?", array($voucher_type))->num_rows();
+		} else if ($voucher_type == "draft") {
+			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE draft = 1 ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}");
+			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE draft = 1")->num_rows();
+		} else if ($voucher_type_int > 0) {
+			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE type = ? ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}", array($voucher_type_int));
+			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE type = ?", array($voucher_type_int))->num_rows();
 		} else {
 			$voucher_q = $this->db->query("SELECT * FROM vouchers ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}");
 			$config['total_rows'] = $this->db->count_all('vouchers');
@@ -129,6 +120,7 @@ class Voucher extends Controller {
 		{
 			$html_voucher_type = n_to_v($row->type);
 
+			/* Showing the credit ledger name for payment and debit for other voucher types */
 			$ledger_type = ($row->type == 2) ? "C" : "D";
 			$ledger_q = $this->db->query("SELECT ledgers.name as name FROM voucher_items join ledgers on voucher_items.ledger_id = ledgers.id WHERE voucher_items.voucher_id = ? AND voucher_items.dc = ?", array($row->id, $ledger_type));
 			$ledger_multiple = ($ledger_q->num_rows() > 1) ? TRUE : FALSE;
@@ -171,7 +163,11 @@ class Voucher extends Controller {
 		}
 		$html .= "</tbody>";
 		$html .= "</table>";
-		return $html;
+		$data['voucher_table'] = $html;
+
+		$this->template->load('template', 'voucher/index', $data);
+		return;
+
 	}
 
 	function view($voucher_type, $voucher_id = 0)
