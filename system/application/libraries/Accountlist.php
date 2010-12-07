@@ -128,17 +128,20 @@ class Accountlist
 		$this->counter = $c;
 		if ($this->id != 0)
 		{
-			echo "<tr class=\"group-tr\">";
-			echo "<td class=\"group-td\">";
+			echo "<tr class=\"tr-group\">";
+			echo "<td class=\"td-group\">";
 			echo $this->print_space($this->counter);
-			echo "&nbsp;" . $this->name;
+			if ($this->id <= 4)
+				echo "&nbsp;<strong>" .  $this->name. "</strong>";
+			else
+				echo "&nbsp;" .  $this->name;
 			echo "</td>";
 			echo "<td>Group A/C</td>";
 			echo "<td>-</td>";
 			echo "<td>-</td>";
 
-			echo "<td>" . anchor('group/edit/' . $this->id , img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit group')), array('title' => "Edit Group")) . "</td>";
-			echo "<td>" . anchor('group/delete/' . $this->id, img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete group')), array('class' => "confirmClick", 'title' => "Delete Group")) . "</td>";
+			echo "<td class=\"td-actions\">" . anchor('group/edit/' . $this->id , "Edit", array('title' => 'Edit Group', 'class' => 'red-link'));
+			echo " &nbsp;" . anchor('group/delete/' . $this->id, img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete group')), array('class' => "confirmClick", 'title' => "Delete Group")) . "</td>";
 			echo "</tr>";
 		}
 		foreach ($this->children_groups as $id => $data)
@@ -152,8 +155,8 @@ class Accountlist
 			$this->counter++;
 			foreach ($this->children_ledgers as $id => $data)
 			{
-				echo "<tr class=\"ledger-tr\">";
-				echo "<td class=\"ledger-td\">";
+				echo "<tr class=\"tr-ledger\">";
+				echo "<td class=\"td-ledger\">";
 				echo $this->print_space($this->counter);
 				echo "&nbsp;" . anchor('report/ledgerst/' . $data['id'], $data['name'], array('title' => $data['name'] . ' Ledger Statement', 'style' => 'color:#000000'));
 				echo "</td>";
@@ -181,8 +184,8 @@ class Accountlist
 				}
 				echo "</td>";
 
-				echo "<td>" . anchor('ledger/edit/' . $data['id'], img(array('src' => asset_url() . "images/icons/edit.png", 'border' => '0', 'alt' => 'Edit Ledger')), array('title' => "Edit Ledger")) . "</td>";
-				echo "<td>" . anchor('ledger/delete/' . $data['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Ledger')), array('class' => "confirmClick", 'title' => "Delete Ledger")) . "</td>";
+				echo "<td class=\"td-actions\">" . anchor('ledger/edit/' . $data['id'], 'Edit', array('title' => "Edit Ledger", 'class' => 'red-link'));
+				echo " &nbsp;" . anchor('ledger/delete/' . $data['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Ledger')), array('class' => "confirmClick", 'title' => "Delete Ledger")) . "</td>";
 				echo "</tr>";
 			}
 			$this->counter--;

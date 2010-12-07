@@ -52,13 +52,12 @@
 .simple-table
 {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size: 12px;
+	font-size: 13px;
 	border-collapse: collapse;
 	text-align: left;
 }
 .simple-table th
 {
-	font-size: 12px;
 	font-weight: normal;
 	color: #000000;
 	padding: 5px 8px;
@@ -74,7 +73,11 @@
 }
 
 .simple-table tr.tr-draft {
-	background-color:#FAF8CC;
+	background-color:#FFFFE6;
+}
+
+.simple-table tr.tr-group td {
+	background-color:#FFFFE6;
 }
 
 .simple-table a.red-link {
@@ -83,4 +86,16 @@
 
 .simple-table a.blue-link {
 	color:#1A2745;
+}
+
+/******************************************************************************/
+/****************************** CUSTOM TABLES *********************************/
+/******************************************************************************/
+
+.account-table td {
+	padding-right: 30px;
+}
+
+.account-table .td-actions {
+	padding-right: 8px;
 }
