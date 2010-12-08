@@ -145,7 +145,7 @@
 .trial-balance-table td {
 	padding-right: 20px;
 }
-
+                      
 /* balance sheet */
 .balance-sheet-table {
 	border:1px solid #BBBBBB;	
@@ -234,4 +234,8 @@
 
 .ledger-summary td {
 	padding: 8px 8px 8px 8px;
+}
+
+.manage-account-table td {
+	padding-right: 20px;
 }

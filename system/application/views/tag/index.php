@@ -1,7 +1,7 @@
 <?php
 	$tags_q = $this->db->get("tags");
 	echo "<table border=0 cellpadding=5 class=\"simple-table tag-table\">";
-	echo "<thead><tr><th>Title</th><th>Color</th><th colspan=5></th></tr></thead>";
+	echo "<thead><tr><th>Title</th><th>Color</th><th></th></tr></thead>";
 	echo "<tbody>";
 	$odd_even = "odd";
 	foreach ($tags_q->result() as $row)

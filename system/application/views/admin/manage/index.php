@@ -4,8 +4,8 @@ echo "<b>Currently active account : </b>";
 echo $this->session->userdata('db_active_label');
 echo "</p>";
 
-echo "<table border=0 cellpadding=5 class=\"generaltable\">";
-echo "<thead><tr><th>Label</th><th>Hostname</th><th>Port</th><th>Database</th><th>Username</th><th>Actions</th></tr></thead>";
+echo "<table border=0 cellpadding=5 class=\"simple-table manage-account-table\">";
+echo "<thead><tr><th>Label</th><th>Hostname</th><th>Port</th><th>Database</th><th>Username</th><th></th></tr></thead>";
 echo "<tbody>";
 $odd_even = "odd";
 foreach ($accounts as $label)
@@ -37,7 +37,10 @@ foreach ($accounts as $label)
 	echo "<td>" . $db_port . "</td>";
 	echo "<td>" . $db_name . "</td>";
 	echo "<td>" . $db_user . "</td>";
-	echo "<td>" . anchor("admin/active/index/" . $label, "Activate", array('title' => 'Activate ' . ucfirst($label) . ' Account', 'style' => 'color:#000000;')) . "</td>";
+	if ($this->session->userdata('db_active_label') == $label)
+		echo "<td>Active</td>";
+	else
+		echo "<td>" . anchor("admin/active/index/" . $label, "Activate", array('title' => 'Activate ' . ucfirst($label) . ' Account', 'class' => 'red-link')) . "</td>";
 	echo "</tr>";
 	$odd_even = ($odd_even == "odd") ? "even" : "odd";
 }
