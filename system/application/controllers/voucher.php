@@ -945,6 +945,8 @@ class Voucher extends Controller {
 		echo '<td>';
 		echo img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow'));
 		echo '</td>';
+		echo '<td class="ledger-balance"><div></div>';
+		echo '</td>';
 		echo '</tr>';
 		return;
 	}
