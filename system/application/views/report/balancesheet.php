@@ -7,8 +7,8 @@
 	$liability = new Accountlist();
 	echo "<td>";
 	$liability->init(2);
-	echo "<table border=0 cellpadding=5 class=\"generaltable\" width=\"450\">";
-	echo "<thead><tr><th>Liabilities</th><th>Amount</th></tr></thead>";
+	echo "<table border=0 cellpadding=5 class=\"simple-table balance-sheet-table\" width=\"450\">";
+	echo "<thead><tr><th>Liabilities</th><th align=\"right\">Amount</th></tr></thead>";
 	$liability->account_st_short(0);
 	echo "</table>";
 	echo "</td>";
@@ -17,8 +17,8 @@
 	$asset = new Accountlist();
 	echo "<td>";
 	$asset->init(1);
-	echo "<table border=0 cellpadding=5 class=\"generaltable\" width=\"450\">";
-	echo "<thead><tr><th>Assets</th><th>Amount</th></tr></thead>";
+	echo "<table border=0 cellpadding=5 class=\"simple-table balance-sheet-table\" width=\"450\">";
+	echo "<thead><tr><th>Assets</th><th align=\"right\">Amount</th></tr></thead>";
 	$asset->account_st_short(0);
 	echo "</table>";
 	echo "</td>";
@@ -44,7 +44,7 @@
 
 	echo "<tr style=\"background-color:#F8F8F8;\">";
 	echo "<td>";
-	echo "<table border=0 cellpadding=5 class=\"vouchertable\" width=\"450\">";
+	echo "<table border=0 cellpadding=5 class=\"balance-sheet-total-table\" width=\"450\">";
 	echo "<tr valign=\"top\">";
 	echo "<td class=\"bold\">Liability Total</td>";
 	echo "<td align=\"right\" class=\"bold\">" . convert_cur($liability_total) . "</td>";
@@ -98,7 +98,7 @@
 	$total = $asset_total;
 
 	echo "<td>";
-	echo "<table border=0 cellpadding=5 class=\"vouchertable\" width=\"450\">";
+	echo "<table border=0 cellpadding=5 class=\"balance-sheet-total-table\" width=\"450\">";
 	echo "<tr valign=\"top\">";
 	echo "<td class=\"bold\">Asset Total</td>";
 	echo "<td align=\"right\" class=\"bold\">" . convert_cur($asset_total) . "</td>";

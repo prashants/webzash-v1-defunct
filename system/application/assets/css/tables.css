@@ -107,6 +107,31 @@
 	padding-right: 20px;
 }
 
+.balance-sheet-table {
+	border:1px solid #BBBBBB;	
+}
+
+.balance-sheet-table td {
+	border:1px solid #EEEEEE;	
+}
+
+.balance-sheet-table tr.tr-group td {
+	background-color:#FFFFF0;
+}
+
+.balance-sheet-total-table {
+	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size:13px;
+	border-collapse:collapse;
+	text-align:left;	
+}
+
+.balance-sheet-total-table td {
+	border-bottom:1px solid #FFFFFF;
+	color:#000000;
+	padding:8px 8px 8px 8px;
+}
+
 .dashboard-cashbank-table {
 	border-collapse: collapse;
 	text-align: left;

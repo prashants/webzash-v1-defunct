@@ -66,13 +66,14 @@ class Accountlist
 		}
 	}
 
+	/* Display Account list in Balance sheet and Profit and Loss st */
 	function account_st_short($c = 0)
 	{
 		$this->counter = $c;
 		if ($this->id != 0)
 		{
-			echo "<tr class=\"group-tr\">";
-			echo "<td class=\"group-td\">";
+			echo "<tr class=\"tr-group\">";
+			echo "<td class=\"td-group\">";
 			echo $this->print_space($this->counter);
 			echo "&nbsp;" .  $this->name;
 			echo "</td>";
@@ -100,8 +101,8 @@ class Accountlist
 			$this->counter++;
 			foreach ($this->children_ledgers as $id => $data)
 			{
-				echo "<tr class=\"ledger-tr\">";
-				echo "<td class=\"ledger-td\">";
+				echo "<tr class=\"tr-ledger\">";
+				echo "<td class=\"td-ledger\">";
 				echo $this->print_space($this->counter);
 				echo "&nbsp;" . anchor('report/ledgerst/' . $data['id'], $data['name'], array('title' => $data['name'] . ' Ledger Statement', 'style' => 'color:#000000'));
 				echo "</td>";
