@@ -3,7 +3,7 @@
 Voucher Date : <span class="bold"><?php echo date_mysql_to_php($cur_voucher->date); ?></span>
 </p>
 
-<table border=0 cellpadding=5 class="generaltable">
+<table border=0 cellpadding=5 class="simple-table voucher-view-table">
 <thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>
 <?php
 $odd_even = "odd";
@@ -14,26 +14,25 @@ foreach ($cur_voucher_ledgers->result() as $row)
 	echo "<td>" . $this->Ledger_model->get_name($row->ledger_id) . "</td>";
 	if ($row->dc == "D")
 	{
-		echo "<td>" . $row->amount . "</td>";
+		echo "<td>Dr " . $row->amount . "</td>";
 		echo "<td></td>";
 	} else {
 		echo "<td></td>";
-		echo "<td>" . $row->amount . "</td>";
+		echo "<td>Cr " . $row->amount . "</td>";
 	}
 	echo "</tr>";
 	$odd_even = ($odd_even == "odd") ? "even" : "odd";
 }
 ?>
-<tr><td colspan=4><hr /></td></tr>
-<tr id="total"><td colspan=2>TOTAL</td><td id=dr-total><?php echo $cur_voucher->dr_total; ?></td><td id=cr-total"><?php echo $cur_voucher->cr_total; ?></td></tr>
+<tr class="voucher-total"><td colspan=2><strong>Total</strong></td><td id=dr-total>Dr <?php echo $cur_voucher->dr_total; ?></td><td id=cr-total">Cr <?php echo $cur_voucher->cr_total; ?></td></tr>
 <?php
 if ($cur_voucher->dr_total != $cur_voucher->cr_total)
 {
 	$difference = $cur_voucher->dr_total - $cur_voucher->cr_total;
 	if ($difference < 0)
-		echo "<tr id=\"difference\"><td colspan=2>DIFFERENCE</td><td id=\"dr-diff\"></td><td id=\"cr-diff\">" . $cur_voucher->cr_total . "</td></tr>";
+		echo "<tr class=\"voucher-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\"></td><td id=\"cr-diff\">" . $cur_voucher->cr_total . "</td></tr>";
 	else
-		echo "<tr id=\"difference\"><td colspan=2>DIFFERENCE</td><td id=\"dr-diff\">" .  $cur_voucher->dr_total .  "</td><td id=\"cr-diff\"></td></tr>";
+		echo "<tr class=\"voucher-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\">" .  $cur_voucher->dr_total .  "</td><td id=\"cr-diff\"></td></tr>";
 }
 ?>
 </table>

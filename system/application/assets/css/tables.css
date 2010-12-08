@@ -130,6 +130,18 @@
 	padding-right: 8px;
 }
 
+.voucher-view-table td {
+	padding-right: 30px;
+}
+
+.voucher-view-table tr.voucher-total {
+	background-color:#FFFFE0;
+}
+
+.voucher-view-table tr.voucher-difference {
+	background-color:#FFE9E8;
+}
+
 .trial-balance-table td {
 	padding-right: 20px;
 }
@@ -140,7 +152,7 @@
 }
 
 .balance-sheet-table td {
-	border:1px solid #EEEEEE;	
+	border:1px solid #EEEEEE;
 }
 
 .balance-sheet-table tr.tr-group td {
