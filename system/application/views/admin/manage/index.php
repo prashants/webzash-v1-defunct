@@ -5,7 +5,7 @@ echo $this->session->userdata('db_active_label');
 echo "</p>";
 
 echo "<table border=0 cellpadding=5 class=\"simple-table manage-account-table\">";
-echo "<thead><tr><th>Label</th><th>Hostname</th><th>Port</th><th>Database</th><th>Username</th><th></th></tr></thead>";
+echo "<thead><tr><th>Label</th><th>Hostname</th><th>Port</th><th>Database</th><th>Username</th><th></th><th></th></tr></thead>";
 echo "<tbody>";
 $odd_even = "odd";
 foreach ($accounts as $label)
@@ -37,10 +37,18 @@ foreach ($accounts as $label)
 	echo "<td>" . $db_port . "</td>";
 	echo "<td>" . $db_name . "</td>";
 	echo "<td>" . $db_user . "</td>";
+
+	echo "<td>";
 	if ($this->session->userdata('db_active_label') == $label)
-		echo "<td>Active</td>";
+		echo "Active";
 	else
-		echo "<td>" . anchor("admin/active/index/" . $label, "Activate", array('title' => 'Activate ' . ucfirst($label) . ' Account', 'class' => 'red-link')) . "</td>";
+		echo anchor("admin/active/index/" . $label, "Activate", array('title' => 'Activate ' . ucfirst($label) . ' Account', 'class' => 'red-link'));
+	echo "</td>";
+	echo "<td>";
+	echo anchor("admin/manage/edit/" . $label, "Edit", array('title' => 'Edit ' . ucfirst($label) . ' Account', 'class' => 'red-link'));
+	echo " &nbsp;" . anchor('admin/manage/delete/' .  $label, img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Account Settings', 'class' => "confirmClick", 'title' => "Delete Account Settings")), array('title' => 'Delete Account Settings')) . " ";
+	echo "</td>";
+
 	echo "</tr>";
 	$odd_even = ($odd_even == "odd") ? "even" : "odd";
 }

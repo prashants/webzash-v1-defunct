@@ -104,14 +104,15 @@ body {
 	margin:0 18px 0 0;
 }
 
-#content #main ul#main-links-nav li a
-{
-	color:#000000;
-	font-size:100%;
-	background-color:#EEE;
-	border:1px solid;
-	border-color: #696 #363 #363 #696;
-	padding:3px;
+#content #main ul#main-links-nav li a {
+	-moz-border-radius:3px 3px 3px 3px;
+	border-radius:3px 3px 3px 3px;
+	background:repeat-x scroll 0 0 transparent;
+	color:#FFFFFF;
+	font-size:11px;
+	font-weight:bold;
+	padding:4px 10px;
+	text-shadow:-1px -1px 0 #333333;
 	text-decoration:none;
 }
 
