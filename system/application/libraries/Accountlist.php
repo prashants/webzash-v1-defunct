@@ -140,8 +140,13 @@ class Accountlist
 			echo "<td>-</td>";
 			echo "<td>-</td>";
 
-			echo "<td class=\"td-actions\">" . anchor('group/edit/' . $this->id , "Edit", array('title' => 'Edit Group', 'class' => 'red-link'));
-			echo " &nbsp;" . anchor('group/delete/' . $this->id, img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete group')), array('class' => "confirmClick", 'title' => "Delete Group")) . "</td>";
+			if ($this->id <= 4)
+			{
+				echo "<td class=\"td-actions\"></tr>";
+			} else {
+				echo "<td class=\"td-actions\">" . anchor('group/edit/' . $this->id , "Edit", array('title' => 'Edit Group', 'class' => 'red-link'));
+				echo " &nbsp;" . anchor('group/delete/' . $this->id, img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete group')), array('class' => "confirmClick", 'title' => "Delete Group")) . "</td>";
+			}
 			echo "</tr>";
 		}
 		foreach ($this->children_groups as $id => $data)

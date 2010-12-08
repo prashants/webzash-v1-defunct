@@ -87,7 +87,7 @@ jQuery(document).ready(function () {
 		<div class="dashboard-title">Account Summary</div>
 		<div class="dashboard-content">
 			<div>Welcome back, <strong><?php echo $this->config->item('account_name');?> !</strong></div>
-			<div id="dashboard-draft">You have <?php echo $draft_count;?> draft voucher(s)</div>
+			<div id="dashboard-draft">You have <?php echo anchor("voucher/show/draft", $draft_count . " draft", array('class' => 'black-link')); ?> voucher(s)</div>
 		</div>
 	</div>
 	<div class="clear"></div>
