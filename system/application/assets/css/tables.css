@@ -107,6 +107,7 @@
 	padding-right: 20px;
 }
 
+/* balance sheet */
 .balance-sheet-table {
 	border:1px solid #BBBBBB;	
 }
@@ -127,6 +128,32 @@
 }
 
 .balance-sheet-total-table td {
+	border-bottom:1px solid #FFFFFF;
+	color:#000000;
+	padding:8px 8px 8px 8px;
+}
+
+/* profit and loss */
+.profit-loss-table {
+	border:1px solid #BBBBBB;	
+}
+
+.profit-loss-table td {
+	border:1px solid #EEEEEE;	
+}
+
+.profit-loss-table tr.tr-group td {
+	background-color:#FFFFF0;
+}
+
+.profit-loss-total-table {
+	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size:13px;
+	border-collapse:collapse;
+	text-align:left;	
+}
+
+.profit-loss-total-table td {
 	border-bottom:1px solid #FFFFFF;
 	color:#000000;
 	padding:8px 8px 8px 8px;
