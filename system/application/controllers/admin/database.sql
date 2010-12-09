@@ -42,6 +42,11 @@ CREATE TABLE IF NOT EXISTS settings (
   print_page_format varchar(1) NOT NULL,
   print_page_layout text NOT NULL,
   print_logo varchar(255) NOT NULL,
+  receipt_voucher_prefix varchar(10) NOT NULL,
+  payment_voucher_prefix varchar(10) NOT NULL,
+  contra_voucher_prefix varchar(10) NOT NULL,
+  journal_voucher_prefix varchar(10) NOT NULL,
+  voucher_number_padding int(5) NOT NULL,
   database_version int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
