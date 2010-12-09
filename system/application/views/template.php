@@ -54,7 +54,7 @@ $(document).ready(function() {
 <div id="container">
 	<div id="header">
 		<div id="logo">
-			Webzash
+			Webzash <span style="font-size:18px;color:#00000;">(beta)</span>
 		</div>
 		<div id="admin">
 			<?php echo anchor('admin', 'Administer', array('title' => "Administer", 'style' => 'color:#000000; text-decoration:none')); ?>
