@@ -10,6 +10,10 @@ class Accountlist
 	var $children_groups = array();
 	var $children_ledgers = array();
 	var $counter = 0;
+	public static $temp_max = 0;
+	public static $max_depth = 0;
+	public static $csv_data = array();
+	public static $csv_row = 0;
 
 	function Accountlist()
 	{
@@ -197,6 +201,7 @@ class Accountlist
 			$this->counter--;
 		}
 	}
+
 	function print_space($count)
 	{
 		$html = "";
@@ -205,6 +210,162 @@ class Accountlist
 			$html .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		}
 		return $html;
+	}
+	
+	/* Build a array of groups and ledgers */
+	function build_array()
+	{
+		$item = array(
+			'id' => $this->id,
+			'name' => $this->name,
+			'type' => "G",
+			'total' => $this->total,
+			'child_groups' => array(),
+			'child_ledgers' => array(),
+			'depth' => self::$temp_max,
+		);
+		$local_counter = 0;
+		if (count($this->children_groups) > 0)
+		{
+			self::$temp_max++;
+			if (self::$temp_max > self::$max_depth)
+				self::$max_depth = self::$temp_max;
+			foreach ($this->children_groups as $id => $data)
+			{
+				$item['child_groups'][$local_counter] = $data->build_array();
+				$local_counter++;
+			}
+			self::$temp_max--;
+		}
+		$local_counter = 0;
+		if (count($this->children_ledgers) > 0)
+		{
+			self::$temp_max++;
+			foreach ($this->children_ledgers as $id => $data)
+			{
+				$item['child_ledgers'][$local_counter] = array(
+					'id' => $data['id'],
+					'name' => $data['name'],
+					'type' => "L",
+					'total' => $data['total'],
+					'child_groups' => array(),
+					'child_ledgers' => array(),
+					'depth' => self::$temp_max,
+				);
+				$local_counter++;
+			}
+			self::$temp_max--;
+		}
+		return $item;
+	}
+
+	/* Show array of groups and ledgers as created by build_array() method */
+	function show_array($data)
+	{
+		echo "<tr>";
+		echo "<td>";
+		echo $this->print_space($data['depth']);
+		echo $data['depth'] . "-";
+		echo $data['id'];
+		echo $data['name'];
+		echo $data['type'];
+		echo $data['total'];
+		if ($data['child_ledgers'])
+		{
+			foreach ($data['child_ledgers'] as $id => $ledger_data)
+			{
+				$this->show_array($ledger_data);
+			}
+		}
+		if ($data['child_groups'])
+		{
+			foreach ($data['child_groups'] as $id => $group_data)
+			{
+				$this->show_array($group_data);
+			}
+		}
+		echo "</td>";
+		echo "</tr>";
+	}
+
+	function to_csv($data)
+	{
+		$counter = 0;
+		while ($counter < $data['depth'])
+		{
+			self::$csv_data[self::$csv_row][$counter] = "";
+			$counter++;
+		}
+
+		self::$csv_data[self::$csv_row][$counter] = $data['name'];
+		$counter++;
+
+		while ($counter < self::$max_depth + 3)
+		{
+			self::$csv_data[self::$csv_row][$counter] = "";
+			$counter++;
+		}
+		self::$csv_data[self::$csv_row][$counter] = $data['type'];
+		$counter++;
+
+		if ($data['total'] == 0)
+		{
+			self::$csv_data[self::$csv_row][$counter] = "";
+			$counter++;
+			self::$csv_data[self::$csv_row][$counter] = "";
+		} else if ($data['total'] < 0) {
+			self::$csv_data[self::$csv_row][$counter] = "Cr";
+			$counter++;
+			self::$csv_data[self::$csv_row][$counter] = -$data['total'];
+		} else {
+			self::$csv_data[self::$csv_row][$counter] = "Dr";
+			$counter++;
+			self::$csv_data[self::$csv_row][$counter] = $data['total'];
+		}
+
+		if ($data['child_ledgers'])
+		{
+			foreach ($data['child_ledgers'] as $id => $ledger_data)
+			{
+				self::$csv_row++;
+				$this->to_csv($ledger_data);
+			}
+		}
+		if ($data['child_groups'])
+		{
+			foreach ($data['child_groups'] as $id => $group_data)
+			{
+				self::$csv_row++;
+				$this->to_csv($group_data);
+			}
+		}
+	}
+
+	public static function get_csv()
+	{
+		return self::$csv_data;
+	}
+	
+	public static function add_blank_csv()
+	{
+		self::$csv_row++;
+		self::$csv_data[self::$csv_row] = array("", "");
+		self::$csv_row++;
+		self::$csv_data[self::$csv_row] = array("", "");
+		return;
+	}
+	
+	public static function add_row_csv($row = array(""))
+	{
+		self::$csv_row++;
+		self::$csv_data[self::$csv_row] = $row;
+		return;
+	}
+
+	public static function reset_max_depth()
+	{
+		self::$max_depth = 0;
+		self::$temp_max = 0;
 	}
 }
 

@@ -20,6 +20,7 @@ class Report extends Controller {
 	function balancesheet($period = NULL)
 	{
 		$this->template->set('page_title', 'Balance Sheet');
+		$this->template->set('nav_links', array('report/download/balancesheet' => 'Download CSV'));
 		$this->template->load('template', 'report/balancesheet');
 		return;
 	}
@@ -323,6 +324,99 @@ class Report extends Controller {
 			echo array_to_csv($ledgerst, "ledgerst.csv");
 			return;
 		}
+		
+		/************************ BALANCE SHEET ***********************/
+		if ($statement == "balancesheet")
+		{
+			$this->load->library('accountlist');
+			$this->load->model('Ledger_model');
+
+			$liability = new Accountlist();
+			$liability->init(2);
+			$liability_array = $liability->build_array();
+			$liability_depth = Accountlist::$max_depth;
+			$liability_total = -$liability->total;
+
+			Accountlist::reset_max_depth();
+
+			$asset = new Accountlist();
+			$asset->init(1);
+			$asset_array = $asset->build_array();
+			$asset_depth = Accountlist::$max_depth;
+			$asset_total = $asset->total;
+
+			$liability->to_csv($liability_array);
+			Accountlist::add_blank_csv();
+			$asset->to_csv($asset_array);
+
+			$income = new Accountlist();
+			$income->init(3);
+			$expense = new Accountlist();
+			$expense->init(4);
+			$income_total = -$income->total;
+			$expense_total = $expense->total;
+			$pandl = $income_total - $expense_total;
+			$diffop = $this->Ledger_model->get_diff_op_balance();
+
+			Accountlist::add_blank_csv();
+			/* Liability side */
+			$total = $liability_total;
+			Accountlist::add_row_csv(array("Liability Total", convert_cur($liability_total)));
+		
+			/* If Profit then Liability side, If Loss then Asset side */
+			if ($pandl != 0)
+			{
+				if ($pandl > 0)
+				{
+					$total += $pandl;
+					Accountlist::add_row_csv(array("Profit & Loss A/C (Net Profit)", convert_cur($pandl)));
+				}
+			}
+		
+			/* If Op balance Dr then Liability side, If Op balance Cr then Asset side */
+			if ($diffop != 0)
+			{
+				if ($diffop > 0)
+				{
+					$total += $diffop;
+					Accountlist::add_row_csv(array("Diff in O/P Balance", "Dr " . convert_cur($diffop)));
+				}
+			}
+		
+			Accountlist::add_row_csv(array("Total - Liabilities", convert_cur($total)));
+
+			/* Asset side */
+			$total = $asset_total;
+			Accountlist::add_row_csv(array("Asset Total", convert_cur($asset_total)));
+		
+			/* If Profit then Liability side, If Loss then Asset side */
+			if ($pandl != 0)
+			{
+				if ($pandl < 0)
+				{
+					$total += -$pandl;
+					Accountlist::add_row_csv(array("Profit & Loss A/C (Net Loss)", convert_cur(-$pandl)));
+				}
+			}
+		
+			/* If Op balance Dr then Liability side, If Op balance Cr then Asset side */
+			if ($diffop != 0)
+			{
+				if ($diffop < 0)
+				{
+					$total += -$diffop;
+					Accountlist::add_row_csv(array("Diff in O/P Balance", "Cr " . convert_cur(-$diffop)));
+				}
+			}
+
+			Accountlist::add_row_csv(array("Total - Assets", convert_cur($total)));
+
+			$balancesheet = Accountlist::get_csv();
+			$this->load->helper('csv');
+			echo array_to_csv($balancesheet, "balancesheet.csv");
+			return;
+		}
+
 		return;
 	}
 }
