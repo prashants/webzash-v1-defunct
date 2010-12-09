@@ -28,6 +28,7 @@ class Report extends Controller {
 	function profitandloss($period = NULL)
 	{
 		$this->template->set('page_title', 'Profit And Loss Statement');
+		$this->template->set('nav_links', array('report/download/profitandloss' => 'Download CSV'));
 		$this->template->load('template', 'report/profitandloss');
 		return;
 	}
@@ -417,6 +418,152 @@ class Report extends Controller {
 			return;
 		}
 
+		/********************** PROFIT AND LOSS ***********************/
+		if ($statement == "profitandloss")
+		{
+			$this->load->library('accountlist');
+			$this->load->model('Ledger_model');
+
+			/***************** GROSS CALCULATION ******************/
+
+			/* Gross P/L : Expenses */
+			$gross_expense_total = 0;
+			$gross_expense_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 4 AND affects_gross = 1");
+			foreach ($gross_expense_list_q->result() as $row)
+			{
+				$gross_expense = new Accountlist();
+				$gross_expense->init($row->id);
+				$gross_expense_total += $gross_expense->total;
+				$gross_exp_array = $gross_expense->build_array();
+				$gross_expense->to_csv($gross_exp_array);
+			}
+			Accountlist::add_blank_csv();
+
+			/* Gross P/L : Incomes */
+			$gross_income_total = 0;
+			$gross_income_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 3 AND affects_gross = 1");
+			foreach ($gross_income_list_q->result() as $row)
+			{
+				$gross_income = new Accountlist();
+				$gross_income->init($row->id);
+				$gross_income_total += $gross_income->total;
+				$gross_inc_array = $gross_income->build_array();
+				$gross_income->to_csv($gross_inc_array);
+			}
+
+			Accountlist::add_blank_csv();
+			Accountlist::add_blank_csv();
+
+			/* Converting to positive value since Cr */
+			$gross_income_total = -$gross_income_total;
+
+			/* Calculating Gross P/L */
+			$grosspl = $gross_income_total - $gross_expense_total;
+
+			/* Showing Gross P/L : Expenses */
+			$grosstotal = $gross_expense_total;
+			Accountlist::add_row_csv(array("Total Gross Expenses", convert_cur($gross_expense_total)));
+			if ($grosspl > 0)
+			{
+				$grosstotal += $grosspl;
+				Accountlist::add_row_csv(array("Gross Profit C/O", convert_cur($grosspl)));
+			}
+			Accountlist::add_row_csv(array("Total Expenses - Gross", convert_cur($grosstotal)));
+
+			/* Showing Gross P/L : Incomes  */
+			$grosstotal = $gross_income_total;
+			Accountlist::add_row_csv(array("Total Gross Incomes", convert_cur($gross_income_total)));
+
+			if ($grosspl > 0)
+			{
+
+			} else if ($grosspl < 0) {
+				$grosstotal += -$grosspl;
+				Accountlist::add_row_csv(array("Gross Loss C/O", convert_cur(-$grosspl)));
+			}
+			Accountlist::add_row_csv(array("Total Incomes - Gross", convert_cur($grosstotal)));
+
+			/************************* NET CALCULATIONS ***************************/
+
+			Accountlist::add_blank_csv();
+			Accountlist::add_blank_csv();
+
+			/* Net P/L : Expenses */
+			$net_expense_total = 0;
+			$net_expense_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 4 AND affects_gross != 1");
+
+			foreach ($net_expense_list_q->result() as $row)
+			{
+				$net_expense = new Accountlist();
+				$net_expense->init($row->id);
+				$net_expense_total += $net_expense->total;
+				$net_exp_array = $net_expense->build_array();
+				$net_expense->to_csv($net_exp_array);
+			}
+			Accountlist::add_blank_csv();
+
+			/* Net P/L : Incomes */
+			$net_income_total = 0;
+			$net_income_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 3 AND affects_gross != 1");
+			foreach ($net_income_list_q->result() as $row)
+			{
+				$net_income = new Accountlist();
+				$net_income->init($row->id);
+				$net_income_total += $net_income->total;
+				$net_inc_array = $net_income->build_array();
+				$net_income->to_csv($net_inc_array);
+			}
+
+			Accountlist::add_blank_csv();
+			Accountlist::add_blank_csv();
+
+			/* Converting to positive value since Cr */
+			$net_income_total = -$net_income_total;
+
+			/* Calculating Net P/L */
+			$netpl = $net_income_total - $net_expense_total + $grosspl;
+
+			/* Showing Net P/L : Expenses */
+			$nettotal = $net_expense_total;
+			Accountlist::add_row_csv(array("Total Expenses", convert_cur($nettotal)));
+
+			if ($grosspl > 0)
+			{
+			} else if ($grosspl < 0) {
+				$nettotal += -$grosspl;
+				Accountlist::add_row_csv(array("Gross Loss B/F", convert_cur(-$grosspl)));
+			}
+			if ($netpl > 0)
+			{
+				$nettotal += $netpl;
+				Accountlist::add_row_csv(array("Net Profit", convert_cur($netpl)));
+			}
+			Accountlist::add_row_csv(array("Total - Net Expenses", convert_cur($nettotal)));
+
+			/* Showing Net P/L : Incomes */
+			$nettotal = $net_income_total;
+			Accountlist::add_row_csv(array("Total Incomes", convert_cur($nettotal)));
+
+			if ($grosspl > 0)
+			{
+				$nettotal += $grosspl;
+				Accountlist::add_row_csv(array("Gross Profit B/F", convert_cur($grosspl)));
+			}
+
+			if ($netpl > 0)
+			{
+
+			} else if ($netpl < 0) {
+				$nettotal += -$netpl;
+				Accountlist::add_row_csv(array("Net Loss", convert_cur(-$netpl)));
+			}
+			Accountlist::add_row_csv(array("Total - Net Incomes", convert_cur($nettotal)));
+		
+			$balancesheet = Accountlist::get_csv();
+			$this->load->helper('csv');
+			echo array_to_csv($balancesheet, "profitandloss.csv");
+			return;
+		}
 		return;
 	}
 }
