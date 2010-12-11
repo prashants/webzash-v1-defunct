@@ -142,10 +142,40 @@ class Setting extends Controller {
 		/* Form fields */
 		$default_start_str = $this->config->item('account_ay_end');
 		$default_start_year = date('Y', strtotime($default_start_str));
-		$default_start = date('d/m/Y', strtotime($default_start_str));
+
+		$current_date_format = $this->config->item('account_date_format');
+		switch ($current_date_format)
+		{
+		case 'dd/mm/yyyy':
+			$default_start = date('d/m/Y', strtotime($default_start_str));
+			break;
+		case 'mm/dd/yyyy':
+			$default_start = date('m/d/Y', strtotime($default_start_str));
+			break;
+		case 'yyyy/mm/dd':
+			$default_start = date('Y/m/d', strtotime($default_start_str));
+			break;
+		default:
+			$this->messages->add('Invalid date format. Please check your account settings', 'error');
+			return "";
+		}
 
 		$default_end_year = $default_start_year + 1;
-		$default_end = '31/03/' . $default_end_year;
+		switch ($current_date_format)
+		{
+		case 'dd/mm/yyyy':
+			$default_end = '31/03/' . $default_end_year;
+			break;
+		case 'mm/dd/yyyy':
+			$default_end = '03/31/' . $default_end_year;
+			break;
+		case 'yyyy/mm/dd':
+			$default_end = $default_end_year . '03/31';
+			break;
+		default:
+			$this->messages->add('Invalid date format. Please check your account settings', 'error');
+			return "";
+		}
 
 		/* Form fields */
 		$data['account_label'] = array(
