@@ -367,5 +367,30 @@ class Accountlist
 		self::$max_depth = 0;
 		self::$temp_max = 0;
 	}
+
+	/*
+	 * Return a array of sub ledgers with the object
+	 * Used in CF ledgers of type Assets and Liabilities
+	*/
+	function get_ledger_ids()
+	{
+		$ledgers = array();
+		if (count($this->children_ledgers) > 0)
+		{
+			foreach ($this->children_ledgers as $id => $data)
+			{
+				$ledgers[] = $data['id'];
+			}
+		}
+		if (count($this->children_groups) > 0)
+		{
+			foreach ($this->children_groups as $id => $data)
+			{
+				foreach ($data->get_ledger_ids() as $row)
+					$ledgers[] = $row;
+			}
+		}
+		return $ledgers;
+	}
 }
 

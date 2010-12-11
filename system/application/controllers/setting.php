@@ -136,6 +136,7 @@ class Setting extends Controller {
 	function cf()
 	{
 		$this->load->helper('file');
+		$this->load->library('accountlist');
 		$this->load->model('Ledger_model');
 		$this->template->set('page_title', 'Carry forward account');
 
@@ -365,25 +366,41 @@ class Setting extends Controller {
 					}
 				}
 
+				/* Only importing Assets and Liability closing balance */
+				$assets = new Accountlist();
+				$assets->init(1);
+				$liability = new Accountlist();
+				$liability->init(2);
+				$cf_ledgers = array_merge($assets->get_ledger_ids(), $liability->get_ledger_ids());
+
 				/* Importing Ledgers */
 				$ledger_q = $this->db->query("SELECT * FROM ledgers ORDER BY id");
 				foreach ($ledger_q->result() as $row)
 				{
-					/* Calculating closing balance for previous year */
-					$cl_balance = $this->Ledger_model->get_ledger_balance($row->id);
-					if ($cl_balance < 0)
+					/* CF only Assets and Liability with Closing Balance */
+					if (in_array($row->id, $cf_ledgers))
 					{
-						$op_balance = -$cl_balance;
-						$op_balance_dc = "C";
+						/* Calculating closing balance for previous year */
+						$cl_balance = $this->Ledger_model->get_ledger_balance($row->id);
+						if ($cl_balance < 0)
+						{
+							$op_balance = -$cl_balance;
+							$op_balance_dc = "C";
+						} else {
+							$op_balance = $cl_balance;
+							$op_balance_dc = "D";
+						}
+						if ( ! $newacc->query("INSERT INTO ledgers (id, group_id, name, op_balance, op_balance_dc, type) VALUES (?, ?, ?, ?, ?, ?)", array($row->id, $row->group_id, $row->name, $op_balance, $op_balance_dc, $row->type)))
+						{
+							$this->messages->add("Failed to add ledger " . $row->name, 'error');
+							$cf_status = FALSE;
+						}
 					} else {
-						$op_balance = $cl_balance;
-						$op_balance_dc = "D";
-					}
-
-					if ( ! $newacc->query("INSERT INTO ledgers (id, group_id, name, op_balance, op_balance_dc, type) VALUES (?, ?, ?, ?, ?, ?)", array($row->id, $row->group_id, $row->name, $op_balance, $op_balance_dc, $row->type)))
-					{
-						$this->messages->add("Failed to add ledger " . $row->name, 'error');
-						$cf_status = FALSE;
+						if ( ! $newacc->query("INSERT INTO ledgers (id, group_id, name, op_balance, op_balance_dc, type) VALUES (?, ?, ?, ?, ?, ?)", array($row->id, $row->group_id, $row->name, 0, "D", $row->type)))
+						{
+							$this->messages->add("Failed to add ledger " . $row->name, 'error');
+							$cf_status = FALSE;
+						}
 					}
 				}
 
