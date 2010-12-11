@@ -129,8 +129,12 @@ class Create extends Controller {
 		$this->form_validation->set_rules('account_name', 'Account Name', 'trim|required|min_length[2]|max_length[100]');
 		$this->form_validation->set_rules('account_address', 'Account Address', 'trim|max_length[255]');
 		$this->form_validation->set_rules('account_email', 'Account Email', 'trim|valid_email');
-		$this->form_validation->set_rules('assy_start', 'Assessment Year Start', 'trim|required|is_date');
-		$this->form_validation->set_rules('assy_end', 'Assessment Year End', 'trim|required|is_date');
+		if ($_POST)
+		{
+			$this->config->set_item('account_date_format', $this->input->post('account_date', TRUE));
+			$this->form_validation->set_rules('assy_start', 'Assessment Year Start', 'trim|required|is_date');
+			$this->form_validation->set_rules('assy_end', 'Assessment Year End', 'trim|required|is_date');
+		}
 		$this->form_validation->set_rules('account_currency', 'Currency', 'trim|max_length[10]');
 		$this->form_validation->set_rules('account_date', 'Date', 'trim|max_length[10]');
 		$this->form_validation->set_rules('account_timezone', 'Timezone', 'trim|max_length[6]');

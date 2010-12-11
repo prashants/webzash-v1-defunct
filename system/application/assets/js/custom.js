@@ -13,7 +13,6 @@ $(document).ready(function() {
 		return false;
 	    }
 	});
-	$('.datepicker').datepick({dateFormat: 'dd/mm/yyyy'});
 })
 
 

@@ -46,6 +46,7 @@ $(document).ready(function() {
 		maxWidth:27,
 		extraWidth: 1
 	}).superfish(); // call supersubs first, then superfish, so that subs are 
+	$('.datepicker').datepick({dateFormat: '<?php echo $this->config->item('account_date_format'); ?>'});
 });
 </script>
 

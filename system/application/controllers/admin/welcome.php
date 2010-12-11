@@ -119,6 +119,7 @@ class Welcome extends Controller {
 							$account_q = $this->db->query('SELECT * FROM settings WHERE id = 1');
 							if ($account_d = $account_q->row())
 							{
+								$this->config->set_item('account_date_format', $account_d->date_format);
 								$data['current_account'] .= "Currently active account is ";
 								$data['current_account'] .= "<b>" . $account_d->name . "</b>";
 								$data['current_account'] .= " from " . "<b>" . date_mysql_to_php($account_d->ay_start) . "</b>";

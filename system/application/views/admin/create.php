@@ -28,18 +28,6 @@
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Assessment Year Start', 'assy_start');
-	echo "<br />";
-	echo form_input_date($assy_start);
-	echo "</p>";
-
-	echo "<p>";
-	echo form_label('Assessment Year End', 'assy_end');
-	echo "<br />";
-	echo form_input_date($assy_end);
-	echo "</p>";
-
-	echo "<p>";
 	echo form_label('Currency', 'account_currency');
 	echo "<br />";
 	echo form_input($account_currency);
@@ -49,6 +37,22 @@
 	echo form_label('Date Format', 'account_date');
 	echo "<br />";
 	echo form_dropdown('account_date', $account_date_options, $account_date);
+	echo "</p>";
+
+	echo "<p>";
+	echo form_label('Assessment Year Start', 'assy_start');
+	echo "<br />";
+	echo form_input_date($assy_start);
+	echo "<br />";
+	echo "<span class=\"form-help-text\">Warning : Assessment Year Start cannot be changed later</span>";
+	echo "</p>";
+
+	echo "<p>";
+	echo form_label('Assessment Year End', 'assy_end');
+	echo "<br />";
+	echo form_input_date($assy_end);
+	echo "<br />";
+	echo "<span class=\"form-help-text\">Warning : Assessment Year End cannot be changed later</span>";
 	echo "</p>";
 
 	echo "<p>";
