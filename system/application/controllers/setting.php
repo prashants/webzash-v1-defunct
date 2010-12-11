@@ -140,42 +140,13 @@ class Setting extends Controller {
 		$this->template->set('page_title', 'Carry forward account');
 
 		/* Form fields */
-		$default_start_str = $this->config->item('account_ay_end');
-		$default_start_year = date('Y', strtotime($default_start_str));
-
-		$current_date_format = $this->config->item('account_date_format');
-		switch ($current_date_format)
-		{
-		case 'dd/mm/yyyy':
-			$default_start = date('d/m/Y', strtotime($default_start_str));
-			break;
-		case 'mm/dd/yyyy':
-			$default_start = date('m/d/Y', strtotime($default_start_str));
-			break;
-		case 'yyyy/mm/dd':
-			$default_start = date('Y/m/d', strtotime($default_start_str));
-			break;
-		default:
-			$this->messages->add('Invalid date format. Please check your account settings', 'error');
-			return "";
-		}
-
-		$default_end_year = $default_start_year + 1;
-		switch ($current_date_format)
-		{
-		case 'dd/mm/yyyy':
-			$default_end = '31/03/' . $default_end_year;
-			break;
-		case 'mm/dd/yyyy':
-			$default_end = '03/31/' . $default_end_year;
-			break;
-		case 'yyyy/mm/dd':
-			$default_end = $default_end_year . '03/31';
-			break;
-		default:
-			$this->messages->add('Invalid date format. Please check your account settings', 'error');
-			return "";
-		}
+		$last_year_end = $this->config->item('account_ay_end');
+		list($last_year_end_date, $last_year_end_time) = explode(' ', $last_year_end);
+		list($last_year_end_year, $last_year_end_month, $last_year_end_day) = explode('-', $last_year_end_date);
+		$last_year_end_ts = strtotime($last_year_end);
+		$default_start_ts = $last_year_end_ts + (60 * 60 * 24); /* Adding 24 hours */
+		$default_start = date("Y-m-d 00:00:00", $default_start_ts);
+		$default_end = ($last_year_end_year + 1) . "-" . $last_year_end_month . "-" . $last_year_end_day . " 00:00:00"; 
 
 		/* Form fields */
 		$data['account_label'] = array(
@@ -197,14 +168,14 @@ class Setting extends Controller {
 			'id' => 'assy_start',
 			'maxlength' => '11',
 			'size' => '11',
-			'value' => $default_start,
+			'value' => date_mysql_to_php($default_start),
 		);
 		$data['assy_end'] = array(
 			'name' => 'assy_end',
 			'id' => 'assy_end',
 			'maxlength' => '11',
 			'size' => '11',
-			'value' => $default_end,
+			'value' => date_mysql_to_php($default_end),
 		);
 
 		$data['database_name'] = array(
@@ -289,7 +260,7 @@ class Setting extends Controller {
 			$data_account_address = $this->config->item('account_address');
 			$data_account_email = $this->config->item('account_email');
 			$data_assy_start = date_php_to_mysql($this->input->post('assy_start', TRUE));
-			$data_assy_end = date_php_to_mysql($this->input->post('assy_end', TRUE));
+			$data_assy_end = date_php_to_mysql_end_time($this->input->post('assy_end', TRUE));
 			$data_account_currency = $this->config->item('account_currency_symbol');
 			$data_account_date = $this->config->item('account_date_format');
 			$data_account_timezone = $this->config->item('account_timezone');

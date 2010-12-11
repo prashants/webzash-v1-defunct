@@ -27,6 +27,33 @@ if ( ! function_exists('date_php_to_mysql'))
 	}
 }
 
+if ( ! function_exists('date_php_to_mysql_end_time'))
+{
+	function date_php_to_mysql_end_time($dt)
+	{
+		$CI =& get_instance();
+		$current_date_format = $CI->config->item('account_date_format');
+		list($d, $m, $y) = array(0, 0, 0);
+		switch ($current_date_format)
+		{
+		case 'dd/mm/yyyy':
+			list($d, $m, $y) = explode('/', $dt);
+			break;
+		case 'mm/dd/yyyy':
+			list($m, $d, $y) = explode('/', $dt);
+			break;
+		case 'yyyy/mm/dd':
+			list($y, $m, $d) = explode('/', $dt);
+			break;
+		default:
+			$CI->messages->add('Invalid date format. Please check your account settings', 'error');
+			return "";
+		}
+		$ts = mktime("23", "59", "59", $m, $d, $y);
+		return date('Y-m-d H:i:s', $ts);
+	}
+}
+
 if ( ! function_exists('date_mysql_to_php'))
 {
 	function date_mysql_to_php($dt)
