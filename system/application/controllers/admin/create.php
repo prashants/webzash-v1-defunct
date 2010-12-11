@@ -179,7 +179,7 @@ class Create extends Controller {
 			$data_account_address = $this->input->post('account_address', TRUE);
 			$data_account_email = $this->input->post('account_email', TRUE);
 			$data_assy_start = date_php_to_mysql($this->input->post('assy_start', TRUE));
-			$data_assy_end = date_php_to_mysql($this->input->post('assy_end', TRUE));
+			$data_assy_end = date_php_to_mysql_end_time($this->input->post('assy_end', TRUE));
 			$data_account_currency = $this->input->post('account_currency', TRUE);
 			$data_account_date_form = $this->input->post('account_date', TRUE);
 			/* Checking for valid format */
