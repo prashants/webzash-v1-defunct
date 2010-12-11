@@ -118,7 +118,7 @@
 			echo ($row->vdraft == 1) ? " tr-draft " : "";
 			echo "\">";
 			echo "<td>";
-			echo date_mysql_to_php($row->vdate);
+			echo date_mysql_to_php_display($row->vdate);
 			echo "</td>";
 			echo "<td>";
 			echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $row->vnumber, array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));

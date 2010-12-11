@@ -80,6 +80,32 @@ if ( ! function_exists('date_mysql_to_php'))
 	}
 }
 
+if ( ! function_exists('date_mysql_to_php_display'))
+{
+	function date_mysql_to_php_display($dt)
+	{
+		$ts = human_to_unix($dt);
+		$CI =& get_instance();
+		$current_date_format = $CI->config->item('account_date_format');
+		switch ($current_date_format)
+		{
+		case 'dd/mm/yyyy':
+			return date('d M Y', $ts);
+			break;
+		case 'mm/dd/yyyy':
+			return date('M d Y', $ts);
+			break;
+		case 'yyyy/mm/dd':
+			return date('Y M d', $ts);
+			break;
+		default:
+			$CI->messages->add('Invalid date format. Please check your account settings', 'error');
+			return "";
+		}
+		return;
+	}
+}
+
 if ( ! function_exists('date_today_php'))
 {
 	function date_today_php()

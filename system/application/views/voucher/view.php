@@ -1,6 +1,6 @@
 <p>Voucher Number : <span class="bold"><?php echo $cur_voucher->number; ?></span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Voucher Date : <span class="bold"><?php echo date_mysql_to_php($cur_voucher->date); ?></span>
+Voucher Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_voucher->date); ?></span>
 </p>
 
 <table border=0 cellpadding=5 class="simple-table voucher-view-table">

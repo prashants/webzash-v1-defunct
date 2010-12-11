@@ -157,7 +157,7 @@ class Voucher extends Controller {
 			$html .= ($row->draft == 1) ? " tr-draft " : "";
 			$html .= "\">";
 
-			$html .= "<td>" . date_mysql_to_php($row->date) . "</td>";
+			$html .= "<td>" . date_mysql_to_php_display($row->date) . "</td>";
 			$html .= "<td>" . anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, $row->number, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'blue-link')) . "</td>";
 
 			$html .= "<td>";
@@ -769,7 +769,7 @@ class Voucher extends Controller {
 		echo "<p><b>" . $account->name . "</b></p>";
 		echo "<p>" . $account->address . "</p>";
 		echo "<p>Voucher Number : " . $cur_voucher->number . "</p>";
-		echo "<p>Voucher Date : " . date_mysql_to_php($cur_voucher->date) . "</p>";
+		echo "<p>Voucher Date : " . date_mysql_to_php_display($cur_voucher->date) . "</p>";
 		echo "<table border=1>";
 		echo "<thead><tr><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>";
 
@@ -848,7 +848,7 @@ class Voucher extends Controller {
 			$message .= "<p><b>" . $this->config->item('account_name') . "</b></p>";
 			$message .= "<p>" . $this->config->item('account_address') . "</p>";
 			$message .= "<p>Voucher Number : " . $cur_voucher->number . "</p>";
-			$message .= "<p>Voucher Date : " . date_mysql_to_php($cur_voucher->date) . "</p>";
+			$message .= "<p>Voucher Date : " . date_mysql_to_php_display($cur_voucher->date) . "</p>";
 			$message .= "<table border=1>";
 			$message .= "<thead><tr><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>";
 
