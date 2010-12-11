@@ -95,7 +95,23 @@ class MY_Form_validation extends CI_Form_validation {
 
 		$CI->form_validation->set_message('is_date', 'The %s is a invalid date');
 
-		list($d, $m, $y) = explode('/', $str);
+		$current_date_format = $CI->config->item('account_date_format');
+		list($d, $m, $y) = array(0, 0, 0);
+		switch ($current_date_format)
+		{
+		case 'dd/mm/yyyy':
+			list($d, $m, $y) = explode('/', $str);
+			break;
+		case 'mm/dd/yyyy':
+			list($m, $d, $y) = explode('/', $str);
+			break;
+		case 'yyyy/mm/dd':
+			list($y, $m, $d) = explode('/', $str);
+			break;
+		default:
+			$CI->messages->add('Invalid date format. Please check your account settings', 'error');
+			return "";
+		}
 		return checkdate($m , $d, $y) ? TRUE : FALSE;
 	}
 
