@@ -40,7 +40,7 @@
 	echo "<p>";
 	echo form_label('Date Format', 'account_date');
 	echo "<br />";
-	echo form_input($account_date);
+	echo form_dropdown('account_date', $account_date_options, $account_date);
 	echo "</p>";
 
 	echo "<p>";

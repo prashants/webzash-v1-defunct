@@ -75,13 +75,12 @@ class Create extends Controller {
 			'size' => '10',
 			'value' => '',
 		);
-		$data['account_date'] = array(
-			'name' => 'account_date',
-			'id' => 'account_date',
-			'maxlength' => '20',
-			'size' => '10',
-			'value' => '',
+		$data['account_date_options'] = array(
+			'dd/mm/yyyy' => 'Day / Month / Year',
+			'mm/dd/yyyy' => 'Month / Day / Year',
+			'yyyy/mm/dd' => 'Year / Month / Day',
 		);
+		$data['account_date'] = 'dd/mm/yyyy';
 		$data['account_timezone'] = 'UTC';
 
 		$data['database_name'] = array(
@@ -133,7 +132,7 @@ class Create extends Controller {
 		$this->form_validation->set_rules('assy_start', 'Assessment Year Start', 'trim|required|is_date');
 		$this->form_validation->set_rules('assy_end', 'Assessment Year End', 'trim|required|is_date');
 		$this->form_validation->set_rules('account_currency', 'Currency', 'trim|max_length[10]');
-		$this->form_validation->set_rules('account_date', 'Date', 'trim|max_length[30]');
+		$this->form_validation->set_rules('account_date', 'Date', 'trim|max_length[10]');
 		$this->form_validation->set_rules('account_timezone', 'Timezone', 'trim|max_length[6]');
 
 
@@ -150,7 +149,7 @@ class Create extends Controller {
 			$data['assy_start']['value'] = $this->input->post('assy_start', TRUE);
 			$data['assy_end']['value'] = $this->input->post('assy_end', TRUE);
 			$data['account_currency']['value'] = $this->input->post('account_currency', TRUE);
-			$data['account_date']['value'] = $this->input->post('account_date', TRUE);
+			$data['account_date'] = $this->input->post('account_date', TRUE);
 			$data['account_timezone'] = $this->input->post('account_timezone', TRUE);
 
 			$data['create_database'] = $this->input->post('create_database', TRUE);
@@ -178,7 +177,16 @@ class Create extends Controller {
 			$data_assy_start = date_php_to_mysql($this->input->post('assy_start', TRUE));
 			$data_assy_end = date_php_to_mysql($this->input->post('assy_end', TRUE));
 			$data_account_currency = $this->input->post('account_currency', TRUE);
-			$data_account_date = $this->input->post('account_date', TRUE);
+			$data_account_date_form = $this->input->post('account_date', TRUE);
+			/* Checking for valid format */
+			if ($data_account_date_form == "dd/mm/yyyy")
+				$data_account_date = "dd/mm/yyyy";
+			else if ($data_account_date_form == "mm/dd/yyyy")
+				$data_account_date = "mm/dd/yyyy";
+			else if ($data_account_date_form == "yyyy/mm/dd")
+				$data_account_date = "yyyy/mm/dd";
+			else
+				$data_account_date = "dd/mm/yyyy";
 			$data_account_timezone = $this->input->post('timezones', TRUE);
 
 			$data_database_host = $this->input->post('database_host', TRUE);

@@ -52,34 +52,6 @@ if ( ! function_exists('echo_value'))
 }
 
 /**
- * Return Account Information
- *
- * Return the account information
- *
- * @access	public
- * @param	a varaible
- * @return	string value
- */	
-if ( ! function_exists('account_info_str'))
-{
-	function account_info_str()
-	{
-		$html = "";
-		$CI =& get_instance();
-		$company_q = $CI->db->query('SELECT * FROM settings WHERE id = 1');
-		if ($company_info = $company_q->row())
-		{
-			$html .= $company_info->name;
-			$html .= "<br />";
-			$html .= date_mysql_to_php($company_info->ay_start);
-			$html .= " - ";
-			$html .= date_mysql_to_php($company_info->ay_end);
-		}
-		return $html;
-	}
-}
-
-/**
  * Return Voucher Type String from Number
  *
  * Return the account information
