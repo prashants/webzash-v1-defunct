@@ -48,7 +48,9 @@ body {
 	top:10px;
 	background:none repeat scroll 0 0 #EEEEEE;
 	padding:10px;
-	-moz-border-radius: 15px;
+	font-size:120%;
+	-moz-border-radius: 10px;
+	border-radius: 1px;
 }
 
 #content #main {

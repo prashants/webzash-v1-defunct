@@ -99,7 +99,10 @@ $(document).ready(function() {
 				</ul>
 			</li>
 			<li>
-				<?php echo anchor('setting', 'Settings', array('title' => 'Settings', 'class' => 'last')); ?>
+				<?php echo anchor('setting', 'Settings', array('title' => 'Settings')); ?>
+			</li>
+			<li>
+				<?php echo anchor('', 'Help', array('title' => 'Help', 'class' => 'last')); ?>
 			</li>
 		</ul>
 	</div>
