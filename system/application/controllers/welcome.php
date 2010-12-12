@@ -45,6 +45,10 @@ class Welcome extends Controller {
 		$liability->init(2);
 		$data['liability_total'] = $liability->total;
 
+		$data['show_asset_liability'] = TRUE;
+		if ($data['asset_total'] == 0 && $data['liability_total'] == 0)
+			$data['show_asset_liability'] = FALSE;
+
 		$income = new Accountlist();
 		$income->init(3);
 		$data['income_total'] = $income->total;
@@ -52,7 +56,11 @@ class Welcome extends Controller {
 		$expense = new Accountlist();
 		$expense->init(4);
 		$data['expense_total'] = $expense->total;
-		
+
+		$data['show_income_expense'] = TRUE;
+		if ($data['income_total'] == 0 && $data['expense_total'] == 0)
+			$data['show_income_expense'] = FALSE;
+
 		$this->template->load('template', 'welcome_message', $data);
 		return;
 	}

@@ -141,18 +141,22 @@ jQuery(document).ready(function () {
 		<table border="0">
 			<tbody>
 				<tr>
-					<td width="300">
-						<div id="income-expense" class="graph">
-							<div id="income-expense-graph-header"><h4>Incomes Vs Expenses</h4></div>
-							<div id="income-expense-graph-data"></div>
-						</div>
-					</td>
-					<td width="300">
-						<div id="asset-liability" class="graph">
-							<div id="asset-liability-graph-header"><h4>Assets Vs Liabilities</h4></div>
-							<div id="asset-liability-graph-data""></div>
-						</div>
-					</td>
+					<?php if ($show_income_expense) { ?>
+						<td width="300">
+							<div id="income-expense" class="graph">
+								<div id="income-expense-graph-header"><h4>Incomes Vs Expenses</h4></div>
+								<div id="income-expense-graph-data"></div>
+							</div>
+						</td>
+					<?php } ?>
+					<?php if ($show_asset_liability) { ?>
+						<td width="300">
+							<div id="asset-liability" class="graph">
+								<div id="asset-liability-graph-header"><h4>Assets Vs Liabilities</h4></div>
+								<div id="asset-liability-graph-data""></div>
+							</div>
+						</td>
+					<?php } ?>
 				</tr>
 			</tbody>
 		</table>
