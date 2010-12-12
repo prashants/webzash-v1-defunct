@@ -11,8 +11,9 @@ class Logger
 	 * Write message to database log
 	 * Levels defined are :
 	 * 0 - error
-	 * 1 - info
-	 * 2 - debug
+	 * 1 - success
+	 * 2 - info
+	 * 3 - debug
 	 */
 	function write_message($level = "debug", $title = "", $desc = "")
 	{
@@ -21,8 +22,9 @@ class Logger
 		switch ($level)
 		{
 		case "error": $data['level'] = 0; break;
-		case "info": $data['level'] = 1; break;
-		case "debug": $data['level'] = 2; break;
+		case "success": $data['level'] = 1; break;
+		case "info": $data['level'] = 2; break;
+		case "debug": $data['level'] = 3; break;
 		default: $data['level'] = 0; break;
 		}
 		$data['host_ip'] = $CI->input->ip_address();
