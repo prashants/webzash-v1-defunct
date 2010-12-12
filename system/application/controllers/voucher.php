@@ -439,7 +439,7 @@ class Voucher extends Controller {
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error addding Ledger A/C ' . $data_ledger_id, 'error');
-					$this->logger->write_message("error", "Error adding " . ucfirst($voucher_type) . " Voucher number " . $data_number . " since failed inserting voucher ledger items " . "[" . $data_ledger_id . "]");
+					$this->logger->write_message("error", "Error adding " . ucfirst($voucher_type) . " Voucher number " . $data_number . " since failed inserting voucher ledger items " . "[id:" . $data_ledger_id . "]");
 					$this->template->load('template', 'voucher/add', $data);
 					return;
 				}
@@ -659,7 +659,7 @@ class Voucher extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Voucher A/C', 'error');
-				$this->logger->write_message("error", "Error updating voucher details for " . ucfirst($voucher_type) . " Voucher number " . $data_number . " [" . $voucher_id . "]");
+				$this->logger->write_message("error", "Error updating voucher details for " . ucfirst($voucher_type) . " Voucher number " . $data_number . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			}
@@ -669,7 +669,7 @@ class Voucher extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting old Ledger A/C\'s', 'error');
-				$this->logger->write_message("error", "Error updating old voucher items for " . ucfirst($voucher_type) . " Voucher number " . $data_number . " [" . $voucher_id . "]");
+				$this->logger->write_message("error", "Error updating old voucher items for " . ucfirst($voucher_type) . " Voucher number " . $data_number . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			}
@@ -702,7 +702,7 @@ class Voucher extends Controller {
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error updating Ledger A/C ' . $data_ledger_id, 'error');
-					$this->logger->write_message("error", "Error updating new voucher item [" . $data_ledger_id . "] for " . ucfirst($voucher_type) . " Voucher number " . $data_number . " [" . $voucher_id . "]");
+					$this->logger->write_message("error", "Error updating new voucher item [id:" . $data_ledger_id . "] for " . ucfirst($voucher_type) . " Voucher number " . $data_number . " [id:" . $voucher_id . "]");
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				}
@@ -713,7 +713,7 @@ class Voucher extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating voucher total', 'error');
-				$this->logger->write_message("error", "Error updating voucher total for " . ucfirst($voucher_type) . " Voucher number " . $data_number . " [" . $voucher_id . "]");
+				$this->logger->write_message("error", "Error updating voucher total for " . ucfirst($voucher_type) . " Voucher number " . $data_number . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			}
@@ -721,7 +721,7 @@ class Voucher extends Controller {
 			/* Success */
 			$this->db->trans_complete();
 			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . $data_number . ' updated successfully', 'success');
-			$this->logger->write_message("success", "Updated " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [" . $voucher_id . "]");
+			$this->logger->write_message("success", "Updated " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -743,7 +743,7 @@ class Voucher extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Voucher - Ledgers entry', 'error');
-			$this->logger->write_message("error", "Error deleting ledger entries for " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [" . $voucher_id . "]");
+			$this->logger->write_message("error", "Error deleting ledger entries for " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			redirect('voucher/' . $voucher_type . '/' . $voucher_id);
 			return;
 		}
@@ -751,13 +751,13 @@ class Voucher extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Voucher entry', 'error');
-			$this->logger->write_message("error", "Error deleting voucher entry for " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [" . $voucher_id . "]");
+			$this->logger->write_message("error", "Error deleting voucher entry for " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			redirect('voucher/' . $voucher_type . '/' . $voucher_id);
 			return;
 		}
 		$this->db->trans_complete();
 		$this->messages->add('Voucher deleted successfully', 'success');
-		$this->logger->write_message("success", "Deleted " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [" . $voucher_id . "]");
+		$this->logger->write_message("success", "Deleted " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [id:" . $voucher_id . "]");
 		redirect('voucher/show/' . $voucher_type);
 		return;
 	}
@@ -907,10 +907,10 @@ class Voucher extends Controller {
 			if ($this->email->send())
 			{
 				$data['message'] = "Successfully sent email !";
-				$this->logger->write_message("success", "Emailed " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [" . $voucher_id . "]");
+				$this->logger->write_message("success", "Emailed " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			} else {
 				$data['error'] = "Error sending email. Please check you email settings";
-				$this->logger->write_message("error", "Error emailing " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [" . $voucher_id . "]");
+				$this->logger->write_message("error", "Error emailing " . ucfirst($voucher_type) . " Voucher number " . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			}
 			$this->load->view('voucher/email', $data);
 			return;

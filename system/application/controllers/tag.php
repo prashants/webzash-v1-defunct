@@ -170,13 +170,13 @@ class Tag extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating ' . $data_tag_title . ' - Tag', 'error');
-				$this->logger->write_message("error", "Error updating tag named " . $data_tag_title . " [" . $id . "]");
+				$this->logger->write_message("error", "Error updating tag named " . $data_tag_title . " [id:" . $id . "]");
 				$this->template->load('template', 'tag/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add("Updated " . $data_tag_title . ' - Tag successfully', 'success');
-				$this->logger->write_message("success", "Updated tag named " . $data_tag_title . " [" . $id . "]");
+				$this->logger->write_message("success", "Updated tag named " . $data_tag_title . " [id:" . $id . "]");
 				redirect('tag');
 				return;
 			}
@@ -210,7 +210,7 @@ class Tag extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error removing Tags', 'error');
-			$this->logger->write_message("error", "Error removing tag named " . $data_tag->title . " [" . $id . "] from vouchers");
+			$this->logger->write_message("error", "Error removing tag named " . $data_tag->title . " [id:" . $id . "] from vouchers");
 			redirect('tag');
 			return;
 		} else {
@@ -218,13 +218,13 @@ class Tag extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting Tag', 'error');
-				$this->logger->write_message("error", "Error deleting tag named " . $data_tag->title . " [" . $id . "]");
+				$this->logger->write_message("error", "Error deleting tag named " . $data_tag->title . " [id:" . $id . "]");
 				redirect('tag');
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Tag deleted successfully', 'success');
-				$this->logger->write_message("success", "Deleted tag named " . $data_tag->title . " [" . $id . "]");
+				$this->logger->write_message("success", "Deleted tag named " . $data_tag->title . " [id:" . $id . "]");
 				redirect('tag');
 				return;
 			}
