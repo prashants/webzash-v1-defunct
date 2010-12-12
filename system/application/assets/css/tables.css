@@ -224,6 +224,11 @@
 	color: #000000;
 }
 
+.dashboard-log-footer {
+	padding:10px;
+	border-top:1px solid #BBBBBB;
+}
+
 .ledgerst-table td {
 
 }

@@ -180,6 +180,16 @@ jQuery(document).ready(function () {
 			}
 			?>
 		</div>
+		<div class="dashboard-log-footer">
+			<?php
+			if ($log)
+			{
+				echo "<span>";
+				echo anchor("", "more...", array('class' => 'blue-link no-underline'));
+				echo "</span>";
+			}
+			?>
+		</div>
 	</div>
 </div>
 <div class="clear"></div>

@@ -36,7 +36,7 @@ class Logger
 		$CI->db->insert('log', $data);
 	}
 
-	function read_recent_messages($count  = 20)
+	function read_recent_messages()
 	{
 		$CI =& get_instance();
 		$log_q = $CI->db->query("SELECT * FROM log ORDER BY id DESC LIMIT 20");
