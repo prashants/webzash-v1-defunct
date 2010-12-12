@@ -211,6 +211,19 @@
 	color: #000000;
 }
 
+.dashboard-summary-table {
+	border-collapse: collapse;
+	text-align: left;
+}
+
+.dashboard-summary-table td {
+	padding: 8px 8px 8px 20px;
+}
+
+.dashboard-summary-table td a {
+	color: #000000;
+}
+
 .ledgerst-table td {
 
 }

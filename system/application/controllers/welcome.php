@@ -43,11 +43,11 @@ class Welcome extends Controller {
 
 		$liability = new Accountlist();
 		$liability->init(2);
-		$data['liability_total'] = -$liability->total;
+		$data['liability_total'] = $liability->total;
 
 		$income = new Accountlist();
 		$income->init(3);
-		$data['income_total'] = -$income->total;
+		$data['income_total'] = $income->total;
 
 		$expense = new Accountlist();
 		$expense->init(4);

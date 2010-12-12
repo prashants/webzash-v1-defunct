@@ -28,7 +28,7 @@ jQuery(document).ready(function () {
 		// First element is the y-value
 		// Other elements are arbitary - they are not used by the lib
 		// but are passed back into callback functions
-			[<?php echo $income_total; ?>, {label: 'Incomes'}],
+			[<?php echo -$income_total; ?>, {label: 'Incomes'}],
 			[<?php echo $expense_total; ?>, {label: 'Expenses'}]
 		],
 
@@ -57,7 +57,7 @@ jQuery(document).ready(function () {
 		// Other elements are arbitary - they are not used by the lib
 		// but are passed back into callback functions
 			[<?php echo $asset_total; ?>, {label: 'Assets'}],
-			[<?php echo $liability_total; ?>, {label: 'Liabilities'}]
+			[<?php echo -$liability_total; ?>, {label: 'Liabilities'}]
 		],
 
 		// Bar width in arbitrary units, 1.0 means the bars will be snuggled
@@ -118,6 +118,21 @@ jQuery(document).ready(function () {
 				} else {
 					echo "You have not created any bank or cash account";
 				}
+			?>
+		</div>
+	</div>
+	<div id="dashboard-summary" class="dashboard-item">
+		<div class="dashboard-title">Account Summary</div>
+		<div class="dashboard-content">
+			<?php
+				echo "<table class=\"dashboard-summary-table\">";
+				echo "<tbody>";
+				echo "<tr><td>Assets Total</td><td>" . convert_amount_dc($asset_total) . "</td></tr>";
+				echo "<tr><td>Liabilities Total</td><td>" . convert_amount_dc($liability_total) . "</td></tr>";
+				echo "<tr><td>Incomes Total</td><td>" . convert_amount_dc($income_total) . "</td></tr>";
+				echo "<tr><td>Expenses Total</td><td>" . convert_amount_dc($expense_total) . "</td></tr>";
+				echo "</tbody>";
+				echo "</table>";
 			?>
 		</div>
 	</div>

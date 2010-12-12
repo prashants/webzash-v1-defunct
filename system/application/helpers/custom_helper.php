@@ -23,6 +23,28 @@ if ( ! function_exists('convert_dc'))
 	}
 }
 
+/**
+ * Converts amount to Dr or Cr Value
+ *
+ * Covnerts the amount to 0 or Dr or Cr value for display
+ *
+ * @access	public
+ * @param	float	amount for display
+ * @return	string
+ */	
+if ( ! function_exists('convert_amount_dc'))
+{
+	function convert_amount_dc($amount)
+	{
+		if ($amount == "D")
+			return "0";
+		else if ($amount < 0)
+			return "Cr " . -$amount;
+		else
+			return "Dr " . $amount;
+	}
+}
+
 if ( ! function_exists('convert_cur'))
 {
 	function convert_cur($amount)
