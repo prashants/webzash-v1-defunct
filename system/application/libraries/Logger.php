@@ -19,6 +19,7 @@ class Logger
 	{
 		$CI =& get_instance();
 		$data['date'] = date("Y-m-d H:i:s");
+		$data['level'] = 3;
 		switch ($level)
 		{
 		case "error": $data['level'] = 0; break;
@@ -33,6 +34,18 @@ class Logger
 		$data['message_title'] = $title;
 		$data['message_desc'] = $desc;
 		$CI->db->insert('log', $data);
+	}
+
+	function read_recent_messages($count  = 20)
+	{
+		$CI =& get_instance();
+		$log_q = $CI->db->query("SELECT * FROM log ORDER BY id DESC LIMIT 20");
+		if ($log_q->num_rows() > 0)
+		{
+			return $log_q;
+		} else {
+			return FALSE;
+		}
 	}
 }
 

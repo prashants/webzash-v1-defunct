@@ -166,7 +166,19 @@ jQuery(document).ready(function () {
 	<div id="dashboard-recent-log" class="dashboard-log-item">
 		<div class="dashboard-log-title">Recent Activity</div>
 		<div class="dashboard-log-content">
-			Hello World !
+			<?php
+			if ($log)
+			{
+				echo "<ul>";
+				foreach ($log->result() as $row)
+				{
+					echo "<li>" . $row->message_title . "</li>";
+				}
+				echo "</ul>";
+			} else {
+				echo "No Recent Activity";
+			}
+			?>
 		</div>
 	</div>
 </div>

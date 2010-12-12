@@ -35,7 +35,7 @@ class Welcome extends Controller {
 		} else {
 			$data['bank_cash_account'] = array();
 		}
-		
+
 		/* Calculating total of Assets, Liabilities, Incomes, Expenses */
 		$asset = new Accountlist();
 		$asset->init(1);
@@ -61,6 +61,8 @@ class Welcome extends Controller {
 		if ($data['income_total'] == 0 && $data['expense_total'] == 0)
 			$data['show_income_expense'] = FALSE;
 
+		/* Getting Log Messages */
+		$data['log'] = $this->logger->read_recent_messages();
 		$this->template->load('template', 'welcome_message', $data);
 		return;
 	}
