@@ -118,17 +118,21 @@ class Setting extends Controller {
 			$data_account_timezone = $this->input->post('timezones', TRUE);
 
 			/* Update settings */
+			$this->db->trans_start();
 			if ( ! $this->db->query("UPDATE settings SET name = ?, address = ?, email = ?, currency_symbol = ?, date_format = ?, timezone = ? WHERE id = 1", array($data_account_name, $data_account_address, $data_account_email, $data_account_currency, $data_account_date, $data_account_timezone)))
 			{
+				$this->db->trans_rollback();
 				$this->messages->add('Error updating settings', 'error');
+				$this->logger->write_message("error", "Error updating account settings");
 				$this->template->load('template', 'setting/account', $data);
 				return;
+			} else {
+				$this->db->trans_complete();
+				$this->messages->add('Settings updated successfully', 'success');
+				$this->logger->write_message("success", "Updated account settings");
+				redirect('setting');
+				return;
 			}
-
-			/* Success */
-			$this->messages->add('Settings updated successfully', 'success');
-			redirect('setting');
-			return;
 		}
 		return;
 	}
@@ -521,17 +525,21 @@ class Setting extends Controller {
 				$data_email_password = $account_data->email_password;
 
 			/* Update settings */
+			$this->db->trans_start();
 			if ( ! $this->db->query("UPDATE settings SET email_protocol = ?, email_host = ?, email_port = ?, email_username = ?, email_password = ? WHERE id = 1", array($data_email_protocol, $data_email_host, $data_email_port, $data_email_username, $data_email_password)))
 			{
+				$this->db->trans_rollback();
 				$this->messages->add('Error updating settings', 'error');
+				$this->logger->write_message("error", "Error updating email settings");
 				$this->template->load('template', 'setting/email', $data);
 				return;
+			} else {
+				$this->db->trans_complete();
+				$this->messages->add('Email settings updated successfully', 'success');
+				$this->logger->write_message("success", "Updated email settings");
+				redirect('setting');
+				return;
 			}
-
-			/* Success */
-			$this->messages->add('Email settings updated successfully', 'success');
-			redirect('setting');
-			return;
 		}
 		return;
 	}
@@ -731,17 +739,21 @@ class Setting extends Controller {
 			}
 
 			/* Update settings */
+			$this->db->trans_start();
 			if ( ! $this->db->query("UPDATE settings SET print_paper_height = ?, print_paper_width = ?, print_margin_top = ?, print_margin_bottom = ?, print_margin_left = ?, print_margin_right = ?, print_orientation = ?, print_page_format = ?, print_page_layout = ?, print_logo = ? WHERE id = 1", array($data_paper_height, $data_paper_width, $data_margin_top, $data_margin_bottom, $data_margin_left, $data_margin_right, $data_orientation, $data_output_format,  $data_page_layout, $data_logo)))
 			{
+				$this->db->trans_rollback();
 				$this->messages->add('Error updating printer settings', 'error');
+				$this->logger->write_message("error", "Error updating printer settings");
 				$this->template->load('template', 'setting/printer');
 				return;
+			} else {
+				$this->db->trans_complete();
+				$this->messages->add('Printer settings updated successfully', 'success');
+				$this->logger->write_message("success", "Updated printer settings");
+				redirect('setting');
+				return;
 			}
-
-			/* Success */
-			$this->messages->add('Printer settings updated successfully', 'success');
-			redirect('setting');
-			return;
 		}
 		return;
 	}
@@ -765,6 +777,7 @@ class Setting extends Controller {
 
 		/* Send the file to your desktop */
 		force_download($backup_filename, $backup_data);
+		$this->logger->write_message("success", "Downloaded account backup");
 		redirect('setting');
 		return;
 	}
