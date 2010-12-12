@@ -98,7 +98,7 @@ class Welcome extends Controller {
 				{
 					$valid_webzash_db = TRUE;
 					/* Check for valid webzash database */
-					$table_names = array('settings', 'groups', 'ledgers', 'vouchers', 'voucher_items');
+					$table_names = array('settings', 'groups', 'ledgers', 'vouchers', 'voucher_items', 'tags', 'log');
 					foreach ($table_names as $id => $tbname)
 					{
 						$valid_db_q = mysql_query('DESC ' . $tbname);
