@@ -180,15 +180,15 @@ jQuery(document).ready(function () {
 			}
 			?>
 		</div>
-		<div class="dashboard-log-footer">
-			<?php
+		<?php
 			if ($logs)
 			{
+				echo "<div class=\"dashboard-log-footer\">";
 				echo "<span>";
 				echo anchor("", "more...", array('class' => 'blue-link no-underline'));
 				echo "</span>";
 			}
-			?>
+		?>
 		</div>
 	</div>
 </div>
