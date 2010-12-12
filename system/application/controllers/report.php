@@ -76,7 +76,7 @@ class Report extends Controller {
 
 			$trialbalance[$counter] = array ("TRIAL BALANCE", "", "", "", "", "", "", "", "");
 			$counter++;
-			$trialbalance[$counter] = array ("AY " . date_mysql_to_php($this->config->item('account_ay_start')) . " - " . date_mysql_to_php($this->config->item('account_ay_end')), "", "", "", "", "", "", "", "");
+			$trialbalance[$counter] = array ("FY " . date_mysql_to_php($this->config->item('account_fy_start')) . " - " . date_mysql_to_php($this->config->item('account_fy_end')), "", "", "", "", "", "", "", "");
 			$counter++;
 
 			$trialbalance[$counter][0]= "Ledger";
@@ -184,7 +184,7 @@ class Report extends Controller {
 
 			$ledgerst[$counter] = array ("", "", "LEDGER STATEMENT FOR " . strtoupper($this->Ledger_model->get_name($ledger_id)), "", "", "", "", "", "", "", "");
 			$counter++;
-			$ledgerst[$counter] = array ("", "", "AY " . date_mysql_to_php($this->config->item('account_ay_start')) . " - " . date_mysql_to_php($this->config->item('account_ay_end')), "", "", "", "", "", "", "", "");
+			$ledgerst[$counter] = array ("", "", "FY " . date_mysql_to_php($this->config->item('account_fy_start')) . " - " . date_mysql_to_php($this->config->item('account_fy_end')), "", "", "", "", "", "", "", "");
 			$counter++;
 
 			$ledgerst[$counter][0]= "Date";

@@ -9,7 +9,7 @@
 				<?php echo anchor('admin/create', 'Create Account', array('title' => 'Create a new account')); ?>
 			</div>
 			<div class="settings-desc">
-				Create a new webzash account
+				Create a new account
 			</div>
 		</div>
 		<div class="settings-container">
@@ -17,7 +17,7 @@
 				<?php echo anchor('admin/active', 'Change Active Account', array('title' => 'Change active account')); ?>
 			</div>
 			<div class="settings-desc">
-				Change existing active webzash account
+				Change existing active account
 			</div>
 		</div>
 		<div class="settings-container">
@@ -25,7 +25,7 @@
 				<?php echo anchor('admin/manage', 'Manage Accounts', array('title' => 'Manage existing accounts')); ?>
 			</div>
 			<div class="settings-desc">
-				Manage existing webzash accounts
+				Manage existing accounts
 			</div>
 		</div>
 	</div>

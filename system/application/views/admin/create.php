@@ -40,19 +40,19 @@
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Assessment Year Start', 'assy_start');
+	echo form_label('Financial Year Start', 'fy_start');
 	echo "<br />";
-	echo form_input_date($assy_start);
+	echo form_input_date($fy_start);
 	echo "<br />";
-	echo "<span class=\"form-help-text\">Warning : Assessment Year Start cannot be changed later</span>";
+	echo "<span class=\"form-help-text\">Warning : Financial Year Start cannot be changed later.<br />Format as per 'Date Foramt' selected abobe.</span>";
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Assessment Year End', 'assy_end');
+	echo form_label('Financial Year End', 'fy_end');
 	echo "<br />";
-	echo form_input_date($assy_end);
+	echo form_input_date($fy_end);
 	echo "<br />";
-	echo "<span class=\"form-help-text\">Warning : Assessment Year End cannot be changed later</span>";
+	echo "<span class=\"form-help-text\">Warning : Financial Year End cannot be changed later.<br />Format as per 'Date Foramt' selected abobe.</span>";
 	echo "</p>";
 
 	echo "<p>";

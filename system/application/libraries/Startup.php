@@ -134,8 +134,8 @@ class Startup
 		$CI->config->set_item('account_name', $account_d->name);
 		$CI->config->set_item('account_address', $account_d->address);
 		$CI->config->set_item('account_email', $account_d->email);
-		$CI->config->set_item('account_ay_start', $account_d->ay_start);
-		$CI->config->set_item('account_ay_end', $account_d->ay_end);
+		$CI->config->set_item('account_fy_start', $account_d->fy_start);
+		$CI->config->set_item('account_fy_end', $account_d->fy_end);
 		$CI->config->set_item('account_currency_symbol', $account_d->currency_symbol);
 		$CI->config->set_item('account_date_format', $account_d->date_format);
 		$CI->config->set_item('account_timezone', $account_d->timezone);

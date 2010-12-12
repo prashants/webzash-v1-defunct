@@ -64,9 +64,9 @@ $(document).ready(function() {
 			<?php
 				echo $this->config->item('account_name');
 				echo "<br />";
-				echo date_mysql_to_php($this->config->item('account_ay_start'));
+				echo date_mysql_to_php_display($this->config->item('account_fy_start'));
 				echo " - ";
-				echo date_mysql_to_php($this->config->item('account_ay_end'));
+				echo date_mysql_to_php_display($this->config->item('account_fy_end'));
 			?>
 		</div>
 	</div>

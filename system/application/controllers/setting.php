@@ -55,8 +55,8 @@ class Setting extends Controller {
 			'value' => ($account_data) ? echo_value($account_data->email) : '',
 		);
 
-		$data['assy_start'] = ($account_data) ? date_mysql_to_php(echo_value($account_data->ay_start)) : "error";
-		$data['assy_end'] = ($account_data) ? date_mysql_to_php(echo_value($account_data->ay_end)) : "error";
+		$data['fy_start'] = ($account_data) ? date_mysql_to_php(echo_value($account_data->fy_start)) : "error";
+		$data['fy_end'] = ($account_data) ? date_mysql_to_php(echo_value($account_data->fy_end)) : "error";
 
 		$data['account_currency'] = array(
 			'name' => 'account_currency',
@@ -141,7 +141,7 @@ class Setting extends Controller {
 		$this->template->set('page_title', 'Carry forward account');
 
 		/* Form fields */
-		$last_year_end = $this->config->item('account_ay_end');
+		$last_year_end = $this->config->item('account_fy_end');
 		list($last_year_end_date, $last_year_end_time) = explode(' ', $last_year_end);
 		list($last_year_end_year, $last_year_end_month, $last_year_end_day) = explode('-', $last_year_end_date);
 		$last_year_end_ts = strtotime($last_year_end);
@@ -164,16 +164,16 @@ class Setting extends Controller {
 			'size' => '40',
 			'value' => '',
 		);
-		$data['assy_start'] = array(
-			'name' => 'assy_start',
-			'id' => 'assy_start',
+		$data['fy_start'] = array(
+			'name' => 'fy_start',
+			'id' => 'fy_start',
 			'maxlength' => '11',
 			'size' => '11',
 			'value' => date_mysql_to_php($default_start),
 		);
-		$data['assy_end'] = array(
-			'name' => 'assy_end',
-			'id' => 'assy_end',
+		$data['fy_end'] = array(
+			'name' => 'fy_end',
+			'id' => 'fy_end',
 			'maxlength' => '11',
 			'size' => '11',
 			'value' => date_mysql_to_php($default_end),
@@ -224,8 +224,8 @@ class Setting extends Controller {
 		/* Form validations */
 		$this->form_validation->set_rules('account_label', 'C/F Label', 'trim|required|min_length[2]|max_length[30]|alpha_numeric');
 		$this->form_validation->set_rules('account_name', 'C/F Account Name', 'trim|required|min_length[2]|max_length[100]');
-		$this->form_validation->set_rules('assy_start', 'C/F Assessment Year Start', 'trim|required|is_date');
-		$this->form_validation->set_rules('assy_end', 'C/F Assessment Year End', 'trim|required|is_date');
+		$this->form_validation->set_rules('fy_start', 'C/F Financial Year Start', 'trim|required|is_date');
+		$this->form_validation->set_rules('fy_end', 'C/F Financial Year End', 'trim|required|is_date');
 
 		$this->form_validation->set_rules('database_name', 'Database Name', 'trim|required');
 		$this->form_validation->set_rules('database_username', 'Database Username', 'trim|required');
@@ -235,8 +235,8 @@ class Setting extends Controller {
 		{
 			$data['account_label']['value'] = $this->input->post('account_label', TRUE);
 			$data['account_name']['value'] = $this->input->post('account_name', TRUE);
-			$data['assy_start']['value'] = $this->input->post('assy_start', TRUE);
-			$data['assy_end']['value'] = $this->input->post('assy_end', TRUE);
+			$data['fy_start']['value'] = $this->input->post('fy_start', TRUE);
+			$data['fy_end']['value'] = $this->input->post('fy_end', TRUE);
 
 			$data['create_database'] = $this->input->post('create_database', TRUE);
 			$data['database_name']['value'] = $this->input->post('database_name', TRUE);
@@ -260,8 +260,8 @@ class Setting extends Controller {
 			$data_account_name = $this->input->post('account_name', TRUE);
 			$data_account_address = $this->config->item('account_address');
 			$data_account_email = $this->config->item('account_email');
-			$data_assy_start = date_php_to_mysql($this->input->post('assy_start', TRUE));
-			$data_assy_end = date_php_to_mysql_end_time($this->input->post('assy_end', TRUE));
+			$data_fy_start = date_php_to_mysql($this->input->post('fy_start', TRUE));
+			$data_fy_end = date_php_to_mysql_end_time($this->input->post('fy_end', TRUE));
 			$data_account_currency = $this->config->item('account_currency_symbol');
 			$data_account_date = $this->config->item('account_date_format');
 			$data_account_timezone = $this->config->item('account_timezone');
@@ -343,7 +343,7 @@ class Setting extends Controller {
 				}
 
 				/* Adding the account settings */
-				$newacc->query("INSERT INTO settings (id, label, name, address, email, ay_start, ay_end, currency_symbol, date_format, timezone, email_protocol, email_host, email_port, email_username, email_password,  database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, "", $data_account_name, $data_account_address, $data_account_email, $data_assy_start, $data_assy_end, $data_account_currency, $data_account_date, $data_account_timezone, $data_account_email_protocol, $data_account_email_host, $data_account_email_port, $data_account_email_username, $data_account_email_password, 1));
+				$newacc->query("INSERT INTO settings (id, label, name, address, email, fy_start, fy_end, currency_symbol, date_format, timezone, email_protocol, email_host, email_port, email_username, email_password,  database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, "", $data_account_name, $data_account_address, $data_account_email, $data_fy_start, $data_fy_end, $data_account_currency, $data_account_date, $data_account_timezone, $data_account_email_protocol, $data_account_email_host, $data_account_email_port, $data_account_email_username, $data_account_email_password, 1));
 
 				$this->messages->add("Successfully created webzash account", 'success');
 

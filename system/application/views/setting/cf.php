@@ -16,15 +16,19 @@
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('C/F Assessment Year Start', 'assy_start');
+	echo form_label('C/F Financial Year Start', 'fy_start');
 	echo "<br />";
-	echo form_input_date($assy_start);
+	echo form_input_date($fy_start);
+	echo "<br />";
+	echo "<span class=\"form-help-text\">Foramt : " . $this->config->item('account_date_format') . "</span>";
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('C/F Assessment Year End', 'assy_end');
+	echo form_label('C/F Financial Year End', 'fy_end');
 	echo "<br />";
-	echo form_input_date($assy_end);
+	echo form_input_date($fy_end);
+	echo "<br />";
+	echo "<span class=\"form-help-text\">Format : " . $this->config->item('account_date_format') . "</span>";
 	echo "</p>";
 
 	echo "<p>";

@@ -122,8 +122,8 @@ class Welcome extends Controller {
 								$this->config->set_item('account_date_format', $account_d->date_format);
 								$data['current_account'] .= "Currently active account is ";
 								$data['current_account'] .= "<b>" . $account_d->name . "</b>";
-								$data['current_account'] .= " from " . "<b>" . date_mysql_to_php($account_d->ay_start) . "</b>";
-								$data['current_account'] .= " to " . "<b>" . date_mysql_to_php($account_d->ay_end) . "</b>";
+								$data['current_account'] .= " from " . "<b>" . date_mysql_to_php_display($account_d->fy_start) . "</b>";
+								$data['current_account'] .= " to " . "<b>" . date_mysql_to_php_display($account_d->fy_end) . "</b>";
 								$data['current_account'] .= " ( " . anchor('admin/active', 'change active account', array('title' => 'Activate a existing account', 'style' => 'color:#000000')) . " )";
 							}
 						}
