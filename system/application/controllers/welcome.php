@@ -62,7 +62,7 @@ class Welcome extends Controller {
 			$data['show_income_expense'] = FALSE;
 
 		/* Getting Log Messages */
-		$data['log'] = $this->logger->read_recent_messages();
+		$data['logs'] = $this->logger->read_recent_messages();
 		$this->template->load('template', 'welcome_message', $data);
 		return;
 	}

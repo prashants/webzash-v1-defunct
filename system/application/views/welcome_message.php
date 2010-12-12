@@ -167,10 +167,10 @@ jQuery(document).ready(function () {
 		<div class="dashboard-log-title">Recent Activity</div>
 		<div class="dashboard-log-content">
 			<?php
-			if ($log)
+			if ($logs)
 			{
 				echo "<ul>";
-				foreach ($log->result() as $row)
+				foreach ($logs->result() as $row)
 				{
 					echo "<li>" . $row->message_title . "</li>";
 				}
@@ -182,7 +182,7 @@ jQuery(document).ready(function () {
 		</div>
 		<div class="dashboard-log-footer">
 			<?php
-			if ($log)
+			if ($logs)
 			{
 				echo "<span>";
 				echo anchor("", "more...", array('class' => 'blue-link no-underline'));

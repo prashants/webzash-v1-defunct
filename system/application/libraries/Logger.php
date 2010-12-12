@@ -33,16 +33,16 @@ class Logger
 		$data['user_agent'] = $CI->input->user_agent();
 		$data['message_title'] = $title;
 		$data['message_desc'] = $desc;
-		$CI->db->insert('log', $data);
+		$CI->db->insert('logs', $data);
 	}
 
 	function read_recent_messages()
 	{
 		$CI =& get_instance();
-		$log_q = $CI->db->query("SELECT * FROM log ORDER BY id DESC LIMIT 20");
-		if ($log_q->num_rows() > 0)
+		$logs_q = $CI->db->query("SELECT * FROM logs ORDER BY id DESC LIMIT 20");
+		if ($logs_q->num_rows() > 0)
 		{
-			return $log_q;
+			return $logs_q;
 		} else {
 			return FALSE;
 		}

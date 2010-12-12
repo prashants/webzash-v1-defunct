@@ -102,7 +102,7 @@ class Startup
 			if ($CI->db->query("SHOW TABLES"))
 			{
 				/* Check for valid webzash database */
-				$table_names = array('settings', 'groups', 'ledgers', 'vouchers', 'voucher_items', 'tags', 'log');
+				$table_names = array('settings', 'groups', 'ledgers', 'vouchers', 'voucher_items', 'tags', 'logs');
 				foreach ($table_names as $id => $tbname)
 				{
 					$valid_db_q = mysql_query('DESC ' . $tbname);
