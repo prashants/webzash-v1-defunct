@@ -76,11 +76,13 @@ class Tag extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding ' . $data_tag_title . ' - Tag', 'error');
+				$this->logger->write_message("error", "Error adding tag named " . $data_tag_title);
 				$this->template->load('template', 'tag/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add("Added " . $data_tag_title . ' - Tag successfully', 'success');
+				$this->logger->write_message("success", "Added tag named " . $data_tag_title);
 				redirect('tag');
 				return;
 			}
@@ -168,11 +170,13 @@ class Tag extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating ' . $data_tag_title . ' - Tag', 'error');
+				$this->logger->write_message("error", "Error updating tag named " . $data_tag_title . " [" . $id . "]");
 				$this->template->load('template', 'tag/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add("Updated " . $data_tag_title . ' - Tag successfully', 'success');
+				$this->logger->write_message("success", "Updated tag named " . $data_tag_title . " [" . $id . "]");
 				redirect('tag');
 				return;
 			}
@@ -198,6 +202,7 @@ class Tag extends Controller {
 			redirect('tag');
 			return;
 		}
+		$data_tag = $data_valid_q->row();
 
 		/* Deleting Tag */
 		$this->db->trans_start();
@@ -205,6 +210,7 @@ class Tag extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error removing Tags', 'error');
+			$this->logger->write_message("error", "Error removing tag named " . $data_tag->title . " [" . $id . "] from vouchers");
 			redirect('tag');
 			return;
 		} else {
@@ -212,11 +218,13 @@ class Tag extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting Tag', 'error');
+				$this->logger->write_message("error", "Error deleting tag named " . $data_tag->title . " [" . $id . "]");
 				redirect('tag');
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Tag deleted successfully', 'success');
+				$this->logger->write_message("success", "Deleted tag named " . $data_tag->title . " [" . $id . "]");
 				redirect('tag');
 				return;
 			}
