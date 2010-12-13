@@ -70,12 +70,6 @@ body {
 	text-align:center;
 }
 
-#footer {
-	color:#555555;
-	font-size:100%;
-	text-align:center;
-}
-
 
 #footer a {
 	color:#555555;
@@ -121,15 +115,7 @@ body {
 	color:#444444;
 }
 
-/* COMMON */
-.clear {
-	clear:both;
-}
-
-.bold {
-	font-weight:bold;
-}
-
+/* MESSAGE BOX */
 #message-box {
 	border:solid 1px #787878;
 	background:#F0F0F0;
@@ -157,22 +143,20 @@ body {
 	text-align:left;
 }
 
+/* COMMON */
+.clear {
+	clear:both;
+}
+
+.bold {
+	font-weight:bold;
+}
+
+a.no-underline {
+	text-decoration:none;
+}
+
 /* NOT SO COMMON */
-.voucher-add-links {
-	margin:0 0 10px 0;
-}
-
-.voucher-add-links a {
-	text-decoration:underline;
-	color:#000000;
-	font-size:90%;
-}
-
-.voucher-add-links a:hover
-{
-	color:#AAAAAA;
-}
-
 #current-active-account {
 	border:solid 1px #787878;
 	background:#F0F0F0;
@@ -181,3 +165,4 @@ body {
 	margin:0 0 10px 0;
 	text-align:left;
 }
+

@@ -83,12 +83,6 @@ body {
 	text-align:center;
 }
 
-#footer {
-	color:#555555;
-	font-size:100%;
-	text-align:center;
-}
-
 
 #footer a {
 	color:#555555;
@@ -122,15 +116,7 @@ body {
 	text-decoration:none;
 }
 
-/* COMMON */
-.clear {
-	clear:both;
-}
-
-.bold {
-	font-weight:bold;
-}
-
+/* MESSAGE BOX */
 #message-box {
 	border:solid 1px #787878;
 	background:#F0F0F0;
@@ -158,22 +144,17 @@ body {
 	text-align:left;
 }
 
-/* NOT SO COMMON */
-.voucher-add-links {
-	margin:0 0 10px 0;
+/* COMMON */
+.clear {
+	clear:both;
 }
 
-.voucher-add-links a {
-	text-decoration:underline;
-	color:#000000;
-	font-size:90%;
-}
-
-.voucher-add-links a:hover
-{
-	color:#AAAAAA;
+.bold {
+	font-weight:bold;
 }
 
 a.no-underline {
 	text-decoration:none;
 }
+
+
