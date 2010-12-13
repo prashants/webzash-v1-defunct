@@ -191,7 +191,7 @@ $(document).ready(function() {
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo form_label('Voucher Date', 'voucher_date');
 	echo " ";
-	echo form_input_date($voucher_date);
+	echo form_input_date_restrict($voucher_date);
 	echo "</p>";
 
 	echo "<table class=\"voucher-table\">";

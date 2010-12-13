@@ -47,6 +47,11 @@ $(document).ready(function() {
 		extraWidth: 1
 	}).superfish(); // call supersubs first, then superfish, so that subs are 
 	$('.datepicker').datepick({dateFormat: '<?php echo $this->config->item('account_date_format'); ?>'});
+	$('.datepicker-restrict').datepick({
+		dateFormat: '<?php echo $this->config->item('account_date_format'); ?>',
+		minDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_start')); ?>',
+		maxDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_end')); ?>',
+	});
 });
 </script>
 

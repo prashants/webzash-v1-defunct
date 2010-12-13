@@ -43,6 +43,16 @@ if ( ! function_exists('form_input_date'))
 	}
 }
 
+if ( ! function_exists('form_input_date_restrict'))
+{
+	function form_input_date_restrict($data = '', $value = '', $extra = '')
+	{
+		$defaults = array('type' => 'text', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
+
+		return "<input "._parse_form_attributes($data, $defaults).$extra." class=\"datepicker-restrict\"/>";
+	}
+}
+
 if ( ! function_exists('form_input_ledger'))
 {
 	function form_input_ledger($name, $selected = NULL, $extra = '')
