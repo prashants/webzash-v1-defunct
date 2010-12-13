@@ -24,8 +24,13 @@
 	color:#999999;
 }
 
-.black-link {
+a.anchor-link-a {
+	color:#1A2745;
+}
+
+a.anchor-link-b {
 	color:#000000;
+	text-decoration:none;
 }
 
 /******************************** PAGINATION **********************************/
@@ -93,7 +98,8 @@ ul#pagination-flickr {
 /* Fieldset */
 .fieldset-auto-width {
 	display:inline;
-	padding:10px;
+	padding:20px;
+	padding-right:50px;
 }
 
 .fieldset-auto-width legend {
@@ -116,6 +122,10 @@ ul#pagination-flickr {
 .form-help-text {
 	font-size:12px;
 	font-weight:italic;
+}
+
+.tag-edit {
+	float:right;
 }
 
 /********************************* DASHBOARD **********************************/

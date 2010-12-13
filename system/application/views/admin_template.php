@@ -33,10 +33,10 @@ $(document).ready(function(){
 <div id="container">
 	<div id="header">
 		<div id="logo">
-		Webzash <span style="font-size:18px;color:#FF0000;">Admin area</span>
+		Webzash <span id="admin-area">Admin area</span>
 		</div>
 		<div id="admin">
-			<?php echo anchor('', 'Back to accounts', array('title' => "Back to accounts", 'style' => 'color:#000000; text-decoration:none')); ?>
+			<?php echo anchor('', 'Back to accounts', array('title' => "Back to accounts", 'class' => 'anchor-link-b')); ?>
 		</div>
 		<div id="info">
 		</div>

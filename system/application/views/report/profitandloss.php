@@ -47,7 +47,7 @@
 
 	/* Showing Gross P/L : Expenses */
 	$grosstotal = $gross_expense_total;
-	echo "<tr style=\"background-color:#F8F8F8;\">";
+	echo "<tr class=\"total-area\">";
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"450\">";
 	echo "<tr valign=\"top\">";
@@ -150,7 +150,7 @@
 
 	/* Showing Net P/L : Expenses */
 	$nettotal = $net_expense_total;
-	echo "<tr style=\"background-color:#F8F8F8;\">";
+	echo "<tr class=\"total-area\">";
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"450\">";
 	echo "<tr valign=\"top\">";

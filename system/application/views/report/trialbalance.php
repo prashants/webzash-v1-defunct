@@ -13,7 +13,7 @@
 		echo "<tr class=\"tr-" . $odd_even . "\">";
 
 		echo "<td>";
-		echo  anchor('report/ledgerst/' . $ledger_id, $ledger_name, array('title' => $ledger_name . ' Ledger Statement', 'style' => 'color:#000000'));
+		echo  anchor('report/ledgerst/' . $ledger_id, $ledger_name, array('title' => $ledger_name . ' Ledger Statement', 'class' => 'anchor-link-a'));
 		echo "</td>";
 
 		echo "<td>";

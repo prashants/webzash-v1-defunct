@@ -157,4 +157,9 @@ a.no-underline {
 	text-decoration:none;
 }
 
+/* NOT SO COMMON */
+#beta-area {
+	font-size:18px;
+	color:#00000;
+}
 

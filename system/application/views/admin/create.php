@@ -62,7 +62,7 @@
 	echo "</p>";
 
 	echo "<p>";
-	echo form_fieldset('Database Settings', array('class' => "fieldset-auto-width", 'style' => "width:500px;"));
+	echo form_fieldset('Database Settings', array('class' => "fieldset-auto-width"));
 
 	echo "<p>";
 	echo form_checkbox('create_database', 1, $create_database) . " Create database if it does not exists";

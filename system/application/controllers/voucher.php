@@ -158,15 +158,15 @@ class Voucher extends Controller {
 			$html .= "\">";
 
 			$html .= "<td>" . date_mysql_to_php_display($row->date) . "</td>";
-			$html .= "<td>" . anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, $row->number, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'blue-link')) . "</td>";
+			$html .= "<td>" . anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, $row->number, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'anchor-link-a')) . "</td>";
 
 			$html .= "<td>";
 			$html .= $this->Tag_model->show_voucher_tag($row->tag_id);
 			if ($ledger)
 				if ($ledger_multiple)
-					$html .= anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, "(" . $ledger->name . ")", array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'blue-link'));
+					$html .= anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, "(" . $ledger->name . ")", array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'anchor-link-a'));
 				else
-					$html .= anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, $ledger->name, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'blue-link'));
+					$html .= anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, $ledger->name, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'anchor-link-a'));
 			$html .= "</td>";
 
 			$html .= "<td>" . ucfirst($html_voucher_type) . "</td>";

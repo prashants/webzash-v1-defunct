@@ -2,7 +2,7 @@
 	#income-expense-graph-header {
 	      width: 200px;
 	      text-align: center;
-	      padding-bottom:10px;
+	      padding-bottom:30px;
 	}
 	#income-expense-graph-data {
 	      width: 200px;
@@ -12,7 +12,7 @@
 	#asset-liability-graph-header {
 	      width: 200px;
 	      text-align: center;
-	      padding-bottom:10px;
+	      padding-bottom:30px;
 	}
 	#asset-liability-graph-data {
 	      width: 200px;
@@ -84,8 +84,16 @@ jQuery(document).ready(function () {
 	<div id="dashboard-welcome-back" class="dashboard-item">
 		<div class="dashboard-title">Account Summary</div>
 		<div class="dashboard-content">
-			<div>Welcome back, <strong><?php echo $this->config->item('account_name');?> !</strong></div>
-			<div id="dashboard-draft">You have <?php echo anchor("voucher/show/draft", $draft_count . " draft", array('class' => 'black-link')); ?> voucher(s)</div>
+			<table class="dashboard-summary-table">
+				<tbody>
+					<tr>
+						<td><div>Welcome back, <strong><?php echo $this->config->item('account_name');?> !</strong></div></td>
+					</tr>
+					<tr>
+						<td><div id="dashboard-draft">You have <?php echo anchor("voucher/show/draft", $draft_count . " draft", array('class' => 'anchor-link-a')); ?> voucher(s)</div></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div class="clear"></div>
@@ -142,7 +150,7 @@ jQuery(document).ready(function () {
 					<?php if ($show_income_expense) { ?>
 						<td width="300">
 							<div id="income-expense" class="graph">
-								<div id="income-expense-graph-header"><h4>Incomes Vs Expenses</h4></div>
+								<div id="income-expense-graph-header"><strong>Incomes Vs Expenses</strong></div>
 								<div id="income-expense-graph-data"></div>
 							</div>
 						</td>
@@ -150,7 +158,7 @@ jQuery(document).ready(function () {
 					<?php if ($show_asset_liability) { ?>
 						<td width="300">
 							<div id="asset-liability" class="graph">
-								<div id="asset-liability-graph-header"><h4>Assets Vs Liabilities</h4></div>
+								<div id="asset-liability-graph-header"><strong>Assets Vs Liabilities</strong></div>
 								<div id="asset-liability-graph-data""></div>
 							</div>
 						</td>
@@ -183,7 +191,7 @@ jQuery(document).ready(function () {
 			{
 				echo "<div class=\"dashboard-log-footer\">";
 				echo "<span>";
-				echo anchor("", "more...", array('class' => 'blue-link no-underline'));
+				echo anchor("", "more...", array('class' => 'anchor-link-a no-underline'));
 				echo "</span>";
 			}
 		?>

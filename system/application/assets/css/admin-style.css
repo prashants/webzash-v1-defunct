@@ -110,11 +110,6 @@ body {
 	text-decoration:none;
 }
 
-#content #main ul#main-links-nav li a:hover
-{
-	color:#444444;
-}
-
 /* MESSAGE BOX */
 #message-box {
 	border:solid 1px #787878;
@@ -164,5 +159,10 @@ a.no-underline {
 	padding:10px;
 	margin:0 0 10px 0;
 	text-align:left;
+}
+
+#admin-area {
+	font-size:18px;
+	color:#FF0000;
 }
 

@@ -121,7 +121,7 @@
 			echo date_mysql_to_php_display($row->vdate);
 			echo "</td>";
 			echo "<td>";
-			echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $row->vnumber, array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
+			echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $row->vnumber, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
 			echo "</td>";
 
 			/* Getting opposite Ledger name */
@@ -135,9 +135,9 @@
 					$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
 					if ($opp_voucher_name_q->num_rows() > 1)
 					{
-						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
+						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
 					} else {
-						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
+						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
 					}
 				}
 			} else {
@@ -147,9 +147,9 @@
 					$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
 					if ($opp_voucher_name_q->num_rows() > 1)
 					{
-						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
+						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
 					} else {
-						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'style' => 'color:#000000'));
+						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
 					}
 				}
 

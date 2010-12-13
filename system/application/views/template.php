@@ -55,10 +55,10 @@ $(document).ready(function() {
 <div id="container">
 	<div id="header">
 		<div id="logo">
-			Webzash <span style="font-size:18px;color:#00000;">(beta)</span>
+			Webzash <span id="beta-area">(beta)</span>
 		</div>
 		<div id="admin">
-			<?php echo anchor('admin', 'Administer', array('title' => "Administer", 'style' => 'color:#000000; text-decoration:none')); ?>
+			<?php echo anchor('admin', 'Administer', array('title' => "Administer", 'class' => 'anchor-link-b')); ?>
 		</div>
 		<div id="info">
 			<?php
