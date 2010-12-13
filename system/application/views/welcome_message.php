@@ -175,7 +175,7 @@ jQuery(document).ready(function () {
 			<?php
 			if ($logs)
 			{
-				echo "<ul>";
+				echo "<ul id=\"recent-activity-list\">";
 				foreach ($logs->result() as $row)
 				{
 					echo "<li>" . $row->message_title . "</li>";

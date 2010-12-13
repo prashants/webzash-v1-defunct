@@ -33,6 +33,25 @@ a.anchor-link-b {
 	text-decoration:none;
 }
 
+/* Fieldset */
+.fieldset-auto-width {
+	display:inline;
+	padding:20px;
+	padding-right:50px;
+}
+
+.fieldset-auto-width legend {
+	border: 1px solid #0099CC;
+	background:#E5F1F4;
+	padding:4px;
+}
+
+/* Form */
+.form-help-text {
+	font-size:12px;
+	font-weight:italic;
+}
+
 /******************************** PAGINATION **********************************/
 #pagination-container {
 	margin-top:20px;
@@ -93,39 +112,6 @@ ul#pagination-flickr {
 
 #pagination-flickr a:hover{
 	border:solid 1px #666666;
-}
-
-/* Fieldset */
-.fieldset-auto-width {
-	display:inline;
-	padding:20px;
-	padding-right:50px;
-}
-
-.fieldset-auto-width legend {
-	border: 1px solid #0099CC;
-	background:#E5F1F4;
-	padding:4px;
-}
-
-/* Tags */
-.tags {
-	font-size:10px;
-	font-weight:bold;
-	text-decoration:none;
-	margin:0 5px 0 1px;
-	padding:3px;
-	-moz-border-radius:5px;
-	border-radius:5px;
-}
-
-.form-help-text {
-	font-size:12px;
-	font-weight:italic;
-}
-
-.tag-edit {
-	float:right;
 }
 
 /********************************* DASHBOARD **********************************/
@@ -216,4 +202,25 @@ ul#pagination-flickr {
 #tag-sidebar ul li a.tag-active {
 	color:#0000FF;
 	text-decoration:none;
+}
+
+.tags {
+	font-size:10px;
+	font-weight:bold;
+	text-decoration:none;
+	margin:0 5px 0 1px;
+	padding:3px;
+	-moz-border-radius:5px;
+	border-radius:5px;
+}
+
+.tag-edit {
+	float:right;
+}
+
+/***************************** RECENT ACTIVITY ********************************/
+#recent-activity-list {
+	margin-left:30px;
+	padding:0px;
+	list-style-type:square;
 }
