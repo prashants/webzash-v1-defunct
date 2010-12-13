@@ -3,8 +3,7 @@
 /******************************************************************************/
 
 .simple-table {
-	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size:13px;
+	font-size:14px;
 	border-collapse:collapse;
 	text-align:left;
 }
@@ -50,7 +49,7 @@
 
 .voucher-table {
 	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size:13px;
+	font-size:14px;
 	border-collapse:collapse;
 	text-align:left;
 }
@@ -113,8 +112,7 @@
 }
 
 .balance-sheet-total-table {
-	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size:13px;
+	font-size:14px;
 	border-collapse:collapse;
 	text-align:left;	
 }
@@ -139,8 +137,7 @@
 }
 
 .profit-loss-total-table {
-	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size:13px;
+	font-size:14px;
 	border-collapse:collapse;
 	text-align:left;	
 }
@@ -191,8 +188,7 @@
 }
 
 .ledger-summary {
-	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size: 13px;
+	font-size:14px;
 	border-collapse: collapse;
 	text-align: left;
 	border: 1px solid #BBBBBB;

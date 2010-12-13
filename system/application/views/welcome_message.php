@@ -80,8 +80,6 @@ jQuery(document).ready(function () {
 	});
 });
 </script>
-
-<h3>&lt;This is beta software not meant for production use !&gt;</h3>
 <div id="dashboard-summary">
 	<div id="dashboard-welcome-back" class="dashboard-item">
 		<div class="dashboard-title">Account Summary</div>

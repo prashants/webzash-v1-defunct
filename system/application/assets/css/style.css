@@ -1,7 +1,7 @@
 body {
 	background:none repeat scroll 0 0 #DDDDDD;
 	color:#333333;
-	font:12px/1.5em "Helvetica Neue","Lucida Grande","Helvetica Neue",Arial,sans-serif;
+	font:12px "Helvetica Neue","Lucida Grande","Helvetica Neue",Arial,sans-serif;
 	margin:0;
 	min-width:950px;
 	padding:0;
@@ -24,14 +24,14 @@ body {
 
 #header #logo {
 	padding:35px 0 0 18px;
-	font-size:400%;		
+	font-size:40px;
 	float:left;
 	width:70%;
 }
 
 #header #admin {
 	color:#000000;
-	font-size:120%;
+	font-size:15px;
 	display:block;
 	position:absolute;
 	background:none repeat scroll 0 0 #E5F1F4;
@@ -48,7 +48,7 @@ body {
 	top:10px;
 	background:none repeat scroll 0 0 #EEEEEE;
 	padding:10px;
-	font-size:120%;
+	font-size:15px;
 	-moz-border-radius: 10px;
 	border-radius: 1px;
 }
@@ -67,18 +67,18 @@ body {
 }
 
 #content #main #main-title {
-	font-size:150%;
+	font-size:19px;
 	padding:10px 0 10px 0;
 }
 
 #content #main  #main-content {
 	padding:10px 0 10px 0;
-	font-size:120%;
+	font-size:14px;
 }
 
 #footer {
 	color:#555555;
-	font-size:100%;
+	font-size:13px;
 	margin:9px 20px 18px 20px;
 	text-align:center;
 }
@@ -86,7 +86,7 @@ body {
 
 #footer a {
 	color:#555555;
-	font-size:100%;
+	font-size:13px;
 	text-align:center;
 }
 
