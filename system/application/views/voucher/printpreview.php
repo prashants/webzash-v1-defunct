@@ -20,6 +20,7 @@
 		</thead>
 		<tbody>
 		<?php
+			$currency = $this->config->item('account_currency_symbol');
 			foreach ($ledger_data as $id => $row)
 			{
 				echo "<tr class=\"tr-ledger\">";
@@ -31,15 +32,15 @@
 				}
 				if ($row['dc'] == "D")
 				{
-					echo "<td class=\"ledger-dr item\">Dr " . $row['amount'] . "</td>";
+					echo "<td class=\"ledger-dr item\">" . $currency . " " . $row['amount'] . "</td>";
 					echo "<td class=\"ledger-cr last-item\"></td>";
 				} else {
 					echo "<td class=\"ledger-dr item\"></td>";
-					echo "<td class=\"ledger-cr last-item\">Cr " . $row['amount'] . "</td>";
+					echo "<td class=\"ledger-cr last-item\">" . $currency . " " . $row['amount'] . "</td>";
 				}
 				echo "</tr>";
 			}
-			echo "<tr class=\"tr-total\"><td class=\"total-name\">Total</td><td class=\"total-dr\">Dr " . $voucher_dr_total . "</td><td class=\"total-cr\">Cr " . $voucher_cr_total . "</td></tr>";
+			echo "<tr class=\"tr-total\"><td class=\"total-name\">Total</td><td class=\"total-dr\">" . $currency . " " .  $voucher_dr_total . "</td><td class=\"total-cr\">" . $currency . " " . $voucher_cr_total . "</td></tr>";
 		?>
 		</tbody>
 	</table>
