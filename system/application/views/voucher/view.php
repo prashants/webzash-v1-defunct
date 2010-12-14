@@ -59,7 +59,7 @@ else
 	echo " | ";
 	echo anchor('voucher/delete/' . $voucher_type . "/" . $cur_voucher->id, 'Delete', array('class' => "confirmClick", 'title' => "Delete voucher", 'title' => 'Delete this ' . ucfirst($voucher_type) . ' Voucher'));
 	echo " | ";
-	echo anchor_popup('voucher/printhtml/' . $voucher_type . "/" . $cur_voucher->id, 'Print', array('title' => 'Print  this ' . ucfirst($voucher_type) . ' Voucher'));
+	echo anchor_popup('voucher/printview/' . $voucher_type . "/" . $cur_voucher->id, 'Print', array('title' => 'Print  this ' . ucfirst($voucher_type) . ' Voucher'));
 	echo " | ";
 	echo anchor_popup('voucher/email/' . $voucher_type . "/" . $cur_voucher->id, 'Email', array('title' => 'Email this ' . ucfirst($voucher_type) . ' Voucher', 'width' => '400', 'height' => '200'));
 

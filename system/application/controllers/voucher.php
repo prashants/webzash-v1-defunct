@@ -181,7 +181,7 @@ class Voucher extends Controller {
 
 			$html .= " &nbsp;" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Delete  ' . ucfirst($html_voucher_type) . ' Voucher')) . " ";
 
-			$html .= " &nbsp;" . anchor_popup('voucher/printhtml/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')) . " ";
+			$html .= " &nbsp;" . anchor_popup('voucher/printview/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')) . " ";
 
 			$html .= " &nbsp;" . anchor_popup('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '500', 'height' => '300')) . "</td>";
 
@@ -762,7 +762,7 @@ class Voucher extends Controller {
 		return;
 	}
 
-	function printhtml($voucher_type, $voucher_id)
+	function printview($voucher_type, $voucher_id)
 	{
 		$this->load->model('Setting_model');
 		$this->load->model('Ledger_model');
@@ -777,37 +777,38 @@ class Voucher extends Controller {
 			return;
 		}
 
-		echo "<h3>" . ucfirst($voucher_type) . " Voucher</h3>";
-		echo "<p><b>" . $account->name . "</b></p>";
-		echo "<p>" . $account->address . "</p>";
-		echo "<p>Voucher Number : " . $cur_voucher->number . "</p>";
-		echo "<p>Voucher Date : " . date_mysql_to_php_display($cur_voucher->date) . "</p>";
-		echo "<table border=1>";
-		echo "<thead><tr><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>";
+		$data['voucher_type'] = $voucher_type;
+		$data['voucher_number'] =  $cur_voucher->number;
+		$data['voucher_date'] = date_mysql_to_php_display($cur_voucher->date);
+		$data['voucher_dr_total'] =  $cur_voucher->dr_total;
+		$data['voucher_cr_total'] =  $cur_voucher->cr_total;
+		$data['voucher_narration'] = $cur_voucher->narration;
+		$data['voucher_draft'] = $cur_voucher->draft;
 
+		/* Getting Ledger details */
 		$ledger_q;
 		if ($voucher_type == "receipt" || $voucher_type == "contra")
 			$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
 		else
 			$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc ASC", $voucher_id);
-	
-		foreach ($ledger_q->result() as $row)
+
+		$counter = 0;
+		$data['ledger_data'] = array();
+		if ($ledger_q->num_rows() > 0)
 		{
-			echo "<tr>";
-			echo "<td>" . $this->Ledger_model->get_name($row->ledger_id) . "</td>";
-			if ($row->dc == "D")
+			foreach ($ledger_q->result() as $row)
 			{
-				echo "<td>" . $row->amount . "</td>";
-				echo "<td>-</td>";
-			} else {
-				echo "<td>-</td>";
-				echo "<td>" . $row->amount . "</td>";
+				$data['ledger_data'][$counter] = array(
+					'id' => $row->ledger_id,
+					'name' => $this->Ledger_model->get_name($row->ledger_id),
+					'dc' => $row->dc,
+					'amount' => $row->amount,
+				);
+				$counter++;
 			}
-			echo "</tr>";
 		}
-		echo "<tr><td><b>TOTAL</b></td><td><b>" . $cur_voucher->dr_total . "</b></td><td><b>" . $cur_voucher->cr_total . "</b></td></tr>";
-		echo "</table>";
-		echo "<p>" . "Narration : " . $cur_voucher->narration . "</p>";
+
+		$this->load->view('voucher/printview', $data);
 		return;
 	}
 
