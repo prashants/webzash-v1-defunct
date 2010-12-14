@@ -291,6 +291,14 @@ class Setting extends Controller {
 				return;
 			}
 
+			/* Check if start date is less than end date */
+			if ($data_fy_end <= $data_fy_start)
+			{
+				$this->messages->add("Financial start date cannot be greater than end date", 'error');
+				$this->template->load('template', 'setting/cf', $data);
+				return;
+			}
+
 			if ($data_database_host == "")
 				$data_database_host = "localhost";
 			if ($data_database_port == "")
