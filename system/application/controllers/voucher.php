@@ -850,40 +850,35 @@ class Voucher extends Controller {
 		}
 		else
 		{
+			$voucher_data['voucher_type'] = $voucher_type;
+			$voucher_data['voucher_number'] =  $cur_voucher->number;
+			$voucher_data['voucher_date'] = date_mysql_to_php_display($cur_voucher->date);
+			$voucher_data['voucher_dr_total'] =  $cur_voucher->dr_total;
+			$voucher_data['voucher_cr_total'] =  $cur_voucher->cr_total;
+			$voucher_data['voucher_narration'] = $cur_voucher->narration;
+			$voucher_data['voucher_draft'] = $cur_voucher->draft;
+	
+			/* Getting Ledger details */
+			$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
+	
+			$counter = 0;
+			$voucher_data['ledger_data'] = array();
+			if ($ledger_q->num_rows() > 0)
+			{
+				foreach ($ledger_q->result() as $row)
+				{
+					$voucher_data['ledger_data'][$counter] = array(
+						'id' => $row->ledger_id,
+						'name' => $this->Ledger_model->get_name($row->ledger_id),
+						'dc' => $row->dc,
+						'amount' => $row->amount,
+					);
+					$counter++;
+				}
+			}
 
 			/* Preparing message */
-			$message = "";
-			$message .= "<h3>" . ucfirst($voucher_type) . " Voucher</h3>";
-			$message .= "<p><b>" . $this->config->item('account_name') . "</b></p>";
-			$message .= "<p>" . $this->config->item('account_address') . "</p>";
-			$message .= "<p>Voucher Number : " . voucher_number_prefix($voucher_type) . $cur_voucher->number . "</p>";
-			$message .= "<p>Voucher Date : " . date_mysql_to_php_display($cur_voucher->date) . "</p>";
-			$message .= "<table border=1>";
-			$message .= "<thead><tr><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>";
-
-			$ledger_q;
-			if ($voucher_type == "receipt" || $voucher_type == "contra")
-				$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
-			else
-				$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc ASC", $voucher_id);
-	
-			foreach ($ledger_q->result() as $row)
-			{
-				$message .=  "<tr>";
-				$message .=  "<td>" . $this->Ledger_model->get_name($row->ledger_id) . "</td>";
-				if ($row->dc == "D")
-				{
-					$message .=  "<td>" . $row->amount . "</td>";
-					$message .=  "<td>-</td>";
-				} else {
-					$message .=  "<td>-</td>";
-					$message .=  "<td>" . $row->amount . "</td>";
-				}
-				$message .=  "</tr>";
-			}
-			$message .=  "<tr><td><b>TOTAL</b></td><td><b>" . $cur_voucher->dr_total . "</b></td><td><b>" . $cur_voucher->cr_total . "</b></td></tr>";
-			$message .=  "</table>";
-			$message .=  "<p>" . "Narration : " . $cur_voucher->narration . "</p>";
+			$message = $this->load->view('voucher/emailpreview', $voucher_data, TRUE);
 
 			/* Sending email */
 			$config['protocol'] = $this->config->item('account_email_protocol');
