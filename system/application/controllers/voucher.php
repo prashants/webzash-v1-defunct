@@ -181,7 +181,7 @@ class Voucher extends Controller {
 
 			$html .= " &nbsp;" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Delete  ' . ucfirst($html_voucher_type) . ' Voucher')) . " ";
 
-			$html .= " &nbsp;" . anchor_popup('voucher/printview/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')) . " ";
+			$html .= " &nbsp;" . anchor_popup('voucher/printpreview/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')) . " ";
 
 			$html .= " &nbsp;" . anchor_popup('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '500', 'height' => '300')) . "</td>";
 
@@ -762,7 +762,7 @@ class Voucher extends Controller {
 		return;
 	}
 
-	function printview($voucher_type, $voucher_id)
+	function printpreview($voucher_type, $voucher_id)
 	{
 		$this->load->model('Setting_model');
 		$this->load->model('Ledger_model');
@@ -804,7 +804,7 @@ class Voucher extends Controller {
 			}
 		}
 
-		$this->load->view('voucher/printview', $data);
+		$this->load->view('voucher/printpreview', $data);
 		return;
 	}
 

@@ -6,8 +6,6 @@
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/printvoucher.css">
 </head>
 <body>
-	<div id="print-html-link" class="hide-print"><a href="javascript:window.print();">Print HTML</a></div>
-	<br />
 	<div id="print-account-name"><span class="value"><?php echo  $this->config->item('account_name'); ?></span></div>
 	<div id="print-account-address"><span class="value"><?php echo $this->config->item('account_address'); ?></span></div>
 	<br />
