@@ -119,5 +119,39 @@ if ( ! function_exists('v_to_n'))
 	}
 }
 
+/**
+ * Converts Voucher number to proper voucher prefix formats
+ *
+ * @access	public
+ * @param	voucher type
+ * @return	string
+ */
+if ( ! function_exists('voucher_number_prefix'))
+{
+	function voucher_number_prefix($voucher_type)
+	{
+		$CI =& get_instance();
+
+		$voucher_prefix = "";
+
+		switch ($voucher_type)
+		{
+		case "receipt":
+			$voucher_prefix = $CI->config->item('account_receipt_prefix');
+			break;
+		case "payment":
+			$voucher_prefix = $CI->config->item('account_payment_prefix');
+			break;
+		case "contra":
+			$voucher_prefix = $CI->config->item('account_contra_prefix');
+			break;
+		case "journal":
+			$voucher_prefix = $CI->config->item('account_journal_prefix');
+			break;
+		}
+		return $voucher_prefix;
+	}
+}
+
 /* End of file custom_helper.php */
 /* Location: ./system/application/helpers/custom_helper.php */

@@ -144,6 +144,10 @@ class Startup
 		$CI->config->set_item('account_email_port', $account_d->email_port);
 		$CI->config->set_item('account_email_username', $account_d->email_username);
 		$CI->config->set_item('account_email_password', $account_d->email_password);
+		$CI->config->set_item('account_receipt_prefix', $account_d->receipt_voucher_prefix);
+		$CI->config->set_item('account_payment_prefix', $account_d->payment_voucher_prefix);
+		$CI->config->set_item('account_contra_prefix', $account_d->contra_voucher_prefix);
+		$CI->config->set_item('account_journal_prefix', $account_d->journal_voucher_prefix);
 
 		/************** Load general application settings *************/
 		$setting_ini_file = "system/application/config/general.ini";

@@ -158,7 +158,7 @@ class Voucher extends Controller {
 			$html .= "\">";
 
 			$html .= "<td>" . date_mysql_to_php_display($row->date) . "</td>";
-			$html .= "<td>" . anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, $row->number, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'anchor-link-a')) . "</td>";
+			$html .= "<td>" . anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, voucher_number_prefix($html_voucher_type) . $row->number, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'anchor-link-a')) . "</td>";
 
 			$html .= "<td>";
 			$html .= $this->Tag_model->show_voucher_tag($row->tag_id);
@@ -856,7 +856,7 @@ class Voucher extends Controller {
 			$message .= "<h3>" . ucfirst($voucher_type) . " Voucher</h3>";
 			$message .= "<p><b>" . $this->config->item('account_name') . "</b></p>";
 			$message .= "<p>" . $this->config->item('account_address') . "</p>";
-			$message .= "<p>Voucher Number : " . $cur_voucher->number . "</p>";
+			$message .= "<p>Voucher Number : " . voucher_number_prefix($voucher_type) . $cur_voucher->number . "</p>";
 			$message .= "<p>Voucher Date : " . date_mysql_to_php_display($cur_voucher->date) . "</p>";
 			$message .= "<table border=1>";
 			$message .= "<thead><tr><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>";

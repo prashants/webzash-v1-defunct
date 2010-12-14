@@ -11,7 +11,7 @@
 	<br />
 	<div id="print-voucher-type"><span class="value"><?php echo ucfirst($voucher_type); ?> Voucher</span></div>
 	<br />
-	<div id="print-voucher-number"><?php echo ucfirst($voucher_type); ?> Voucher Number : <span class="value"><?php echo $voucher_number; ?></span></div>
+	<div id="print-voucher-number"><?php echo ucfirst($voucher_type); ?> Voucher Number : <span class="value"><?php echo voucher_number_prefix($voucher_type) . $voucher_number; ?></span></div>
 	<div id="print-voucher-number"><?php echo ucfirst($voucher_type); ?> Voucher Date : <span class="value"><?php echo $voucher_date; ?></span></div>
 	<br />
 	<table id="print-voucher-table">

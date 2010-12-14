@@ -213,7 +213,7 @@ class Report extends Controller {
 			foreach ($ledgerst_q->result() as $row)
 			{
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
-				$ledgerst[$counter][1] = $row->vid;
+				$ledgerst[$counter][1] = voucher_number_prefix(n_to_v($row->vtype)) . $row->vnumber;
 
 				/* Opposite voucher name */
 				if ($row->ldc == "D")

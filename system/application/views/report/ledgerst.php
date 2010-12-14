@@ -121,7 +121,7 @@
 			echo date_mysql_to_php_display($row->vdate);
 			echo "</td>";
 			echo "<td>";
-			echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $row->vnumber, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
+			echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, voucher_number_prefix(n_to_v($row->vtype)) . $row->vnumber, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
 			echo "</td>";
 
 			/* Getting opposite Ledger name */
