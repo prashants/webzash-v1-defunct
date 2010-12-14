@@ -1,5 +1,5 @@
 <?php
-	echo form_open('admin/gensetting');
+	echo form_open('admin/setting');
 
 	echo "<p>";
 	echo form_label('Number of rows to display per page', 'row_count');

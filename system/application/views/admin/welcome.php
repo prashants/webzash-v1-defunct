@@ -32,7 +32,7 @@
 	<div id="right-col">
 		<div class="settings-container">
 			<div class="settings-title">
-				<?php echo anchor('admin/gensetting', 'General Settings', array('title' => 'General Application Settings')); ?>
+				<?php echo anchor('admin/setting', 'General Settings', array('title' => 'General Application Settings')); ?>
 			</div>
 			<div class="settings-desc">
 				General application settings

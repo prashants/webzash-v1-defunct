@@ -1,8 +1,8 @@
 <?php
 
-class Gensetting extends Controller {
+class Setting extends Controller {
 
-	function Gensetting()
+	function Setting()
 	{
 		parent::Controller();
 		return;
@@ -51,7 +51,7 @@ class Gensetting extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('admin_template', 'admin/gensetting', $data);
+			$this->template->load('admin_template', 'admin/setting', $data);
 			return;
 		}
 		else
@@ -61,7 +61,7 @@ class Gensetting extends Controller {
 			if ($data_row_count < 0 || $data_row_count > 200)
 			{
 				$this->messages->add('Invalid value for Row Count', 'error');
-				$this->template->load('admin_template', 'admin/gensetting');
+				$this->template->load('admin_template', 'admin/setting');
 				return;
 			}
 
@@ -74,11 +74,11 @@ class Gensetting extends Controller {
 			{
 				$this->messages->add("Failed to update settings file. Please check if \"" . $ini_file . "\" file is writable", 'error');
 				$this->messages->add("You can manually create a text file \"" . $ini_file . "\" with the following content :<br /><br />" . $new_setting_html, 'error');
-				$this->template->load('admin_template', 'admin/gensetting', $data);
+				$this->template->load('admin_template', 'admin/setting', $data);
 				return;
 			} else {
 				$this->messages->add('General settings updated successfully', 'success');
-				redirect('admin/gensetting');
+				redirect('admin/setting');
 				return;
 			}
 		}
@@ -86,5 +86,5 @@ class Gensetting extends Controller {
 	}
 }
 
-/* End of file gensetting.php */
-/* Location: ./system/application/controllers/admin/gensetting.php */
+/* End of file setting.php */
+/* Location: ./system/application/controllers/admin/setting.php */
