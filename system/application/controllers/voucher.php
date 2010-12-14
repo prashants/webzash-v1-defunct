@@ -786,11 +786,7 @@ class Voucher extends Controller {
 		$data['voucher_draft'] = $cur_voucher->draft;
 
 		/* Getting Ledger details */
-		$ledger_q;
-		if ($voucher_type == "receipt" || $voucher_type == "contra")
-			$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
-		else
-			$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc ASC", $voucher_id);
+		$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
 
 		$counter = 0;
 		$data['ledger_data'] = array();

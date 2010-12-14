@@ -1,0 +1,61 @@
+/*********************************** COMMON ***********************************/
+body {
+	color:#000000;
+	font:14px "Helvetica Neue","Lucida Grande","Helvetica Neue",Arial,sans-serif;
+	margin:20px;
+	padding:0;
+}
+
+/******************************** SPECIFIC ************************************/
+
+#print-account-name {
+	text-align:center;
+	font-size:17px;
+}
+
+#print-account-address {
+	text-align:center;
+	font-size:14px;
+}
+
+#print-voucher-type {
+	text-align:center;
+	font-size:15px;
+}
+
+table#print-voucher-table {
+	border:1px solid #000000;
+	border-collapse: collapse;
+}
+
+table#print-voucher-table tr.tr-title {
+	text-align:left;
+	border:1px solid #000000;
+	padding:5px 0 5px 2px;
+}
+
+table#print-voucher-table tr.tr-title th {
+	padding:5px 0 5px 5px;
+}
+
+table#print-voucher-table td {
+	padding:5px 0 5px 5px;
+}
+
+table#print-voucher-table td.item {
+	padding-right:35px;
+}
+
+table#print-voucher-table td.last-item {
+	padding-right:5px;
+}
+
+table#print-voucher-table tr.tr-total {
+	border:1px solid #000000;
+}
+
+@media print {
+	.hide-print {
+		display: none;
+	}
+}
