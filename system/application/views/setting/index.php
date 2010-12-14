@@ -26,7 +26,7 @@
 		</div>
 		<div class="settings-container">
 			<div class="settings-title">
-				<?php echo anchor('setting/printer', 'Printer Settings', array('title' => 'Printer  Settings')); ?>
+				<?php echo anchor('setting/printer', 'Printer Settings', array('title' => 'Printer Settings')); ?>
 			</div>
 			<div class="settings-desc">
 				Setup printing options for vouchers, reports, etc.
@@ -48,6 +48,14 @@
 			</div>
 			<div class="settings-desc">
 				Manage Voucher Tags
+			</div>
+		</div>
+		<div class="settings-container">
+			<div class="settings-title">
+				<?php echo anchor('setting/voucher', 'Voucher', array('title' => 'Voucher Settings')); ?>
+			</div>
+			<div class="settings-desc">
+				Voucher settings
 			</div>
 		</div>
 	</div>

@@ -789,6 +789,95 @@ class Setting extends Controller {
 		redirect('setting');
 		return;
 	}
+
+	function voucher()
+	{
+		$this->template->set('page_title', 'Voucher Settings');
+		$account_data = $this->Setting_model->get_current();
+
+		$data['receipt_prefix'] = array(
+			'name' => 'receipt_prefix',
+			'id' => 'receipt_prefix',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+		$data['payment_prefix'] = array(
+			'name' => 'payment_prefix',
+			'id' => 'payment_prefix',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+		$data['contra_prefix'] = array(
+			'name' => 'contra_prefix',
+			'id' => 'contra_prefix',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+		$data['journal_prefix'] = array(
+			'name' => 'journal_prefix',
+			'id' => 'journal_prefix',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+
+		if ($account_data)
+		{
+			$data['receipt_prefix']['value'] = $account_data->receipt_voucher_prefix;
+			$data['payment_prefix']['value'] = $account_data->payment_voucher_prefix;
+			$data['contra_prefix']['value'] = $account_data->contra_voucher_prefix;
+			$data['journal_prefix']['value'] = $account_data->journal_voucher_prefix;
+		}
+
+		/* Form validations */
+		$this->form_validation->set_rules('receipt_prefix', 'Prefix Receipt Vouchers', 'trim');
+		$this->form_validation->set_rules('payment_prefix', 'Prefix Payment Vouchers', 'trim');
+		$this->form_validation->set_rules('contra_prefix', 'Prefix Contra Vouchers', 'trim');
+		$this->form_validation->set_rules('journal_prefix', 'Prefix Journal Vouchers', 'trim');
+
+		/* Repopulating form */
+		if ($_POST)
+		{
+			$data['receipt_prefix']['value'] = $this->input->post('receipt_prefix', TRUE);
+			$data['payment_prefix']['value'] = $this->input->post('payment_prefix', TRUE);
+			$data['contra_prefix']['value'] = $this->input->post('contra_prefix', TRUE);
+			$data['journal_prefix']['value'] = $this->input->post('journal_prefix', TRUE);
+		}
+
+		/* Validating form */
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this->messages->add(validation_errors(), 'error');
+			$this->template->load('template', 'setting/voucher', $data);
+			return;
+		} else {
+			$data_receipt_prefix = $this->input->post('receipt_prefix', TRUE);
+			$data_payment_prefix = $this->input->post('payment_prefix', TRUE);
+			$data_contra_prefix = $this->input->post('contra_prefix', TRUE);
+			$data_journal_prefix = $this->input->post('journal_prefix', TRUE);
+
+			/* Update settings */
+			$this->db->trans_start();
+			if ( ! $this->db->query("UPDATE settings SET receipt_voucher_prefix  = ?, payment_voucher_prefix = ?, contra_voucher_prefix = ?, journal_voucher_prefix = ? WHERE id = 1", array($data_receipt_prefix, $data_payment_prefix, $data_contra_prefix, $data_journal_prefix)))
+			{
+				$this->db->trans_rollback();
+				$this->messages->add('Error updating voucher settings', 'error');
+				$this->logger->write_message("error", "Error updating voucher settings");
+				$this->template->load('template', 'setting/voucher');
+				return;
+			} else {
+				$this->db->trans_complete();
+				$this->messages->add('Voucher settings updated successfully', 'success');
+				$this->logger->write_message("success", "Updated voucher settings");
+				redirect('setting');
+				return;
+			}
+		}
+		return;
+	}
 }
 
 /* End of file setting.php */
