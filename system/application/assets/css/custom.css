@@ -33,6 +33,10 @@ a.anchor-link-b {
 	text-decoration:none;
 }
 
+.float-right {
+	float:right;
+}
+
 /* Fieldset */
 .fieldset-auto-width {
 	display:inline;
@@ -212,10 +216,6 @@ ul#pagination-flickr {
 	padding:3px;
 	-moz-border-radius:5px;
 	border-radius:5px;
-}
-
-.tag-edit {
-	float:right;
 }
 
 /***************************** RECENT ACTIVITY ********************************/

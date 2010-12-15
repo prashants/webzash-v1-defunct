@@ -1,5 +1,5 @@
 <?php
-echo "<div class=\"tag-title\">Tags<span class=\"tag-edit\">" . anchor("tag", "Edit") . "</span></div>";
+echo "<div class=\"tag-title\">Tags<span class=\"float-right\">" . anchor("tag", "Edit") . "</span></div>";
 	echo "<div class=\"tag-content\">";
 	$tags = $this->Tag_model->get_all_tags($allow_none = FALSE);
 	echo "<ul id=\"tag-list\">";

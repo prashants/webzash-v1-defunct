@@ -170,7 +170,7 @@ jQuery(document).ready(function () {
 </div>
 <div id="dashboard-log">
 	<div id="dashboard-recent-log" class="dashboard-log-item">
-		<div class="dashboard-log-title">Recent Activity</div>
+		<div class="dashboard-log-title">Recent Activity <span class="float-right"><?php echo anchor('log/feed', img(array('src'=> asset_url() . "images/icons/rss.png", 'border' => '0', 'alt' => 'Log Feed', 'width' => '16px',))); ?></span></div>
 		<div class="dashboard-log-content">
 			<?php
 			if ($logs)
@@ -191,7 +191,7 @@ jQuery(document).ready(function () {
 			{
 				echo "<div class=\"dashboard-log-footer\">";
 				echo "<span>";
-				echo anchor("", "more...", array('class' => 'anchor-link-a no-underline'));
+				echo anchor("log", "more...", array('class' => 'anchor-link-a'));
 				echo "</span>";
 			}
 		?>

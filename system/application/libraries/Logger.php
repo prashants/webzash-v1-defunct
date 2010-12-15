@@ -29,7 +29,7 @@ class Logger
 		default: $data['level'] = 0; break;
 		}
 		$data['host_ip'] = $CI->input->ip_address();
-		$data['url'] = current_url();
+		$data['url'] = uri_string();
 		$data['user_agent'] = $CI->input->user_agent();
 		$data['message_title'] = $title;
 		$data['message_desc'] = $desc;
