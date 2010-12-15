@@ -52,7 +52,7 @@
 		</div>
 		<div class="settings-container">
 			<div class="settings-title">
-				<?php echo anchor('setting/voucher', 'Voucher', array('title' => 'Voucher Settings')); ?>
+				<?php echo anchor('setting/voucher', 'Voucher Settings', array('title' => 'Voucher Settings')); ?>
 			</div>
 			<div class="settings-desc">
 				Voucher settings
