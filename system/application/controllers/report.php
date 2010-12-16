@@ -54,13 +54,14 @@ class Report extends Controller {
 
 		$this->template->set('page_title', 'Ledger Statement');
 		if ($ledger_id != 0)
-			$this->template->set('nav_links', array('report/download/ledgerst/' . $ledger_id  => 'Download CSV'));
+			$this->template->set('nav_links', array('report/download/ledgerst/' . $ledger_id  => 'Download CSV', 'report/printpreview/ledgerst/' . $ledger_id => 'Print Preview'));
 
 		if ($_POST)
 		{
 			$ledger_id = $this->input->post('ledger_id', TRUE);
 			redirect('report/ledgerst/' . $ledger_id);
 		}
+		$data['print_preview'] = FALSE;
 		$data['ledger_id'] = $ledger_id;
 		$this->template->load('template', 'report/ledgerst', $data);
 		return;
@@ -599,6 +600,24 @@ class Report extends Controller {
 			$data['title'] = "Profit and Loss Statement";
 			$data['left_width'] = "";
 			$data['right_width'] = "";
+			$this->load->view('report/report_template', $data);
+			return;
+		}
+		
+		if ($statement == "ledgerst")
+		{
+			/* Pagination setup */
+			$this->load->library('pagination');
+			$data['ledger_id'] = $this->uri->segment(4);
+			/* Checking for valid ledger id */
+			if ($data['ledger_id'] < 1)
+			{
+				$this->messages->add("Invalid Ledger A/C", 'error');
+				redirect("report/ledgerst");
+			}
+			$data['report'] = "report/ledgerst";
+			$data['title'] = "Ledger Statement for '" . $this->Ledger_model->get_name($data['ledger_id']) . "'";
+			$data['print_preview'] = TRUE;
 			$this->load->view('report/report_template', $data);
 			return;
 		}
