@@ -39,9 +39,32 @@ if ( ! function_exists('convert_amount_dc'))
 		if ($amount == "D")
 			return "0";
 		else if ($amount < 0)
-			return "Cr " . -$amount;
+			return "Cr " . convert_cur(-$amount);
 		else
-			return "Dr " . $amount;
+			return "Dr " . convert_cur($amount);
+	}
+}
+
+/**
+ * Converts Opening balance amount to Dr or Cr Value
+ *
+ * Covnerts the Opening balance amount to 0 or Dr or Cr value for display
+ *
+ * @access	public
+ * @param	amount
+ * @param	debit or credit
+ * @return	string
+ */
+if ( ! function_exists('convert_opening'))
+{
+	function convert_opening($amount, $dc)
+	{
+		if ($amount == 0)
+			return "0";
+		else if ($dc == 'D')
+			return "Dr " . convert_cur($amount);
+		else
+			return "Cr " . convert_cur($amount);
 	}
 }
 

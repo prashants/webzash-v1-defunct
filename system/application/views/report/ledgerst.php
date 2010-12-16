@@ -47,16 +47,10 @@
 		/* Ledger Summary */
 		echo "<table class=\"ledger-summary\">";
 		echo "<tr>";
-		if ($optype == "D")
-			echo "<td><b>Opening Balance</b></td><td>Dr " . $opbalance . "</td>";
-		else
-			echo "<td><b>Opening Balance</b></td><td>Cr " . $opbalance . "</td>";
+		echo "<td><b>Opening Balance</b></td><td>" . convert_opening($opbalance, $optype) . "</td>";
 		echo "</tr>";
 		echo "<tr>";
-		if ($clbalance < 0)
-			echo "<td><b>Closing Balance</b></td><td>Cr " . convert_cur(-$clbalance) . "</td>";
-		else
-			echo "<td><b>Closing Balance</b></td><td>Dr " . convert_cur($clbalance) . "</td>";
+		echo "<td><b>Closing Balance</b></td><td>" . convert_amount_dc($clbalance) . "</td>";
 		echo "</tr>";
 		echo "</table>";
 		echo "<br />";
@@ -75,10 +69,10 @@
 			/* Opening balance */
 			if ($optype == "D")
 			{
-				echo "<tr class=\"tr-balance\"><td colspan=7>Opening Balance</td><td>" . convert_dc($optype) . " " . $opbalance . "</td></tr>";
+				echo "<tr class=\"tr-balance\"><td colspan=7>Opening Balance</td><td>" . convert_opening($opbalance, $optype) . "</td></tr>";
 				$cur_balance += $opbalance;
 			} else {
-				echo "<tr class=\"tr-balance\"><td colspan=7>Opening Balance</td><td>" . convert_dc($optype) . " " . $opbalance . "</td></tr>";
+				echo "<tr class=\"tr-balance\"><td colspan=7>Opening Balance</td><td>" . convert_opening($opbalance, $optype) . "</td></tr>";
 				$cur_balance -= $opbalance;
 			}
 		} else {
@@ -104,12 +98,7 @@
 			}
 
 			/* Show new current total */
-			if ($cur_balance < 0)
-			{
-				echo "<tr class=\"tr-balance\"><td colspan=7>Opening</td><td>Cr " . convert_cur(-$cur_balance) . "</td></tr>";
-			} else {
-				echo "<tr class=\"tr-balance\"><td colspan=7>Opening</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
-			}
+			echo "<tr class=\"tr-balance\"><td colspan=7>Opening</td><td>" . convert_amount_dc($cur_balance) . "</td></tr>";
 		}
 
 		foreach ($ledgerst_q->result() as $row)
@@ -184,7 +173,7 @@
 			}
 			echo "<td>";
 			if ($row->vdraft == 0)
-				echo ($cur_balance < 0) ? "Cr " . convert_cur(-$cur_balance) :  "Dr " . convert_cur($cur_balance);
+				echo convert_amount_dc($cur_balance);
 			else
 				echo "-";
 			echo "</td>";
@@ -193,13 +182,7 @@
 		}
 
 		/* Current Page Closing Balance */
-		if ($cur_balance < 0)
-		{
-			echo "<tr class=\"tr-balance\"><td colspan=7>Closing</td><td>Cr " .  convert_cur(-$cur_balance) . "</td></tr>";
-		} else {
-			echo "<tr class=\"tr-balance\"><td colspan=7>Closing</td><td>Dr " . convert_cur($cur_balance) . "</td></tr>";
-		}
-
+		echo "<tr class=\"tr-balance\"><td colspan=7>Closing</td><td>" .  convert_amount_dc($cur_balance) . "</td></tr>";
 		echo "</table>";
 	}
 ?>

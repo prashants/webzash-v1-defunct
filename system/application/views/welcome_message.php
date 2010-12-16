@@ -109,14 +109,7 @@ jQuery(document).ready(function () {
 					{
 						echo "<tr>";
 						echo "<td>" . anchor('report/ledgerst/' . $row['id'], $row['name'], array('title' => $row['name'] . ' Statement')) . "</td>";
-						echo "<td>";
-						if ($row['balance'] == 0)
-							echo "0";
-						else if ($row['balance'] > 0)
-							echo "Dr " . $row['balance'];
-						else
-							echo "Cr " . -$row['balance'];
-						echo "</td>";
+						echo "<td>" . convert_amount_dc($row['balance']) . "</td>";
 						echo "</tr>";
 					}
 					echo "</tbody>";

@@ -18,20 +18,12 @@
 
 		echo "<td>";
 		list ($opbal_amount, $opbal_type) = $this->Ledger_model->get_op_balance($ledger_id);
-		if ($opbal_amount == 0)
-			echo "0";
-		else
-			echo convert_dc($opbal_type) . " " . $opbal_amount;
+		echo convert_opening($opbal_amount, $opbal_type);
 		echo "</td>";
 
 		echo "<td>";
 		$clbal_amount = $this->Ledger_model->get_ledger_balance($ledger_id);
-		if ($clbal_amount == 0)
-			echo "0";
-		else if ($clbal_amount < 0)
-			echo "Cr " . convert_cur(-$clbal_amount);
-		else
-			echo "Dr " . convert_cur($clbal_amount);
+		echo convert_amount_dc($clbal_amount);
 		echo "</td>";
 
 		echo "<td>";

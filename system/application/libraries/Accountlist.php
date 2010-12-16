@@ -81,17 +81,7 @@ class Accountlist
 			echo $this->print_space($this->counter);
 			echo "&nbsp;" .  $this->name;
 			echo "</td>";
-
-			echo "<td align=\"right\">";
-			if ($this->total == 0)
-				echo "0";
-			else if ($this->total < 0)
-				echo "Cr " . convert_cur(-$this->total);
-			else
-				echo "Dr " . convert_cur($this->total);
-			echo $this->print_space($this->counter);
-			echo "</td>";
-
+			echo "<td align=\"right\">" . convert_amount_dc($this->total) . $this->print_space($this->counter) . "</td>";
 			echo "</tr>";
 		}
 		foreach ($this->children_groups as $id => $data)
@@ -110,17 +100,7 @@ class Accountlist
 				echo $this->print_space($this->counter);
 				echo "&nbsp;" . anchor('report/ledgerst/' . $data['id'], $data['name'], array('title' => $data['name'] . ' Ledger Statement', 'style' => 'color:#000000'));
 				echo "</td>";
-
-				echo "<td align=\"right\">";
-				if ($data['total'] == 0)
-					echo "0";
-				else if ($data['total'] < 0)
-					echo "Cr " . convert_cur(-$data['total']);
-				else
-					echo "Dr " . convert_cur($data['total']);
-				echo $this->print_space($this->counter);
-				echo "</td>";
-
+				echo "<td align=\"right\">" . convert_amount_dc($data['total']) . $this->print_space($this->counter) . "</td>";
 				echo "</tr>";
 			}
 			$this->counter--;
@@ -171,29 +151,8 @@ class Accountlist
 				echo "&nbsp;" . anchor('report/ledgerst/' . $data['id'], $data['name'], array('title' => $data['name'] . ' Ledger Statement', 'style' => 'color:#000000'));
 				echo "</td>";
 				echo "<td>Ledger A/C</td>";
-
-				echo "<td>";
-				if ($data['opbalance'] == 0)
-				{
-					echo "0";
-				} else {
-					echo ($data['optype'] == "D") ? "Dr " : "Cr ";
-					echo convert_cur($data['opbalance']);
-				}
-				echo "</td>";
-
-				echo "<td>";
-				if ($data['total'] == 0)
-				{
-					echo "0";
-				} else if ($data['total'] > 0)
-				{
-					echo "Dr " . convert_cur($data['total']);
-				} else {
-					echo "Cr " . convert_cur(-$data['total']);
-				}
-				echo "</td>";
-
+				echo "<td>" . convert_opening($data['opbalance'], $data['optype']) . "</td>";
+				echo "<td>" . convert_amount_dc($data['total']) . "</td>";
 				echo "<td class=\"td-actions\">" . anchor('ledger/edit/' . $data['id'], 'Edit', array('title' => "Edit Ledger", 'class' => 'red-link'));
 				echo " &nbsp;" . anchor('ledger/delete/' . $data['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Ledger')), array('class' => "confirmClick", 'title' => "Delete Ledger")) . "</td>";
 				echo "</tr>";
