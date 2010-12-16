@@ -1,0 +1,62 @@
+/*********************************** COMMON ***********************************/
+body {
+	color:#000000;
+	font:14px "Helvetica Neue","Lucida Grande","Helvetica Neue",Arial,sans-serif;
+	margin:20px;
+	padding:0;
+}
+
+/******************************** SPECIFIC ************************************/
+
+#print-account-name {
+	text-align:center;
+	font-size:17px;
+}
+
+#print-account-address {
+	text-align:center;
+	font-size:14px;
+}
+
+#print-report-title {
+	text-align:center;
+	font-size:17px;
+}
+
+#print-report-period {
+	text-align:center;
+	font-size:15px;
+}
+
+table.simple-table {
+	border:1px solid #000000;
+	border-collapse: collapse;
+}
+
+table.simple-table tr th {
+	text-align:left;
+	border:1px solid #000000;
+	padding:5px 30px 5px 5px;
+	background-color:#EEEEEE;
+}
+
+table.simple-table tr td {
+	text-align:left;
+	border:1px solid #000000;
+	padding:5px 30px 5px 5px;
+}
+
+table.simple-table a {
+	text-decoration:none;
+	color:#000000;
+}
+
+table.simple-table tr.tr-total {
+	border:1px solid #000000;
+}
+
+@media print {
+	.hide-print {
+		display: none;
+	}
+}

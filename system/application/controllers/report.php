@@ -36,7 +36,7 @@ class Report extends Controller {
 	function trialbalance($period = NULL)
 	{
 		$this->template->set('page_title', 'Trial Balance');
-		$this->template->set('nav_links', array('report/download/trialbalance' => 'Download CSV'));
+		$this->template->set('nav_links', array('report/download/trialbalance' => 'Download CSV', 'report/printpreview/trialbalance' => 'Print Preview'));
 
 		$this->load->library('accountlist');
 		$this->template->load('template', 'report/trialbalance');
@@ -562,6 +562,20 @@ class Report extends Controller {
 			$balancesheet = Accountlist::get_csv();
 			$this->load->helper('csv');
 			echo array_to_csv($balancesheet, "profitandloss.csv");
+			return;
+		}
+		return;
+	}
+
+	function printpreview($statement, $id = NULL)
+	{
+		/********************** TRIAL BALANCE *************************/
+		if ($statement == "trialbalance")
+		{
+			$this->load->library('accountlist');
+			$data['report'] = "report/trialbalance";
+			$data['title'] = "Trial Balance";
+			$this->load->view('report/report_template', $data);
 			return;
 		}
 		return;
