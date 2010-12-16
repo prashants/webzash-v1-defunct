@@ -21,7 +21,9 @@ class Report extends Controller {
 	{
 		$this->template->set('page_title', 'Balance Sheet');
 		$this->template->set('nav_links', array('report/download/balancesheet' => 'Download CSV', 'report/printpreview/balancesheet' => 'Print Preview'));
-		$this->template->load('template', 'report/balancesheet');
+		$data['left_width'] = "450";
+		$data['right_width'] = "450";
+		$this->template->load('template', 'report/balancesheet', $data);
 		return;
 	}
 
@@ -29,7 +31,9 @@ class Report extends Controller {
 	{
 		$this->template->set('page_title', 'Profit And Loss Statement');
 		$this->template->set('nav_links', array('report/download/profitandloss' => 'Download CSV', 'report/printpreview/profitandloss' => 'Print Preview'));
-		$this->template->load('template', 'report/profitandloss');
+		$data['left_width'] = "450";
+		$data['right_width'] = "450";
+		$this->template->load('template', 'report/profitandloss', $data);
 		return;
 	}
 
@@ -583,6 +587,8 @@ class Report extends Controller {
 		{
 			$data['report'] = "report/balancesheet";
 			$data['title'] = "Balance Sheet";
+			$data['left_width'] = "";
+			$data['right_width'] = "";
 			$this->load->view('report/report_template', $data);
 			return;
 		}
@@ -591,6 +597,8 @@ class Report extends Controller {
 		{
 			$data['report'] = "report/profitandloss";
 			$data['title'] = "Profit and Loss Statement";
+			$data['left_width'] = "";
+			$data['right_width'] = "";
 			$this->load->view('report/report_template', $data);
 			return;
 		}

@@ -10,8 +10,8 @@
 	/* Gross P/L : Expenses */
 	$gross_expense_total = 0;
 	$gross_expense_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 4 AND affects_gross = 1");
-	echo "<td>";
-	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"450\">";
+	echo "<td width=\"" . $left_width . "\">";
+	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"100%\">";
 	echo "<thead><tr><th>Expenses (Gross)</th><th align=\"right\">Amount</th></tr></thead>";
 	foreach ($gross_expense_list_q->result() as $row)
 	{
@@ -26,8 +26,8 @@
 	/* Gross P/L : Incomes */
 	$gross_income_total = 0;
 	$gross_income_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 3 AND affects_gross = 1");
-	echo "<td>";
-	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"450\">";
+	echo "<td width=\"" . $right_width . "\">";
+	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"100%\">";
 	echo "<thead><tr><th>Incomes (Gross)</th><th align=\"right\">Amount</th></tr></thead>";
 	foreach ($gross_income_list_q->result() as $row)
 	{
@@ -49,7 +49,7 @@
 	$grosstotal = $gross_expense_total;
 	echo "<tr class=\"total-area\">";
 	echo "<td>";
-	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"450\">";
+	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"100%\">";
 	echo "<tr valign=\"top\">";
 	echo "<td class=\"bold\">Total Gross Expenses</td>";
 	echo "<td align=\"right\" class=\"bold\">" . convert_cur($gross_expense_total) . "</td>";
@@ -78,7 +78,7 @@
 	/* Showing Gross P/L : Incomes  */
 	$grosstotal = $gross_income_total;
 	echo "<td>";
-	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"450\">";
+	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"100%\">";
 	echo "<tr valign=\"top\">";
 	echo "<td class=\"bold\">Total Gross Incomes</td>";
 	echo "<td align=\"right\" class=\"bold\">" . convert_cur($gross_income_total) . "</td>";
@@ -114,7 +114,7 @@
 	$net_expense_total = 0;
 	$net_expense_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 4 AND affects_gross != 1");
 	echo "<td>";
-	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"450\">";
+	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"100%\">";
 	echo "<thead><tr><th>Expenses (Net)</th><th align=\"right\">Amount</th></tr></thead>";
 	foreach ($net_expense_list_q->result() as $row)
 	{
@@ -130,7 +130,7 @@
 	$net_income_total = 0;
 	$net_income_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 3 AND affects_gross != 1");
 	echo "<td>";
-	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"450\">";
+	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"100%\">";
 	echo "<thead><tr><th>Incomes (Net)</th><th align=\"right\">Amount</th></tr></thead>";
 	foreach ($net_income_list_q->result() as $row)
 	{
@@ -152,7 +152,7 @@
 	$nettotal = $net_expense_total;
 	echo "<tr class=\"total-area\">";
 	echo "<td>";
-	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"450\">";
+	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"100%\">";
 	echo "<tr valign=\"top\">";
 	echo "<td class=\"bold\">Total Expenses</td>";
 	echo "<td align=\"right\" class=\"bold\">" . convert_cur($nettotal) . "</td>";
@@ -194,7 +194,7 @@
 	/* Showing Net P/L : Incomes */
 	$nettotal = $net_income_total;
 	echo "<td>";
-	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"450\">";
+	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"100%\">";
 	echo "<tr valign=\"top\">";
 	echo "<td class=\"bold\">Total Incomes</td>";
 	echo "<td align=\"right\" class=\"bold\">" . convert_cur($nettotal) . "</td>";
