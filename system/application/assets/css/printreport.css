@@ -28,31 +28,87 @@ body {
 	font-size:15px;
 }
 
-table.simple-table {
+/************************************ COMMON **********************************/
+table.simple-table a {
+	text-decoration:none;
+	color:#000000;
+}
+
+/********************************* TRIAL BALANCE ******************************/
+table.trial-balance-table {
 	border:1px solid #000000;
 	border-collapse: collapse;
 }
 
-table.simple-table tr th {
+table.trial-balance-table tr th {
 	text-align:left;
 	border:1px solid #000000;
 	padding:5px 30px 5px 5px;
 	background-color:#EEEEEE;
 }
 
-table.simple-table tr td {
+table.trial-balance-table tr td {
 	text-align:left;
 	border:1px solid #000000;
 	padding:5px 30px 5px 5px;
 }
 
-table.simple-table a {
-	text-decoration:none;
-	color:#000000;
+table.trial-balance-table tr.tr-total {
+	border:1px solid #000000;
 }
 
-table.simple-table tr.tr-total {
+/********************************* BALANCE SHEET ******************************/
+table.balance-sheet-table {
 	border:1px solid #000000;
+	border-collapse: collapse;
+}
+
+table.balance-sheet-table tr th {
+	text-align:left;
+	border:1px solid #000000;
+	padding:5px 30px 5px 5px;
+	background-color:#EEEEEE;
+}
+
+table.balance-sheet-table tr td {
+	border:1px solid #000000;
+	padding:5px 30px 5px 5px;
+}
+
+table.balance-sheet-total-table {
+	border:1px solid #000000;
+	background-color:#EEEEEE;
+}
+
+table.balance-sheet-table td.td-group {
+	font-weight:bold;
+}
+
+/**************************** PROFIT AND LOSS ST ******************************/
+table.profit-loss-table {
+	border:1px solid #000000;
+	border-collapse: collapse;
+}
+
+table.profit-loss-table tr th {
+	text-align:left;
+	border:1px solid #000000;
+	padding:5px 30px 5px 5px;
+	background-color:#EEEEEE;
+}
+
+table.profit-loss-table tr td {
+	border:1px solid #000000;
+	padding:5px 30px 5px 5px;
+}
+
+table.profit-loss-total-table {
+	border:1px solid #000000;
+	background-color:#EEEEEE;
+}
+
+table.profit-loss-table td.td-group {
+	font-weight:bold;
 }
 
 @media print {

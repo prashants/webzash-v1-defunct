@@ -20,7 +20,7 @@ class Report extends Controller {
 	function balancesheet($period = NULL)
 	{
 		$this->template->set('page_title', 'Balance Sheet');
-		$this->template->set('nav_links', array('report/download/balancesheet' => 'Download CSV'));
+		$this->template->set('nav_links', array('report/download/balancesheet' => 'Download CSV', 'report/printpreview/balancesheet' => 'Print Preview'));
 		$this->template->load('template', 'report/balancesheet');
 		return;
 	}
@@ -28,7 +28,7 @@ class Report extends Controller {
 	function profitandloss($period = NULL)
 	{
 		$this->template->set('page_title', 'Profit And Loss Statement');
-		$this->template->set('nav_links', array('report/download/profitandloss' => 'Download CSV'));
+		$this->template->set('nav_links', array('report/download/profitandloss' => 'Download CSV', 'report/printpreview/profitandloss' => 'Print Preview'));
 		$this->template->load('template', 'report/profitandloss');
 		return;
 	}
@@ -575,6 +575,22 @@ class Report extends Controller {
 			$this->load->library('accountlist');
 			$data['report'] = "report/trialbalance";
 			$data['title'] = "Trial Balance";
+			$this->load->view('report/report_template', $data);
+			return;
+		}
+
+		if ($statement == "balancesheet")
+		{
+			$data['report'] = "report/balancesheet";
+			$data['title'] = "Balance Sheet";
+			$this->load->view('report/report_template', $data);
+			return;
+		}
+
+		if ($statement == "profitandloss")
+		{
+			$data['report'] = "report/profitandloss";
+			$data['title'] = "Profit and Loss Statement";
 			$this->load->view('report/report_template', $data);
 			return;
 		}
