@@ -85,9 +85,9 @@ if ( ! function_exists('convert_cur'))
  * @param	a varaible
  * @return	string value
  */	
-if ( ! function_exists('echo_value'))
+if ( ! function_exists('print_value'))
 {
-	function echo_value($value = NULL, $default = "")
+	function print_value($value = NULL, $default = "")
 	{
 		if (isset($value))
 			return $value;

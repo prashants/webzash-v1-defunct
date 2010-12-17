@@ -245,13 +245,13 @@ $(document).ready(function() {
 
 	echo "<p>";
 	echo form_fieldset('Options', array('class' => "fieldset-auto-width"));
-	echo form_checkbox('voucher_draft', 1, echo_value($voucher_draft, FALSE)) . "Draft";
+	echo form_checkbox('voucher_draft', 1, $voucher_draft) . "Draft";
 	echo "<br /><br />";
-	echo form_checkbox('voucher_print', 1, echo_value($voucher_print, FALSE)) . "Print";
+	echo form_checkbox('voucher_print', 1, $voucher_print) . "Print";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	echo form_checkbox('voucher_email', 1, echo_value($voucher_email, FALSE)) . "Email";
+	echo form_checkbox('voucher_email', 1, $voucher_email) . "Email";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	echo form_checkbox('voucher_pdf', 1, echo_value($voucher_pdf, FALSE)) . "Download PDF";
+	echo form_checkbox('voucher_pdf', 1, $voucher_pdf) . "Download PDF";
 	echo form_fieldset_close();
 	echo "</p>";
 	echo "<br /><br />";

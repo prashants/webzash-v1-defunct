@@ -38,40 +38,53 @@ class Setting extends Controller {
 			'id' => 'account_name',
 			'maxlength' => '100',
 			'size' => '40',
-			'value' => ($account_data) ? echo_value($account_data->name) : '',
+			'value' => '',
 		);
 		$data['account_address'] = array(
 			'name' => 'account_address',
 			'id' => 'account_address',
 			'rows' => '4',
 			'cols' => '47',
-			'value' => ($account_data) ? echo_value($account_data->address) : '',
+			'value' => '',
 		);
 		$data['account_email'] = array(
 			'name' => 'account_email',
 			'id' => 'account_email',
 			'maxlength' => '100',
 			'size' => '40',
-			'value' => ($account_data) ? echo_value($account_data->email) : '',
+			'value' => '',
 		);
 
-		$data['fy_start'] = ($account_data) ? date_mysql_to_php(echo_value($account_data->fy_start)) : "error";
-		$data['fy_end'] = ($account_data) ? date_mysql_to_php(echo_value($account_data->fy_end)) : "error";
+		$data['fy_start'] = '';
+		$data['fy_end'] = '';
 
 		$data['account_currency'] = array(
 			'name' => 'account_currency',
 			'id' => 'account_currency',
 			'maxlength' => '10',
 			'size' => '10',
-			'value' => ($account_data) ? echo_value($account_data->currency_symbol) : '',
+			'value' => '',
 		);
 		$data['account_date_options'] = array(
 			'dd/mm/yyyy' => 'Day / Month / Year',
 			'mm/dd/yyyy' => 'Month / Day / Year',
 			'yyyy/mm/dd' => 'Year / Month / Day',
 		);
-		$data['account_date'] = ($account_data) ? echo_value($account_data->date_format) : 'dd/mm/yyyy';
-		$data['account_timezone'] = ($account_data) ? echo_value($account_data->timezone) : 'UTC';
+		$data['account_date'] = 'dd/mm/yyyy';
+		$data['account_timezone'] = 'UTC';
+
+		/* Current account settings */
+		if ($account_data)
+		{
+			$data['account_name']['value'] = print_value($account_data->name);
+			$data['account_address']['value'] = print_value($account_data->address);
+			$data['account_email']['value'] = print_value($account_data->email);
+			$data['account_currency']['value'] = print_value($account_data->currency_symbol);
+			$data['account_date'] = print_value($account_data->date_format);
+			$data['account_timezone'] = print_value($account_data->timezone);
+			$data['fy_start'] = date_mysql_to_php(print_value($account_data->fy_start));
+			$data['fy_end'] = date_mysql_to_php(print_value($account_data->fy_end));
+		}
 
 		/* Form validations */
 		$this->form_validation->set_rules('account_name', 'Account Name', 'trim|required|min_length[2]|max_length[100]');
@@ -490,10 +503,10 @@ class Setting extends Controller {
 
 		if ($account_data)
 		{
-			$data['email_protocol'] = ($account_data->email_protocol) ? echo_value($account_data->email_protocol) : 'smtp';
-			$data['email_host']['value'] = ($account_data->email_host) ? echo_value($account_data->email_host) : '';
-			$data['email_port']['value'] = ($account_data->email_port) ? echo_value($account_data->email_port) : '';
-			$data['email_username']['value'] = ($account_data->email_username) ? echo_value($account_data->email_username) : '';
+			$data['email_protocol'] = ($account_data->email_protocol) ? print_value($account_data->email_protocol) : 'smtp';
+			$data['email_host']['value'] = ($account_data->email_host) ? print_value($account_data->email_host) : '';
+			$data['email_port']['value'] = ($account_data->email_port) ? print_value($account_data->email_port) : '';
+			$data['email_username']['value'] = ($account_data->email_username) ? print_value($account_data->email_username) : '';
 		}
 
 		/* Form validations */
@@ -641,14 +654,14 @@ class Setting extends Controller {
 
 		if ($account_data)
 		{
-			$data['paper_height']['value'] = ($account_data->print_paper_height) ? echo_value($account_data->print_paper_height) : '';
-			$data['paper_width']['value'] = ($account_data->print_paper_width) ? echo_value($account_data->print_paper_width) : '';
-			$data['margin_top']['value'] = ($account_data->print_margin_top) ? echo_value($account_data->print_margin_top) : '';
-			$data['margin_bottom']['value'] = ($account_data->print_margin_bottom) ? echo_value($account_data->print_margin_bottom) : '';
-			$data['margin_left']['value'] = ($account_data->print_margin_left) ? echo_value($account_data->print_margin_left) : '';
-			$data['margin_right']['value'] = ($account_data->print_margin_right) ? echo_value($account_data->print_margin_right) : '';
-			$data['page_layout']['value'] = ($account_data->print_page_layout) ? echo_value($account_data->print_page_layout) : '';
-			$data['logo']['value'] = ($account_data->print_logo) ? echo_value($account_data->print_logo) : '';
+			$data['paper_height']['value'] = ($account_data->print_paper_height) ? print_value($account_data->print_paper_height) : '';
+			$data['paper_width']['value'] = ($account_data->print_paper_width) ? print_value($account_data->print_paper_width) : '';
+			$data['margin_top']['value'] = ($account_data->print_margin_top) ? print_value($account_data->print_margin_top) : '';
+			$data['margin_bottom']['value'] = ($account_data->print_margin_bottom) ? print_value($account_data->print_margin_bottom) : '';
+			$data['margin_left']['value'] = ($account_data->print_margin_left) ? print_value($account_data->print_margin_left) : '';
+			$data['margin_right']['value'] = ($account_data->print_margin_right) ? print_value($account_data->print_margin_right) : '';
+			$data['page_layout']['value'] = ($account_data->print_page_layout) ? print_value($account_data->print_page_layout) : '';
+			$data['logo']['value'] = ($account_data->print_logo) ? print_value($account_data->print_logo) : '';
 			if ($account_data->print_orientation)
 			{
 				if ($account_data->print_orientation == "P")
