@@ -251,7 +251,7 @@ $(document).ready(function() {
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo form_checkbox('voucher_email', 1, $voucher_email) . "Email";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	echo form_checkbox('voucher_pdf', 1, $voucher_pdf) . "Download PDF";
+	echo form_checkbox('voucher_pdf', 1, $voucher_pdf) . "Download";
 	echo form_fieldset_close();
 	echo "</p>";
 	echo "<br /><br />";

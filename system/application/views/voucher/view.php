@@ -62,4 +62,6 @@ else
 	echo anchor_popup('voucher/printpreview/' . $voucher_type . "/" . $cur_voucher->id, 'Print', array('title' => 'Print this ' . ucfirst($voucher_type) . ' Voucher', 'width' => '600', 'height' => '600'));
 	echo " | ";
 	echo anchor_popup('voucher/email/' . $voucher_type . "/" . $cur_voucher->id, 'Email', array('title' => 'Email this ' . ucfirst($voucher_type) . ' Voucher', 'width' => '400', 'height' => '200'));
+	echo " | ";
+	echo anchor('voucher/download/' . $voucher_type . "/" . $cur_voucher->id, 'Download', array('title' => "Download voucher", 'title' => 'Download this ' . ucfirst($voucher_type) . ' Voucher'));
 

@@ -183,7 +183,9 @@ class Voucher extends Controller {
 
 			$html .= " &nbsp;" . anchor_popup('voucher/printpreview/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '600', 'height' => '600')) . " ";
 
-			$html .= " &nbsp;" . anchor_popup('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '500', 'height' => '300')) . "</td>";
+			$html .= " &nbsp;" . anchor_popup('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '500', 'height' => '300')) . " ";
+
+			$html .= " &nbsp;" . anchor('voucher/download/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/save.png", 'border' => '0', 'alt' => 'Download ' . ucfirst($html_voucher_type) . ' Voucher', 'title' => "Download voucher")), array('title' => 'Download  ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
 
 			$html .= "</tr>";
 			$odd_even = ($odd_even == "odd") ? "even" : "odd";
