@@ -358,5 +358,15 @@ $config['asset_path'] = 'system/application/assets/';
 */
 $config['config_path'] = 'config/';
 
+/*
+|--------------------------------------------------------------------------
+| Custom : Backup Path
+|--------------------------------------------------------------------------
+|
+| Sets the base backup path for all account backups
+|
+*/
+$config['backup_path'] = 'backups/';
+
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */

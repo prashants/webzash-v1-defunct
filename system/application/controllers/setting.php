@@ -789,9 +789,9 @@ class Setting extends Controller {
 		$backup_data =& $this->dbutil->backup();
 
 		/* Write the backup file to server */
-		if ( ! write_file('system/application/backups/' . $backup_filename, $backup_data))
+		if ( ! write_file($this->config->item('backup_path') . $backup_filename, $backup_data))
 		{
-			$this->messages->add('Error saving backup file to server.' . ' Please check if "system/application/backups/" folder is writable', 'error');
+			$this->messages->add('Error saving backup file to server.' . ' Please check if "' . $this->config->item('backup_path') . '" folder is writable', 'error');
 			redirect('setting');
 			return;
 		}

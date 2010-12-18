@@ -152,15 +152,22 @@ class Welcome extends Controller {
 		$check_path = $this->config->item('config_path') . "settings/";
 		if (! is_writable($check_path))
 		{
-			$this->messages->add('Application settings directory "' . $check_path . '" is not writable. You will not able able to save or edit any application related settings.', 'error');
+			$this->messages->add('Application settings directory "' . $check_path . '" is not writable. You will not able to save or edit any application related settings.', 'error');
 		}
 
 		$check_path = $this->config->item('config_path') . "accounts/";
 		if (! is_writable($check_path))
 		{
-			$this->messages->add('Account settings directory "' . $check_path . '" is not writable. You will not able able to save or edit any account related settings.', 'error');
+			$this->messages->add('Account settings directory "' . $check_path . '" is not writable. You will not able to save or edit any account related settings.', 'error');
 		}
 
+		$check_path = $this->config->item('backup_path');
+		if (! is_writable($check_path))
+		{
+			$this->messages->add('Backup directory "' . $check_path . '" is not writable. You will not able to save or download any backups.', 'error');
+		}
+
+		/* Security checks */
 		$check_path = $this->config->item('config_path');
 		if (substr(symbolic_permissions(fileperms($check_path)), -3, 1) == "r")
 		{
@@ -189,6 +196,16 @@ class Welcome extends Controller {
 		if (substr(symbolic_permissions(fileperms($check_path)), -2, 1) == "W")
 		{
 			$this->messages->add('Security Risk ! The application settings directory "' . $check_path . '" is world writeable.', 'error');
+		}
+
+		$check_path = $this->config->item('backup_path');
+		if (substr(symbolic_permissions(fileperms($check_path)), -3, 1) == "r")
+		{
+			$this->messages->add('Security Risk ! The application backup directory "' . $check_path . '" is world readable.', 'error');
+		}
+		if (substr(symbolic_permissions(fileperms($check_path)), -2, 1) == "W")
+		{
+			$this->messages->add('Security Risk ! The application backup directory "' . $check_path . '" is world writeable.', 'error');
 		}
 	}
 }
