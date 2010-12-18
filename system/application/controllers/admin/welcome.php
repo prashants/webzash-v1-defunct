@@ -139,8 +139,57 @@ class Welcome extends Controller {
 		if ($data['current_account'] == "")
 			$data['current_account'] = "No account is currently active. You can " . anchor('admin/create', 'create', array('title' => 'Create a new account', 'style' => 'color:#000000')) . " a new account or " . anchor('admin/active', 'activate', array('title' => 'Activate a existing account', 'style' => 'color:#000000')) . " an existing account";
 
+		/* check for permissions */
+		$this->_check_permissions();
+
 		$this->template->load('admin_template', 'admin/welcome', $data);
 		return;
+	}
+
+	/* Check application file permissions for any security related issues */
+	function _check_permissions()
+	{
+		$check_path = $this->config->item('config_path') . "settings/";
+		if (! is_writable($check_path))
+		{
+			$this->messages->add('Application settings directory "' . $check_path . '" is not writable. You will not able able to save or edit any application related settings.', 'error');
+		}
+
+		$check_path = $this->config->item('config_path') . "accounts/";
+		if (! is_writable($check_path))
+		{
+			$this->messages->add('Account settings directory "' . $check_path . '" is not writable. You will not able able to save or edit any account related settings.', 'error');
+		}
+
+		$check_path = $this->config->item('config_path');
+		if (substr(symbolic_permissions(fileperms($check_path)), -3, 1) == "r")
+		{
+			$this->messages->add('Security Risk ! The application config directory "' . $check_path . '" is world readable.', 'error');
+		}
+		if (substr(symbolic_permissions(fileperms($check_path)), -2, 1) == "W")
+		{
+			$this->messages->add('Security Risk ! The application config directory "' . $check_path . '" is world writeable.', 'error');
+		}
+
+		$check_path = $this->config->item('config_path') . "accounts/";
+		if (substr(symbolic_permissions(fileperms($check_path)), -3, 1) == "r")
+		{
+			$this->messages->add('Security Risk ! The application accounts directory "' . $check_path . '" is world readable.', 'error');
+		}
+		if (substr(symbolic_permissions(fileperms($check_path)), -2, 1) == "W")
+		{
+			$this->messages->add('Security Risk ! The application accounts directory "' . $check_path . '" is world writeable.', 'error');
+		}
+
+		$check_path = $this->config->item('config_path') . "settings/";
+		if (substr(symbolic_permissions(fileperms($check_path)), -3, 1) == "r")
+		{
+			$this->messages->add('Security Risk ! The application settings directory "' . $check_path . '" is world readable.', 'error');
+		}
+		if (substr(symbolic_permissions(fileperms($check_path)), -2, 1) == "W")
+		{
+			$this->messages->add('Security Risk ! The application settings directory "' . $check_path . '" is world writeable.', 'error');
+		}
 	}
 }
 
