@@ -21,8 +21,8 @@ class Active extends Controller {
 			$data['account'] = "";
 		}
 
-		/* Getting list of files in the config/accounts directory */
-		$accounts_list = get_filenames('system/application/config/accounts');
+		/* Getting list of files in the config - accounts directory */
+		$accounts_list = get_filenames($this->config->item('config_path') . 'accounts');
 		$data['accounts'] = array();
 		if ($accounts_list)
 		{
@@ -64,7 +64,7 @@ class Active extends Controller {
 			} else {
 				$db_label = $this->input->post('account', TRUE);
 			}
-			$ini_file = "system/application/config/accounts/" . $db_label . ".ini";
+			$ini_file = $this->config->item('config_path') . "accounts/" . $db_label . ".ini";
 
 			/* Check if database ini file exists */
 			if ( ! get_file_info($ini_file))

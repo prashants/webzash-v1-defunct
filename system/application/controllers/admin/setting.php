@@ -16,7 +16,7 @@ class Setting extends Controller {
 		$data['row_count'] = 20;
 
 		/* Loading settings from ini file */
-		$ini_file = "system/application/config/general.ini";
+		$ini_file = $this->config->item('config_path') . "settings/general.ini";
 
 		/* Check if database ini file exists */
 		if (get_file_info($ini_file))

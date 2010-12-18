@@ -10,7 +10,7 @@ echo "<tbody>";
 $odd_even = "odd";
 foreach ($accounts as $label)
 {
-	$ini_file = "system/application/config/accounts/" . $label . ".ini";
+	$ini_file = $this->config->item('config_path') . "accounts/" . $label . ".ini";
 
 	/* Check if database ini file exists */
 	if (get_file_info($ini_file))

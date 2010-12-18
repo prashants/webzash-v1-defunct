@@ -14,8 +14,8 @@ class Manage extends Controller {
 		$this->template->set('page_title', 'Manage webzash accounts');
 		$this->template->set('nav_links', array('admin/manage/add' => 'New account'));
 
-		/* Getting list of files in the config/accounts directory */
-		$accounts_list = get_filenames('system/application/config/accounts');
+		/* Getting list of files in the config - accounts directory */
+		$accounts_list = get_filenames($this->config->item('config_path') . 'accounts');
 		$data['accounts'] = array();
 		if ($accounts_list)
 		{
@@ -119,7 +119,7 @@ class Manage extends Controller {
 			$data_database_username = $this->input->post('database_username', TRUE);
 			$data_database_password = $this->input->post('database_password', TRUE);
 
-			$ini_file = "system/application/config/accounts/" . $data_database_label . ".ini";
+			$ini_file = $this->config->item('config_path') . "accounts/" . $data_database_label . ".ini";
 
 			/* Check if database ini file exists */
 			if (get_file_info($ini_file))
@@ -153,7 +153,7 @@ class Manage extends Controller {
 	{
 		$this->template->set('page_title', 'Edit a webzash account');
 
-		$ini_file = "system/application/config/accounts/" . $database_label . ".ini";
+		$ini_file = $this->config->item('config_path') . "accounts/" . $database_label . ".ini";
 
 		/* Form fields */
 		$data['database_name'] = array(
@@ -262,7 +262,7 @@ class Manage extends Controller {
 			$data_database_username = $this->input->post('database_username', TRUE);
 			$data_database_password = $this->input->post('database_password', TRUE);
 
-			$ini_file = "system/application/config/accounts/" . $database_label . ".ini";
+			$ini_file = $this->config->item('config_path') . "accounts/" . $database_label . ".ini";
 
 			$con_details = "[database]" . "\r\n" . "db_hostname = \"" . $data_database_host . "\"" . "\r\n" . "db_port = \"" . $data_database_port . "\"" . "\r\n" . "db_name = \"" . $data_database_name . "\"" . "\r\n" . "db_username = \"" . $data_database_username . "\"" . "\r\n" . "db_password = \"" . $data_database_password . "\"" . "\r\n";
 
@@ -288,7 +288,7 @@ class Manage extends Controller {
 	{
 		$this->template->set('page_title', 'Delete a webzash account');
 
-		$ini_file = "system/application/config/accounts/" . $database_label . ".ini";
+		$ini_file = $this->config->item('config_path') . "accounts/" . $database_label . ".ini";
 		$this->messages->add("Please delete " . $ini_file . " file manually", 'error');
 		$this->messages->add("Note that only the settings file will be delete. Account database will have to be deleted manually", 'status');
 		/*

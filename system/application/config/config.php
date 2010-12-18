@@ -348,5 +348,15 @@ $config['proxy_ips'] = '';
 */
 $config['asset_path'] = 'system/application/assets/';
 
+/*
+|--------------------------------------------------------------------------
+| Custom : Config Path
+|--------------------------------------------------------------------------
+|
+| Sets the base config path for all account related settings
+|
+*/
+$config['config_path'] = 'config/';
+
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */

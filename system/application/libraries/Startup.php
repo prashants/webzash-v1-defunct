@@ -24,7 +24,7 @@ class Startup
 		{
 			/* Fetching database label details from session */
 			$db_active_label = $CI->session->userdata('db_active_label');
-			$ini_file = "system/application/config/accounts/" . $db_active_label . ".ini";
+			$ini_file = $CI->config->item('config_path') . "accounts/" . $db_active_label . ".ini";
 
 			/* Check if database ini file exists */
 			if ( ! get_file_info($ini_file))
@@ -150,7 +150,7 @@ class Startup
 		$CI->config->set_item('account_journal_prefix', $account_d->journal_voucher_prefix);
 
 		/************** Load general application settings *************/
-		$setting_ini_file = "system/application/config/general.ini";
+		$setting_ini_file = $CI->config->item('config_path') . "settings/general.ini";
 		$CI->config->set_item('row_count', 20);
 
 		/* Check if general application settings ini file exists */

@@ -22,7 +22,7 @@ class Welcome extends Controller {
 
 			/* Fetching database label details from session */
 			$db_active_label = $this->session->userdata('db_active_label');
-			$ini_file = "system/application/config/accounts/" . $db_active_label . ".ini";
+			$ini_file = $this->config->item('config_path') . "accounts/" . $db_active_label . ".ini";
 
 			/* Check if database ini file exists */
 			if ( ! get_file_info($ini_file))

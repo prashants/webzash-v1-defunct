@@ -199,7 +199,7 @@ class Create extends Controller {
 			$data_database_username = $this->input->post('database_username', TRUE);
 			$data_database_password = $this->input->post('database_password', TRUE);
 
-			$ini_file = "system/application/config/accounts/" . $data_account_label . ".ini";
+			$ini_file = $this->config->item('config_path') . "accounts/" . $data_account_label . ".ini";
 
 			/* Check if database ini file exists */
 			if (get_file_info($ini_file))
