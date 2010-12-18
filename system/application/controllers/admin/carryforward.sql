@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS ledgers (
 
 CREATE TABLE IF NOT EXISTS settings (
   id int(1) NOT NULL,
-  label varchar(255) NOT NULL,
   name varchar(100) NOT NULL,
   address varchar(255) NOT NULL,
   email varchar(100) NOT NULL,

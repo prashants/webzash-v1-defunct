@@ -273,7 +273,7 @@ class Create extends Controller {
 				}
 
 				/* Adding the account settings */
-				$newacc->query("INSERT INTO settings (id, label, name, address, email, fy_start, fy_end, currency_symbol, date_format, timezone, database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, "", $data_account_name, $data_account_address, $data_account_email, $data_fy_start, $data_fy_end, $data_account_currency, $data_account_date, $data_account_timezone, 1));
+				$newacc->query("INSERT INTO settings (id, name, address, email, fy_start, fy_end, currency_symbol, date_format, timezone, database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, $data_account_name, $data_account_address, $data_account_email, $data_fy_start, $data_fy_end, $data_account_currency, $data_account_date, $data_account_timezone, 1));
 				$this->messages->add("Successfully created webzash account", 'success');
 
 				/* Adding account settings to file. Code copied from manage controller */
