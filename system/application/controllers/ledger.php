@@ -73,7 +73,7 @@ class Ledger extends Controller {
 
 			if ($data_group_id < 5)
 			{
-				$this->messages->add("Invalid parent group", 'error');
+				$this->messages->add("Invalid parent group.", 'error');
 				$this->template->load('template', 'ledger/add', $data);
 				return;
 			}
@@ -87,13 +87,13 @@ class Ledger extends Controller {
 			if ( ! $this->db->query("INSERT INTO ledgers (name, group_id, op_balance, op_balance_dc, type) VALUES (?, ?, ?, ?, ?)", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_ledger_type_cashbank)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding ' . $data_name . ' - Ledger A/C', 'error');
+				$this->messages->add('Error addding ' . $data_name . ' - Ledger A/C.', 'error');
 				$this->logger->write_message("error", "Error adding Ledger A/C named " . $data_name);
 				$this->template->load('template', 'group/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add($data_name . ' - Ledger A/C added successfully', 'success');
+				$this->messages->add($data_name . ' - Ledger A/C added successfully.', 'success');
 				$this->logger->write_message("success", "Added Ledger A/C named " . $data_name);
 				redirect('account');
 				return;
@@ -111,7 +111,7 @@ class Ledger extends Controller {
 		$id = (int)$id;
 		if ($id < 1)
 		{
-			$this->messages->add('Invalid Ledger A/C', 'error');
+			$this->messages->add('Invalid Ledger A/C.', 'error');
 			redirect('account');
 			return;
 		}
@@ -120,7 +120,7 @@ class Ledger extends Controller {
 		$ledger_data_q = $this->db->query("SELECT * FROM ledgers WHERE id = ?", array($id));
 		if ($ledger_data_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Ledger A/C', 'error');
+			$this->messages->add('Invalid Ledger A/C.', 'error');
 			redirect('account');
 			return;
 		}
@@ -184,7 +184,7 @@ class Ledger extends Controller {
 
 			if ($data_group_id < 5)
 			{
-				$this->messages->add("Invalid parent group", 'error');
+				$this->messages->add("Invalid parent group.", 'error');
 				$this->template->load('template', 'ledger/add', $data);
 				return;
 			}
@@ -198,13 +198,13 @@ class Ledger extends Controller {
 			if ( ! $this->db->query("UPDATE ledgers SET name = ?, group_id = ?, op_balance = ?, op_balance_dc = ?, type = ? WHERE id = ?", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_ledger_type_cashbank, $data_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating ' . $data_name . ' - Ledger A/C', 'error');
+				$this->messages->add('Error updating ' . $data_name . ' - Ledger A/C.', 'error');
 				$this->logger->write_message("error", "Error updating Ledger A/C named " . $data_name . " [id:" . $data_id . "]");
 				$this->template->load('template', 'ledger/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add($data_name . ' - Ledger A/C updated successfully', 'success');
+				$this->messages->add($data_name . ' - Ledger A/C updated successfully.', 'success');
 				$this->logger->write_message("success", "Updated Ledger A/C named " . $data_name . " [id:" . $data_id . "]");
 				redirect('account');
 				return;
@@ -220,14 +220,14 @@ class Ledger extends Controller {
 		$id = (int)$id;
 		if ($id < 1)
 		{
-			$this->messages->add('Invalid Ledger A/C', 'error');
+			$this->messages->add('Invalid Ledger A/C.', 'error');
 			redirect('account');
 			return;
 		}
 		$data_present_q = $this->db->query("SELECT * FROM voucher_items WHERE ledger_id = ?", array($id));
 		if ($data_present_q->num_rows() > 0)
 		{
-			$this->messages->add('Cannot delete non-empty Ledger A/C', 'error');
+			$this->messages->add('Cannot delete non-empty Ledger A/C.', 'error');
 			redirect('account');
 			return;
 		}
@@ -236,7 +236,7 @@ class Ledger extends Controller {
 		$ledger_q = $this->db->query("SELECT * FROM ledgers WHERE id = ?", array($id));
 		if ($ledger_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Ledger A/C', 'error');
+			$this->messages->add('Invalid Ledger A/C.', 'error');
 			redirect('account');
 			return;
 		} else {
@@ -248,13 +248,13 @@ class Ledger extends Controller {
 		if ( ! $this->db->query("DELETE FROM ledgers WHERE id = ?", array($id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add("Error deleting " . $ledger_data->name . " - Ledger A/C", 'error');
+			$this->messages->add("Error deleting " . $ledger_data->name . " - Ledger A/C.", 'error');
 			$this->logger->write_message("error", "Error deleting Ledger A/C named " . $ledger_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;
 		} else {
 			$this->db->trans_complete();
-			$this->messages->add($ledger_data->name . " - Ledger A/C deleted successfully", 'success');
+			$this->messages->add($ledger_data->name . " - Ledger A/C deleted successfully.", 'success');
 			$this->logger->write_message("success", "Deleted Ledger A/C named " . $ledger_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;

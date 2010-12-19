@@ -60,7 +60,7 @@ class Setting extends Controller {
 
 			if ($data_row_count < 0 || $data_row_count > 200)
 			{
-				$this->messages->add('Invalid value for Row Count', 'error');
+				$this->messages->add('Invalid value for Row Count.', 'error');
 				$this->template->load('admin_template', 'admin/setting');
 				return;
 			}
@@ -72,12 +72,12 @@ class Setting extends Controller {
 			/* Writing the connection string to end of file - writing in 'a' append mode */
 			if ( ! write_file($ini_file, $new_setting))
 			{
-				$this->messages->add("Failed to update settings file. Please check if \"" . $ini_file . "\" file is writable", 'error');
+				$this->messages->add("Failed to update settings file. Please check if \"" . $ini_file . "\" file is writable.", 'error');
 				$this->messages->add("You can manually create a text file \"" . $ini_file . "\" with the following content :<br /><br />" . $new_setting_html, 'error');
 				$this->template->load('admin_template', 'admin/setting', $data);
 				return;
 			} else {
-				$this->messages->add('General settings updated successfully', 'success');
+				$this->messages->add('General settings updated successfully.', 'success');
 				redirect('admin/setting');
 				return;
 			}

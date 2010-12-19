@@ -204,7 +204,7 @@ class Create extends Controller {
 			/* Check if database ini file exists */
 			if (get_file_info($ini_file))
 			{
-				$this->messages->add("Account with same label already exists", 'error');
+				$this->messages->add("Account with same label already exists.", 'error');
 				$this->template->load('admin_template', 'admin/create', $data);
 				return;
 			}
@@ -212,7 +212,7 @@ class Create extends Controller {
 			/* Check if start date is less than end date */
 			if ($data_fy_end <= $data_fy_start)
 			{
-				$this->messages->add("Financial start date cannot be greater than end date", 'error');
+				$this->messages->add("Financial start date cannot be greater than end date.", 'error');
 				$this->template->load('admin_template', 'admin/create', $data);
 				return;
 			}
@@ -234,12 +234,12 @@ class Create extends Controller {
 				{
 					if ($newacc->query("CREATE DATABASE " . mysql_real_escape_string($data_database_name)))
 					{
-						$this->messages->add("New database created", 'success');
+						$this->messages->add("New database created.", 'success');
 						/* Retrying to connect to new database */
 						$newacc = $this->load->database($dsn, TRUE);
 						$conn_error = $newacc->_error_message();
 					} else {
-						$this->messages->add("Cannot create database", 'error');
+						$this->messages->add("Cannot create database.", 'error');
 						$this->template->load('admin_template', 'admin/create', $data);
 						return;
 					}
@@ -248,7 +248,7 @@ class Create extends Controller {
 
 			if ( ! $newacc->conn_id)
 			{
-				$this->messages->add("Cannot connecting to database", 'error');
+				$this->messages->add("Cannot connecting to database.", 'error');
 				$this->template->load('admin_template', 'admin/create', $data);
 				return;
 			}  else if ($conn_error != "") {
@@ -256,7 +256,7 @@ class Create extends Controller {
 				$this->template->load('admin_template', 'admin/create', $data);
 				return;
 			} else if ($newacc->query("SHOW TABLES")->num_rows() > 0) {
-				$this->messages->add("Selected database in not empty", 'error');
+				$this->messages->add("Selected database in not empty.", 'error');
 				$this->template->load('admin_template', 'admin/create', $data);
 				return;
 			} else {
@@ -274,7 +274,7 @@ class Create extends Controller {
 
 				/* Adding the account settings */
 				$newacc->query("INSERT INTO settings (id, name, address, email, fy_start, fy_end, currency_symbol, date_format, timezone, database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, $data_account_name, $data_account_address, $data_account_email, $data_fy_start, $data_fy_end, $data_account_currency, $data_account_date, $data_account_timezone, 1));
-				$this->messages->add("Successfully created webzash account", 'success');
+				$this->messages->add("Successfully created webzash account.", 'success');
 
 				/* Adding account settings to file. Code copied from manage controller */
 				$con_details = "[database]" . "\r\n" . "db_hostname = \"" . $data_database_host . "\"" . "\r\n" . "db_port = \"" . $data_database_port . "\"" . "\r\n" . "db_name = \"" . $data_database_name . "\"" . "\r\n" . "db_username = \"" . $data_database_username . "\"" . "\r\n" . "db_password = \"" . $data_database_password . "\"" . "\r\n";
@@ -284,10 +284,10 @@ class Create extends Controller {
 				/* Writing the connection string to end of file - writing in 'a' append mode */
 				if ( ! write_file($ini_file, $con_details))
 				{
-					$this->messages->add("Failed to add account settings file. Please check if \"" . $ini_file . "\" file is writable", 'error');
+					$this->messages->add("Failed to add account settings file. Please check if \"" . $ini_file . "\" file is writable.", 'error');
 					$this->messages->add("You can manually create a text file \"" . $ini_file . "\" with the following content :<br /><br />" . $con_details_html, 'error');
 				} else {
-					$this->messages->add("Successfully added webzash account settings file to list of active accounts", 'success');
+					$this->messages->add("Successfully added webzash account settings file to list of active accounts.", 'success');
 				}
 
 				redirect('admin');

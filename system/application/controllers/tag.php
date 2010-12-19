@@ -75,13 +75,13 @@ class Tag extends Controller {
 			if ( ! $this->db->query("INSERT INTO tags (title, color, background) VALUES (?, ?, ?)", array($data_tag_title, $data_tag_color, $data_tag_background)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding ' . $data_tag_title . ' - Tag', 'error');
+				$this->messages->add('Error addding ' . $data_tag_title . ' - Tag.', 'error');
 				$this->logger->write_message("error", "Error adding tag named " . $data_tag_title);
 				$this->template->load('template', 'tag/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add("Added " . $data_tag_title . ' - Tag successfully', 'success');
+				$this->messages->add("Added " . $data_tag_title . ' - Tag successfully.', 'success');
 				$this->logger->write_message("success", "Added tag named " . $data_tag_title);
 				redirect('tag');
 				return;
@@ -99,7 +99,7 @@ class Tag extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->messages->add('Invalid Tag', 'error');
+			$this->messages->add('Invalid Tag.', 'error');
 			redirect('tag');
 			return;
 		}
@@ -108,7 +108,7 @@ class Tag extends Controller {
 		$tag_data_q = $this->db->query("SELECT * FROM tags WHERE id = ?", array($id));
 		if ($tag_data_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Tag', 'error');
+			$this->messages->add('Invalid Tag.', 'error');
 			redirect('tag');
 			return;
 		}
@@ -169,13 +169,13 @@ class Tag extends Controller {
 			if ( ! $this->db->query("UPDATE tags SET title = ?, color = ?, background = ? WHERE id = ?", array($data_tag_title, $data_tag_color, $data_tag_background, $id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating ' . $data_tag_title . ' - Tag', 'error');
+				$this->messages->add('Error updating ' . $data_tag_title . ' - Tag.', 'error');
 				$this->logger->write_message("error", "Error updating tag named " . $data_tag_title . " [id:" . $id . "]");
 				$this->template->load('template', 'tag/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add("Updated " . $data_tag_title . ' - Tag successfully', 'success');
+				$this->messages->add("Updated " . $data_tag_title . ' - Tag successfully.', 'success');
 				$this->logger->write_message("success", "Updated tag named " . $data_tag_title . " [id:" . $id . "]");
 				redirect('tag');
 				return;
@@ -191,14 +191,14 @@ class Tag extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->messages->add('Invalid Tag', 'error');
+			$this->messages->add('Invalid Tag.', 'error');
 			redirect('tag');
 			return;
 		}
 		$data_valid_q = $this->db->query("SELECT * FROM tags WHERE id = ?", array($id));
 		if ($data_valid_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Tag specified', 'error');
+			$this->messages->add('Invalid Tag specified.', 'error');
 			redirect('tag');
 			return;
 		}
@@ -209,7 +209,7 @@ class Tag extends Controller {
 		if ( ! $this->db->query("UPDATE vouchers SET tag_id = 0 WHERE tag_id = ?", array($id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error removing Tags', 'error');
+			$this->messages->add('Error removing Tags.', 'error');
 			$this->logger->write_message("error", "Error removing tag named " . $data_tag->title . " [id:" . $id . "] from vouchers");
 			redirect('tag');
 			return;
@@ -217,13 +217,13 @@ class Tag extends Controller {
 			if ( ! $this->db->query("DELETE FROM tags WHERE id = ?", array($id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error deleting Tag', 'error');
+				$this->messages->add('Error deleting Tag.', 'error');
 				$this->logger->write_message("error", "Error deleting tag named " . $data_tag->title . " [id:" . $id . "]");
 				redirect('tag');
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Tag deleted successfully', 'success');
+				$this->messages->add('Tag deleted successfully.', 'success');
 				$this->logger->write_message("success", "Deleted tag named " . $data_tag->title . " [id:" . $id . "]");
 				redirect('tag');
 				return;

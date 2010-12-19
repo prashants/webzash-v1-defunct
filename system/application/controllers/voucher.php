@@ -63,7 +63,7 @@ class Voucher extends Controller {
 			$data['voucher_type'] = "";
 			break;
 		default :
-			$this->messages->add('Invalid voucher type', 'error');
+			$this->messages->add('Invalid voucher type.', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -118,7 +118,7 @@ class Voucher extends Controller {
 
 		if ($voucher_type_int > 5)
 		{
-			$this->messages->add('Invalid voucher type', 'error');
+			$this->messages->add('Invalid voucher type.', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else if ($voucher_type == "draft") {
@@ -216,7 +216,7 @@ class Voucher extends Controller {
 			$this->template->set('page_title', 'View Journal Voucher');
 			break;
 		default :
-			$this->messages->add('Invalid voucher type', 'error');
+			$this->messages->add('Invalid voucher type.', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -225,14 +225,14 @@ class Voucher extends Controller {
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
-			$this->messages->add('Invalid Voucher', 'error');
+			$this->messages->add('Invalid Voucher.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
 		/* Load current voucher details */
 		if ( ! $cur_voucher_ledgers = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY id ASC", array($voucher_id)))
 		{
-			$this->messages->add('Voucher has no associated ledger data', 'error');
+			$this->messages->add('Voucher has no associated ledger data.', 'error');
 		}
 		$data['cur_voucher'] = $cur_voucher;
 		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
@@ -258,7 +258,7 @@ class Voucher extends Controller {
 			$this->template->set('page_title', 'New Journal Voucher');
 			break;
 		default :
-			$this->messages->add('Invalid voucher type', 'error');
+			$this->messages->add('Invalid voucher type.', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -373,7 +373,7 @@ class Voucher extends Controller {
 				$this->template->load('template', 'voucher/add', $data);
 				return;
 			} else if ($dr_total == 0 && $cr_total == 0) {
-				$this->messages->add('Cannot save empty voucher', 'error');
+				$this->messages->add('Cannot save empty voucher.', 'error');
 				$this->template->load('template', 'voucher/add', $data);
 				return;
 			}
@@ -405,7 +405,7 @@ class Voucher extends Controller {
 			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, draft, type, tag_id) VALUES (?, ?, ?, ?, ?, ?)", array($data_number, $data_date, $data_narration, $data_draft, $data_type, $data_tag)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding Voucher A/C', 'error');
+				$this->messages->add('Error addding Voucher A/C.', 'error');
 				$this->logger->write_message("error", "Error adding " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " since failed inserting voucher");
 				$this->template->load('template', 'voucher/add', $data);
 				return;
@@ -440,7 +440,7 @@ class Voucher extends Controller {
 				if ( ! $this->db->query("INSERT INTO voucher_items (voucher_id, ledger_id, amount, dc) VALUES (?, ?, ?, ?)", array($voucher_id, $data_ledger_id, $data_amount, $data_ledger_dc)))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error addding Ledger A/C ' . $data_ledger_id, 'error');
+					$this->messages->add('Error addding Ledger A/C ' . $data_ledger_id . '.', 'error');
 					$this->logger->write_message("error", "Error adding " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " since failed inserting voucher ledger items " . "[id:" . $data_ledger_id . "]");
 					$this->template->load('template', 'voucher/add', $data);
 					return;
@@ -451,7 +451,7 @@ class Voucher extends Controller {
 			if ( ! $this->db->query("UPDATE vouchers SET dr_total = ?, cr_total = ? WHERE id = ?", array($dr_total, $cr_total, $voucher_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating voucher total', 'error');
+				$this->messages->add('Error updating voucher total.', 'error');
 				$this->logger->write_message("error", "Error adding " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " since failed updating debit and credit total");
 				$this->template->load('template', 'voucher/add', $data);
 				return;
@@ -459,7 +459,7 @@ class Voucher extends Controller {
 
 			/* Success */
 			$this->db->trans_complete();
-			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ' added successfully', 'success');
+			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ' added successfully.', 'success');
 			$this->logger->write_message("success", "Added " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number);
 			redirect('voucher/show/' . $voucher_type);
 			$this->template->load('template', 'voucher/add', $data);
@@ -485,7 +485,7 @@ class Voucher extends Controller {
 			$this->template->set('page_title', 'Edit Journal Voucher');
 			break;
 		default :
-			$this->messages->add('Invalid voucher type', 'error');
+			$this->messages->add('Invalid voucher type.', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -494,7 +494,7 @@ class Voucher extends Controller {
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
-			$this->messages->add('Invalid Voucher', 'error');
+			$this->messages->add('Invalid Voucher.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -629,7 +629,7 @@ class Voucher extends Controller {
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			} else if ($dr_total == 0 && $cr_total == 0) {
-				$this->messages->add('Cannot save empty voucher', 'error');
+				$this->messages->add('Cannot save empty voucher.', 'error');
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			}
@@ -660,7 +660,7 @@ class Voucher extends Controller {
 			if ( ! $this->db->query("UPDATE vouchers SET number = ?, date = ?, narration = ?, draft = ?, tag_id = ? WHERE id = ?", array($data_number, $data_date, $data_narration, $data_draft, $data_tag, $voucher_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating Voucher A/C', 'error');
+				$this->messages->add('Error updating Voucher A/C.', 'error');
 				$this->logger->write_message("error", "Error updating voucher details for " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
@@ -703,7 +703,7 @@ class Voucher extends Controller {
 				if ( ! $this->db->query("INSERT INTO voucher_items (voucher_id, ledger_id, amount, dc) VALUES (?, ?, ?, ?)", array($voucher_id, $data_ledger_id, $data_amount, $data_ledger_dc)))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error updating Ledger A/C ' . $data_ledger_id, 'error');
+					$this->messages->add('Error updating Ledger A/C ' . $data_ledger_id . '.', 'error');
 					$this->logger->write_message("error", "Error updating new voucher item [id:" . $data_ledger_id . "] for " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
@@ -714,7 +714,7 @@ class Voucher extends Controller {
 			if ( ! $this->db->query("UPDATE vouchers SET dr_total = ?, cr_total = ? WHERE id = ?", array($dr_total, $cr_total, $voucher_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating voucher total', 'error');
+				$this->messages->add('Error updating voucher total.', 'error');
 				$this->logger->write_message("error", "Error updating voucher total for " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
@@ -722,7 +722,7 @@ class Voucher extends Controller {
 
 			/* Success */
 			$this->db->trans_complete();
-			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ' updated successfully', 'success');
+			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ' updated successfully.', 'success');
 			$this->logger->write_message("success", "Updated " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $voucher_type);
 			return;
@@ -735,7 +735,7 @@ class Voucher extends Controller {
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
-			$this->messages->add('Invalid Voucher', 'error');
+			$this->messages->add('Invalid Voucher.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -744,7 +744,7 @@ class Voucher extends Controller {
 		if ( ! $this->db->query("DELETE FROM voucher_items WHERE voucher_id = ?", array($voucher_id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Voucher - Ledgers entry', 'error');
+			$this->messages->add('Error deleting Voucher - Ledgers entry.', 'error');
 			$this->logger->write_message("error", "Error deleting ledger entries for " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			redirect('voucher/' . $voucher_type . '/' . $voucher_id);
 			return;
@@ -752,13 +752,13 @@ class Voucher extends Controller {
 		if ( ! $this->db->query("DELETE FROM vouchers WHERE id = ?", array($voucher_id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Voucher entry', 'error');
+			$this->messages->add('Error deleting Voucher entry.', 'error');
 			$this->logger->write_message("error", "Error deleting voucher entry for " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			redirect('voucher/' . $voucher_type . '/' . $voucher_id);
 			return;
 		}
 		$this->db->trans_complete();
-		$this->messages->add('Voucher deleted successfully', 'success');
+		$this->messages->add('Voucher deleted successfully.', 'success');
 		$this->logger->write_message("success", "Deleted " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $cur_voucher->number . " [id:" . $voucher_id . "]");
 		redirect('voucher/show/' . $voucher_type);
 		return;
@@ -774,7 +774,7 @@ class Voucher extends Controller {
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
-			$this->messages->add('Invalid Voucher', 'error');
+			$this->messages->add('Invalid Voucher.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -821,7 +821,7 @@ class Voucher extends Controller {
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
-			$this->messages->add('Invalid Voucher', 'error');
+			$this->messages->add('Invalid Voucher.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}

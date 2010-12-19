@@ -71,13 +71,13 @@ class Group extends Controller {
 			if ( ! $this->db->query("INSERT INTO groups (name, parent_id, affects_gross) VALUES (?, ?, ?)", array($data_name, $data_parent_id, $data_affects_gross)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding ' . $data_name . ' - Group A/C', 'error');
+				$this->messages->add('Error addding ' . $data_name . ' - Group A/C.', 'error');
 				$this->logger->write_message("error", "Error adding Group A/C named " . $data_name);
 				$this->template->load('template', 'group/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add($data_name . ' - Group A/C added successfully', 'success');
+				$this->messages->add($data_name . ' - Group A/C added successfully.', 'success');
 				$this->logger->write_message("success", "Added Group A/C named " . $data_name);
 				redirect('account');
 				return;
@@ -94,12 +94,12 @@ class Group extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->messages->add('Invalid Group A/C', 'error');
+			$this->messages->add('Invalid Group A/C.', 'error');
 			redirect('account');
 			return;
 		}
 		if ($id < 5) {
-			$this->messages->add('Cannot edit system created Group A/C', 'error');
+			$this->messages->add('Cannot edit system created Group A/C.', 'error');
 			redirect('account');
 			return;
 		}
@@ -108,7 +108,7 @@ class Group extends Controller {
 		$group_data_q = $this->db->query("SELECT * FROM groups WHERE id = ?", array($id));
 		if ($group_data_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Group A/C', 'error');
+			$this->messages->add('Invalid Group A/C.', 'error');
 			redirect('account');
 			return;
 		}
@@ -168,13 +168,13 @@ class Group extends Controller {
 			if ( ! $this->db->query("UPDATE groups SET name = ?, parent_id = ?, affects_gross = ? WHERE id = ?", array($data_name, $data_parent_id, $data_affects_gross, $data_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating ' . $data_name . ' - Group A/C', 'error');
+				$this->messages->add('Error updating ' . $data_name . ' - Group A/C.', 'error');
 				$this->logger->write_message("error", "Error updating Group A/C named " . $data_name . " [id:" . $data_id . "]");
 				$this->template->load('template', 'group/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add($data_name . ' - Group A/C updated successfully', 'success');
+				$this->messages->add($data_name . ' - Group A/C updated successfully.', 'success');
 				$this->logger->write_message("success", "Updated Group A/C named " . $data_name . " [id:" . $data_id . "]");
 				redirect('account');
 				return;
@@ -189,26 +189,26 @@ class Group extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->messages->add('Invalid Group A/C', 'error');
+			$this->messages->add('Invalid Group A/C.', 'error');
 			redirect('account');
 			return;
 		}
 		if ($id < 5) {
-			$this->messages->add('Cannot delete system created Group A/C', 'error');
+			$this->messages->add('Cannot delete system created Group A/C.', 'error');
 			redirect('account');
 			return;
 		}
 		$data_present_q = $this->db->query("SELECT * FROM groups WHERE parent_id = ?", array($id));
 		if ($data_present_q->num_rows() > 0)
 		{
-			$this->messages->add('Cannot delete non-empty Group A/C', 'error');
+			$this->messages->add('Cannot delete non-empty Group A/C.', 'error');
 			redirect('account');
 			return;
 		}
 		$data_present_q = $this->db->query("SELECT * FROM ledgers WHERE group_id = ?", array($id));
 		if ($data_present_q->num_rows() > 0)
 		{
-			$this->messages->add('Cannot delete non-empty Group A/C', 'error');
+			$this->messages->add('Cannot delete non-empty Group A/C.', 'error');
 			redirect('account');
 			return;
 		}
@@ -217,7 +217,7 @@ class Group extends Controller {
 		$group_q = $this->db->query("SELECT * FROM groups WHERE id = ?", array($id));
 		if ($group_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Group A/C', 'error');
+			$this->messages->add('Invalid Group A/C.', 'error');
 			redirect('account');
 			return;
 		} else {
@@ -229,13 +229,13 @@ class Group extends Controller {
 		if ( ! $this->db->query("DELETE FROM groups WHERE id = ?", array($id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add("Error deleting " . $group_data->name . " - Group A/C", 'error');
+			$this->messages->add("Error deleting " . $group_data->name . " - Group A/C.", 'error');
 			$this->logger->write_message("error", "Error deleting Group A/C named " . $group_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;
 		} else {
 			$this->db->trans_complete();
-			$this->messages->add($group_data->name . ' - Group A/C deleted successfully', 'success');
+			$this->messages->add($group_data->name . ' - Group A/C deleted successfully.', 'success');
 			$this->logger->write_message("success", "Deleted Group A/C named " . $group_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;

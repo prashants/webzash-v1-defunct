@@ -14,10 +14,10 @@ class Log extends Controller {
 	{
 		if ($this->db->query('DELETE FROM logs'))
 		{
-			$this->messages->add('Log cleared', 'success');
+			$this->messages->add('Log cleared.', 'success');
 			redirect("log");
 		} else {
-			$this->messages->add('Error clearing Log', 'error');
+			$this->messages->add('Error clearing Log.', 'error');
 			redirect("log");
 		}
 		return;

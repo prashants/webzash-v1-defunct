@@ -69,7 +69,7 @@ class Active extends Controller {
 			/* Check if database ini file exists */
 			if ( ! get_file_info($ini_file))
 			{
-				$this->messages->add("Account setting file is missing", 'error');
+				$this->messages->add("Account setting file is missing.", 'error');
 				$this->template->load('admin_template', 'admin/active', $data);
 				return;
 			}
@@ -78,7 +78,7 @@ class Active extends Controller {
 			$active_accounts = parse_ini_file($ini_file);
 			if ( ! $active_accounts)
 			{
-				$this->messages->add("Invalid account setting file", 'error');
+				$this->messages->add("Invalid account setting file.", 'error');
 				$this->template->load('admin_template', 'admin/active', $data);
 				return;
 			}
@@ -86,38 +86,38 @@ class Active extends Controller {
 			/* Check if all needed variables are set in ini file */
 			if ( ! isset($active_accounts['db_hostname']))
 			{
-				$this->messages->add("Hostname missing from account setting file", 'error');
+				$this->messages->add("Hostname missing from account setting file.", 'error');
 				$this->template->load('admin_template', 'admin/active', $data);
 				return;
 			}
 			if ( ! isset($active_accounts['db_port']))
 			{
-				$this->messages->add("Port missing from account setting file. Default MySQL port is 3306", 'error');
+				$this->messages->add("Port missing from account setting file. Default MySQL port is 3306.", 'error');
 				$this->template->load('admin_template', 'admin/active', $data);
 				return;
 			}
 			if ( ! isset($active_accounts['db_name']))
 			{
-				$this->messages->add("Database name missing from account setting file", 'error');
+				$this->messages->add("Database name missing from account setting file.", 'error');
 				$this->template->load('admin_template', 'admin/active', $data);
 				return;
 			}
 			if ( ! isset($active_accounts['db_username']))
 			{
-				$this->messages->add("Database username missing from account setting file", 'error');
+				$this->messages->add("Database username missing from account setting file.", 'error');
 				$this->template->load('admin_template', 'admin/active', $data);
 				return;
 			}
 			if ( ! isset($active_accounts['db_password']))
 			{
-				$this->messages->add("Database password missing from account setting file", 'error');
+				$this->messages->add("Database password missing from account setting file.", 'error');
 				$this->template->load('admin_template', 'admin/active', $data);
 				return;
 			}
 
 			/* Setting new account database details in session */
 			$this->session->set_userdata('db_active_label', $db_label);
-			$this->messages->add("Active account settings changed", 'success');
+			$this->messages->add("Active account settings changed.", 'success');
 			redirect('admin');
 		}
 		return;

@@ -27,40 +27,40 @@ class Welcome extends Controller {
 			/* Check if database ini file exists */
 			if ( ! get_file_info($ini_file))
 			{
-				$this->messages->add("Account setting file is missing", 'error');
+				$this->messages->add("Account setting file is missing.", 'error');
 			} else {
 				/* Parsing database ini file */
 				$active_accounts = parse_ini_file($ini_file);
 				if ( ! $active_accounts)
 				{
-					$this->messages->add("Invalid account setting file", 'error');
+					$this->messages->add("Invalid account setting file.", 'error');
 				} else {
 					/* Check if all needed variables are set in ini file */
 					$ini_ok = TRUE;
 					if ( ! isset($active_accounts['db_hostname']))
 					{
 						$ini_ok = FALSE;
-						$this->messages->add("Hostname missing from account setting file", 'error');
+						$this->messages->add("Hostname missing from account setting file.", 'error');
 					}
 					if ( ! isset($active_accounts['db_port']))
 					{
 						$ini_ok = FALSE;
-						$this->messages->add("Port missing from account setting file. Default MySQL port is 3306", 'error');
+						$this->messages->add("Port missing from account setting file. Default MySQL port is 3306.", 'error');
 					}
 					if ( ! isset($active_accounts['db_name']))
 					{
 						$ini_ok = FALSE;
-						$this->messages->add("Database name missing from account setting file", 'error');
+						$this->messages->add("Database name missing from account setting file.", 'error');
 					}
 					if ( ! isset($active_accounts['db_username']))
 					{
 						$ini_ok = FALSE;
-						$this->messages->add("Database username missing from account setting file", 'error');
+						$this->messages->add("Database username missing from account setting file.", 'error');
 					}
 					if ( ! isset($active_accounts['db_password']))
 					{
 						$ini_ok = FALSE;
-						$this->messages->add("Database password missing from account setting file", 'error');
+						$this->messages->add("Database password missing from account setting file.", 'error');
 					}
 
 					if ($ini_ok)
@@ -85,7 +85,7 @@ class Welcome extends Controller {
 			}
 		} else {
 			$is_label_set = FALSE;
-			$this->messages->add('Please select a Webzash database', 'error');
+			$this->messages->add('Please select a Webzash database.', 'error');
 		}
 
 		if ($is_label_set)
@@ -105,7 +105,7 @@ class Welcome extends Controller {
 						if ( ! $valid_db_q)
 						{
 							$valid_webzash_db = FALSE;
-							$this->messages->add('Invalid Webzash database', 'error');
+							$this->messages->add('Invalid Webzash database.', 'error');
 							break;
 						}
 					}
@@ -129,10 +129,10 @@ class Welcome extends Controller {
 						}
 					}
 				} else {
-					$this->messages->add('Invalid database connection settings. Please check whether the provided database name, username and password is valid', 'error');
+					$this->messages->add('Invalid database connection settings. Please check whether the provided database name, username and password is valid.', 'error');
 				}
 			} else {
-				$this->messages->add('Cannot connect to database server. Please check whether database server is running', 'error');
+				$this->messages->add('Cannot connect to database server. Please check whether database server is running.', 'error');
 			}
 		}
 

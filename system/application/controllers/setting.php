@@ -135,13 +135,13 @@ class Setting extends Controller {
 			if ( ! $this->db->query("UPDATE settings SET name = ?, address = ?, email = ?, currency_symbol = ?, date_format = ?, timezone = ? WHERE id = 1", array($data_account_name, $data_account_address, $data_account_email, $data_account_currency, $data_account_date, $data_account_timezone)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating settings', 'error');
+				$this->messages->add('Error updating settings.', 'error');
 				$this->logger->write_message("error", "Error updating account settings");
 				$this->template->load('template', 'setting/account', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Settings updated successfully', 'success');
+				$this->messages->add('Settings updated successfully.', 'success');
 				$this->logger->write_message("success", "Updated account settings");
 				redirect('setting');
 				return;
@@ -299,7 +299,7 @@ class Setting extends Controller {
 			/* Check if database ini file exists */
 			if (get_file_info($ini_file))
 			{
-				$this->messages->add("Account with same label already exists", 'error');
+				$this->messages->add("Account with same label already exists.", 'error');
 				$this->template->load('template', 'setting/cf', $data);
 				return;
 			}
@@ -307,7 +307,7 @@ class Setting extends Controller {
 			/* Check if start date is less than end date */
 			if ($data_fy_end <= $data_fy_start)
 			{
-				$this->messages->add("Financial start date cannot be greater than end date", 'error');
+				$this->messages->add("Financial start date cannot be greater than end date.", 'error');
 				$this->template->load('template', 'setting/cf', $data);
 				return;
 			}
@@ -329,12 +329,12 @@ class Setting extends Controller {
 				{
 					if ($newacc->query("CREATE DATABASE " . mysql_real_escape_string($data_database_name)))
 					{
-						$this->messages->add("New database created", 'success');
+						$this->messages->add("New database created.", 'success');
 						/* Retrying to connect to new database */
 						$newacc = $this->load->database($dsn, TRUE);
 						$conn_error = $newacc->_error_message();
 					} else {
-						$this->messages->add("Cannot create database", 'error');
+						$this->messages->add("Cannot create database.", 'error');
 						$this->template->load('template', 'setting/cf', $data);
 						return;
 					}
@@ -343,7 +343,7 @@ class Setting extends Controller {
 
 			if ( ! $newacc->conn_id)
 			{
-				$this->messages->add("Cannot connecting to database", 'error');
+				$this->messages->add("Cannot connecting to database.", 'error');
 				$this->template->load('template', 'setting/cf', $data);
 				return;
 			}  else if ($conn_error != "") {
@@ -351,7 +351,7 @@ class Setting extends Controller {
 				$this->template->load('template', 'setting/cf', $data);
 				return;
 			} else if ($newacc->query("SHOW TABLES")->num_rows() > 0) {
-				$this->messages->add("Selected database in not empty", 'error');
+				$this->messages->add("Selected database in not empty.", 'error');
 				$this->template->load('template', 'setting/cf', $data);
 				return;
 			} else {
@@ -370,7 +370,7 @@ class Setting extends Controller {
 				/* Adding the account settings */
 				$newacc->query("INSERT INTO settings (id, name, address, email, fy_start, fy_end, currency_symbol, date_format, timezone, email_protocol, email_host, email_port, email_username, email_password,  database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, $data_account_name, $data_account_address, $data_account_email, $data_fy_start, $data_fy_end, $data_account_currency, $data_account_date, $data_account_timezone, $data_account_email_protocol, $data_account_email_host, $data_account_email_port, $data_account_email_username, $data_account_email_password, 1));
 
-				$this->messages->add("Successfully created webzash account", 'success');
+				$this->messages->add("Successfully created webzash account.", 'success');
 
 				/* Adding account settings to file. Code copied from manage controller */
 				$con_details = "[database]" . "\r\n" . "db_hostname = \"" . $data_database_host . "\"" . "\r\n" . "db_port = \"" . $data_database_port . "\"" . "\r\n" . "db_name = \"" . $data_database_name . "\"" . "\r\n" . "db_username = \"" . $data_database_username . "\"" . "\r\n" . "db_password = \"" . $data_database_password . "\"" . "\r\n";
@@ -386,7 +386,7 @@ class Setting extends Controller {
 				{
 					if ( ! $newacc->query("INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (?, ?, ?, ?)", array($row->id, $row->parent_id, $row->name, $row->affects_gross)))
 					{
-						$this->messages->add("Failed to add group " . $row->name, 'error');
+						$this->messages->add("Failed to add group " . $row->name . '.', 'error');
 						$cf_status = FALSE;
 					}
 				}
@@ -417,13 +417,13 @@ class Setting extends Controller {
 						}
 						if ( ! $newacc->query("INSERT INTO ledgers (id, group_id, name, op_balance, op_balance_dc, type) VALUES (?, ?, ?, ?, ?, ?)", array($row->id, $row->group_id, $row->name, $op_balance, $op_balance_dc, $row->type)))
 						{
-							$this->messages->add("Failed to add ledger " . $row->name, 'error');
+							$this->messages->add("Failed to add ledger " . $row->name . '.', 'error');
 							$cf_status = FALSE;
 						}
 					} else {
 						if ( ! $newacc->query("INSERT INTO ledgers (id, group_id, name, op_balance, op_balance_dc, type) VALUES (?, ?, ?, ?, ?, ?)", array($row->id, $row->group_id, $row->name, 0, "D", $row->type)))
 						{
-							$this->messages->add("Failed to add ledger " . $row->name, 'error');
+							$this->messages->add("Failed to add ledger " . $row->name . '.', 'error');
 							$cf_status = FALSE;
 						}
 					}
@@ -435,23 +435,23 @@ class Setting extends Controller {
 				{
 					if ( ! $newacc->query("INSERT INTO tags (id, title, color, background) VALUES (?, ?, ?, ?)", array($row->id, $row->title, $row->color, $row->background)))
 					{
-						$this->messages->add("Failed to add tag " . $row->title, 'error');
+						$this->messages->add("Failed to add tag " . $row->title . '.', 'error');
 						$cf_status = FALSE;
 					}
 				}
 
 				if ($cf_status)
-					$this->messages->add("Successfully carry forward to new account", 'success');
+					$this->messages->add("Successfully carry forward to new account.", 'success');
 				else
-					$this->messages->add("Error in carry forward to new account", 'error');
+					$this->messages->add("Error in carry forward to new account.", 'error');
 
 				/* Writing the connection string to end of file - writing in 'a' append mode */
 				if ( ! write_file($ini_file, $con_details))
 				{
-					$this->messages->add("Failed to add account settings file. Please check if \"" . $ini_file . "\" file is writable", 'error');
+					$this->messages->add("Failed to add account settings file. Please check if \"" . $ini_file . "\" file is writable.", 'error');
 					$this->messages->add("You can manually create a text file \"" . $ini_file . "\" with the following content :<br /><br />" . $con_details_html, 'error');
 				} else {
-					$this->messages->add("Successfully added webzash account settings file to list of active accounts", 'success');
+					$this->messages->add("Successfully added webzash account settings file to list of active accounts.", 'success');
 				}
 
 				redirect('setting');
@@ -550,13 +550,13 @@ class Setting extends Controller {
 			if ( ! $this->db->query("UPDATE settings SET email_protocol = ?, email_host = ?, email_port = ?, email_username = ?, email_password = ? WHERE id = 1", array($data_email_protocol, $data_email_host, $data_email_port, $data_email_username, $data_email_password)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating settings', 'error');
+				$this->messages->add('Error updating settings.', 'error');
 				$this->logger->write_message("error", "Error updating email settings");
 				$this->template->load('template', 'setting/email', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Email settings updated successfully', 'success');
+				$this->messages->add('Email settings updated successfully.', 'success');
 				$this->logger->write_message("success", "Updated email settings");
 				redirect('setting');
 				return;
@@ -764,13 +764,13 @@ class Setting extends Controller {
 			if ( ! $this->db->query("UPDATE settings SET print_paper_height = ?, print_paper_width = ?, print_margin_top = ?, print_margin_bottom = ?, print_margin_left = ?, print_margin_right = ?, print_orientation = ?, print_page_format = ?, print_page_layout = ?, print_logo = ? WHERE id = 1", array($data_paper_height, $data_paper_width, $data_margin_top, $data_margin_bottom, $data_margin_left, $data_margin_right, $data_orientation, $data_output_format,  $data_page_layout, $data_logo)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating printer settings', 'error');
+				$this->messages->add('Error updating printer settings.', 'error');
 				$this->logger->write_message("error", "Error updating printer settings");
 				$this->template->load('template', 'setting/printer');
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Printer settings updated successfully', 'success');
+				$this->messages->add('Printer settings updated successfully.', 'success');
 				$this->logger->write_message("success", "Updated printer settings");
 				redirect('setting');
 				return;
@@ -791,7 +791,7 @@ class Setting extends Controller {
 		/* Write the backup file to server */
 		if ( ! write_file($this->config->item('backup_path') . $backup_filename, $backup_data))
 		{
-			$this->messages->add('Error saving backup file to server.' . ' Please check if "' . $this->config->item('backup_path') . '" folder is writable', 'error');
+			$this->messages->add('Error saving backup file to server.' . ' Please check if "' . $this->config->item('backup_path') . '" folder is writable.', 'error');
 			redirect('setting');
 			return;
 		}
@@ -877,13 +877,13 @@ class Setting extends Controller {
 			if ( ! $this->db->query("UPDATE settings SET receipt_voucher_prefix  = ?, payment_voucher_prefix = ?, contra_voucher_prefix = ?, journal_voucher_prefix = ? WHERE id = 1", array($data_receipt_prefix, $data_payment_prefix, $data_contra_prefix, $data_journal_prefix)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating voucher settings', 'error');
+				$this->messages->add('Error updating voucher settings.', 'error');
 				$this->logger->write_message("error", "Error updating voucher settings");
 				$this->template->load('template', 'setting/voucher');
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Voucher settings updated successfully', 'success');
+				$this->messages->add('Voucher settings updated successfully.', 'success');
 				$this->logger->write_message("success", "Updated voucher settings");
 				redirect('setting');
 				return;
