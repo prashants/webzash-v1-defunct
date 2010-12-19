@@ -764,6 +764,56 @@ class Voucher extends Controller {
 		return;
 	}
 
+	function download($voucher_type, $voucher_id = 0)
+	{
+		$this->load->helper('download');
+		$this->load->model('Setting_model');
+		$this->load->model('Ledger_model');
+
+		$account = $this->Setting_model->get_current();
+
+		/* Load current voucher details */
+		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
+		{
+			$this->messages->add('Invalid Voucher.', 'error');
+			redirect('voucher/show/' . $voucher_type);
+			return;
+		}
+
+		$data['voucher_type'] = $voucher_type;
+		$data['voucher_number'] =  $cur_voucher->number;
+		$data['voucher_date'] = date_mysql_to_php_display($cur_voucher->date);
+		$data['voucher_dr_total'] =  $cur_voucher->dr_total;
+		$data['voucher_cr_total'] =  $cur_voucher->cr_total;
+		$data['voucher_narration'] = $cur_voucher->narration;
+		$data['voucher_draft'] = $cur_voucher->draft;
+
+		/* Getting Ledger details */
+		$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
+
+		$counter = 0;
+		$data['ledger_data'] = array();
+		if ($ledger_q->num_rows() > 0)
+		{
+			foreach ($ledger_q->result() as $row)
+			{
+				$data['ledger_data'][$counter] = array(
+					'id' => $row->ledger_id,
+					'name' => $this->Ledger_model->get_name($row->ledger_id),
+					'dc' => $row->dc,
+					'amount' => $row->amount,
+				);
+				$counter++;
+			}
+		}
+
+		/* Download Voucher */
+		$file_name = $voucher_type . '_voucher_' . $cur_voucher->number . ".html";
+		$download_data = $this->load->view('voucher/downloadpreview', $data, TRUE);
+		force_download($file_name, $download_data);
+		return;
+	}
+
 	function printpreview($voucher_type, $voucher_id)
 	{
 		$this->load->model('Setting_model');
