@@ -307,7 +307,7 @@ class CI_Router {
 	 */	
 	function set_class($class)
 	{
-		$this->class = $class;
+		$this->class = str_replace(array('/', '.'), '', $class);
 	}
 	
 	// --------------------------------------------------------------------
@@ -366,7 +366,7 @@ class CI_Router {
 	 */	
 	function set_directory($dir)
 	{
-		$this->directory = $dir.'/';
+		$this->directory = str_replace(array('/', '.'), '', $dir).'/';
 	}
 
 	// --------------------------------------------------------------------
