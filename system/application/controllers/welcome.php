@@ -17,11 +17,11 @@ class Welcome extends Controller {
 		$this->template->set('add_javascript', array("raphael.js", "jquery.enumerable.js", "jquery.tufte-graph.js"));
 
 		/* Draft voucher count */
-		$draft_q = $this->db->get_where('vouchers', array('draft' => 1));
+		$draft_q = $this->db->query("SELECT * FROM vouchers WHERE draft = 1");
 		$data['draft_count'] = $draft_q->num_rows();
 
 		/* Bank and Cash Ledger accounts */
-		$bank_q = $this->db->get_where('ledgers', array('type' => 'B'));
+		$bank_q = $this->db->query("SELECT * FROM ledgers WHERE type = ?", array('B'));
 		if ($bank_q->num_rows() > 0)
 		{
 			foreach ($bank_q->result() as $row)

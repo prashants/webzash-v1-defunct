@@ -1,5 +1,5 @@
 <?php
-	$tags_q = $this->db->get("tags");
+	$tags_q = $this->db->query("SELECT * FROM tags ORDER BY title ASC");
 	echo "<table border=0 cellpadding=5 class=\"simple-table tag-table\">";
 	echo "<thead><tr><th>Title</th><th>Color</th><th></th></tr></thead>";
 	echo "<tbody>";

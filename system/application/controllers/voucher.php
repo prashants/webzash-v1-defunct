@@ -467,7 +467,7 @@ class Voucher extends Controller {
 			$voucher_success_links .= " it.";
 
 			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ' added successfully. ' . $voucher_success_links, 'success');
-			$this->logger->write_message("success", "Added " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number);
+			$this->logger->write_message("success", "Added " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $voucher_type);
 			$this->template->load('template', 'voucher/add', $data);
 			return;

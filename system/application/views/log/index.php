@@ -1,6 +1,5 @@
 <?php
-	$this->db->order_by("id", "desc");
-	$logs_q = $this->db->get('logs');
+	$logs_q = $this->db->query('SELECT * FROM logs ORDER BY id DESC');
 	echo "<table border=0 class=\"simple-table\">";
 	echo "<thead><tr><th width=\"90\">Date</th><th>Host IP</th><th>Message</th><th width=\"30\">URL</th><th>Browser</th></tr></thead>";
 	foreach ($logs_q->result() as $row)

@@ -33,8 +33,7 @@ class Log extends Controller {
 		$data['page_language'] = 'en-en';
 		$data['creator_email'] = $this->config->item('account_email');
 
-		$this->db->order_by("id", "desc");
-		$data['feed_data'] = $this->db->get('logs');
+		$data['feed_data'] = $this->db->query('SELECT * FROM logs ORDER BY id DESC');
 
 		header("Content-Type: application/rss+xml");
 		$this->load->view('rss', $data);

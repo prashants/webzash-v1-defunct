@@ -24,7 +24,7 @@ class Tag_model extends Model {
 	{
 		if ($tag_id < 1)
 			return "";
-		$tag_q = $this->db->get_where('tags', array('id' => $tag_id));
+		$tag_q = $this->db->query("SELECT * FROM tags WHERE id = ?", array($tag_id));
 		if ($tag = $tag_q->row())
 		{
 			return "<span class=\"tags\" style=\"color:#" . $tag->color . "; background-color:#" . $tag->background . "\">" . $tag->title . "</span>";
@@ -36,7 +36,7 @@ class Tag_model extends Model {
 	{
 		if ($tag_id < 1)
 			return "";
-		$tag_q = $this->db->get_where('tags', array('id' => $tag_id));
+		$tag_q = $this->db->query("SELECT * FROM tags WHERE id = ?", array($tag_id));
 		if ($tag = $tag_q->row())
 		{
 			return "<span class=\"tags\" style=\"color:#" . $tag->color . "; background-color:#" . $tag->background . "\">" . anchor("voucher/show/tag/" . $tag->id , $tag->title, array('style' => 'text-decoration:none;color:#' . $tag->color . ';')) . "</span>";
@@ -48,7 +48,7 @@ class Tag_model extends Model {
 	{
 		if ($tag_id < 1)
 			return "";
-		$tag_q = $this->db->get_where('tags', array('id' => $tag_id));
+		$tag_q = $this->db->query("SELECT * FROM tags WHERE id = ?", array($tag_id));
 		if ($tag = $tag_q->row())
 		{
 			return $tag->title;
