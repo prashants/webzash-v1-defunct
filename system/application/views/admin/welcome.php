@@ -38,6 +38,14 @@
 				General application settings
 			</div>
 		</div>
+		<div class="settings-container">
+			<div class="settings-title">
+				<?php echo anchor('admin/status', 'Status Report', array('title' => 'Status Report')); ?>
+			</div>
+			<div class="settings-desc">
+				Status report of the application
+			</div>
+		</div>
 	</div>
 </div>
 <div class="clear">
