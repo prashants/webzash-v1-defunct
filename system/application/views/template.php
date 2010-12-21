@@ -10,6 +10,8 @@
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/custom.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/menu.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/jquery.datepick.css">
+<link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/thickbox.css">
+
 <?php
 /* Dynamically adding css files from controllers */
 if (isset($add_css))
@@ -27,6 +29,7 @@ if (isset($add_css))
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/hoverIntent.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/superfish.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/supersubs.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/thickbox-compressed.js"></script>
 <?php
 /* Dynamically adding javascript files from controllers */
 if (isset($add_javascript))
@@ -68,7 +71,10 @@ $(document).ready(function() {
 		<div id="info">
 			<?php
 				echo $this->config->item('account_name');
-				echo "<br />";
+				echo " (";
+				echo "<a href=\"#TB_inline?height=300&width=300&inlineId=changeActiveAccount\" class=\"thickbox anchor-link-a\" title=\"Change Active Account\">change</a>";
+				echo ")<br />";
+				echo "FY : ";
 				echo date_mysql_to_php_display($this->config->item('account_fy_start'));
 				echo " - ";
 				echo date_mysql_to_php_display($this->config->item('account_fy_end'));
@@ -181,6 +187,11 @@ $(document).ready(function() {
 <div id="footer">
 	<?php if (isset($page_footer)) echo $page_footer ?>
 	<a href="http://webzash.wordpress.com" target="_blank">Webzash<a/> is licensed under <a href="http://www.gnu.org/licenses/agpl-3.0.txt" target="_blank">GNU Affero General Public License, version 3</a> as published by the Free Software Foundation.
+</div>
+<div id="account_change" class="hidden-element">
+	<div id="changeActiveAccount">
+	<?php $this->load->view("setting/change"); ?>
+	</div>
 </div>
 </body>
 </html>

@@ -121,7 +121,6 @@ body {
 	border:solid 1px #787878;
 	background:#F0F0F0;
 	color:#222222;
-	padding:0 10px 0 10px;
 	margin:0 0 10px 0;
 	text-align:left;
 }
@@ -130,7 +129,6 @@ body {
 	border:solid 1px #C34A2C;
 	background:#FFBABA;
 	color:#222222;
-	padding:0 10px 0 10px;
 	margin:0 0 10px 0;
 	text-align:left;
 }
@@ -139,7 +137,6 @@ body {
 	border:solid 1px #FFEC8B;
 	background:#FFF8C6;
 	color:#222222;
-	padding:0 10px 0 10px;
 	margin:0 0 10px 0;
 	text-align:left;
 }
@@ -151,6 +148,10 @@ body {
 
 .bold {
 	font-weight:bold;
+}
+
+.hidden-element {
+	display:none;
 }
 
 a.no-underline {
