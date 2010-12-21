@@ -459,7 +459,14 @@ class Voucher extends Controller {
 
 			/* Success */
 			$this->db->trans_complete();
-			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ' added successfully.', 'success');
+
+			/* Voucher Actions */
+			$voucher_success_links = "You can ";
+			$voucher_success_links .= anchor('voucher/view/' . strtolower($voucher_type) . "/" . $voucher_id, 'View', array('class' => 'anchor-link-a')) . " or ";
+			$voucher_success_links .= anchor('voucher/download/' . strtolower($voucher_type) . "/" . $voucher_id, 'Download', array('class' => 'anchor-link-a'));
+			$voucher_success_links .= " it.";
+
+			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ' added successfully. ' . $voucher_success_links, 'success');
 			$this->logger->write_message("success", "Added " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number);
 			redirect('voucher/show/' . $voucher_type);
 			$this->template->load('template', 'voucher/add', $data);
@@ -722,7 +729,14 @@ class Voucher extends Controller {
 
 			/* Success */
 			$this->db->trans_complete();
-			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ' updated successfully.', 'success');
+
+			/* Voucher Actions */
+			$voucher_success_links = "You can ";
+			$voucher_success_links .= anchor('voucher/view/' . strtolower($voucher_type) . "/" . $voucher_id, 'View', array('class' => 'anchor-link-a')) . " or ";
+			$voucher_success_links .= anchor('voucher/download/' . strtolower($voucher_type) . "/" . $voucher_id, 'Download', array('class' => 'anchor-link-a'));
+			$voucher_success_links .= " it.";
+
+			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ' updated successfully. ' . $voucher_success_links, 'success');
 			$this->logger->write_message("success", "Updated " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $voucher_type);
 			return;
