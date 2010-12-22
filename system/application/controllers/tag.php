@@ -21,6 +21,19 @@ class Tag extends Controller {
 	{
 		$this->template->set('page_title', 'New Tag');
 
+		/* Colorpicker JS and CSS */
+		$this->template->set('add_css', array(
+			"plugins/colorpicker/css/colorpicker.css",
+		));
+
+		$this->template->set('add_javascript', array(
+			"plugins/colorpicker/js/colorpicker.js",
+			"plugins/colorpicker/js/eye.js",
+			"plugins/colorpicker/js/utils.js",
+			"plugins/colorpicker/js/layout.js",
+			"plugins/colorpicker/js/startup.js",
+		));
+
 		/* Form fields */
 		$data['tag_title'] = array(
 			'name' => 'tag_title',

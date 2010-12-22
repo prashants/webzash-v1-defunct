@@ -18,7 +18,7 @@ if (isset($add_css))
 {
 	foreach ($add_css as $id => $row)
 	{
-		echo "<link type=\"text/css\" rel=\"stylesheet\" href=\"" . asset_url() . "css/" . $row ."\">";
+		echo "<link type=\"text/css\" rel=\"stylesheet\" href=\"" . asset_url() . $row ."\">";
 	}
 }
 ?>
@@ -30,13 +30,14 @@ if (isset($add_css))
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/superfish.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/supersubs.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/thickbox-compressed.js"></script>
+
 <?php
 /* Dynamically adding javascript files from controllers */
 if (isset($add_javascript))
 {
 	foreach ($add_javascript as $id => $row)
 	{
-		echo "<script type=\"text/javascript\" src=\"" . asset_url() . "js/" . $row ."\"></script>";
+		echo "<script type=\"text/javascript\" src=\"" . asset_url() . $row ."\"></script>";
 	}
 }
 ?>
