@@ -107,6 +107,19 @@ class Tag extends Controller {
 	function edit($id = 0)
 	{
 		$this->template->set('page_title', 'Edit Tag');
+		
+		/* Colorpicker JS and CSS */
+		$this->template->set('add_css', array(
+			"plugins/colorpicker/css/colorpicker.css",
+		));
+
+		$this->template->set('add_javascript', array(
+			"plugins/colorpicker/js/colorpicker.js",
+			"plugins/colorpicker/js/eye.js",
+			"plugins/colorpicker/js/utils.js",
+			"plugins/colorpicker/js/layout.js",
+			"plugins/colorpicker/js/startup.js",
+		));
 
 		/* Checking for valid data */
 		$id = $this->input->xss_clean($id);
