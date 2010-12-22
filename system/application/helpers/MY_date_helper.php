@@ -111,6 +111,16 @@ if ( ! function_exists('date_today_php'))
 	function date_today_php()
 	{
 		$CI =& get_instance();
+
+		/* Check for date beyond the current financial year range */
+		$todays_date = date('Y-m-d 00:00:00');
+		$fy_start = $CI->config->item('account_fy_start');
+		$fy_end = $CI->config->item('account_fy_end');
+		if ($CI->config->item('account_fy_start') > $todays_date)
+			return date_mysql_to_php($fy_start);
+		if ($CI->config->item('account_fy_end') < $todays_date)
+			return date_mysql_to_php($fy_end);
+
 		$current_date_format = $CI->config->item('account_date_format');
 		switch ($current_date_format)
 		{
