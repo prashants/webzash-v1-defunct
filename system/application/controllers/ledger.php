@@ -79,7 +79,7 @@ class Ledger extends Controller {
 			}
 
 			/* Check if parent group id present */
-			if ($this->db->query("SELECT id FROM groups WHERE id = ?", $data_group_id)->num_rows() < 1)
+			if ($this->db->query("SELECT id FROM groups WHERE id = ?", array($data_group_id))->num_rows() < 1)
 			{
 				$this->messages->add('Invalid Parent group.', 'error');
 				$this->template->load('template', 'ledger/add', $data);
@@ -198,7 +198,7 @@ class Ledger extends Controller {
 			}
 
 			/* Check if parent group id present */
-			if ($this->db->query("SELECT id FROM groups WHERE id = ?", $data_group_id)->num_rows() < 1)
+			if ($this->db->query("SELECT id FROM groups WHERE id = ?", array($data_group_id))->num_rows() < 1)
 			{
 				$this->messages->add('Invalid Parent group.', 'error');
 				$this->template->load('template', 'ledger/edit', $data);

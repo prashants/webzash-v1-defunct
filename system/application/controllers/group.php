@@ -56,7 +56,7 @@ class Group extends Controller {
 			$data_parent_id = $this->input->post('group_parent', TRUE);
 
 			/* Check if parent group id present */
-			if ($this->db->query("SELECT id FROM groups WHERE id = ?", $data_parent_id)->num_rows() < 1)
+			if ($this->db->query("SELECT id FROM groups WHERE id = ?", array($data_parent_id))->num_rows() < 1)
 			{
 				$this->messages->add('Invalid Parent group.', 'error');
 				$this->template->load('template', 'group/add', $data);
@@ -161,7 +161,7 @@ class Group extends Controller {
 			$data_id = $id;
 
 			/* Check if parent group id present */
-			if ($this->db->query("SELECT id FROM groups WHERE id = ?", $data_parent_id)->num_rows() < 1)
+			if ($this->db->query("SELECT id FROM groups WHERE id = ?", array($data_parent_id))->num_rows() < 1)
 			{
 				$this->messages->add('Invalid Parent group.', 'error');
 				$this->template->load('template', 'group/edit', $data);
