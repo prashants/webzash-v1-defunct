@@ -22,7 +22,10 @@
 	echo "</p>";
 
 	echo "<p>";
+	echo "<span id=\"tooltip-target-1\">";
 	echo form_checkbox('ledger_type_cashbank', 1, $ledger_type_cashbank) . " Cash / Bank Account";
+	echo "</span>";
+	echo "<span id=\"tooltip-content-1\">Select if Ledger A/C is a Bank A/C or a Cash A/C.</span>";
 	echo "</p>";
 
 	echo "<p>";
