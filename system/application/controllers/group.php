@@ -55,6 +55,14 @@ class Group extends Controller {
 			$data_name = $this->input->post('group_name', TRUE);
 			$data_parent_id = $this->input->post('group_parent', TRUE);
 
+			/* Check if parent group id present */
+			if ($this->db->query("SELECT id FROM groups WHERE id = ?", $data_parent_id)->num_rows() < 1)
+			{
+				$this->messages->add('Invalid Parent group.', 'error');
+				$this->template->load('template', 'group/add', $data);
+				return;
+			}
+
 			/* Only if Income or Expense can affect gross profit loss calculation */
 			$data_affects_gross = $this->input->post('affects_gross', TRUE);
 			if ($data_parent_id == "3" || $data_parent_id == "4")
@@ -151,6 +159,22 @@ class Group extends Controller {
 			$data_name = $this->input->post('group_name', TRUE);
 			$data_parent_id = $this->input->post('group_parent', TRUE);
 			$data_id = $id;
+
+			/* Check if parent group id present */
+			if ($this->db->query("SELECT id FROM groups WHERE id = ?", $data_parent_id)->num_rows() < 1)
+			{
+				$this->messages->add('Invalid Parent group.', 'error');
+				$this->template->load('template', 'group/edit', $data);
+				return;
+			}
+
+			/* Check if parent group same as current group id */
+			if ($data_parent_id == $id)
+			{
+				$this->messages->add('Invalid Parent group', 'error');
+				$this->template->load('template', 'group/edit', $data);
+				return;
+			}
 
 			/* Only if Income or Expense can affect gross profit loss calculation */
 			$data_affects_gross = $this->input->post('affects_gross', TRUE);
