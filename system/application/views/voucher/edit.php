@@ -189,9 +189,12 @@ $(document).ready(function() {
 	echo " ";
 	echo voucher_number_prefix($voucher_type) . form_input($voucher_number);
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	echo "<span id=\"tooltip-target-1\">";
 	echo form_label('Voucher Date', 'voucher_date');
 	echo " ";
 	echo form_input_date_restrict($voucher_date);
+	echo "</span>";
+	echo "<span id=\"tooltip-content-1\">Date format is " . $this->config->item('account_date_format') . ".</span>";
 	echo "</p>";
 
 	echo "<table class=\"voucher-table\">";
@@ -245,7 +248,10 @@ $(document).ready(function() {
 
 	echo "<p>";
 	echo form_fieldset('Options', array('class' => "fieldset-auto-width"));
+	echo "<span id=\"tooltip-target-2\">";
 	echo form_checkbox('voucher_draft', 1, $voucher_draft) . "Draft";
+	echo "</span>";
+	echo "<span id=\"tooltip-content-2\">Draft vouchers do not affect any accouting caluculations.</span>";
 	echo "<br /><br />";
 	echo form_checkbox('voucher_print', 1, $voucher_print) . "Print";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
