@@ -360,6 +360,15 @@ class Voucher extends Controller {
 			{
 				if ($data_all_ledger_id[$id] < 1)
 					continue;
+
+				/* Check for valid ledger id */
+				if ($this->db->query("SELECT id FROM ledgers WHERE id = ?", array($data_all_ledger_id[$id]))->num_rows() < 1)
+				{
+					$this->messages->add('Invalid Ledger A/C.', 'error');
+					$this->template->load('template', 'voucher/add', $data);
+					return;
+				}
+
 				if ($data_all_ledger_dc[$id] == "D")
 				{
 					$dr_total += $data_all_dr_amount[$id];
@@ -623,6 +632,15 @@ class Voucher extends Controller {
 			{
 				if ($data_all_ledger_id[$id] < 1)
 					continue;
+
+				/* Check for valid ledger id */
+				if ($this->db->query("SELECT id FROM ledgers WHERE id = ?", array($data_all_ledger_id[$id]))->num_rows() < 1)
+				{
+					$this->messages->add('Invalid Ledger A/C.', 'error');
+					$this->template->load('template', 'voucher/edit', $data);
+					return;
+				}
+
 				if ($data_all_ledger_dc[$id] == "D")
 				{
 					$dr_total += $data_all_dr_amount[$id];
