@@ -13,6 +13,9 @@ $(document).ready(function() {
 		return false;
 	    }
 	});
+	$("#tooltip-target-1").ezpz_tooltip();
+	$("#tooltip-target-2").ezpz_tooltip();
+	$("#tooltip-target-3").ezpz_tooltip();
 })
 
 

@@ -30,6 +30,7 @@ if (isset($add_css))
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/superfish.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/supersubs.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/thickbox-compressed.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/ezpz_tooltip.min.js"></script>
 
 <?php
 /* Dynamically adding javascript files from controllers */

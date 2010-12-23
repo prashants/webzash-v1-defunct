@@ -27,7 +27,10 @@ $(document).ready(function() {
 	echo "</p>";
 
 	echo "<p class=\"affects-gross\">";
+	echo "<span id=\"tooltip-target-1\">";
 	echo form_checkbox('affects_gross', 1, $affects_gross) . " Affects Gross Profit/Loss Calculations";
+	echo "</span>";
+	echo "<span id=\"tooltip-content-1\">If selected the Group A/C will affect Gross Profit and Loss calculations, otherwise it will affect only Net Profit and Loss calculations.</span>";
 	echo "</p>";
 
 	echo "<p>";
@@ -37,4 +40,3 @@ $(document).ready(function() {
 	echo "</p>";
 
 	echo form_close();
-
