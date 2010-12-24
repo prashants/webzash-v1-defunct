@@ -19,7 +19,7 @@ if ( ! function_exists('date_php_to_mysql'))
 			list($y, $m, $d) = explode('/', $dt);
 			break;
 		default:
-			$CI->messages->add('Invalid date format. Please check your account settings', 'error');
+			$CI->messages->add('Invalid date format. Check your account settings.', 'error');
 			return "";
 		}
 		$ts = mktime(0, 0, 0, $m, $d, $y);
@@ -46,7 +46,7 @@ if ( ! function_exists('date_php_to_mysql_end_time'))
 			list($y, $m, $d) = explode('/', $dt);
 			break;
 		default:
-			$CI->messages->add('Invalid date format. Please check your account settings', 'error');
+			$CI->messages->add('Invalid date format. Check your account settings.', 'error');
 			return "";
 		}
 		$ts = mktime("23", "59", "59", $m, $d, $y);
@@ -73,7 +73,7 @@ if ( ! function_exists('date_mysql_to_php'))
 			return date('Y/m/d', $ts);
 			break;
 		default:
-			$CI->messages->add('Invalid date format. Please check your account settings', 'error');
+			$CI->messages->add('Invalid date format. Check your account settings.', 'error');
 			return "";
 		}
 		return;
@@ -99,7 +99,7 @@ if ( ! function_exists('date_mysql_to_php_display'))
 			return date('Y M d', $ts);
 			break;
 		default:
-			$CI->messages->add('Invalid date format. Please check your account settings', 'error');
+			$CI->messages->add('Invalid date format. Check your account settings.', 'error');
 			return "";
 		}
 		return;
@@ -134,7 +134,7 @@ if ( ! function_exists('date_today_php'))
 			return date('Y/m/d');
 			break;
 		default:
-			$CI->messages->add('Invalid date format. Please check your account settings', 'error');
+			$CI->messages->add('Invalid date format. Check your account settings.', 'error');
 			return "";
 		}
 		return;

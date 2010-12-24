@@ -29,7 +29,7 @@ class Startup
 			/* Check if database ini file exists */
 			if ( ! get_file_info($ini_file))
 			{
-				$CI->messages->add("Account setting file is missing", 'error');
+				$CI->messages->add('Account settings file is missing.', 'error');
 				redirect('admin');
 				return;
 			}
@@ -38,7 +38,7 @@ class Startup
 			$active_accounts = parse_ini_file($ini_file);
 			if ( ! $active_accounts)
 			{
-				$CI->messages->add("Invalid account setting file", 'error');
+				$CI->messages->add('Invalid account settings.', 'error');
 				redirect('admin');
 				return;
 			}
@@ -46,31 +46,31 @@ class Startup
 			/* Check if all needed variables are set in ini file */
 			if ( ! isset($active_accounts['db_hostname']))
 			{
-				$CI->messages->add("Hostname missing from account setting file", 'error');
+				$CI->messages->add('Hostname missing from account settings file.', 'error');
 				redirect('admin');
 				return;
 			}
 			if ( ! isset($active_accounts['db_port']))
 			{
-				$CI->messages->add("Port missing from account setting file. Default MySQL port is 3306", 'error');
+				$CI->messages->add('Port missing from account setting file. Default MySQL port is 3306.', 'error');
 				redirect('admin');
 				return;
 			}
 			if ( ! isset($active_accounts['db_name']))
 			{
-				$CI->messages->add("Database name missing from account setting file", 'error');
+				$CI->messages->add('Database name missing from account setting file.', 'error');
 				redirect('admin');
 				return;
 			}
 			if ( ! isset($active_accounts['db_username']))
 			{
-				$CI->messages->add("Database username missing from account setting file", 'error');
+				$CI->messages->add('Database username missing from account setting file.', 'error');
 				redirect('admin');
 				return;
 			}
 			if ( ! isset($active_accounts['db_password']))
 			{
-				$CI->messages->add("Database password missing from account setting file", 'error');
+				$CI->messages->add('Database password missing from account setting file.', 'error');
 				redirect('admin');
 				return;
 			}
@@ -91,7 +91,7 @@ class Startup
 			$db_config['dbcollat'] = "utf8_general_ci";
 			$CI->load->database($db_config, FALSE, TRUE);
 		} else {
-			$CI->messages->add('Please select a Webzash database', 'error');
+			$CI->messages->add('Please select a account.', 'error');
 			redirect('admin');
 		}
 
@@ -108,18 +108,18 @@ class Startup
 					$valid_db_q = mysql_query('DESC ' . $tbname);
 					if ( ! $valid_db_q)
 					{
-						$CI->messages->add('Invalid Webzash database', 'error');
+						$CI->messages->add('Invalid account database.', 'error');
 						redirect('admin');
 						return;
 					}
 				}
 			} else {
-				$CI->messages->add('Invalid database connection settings. Please check whether the provided database name, username and password is valid', 'error');
+				$CI->messages->add('Invalid database connection settings. Check whether the provided database name, username and password are valid.', 'error');
 				redirect('admin');
 				return;
 			}
 		} else {
-			$CI->messages->add('Cannot connect to database server. Please check whether database server is running', 'error');
+			$CI->messages->add('Cannot connect to database server. Check whether database server is running.', 'error');
 			redirect('admin');
 			return;
 		}
@@ -128,7 +128,7 @@ class Startup
 		$account_q = $CI->db->query('SELECT * FROM settings WHERE id = 1');
 		if ( ! ($account_d = $account_q->row()))
 		{
-			$CI->messages->add('Please select valid account', 'error');
+			$CI->messages->add('Invalid account details.', 'error');
 			redirect('admin');
 		}
 		$CI->config->set_item('account_name', $account_d->name);

@@ -612,7 +612,7 @@ class Report extends Controller {
 			/* Checking for valid ledger id */
 			if ($data['ledger_id'] < 1)
 			{
-				$this->messages->add("Invalid Ledger A/C.", 'error');
+				$this->messages->add('Invalid Ledger A/C.', 'error');
 				redirect("report/ledgerst");
 			}
 			$data['report'] = "report/ledgerst";

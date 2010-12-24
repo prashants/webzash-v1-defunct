@@ -85,7 +85,7 @@ class Group extends Controller {
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add($data_name . ' - Group A/C added successfully.', 'success');
+				$this->messages->add('Added ' . $data_name . ' - Group A/C.', 'success');
 				$this->logger->write_message("success", "Added Group A/C named " . $data_name);
 				redirect('account');
 				return;
@@ -198,7 +198,7 @@ class Group extends Controller {
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add($data_name . ' - Group A/C updated successfully.', 'success');
+				$this->messages->add('Updated ' . $data_name . ' - Group A/C.', 'success');
 				$this->logger->write_message("success", "Updated Group A/C named " . $data_name . " [id:" . $data_id . "]");
 				redirect('account');
 				return;
@@ -253,13 +253,13 @@ class Group extends Controller {
 		if ( ! $this->db->query("DELETE FROM groups WHERE id = ?", array($id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add("Error deleting " . $group_data->name . " - Group A/C.", 'error');
+			$this->messages->add('Error deleting ' . $group_data->name . ' - Group A/C.', 'error');
 			$this->logger->write_message("error", "Error deleting Group A/C named " . $group_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;
 		} else {
 			$this->db->trans_complete();
-			$this->messages->add($group_data->name . ' - Group A/C deleted successfully.', 'success');
+			$this->messages->add('Deleted ' . $group_data->name . ' - Group A/C.', 'success');
 			$this->logger->write_message("success", "Deleted Group A/C named " . $group_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;

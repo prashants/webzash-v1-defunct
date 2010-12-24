@@ -73,7 +73,7 @@ class Ledger extends Controller {
 
 			if ($data_group_id < 5)
 			{
-				$this->messages->add("Invalid parent group.", 'error');
+				$this->messages->add('Invalid parent group.', 'error');
 				$this->template->load('template', 'ledger/add', $data);
 				return;
 			}
@@ -101,7 +101,7 @@ class Ledger extends Controller {
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add($data_name . ' - Ledger A/C added successfully.', 'success');
+				$this->messages->add('Added ' . $data_name . ' - Ledger A/C.', 'success');
 				$this->logger->write_message("success", "Added Ledger A/C named " . $data_name);
 				redirect('account');
 				return;
@@ -192,7 +192,7 @@ class Ledger extends Controller {
 
 			if ($data_group_id < 5)
 			{
-				$this->messages->add("Invalid parent group.", 'error');
+				$this->messages->add('Invalid parent group.', 'error');
 				$this->template->load('template', 'ledger/edit', $data);
 				return;
 			}
@@ -220,7 +220,7 @@ class Ledger extends Controller {
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add($data_name . ' - Ledger A/C updated successfully.', 'success');
+				$this->messages->add('Updated ' . $data_name . ' - Ledger A/C.', 'success');
 				$this->logger->write_message("success", "Updated Ledger A/C named " . $data_name . " [id:" . $data_id . "]");
 				redirect('account');
 				return;
@@ -264,13 +264,13 @@ class Ledger extends Controller {
 		if ( ! $this->db->query("DELETE FROM ledgers WHERE id = ?", array($id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add("Error deleting " . $ledger_data->name . " - Ledger A/C.", 'error');
+			$this->messages->add('Error deleting ' . $ledger_data->name . ' - Ledger A/C.', 'error');
 			$this->logger->write_message("error", "Error deleting Ledger A/C named " . $ledger_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;
 		} else {
 			$this->db->trans_complete();
-			$this->messages->add($ledger_data->name . " - Ledger A/C deleted successfully.", 'success');
+			$this->messages->add('Deleted ' . $ledger_data->name . ' - Ledger A/C.', 'success');
 			$this->logger->write_message("success", "Deleted Ledger A/C named " . $ledger_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;

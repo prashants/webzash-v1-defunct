@@ -109,7 +109,7 @@ class MY_Form_validation extends CI_Form_validation {
 			list($y, $m, $d) = explode('/', $str);
 			break;
 		default:
-			$CI->messages->add('Invalid date format. Please check your account settings', 'error');
+			$CI->messages->add('Invalid date format. Check your account settings.', 'error');
 			return "";
 		}
 		return checkdate($m, $d, $y) ? TRUE : FALSE;

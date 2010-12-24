@@ -124,7 +124,7 @@ class Manage extends Controller {
 			/* Check if database ini file exists */
 			if (get_file_info($ini_file))
 			{
-				$this->messages->add("Account with same label already exists.", 'error');
+				$this->messages->add('Account with same label already exists.', 'error');
 				$this->template->load('admin_template', 'admin/manage/add', $data);
 				return;
 			}
@@ -136,12 +136,12 @@ class Manage extends Controller {
 			/* Writing the connection string to end of file - writing in 'a' append mode */
 			if ( ! write_file($ini_file, $con_details))
 			{
-				$this->messages->add("Failed to add account settings file. Please check if \"" . $ini_file . "\" file is writable.", 'error');
-				$this->messages->add("You can manually create a text file \"" . $ini_file . "\" with the following content :<br /><br />" . $con_details_html, 'error');
+				$this->messages->add('Failed to add account settings file. Check if "' . $ini_file . '" file is writable.', 'error');
+				$this->messages->add('You can manually create a text file "' . $ini_file . '" with the following content :<br /><br />' . $con_details_html, 'error');
 				$this->template->load('admin_template', 'admin/manage/add', $data);
 				return;
 			} else {
-				$this->messages->add("Successfully added webzash account to list of active accounts.", 'success');
+				$this->messages->add('Added account to list of active accounts.', 'success');
 				redirect('admin/manage');
 				return;
 			}
@@ -209,37 +209,37 @@ class Manage extends Controller {
 			/* Check if database ini file exists */
 			if ( ! get_file_info($ini_file))
 			{
-				$this->messages->add("Invalid account. Account setting file labeled " . $database_label . " does not exists.", 'error');
+				$this->messages->add('Account settings file labeled ' . $database_label . ' does not exists.', 'error');
 			} else {
 				/* Parsing database ini file */
 				$active_accounts = parse_ini_file($ini_file);
 				if ( ! $active_accounts)
 				{
-					$CI->messages->add("Invalid account setting file", 'error');
+					$CI->messages->add('Invalid account settings file', 'error');
 				} else {
 					/* Check if all needed variables are set in ini file */
 					if (isset($active_accounts['db_hostname']))
 						$data['database_host']['value'] = $active_accounts['db_hostname'];
 					else
-						$CI->messages->add("Hostname missing from account setting file", 'error');
+						$CI->messages->add('Hostname missing from account settings file', 'error');
 					
 					if (isset($active_accounts['db_port']))
 						$data['database_port']['value'] = $active_accounts['db_port'];
 					else
-						$CI->messages->add("Port missing from account setting file. Default MySQL port is 3306", 'error');
+						$CI->messages->add('Port missing from account settings file. Default MySQL port is 3306', 'error');
 
 					if (isset($active_accounts['db_name']))
 						$data['database_name']['value'] = $active_accounts['db_name'];
 					else
-						$CI->messages->add("Database name missing from account setting file", 'error');
+						$CI->messages->add('Database name missing from account settings file', 'error');
 
 					if (isset($active_accounts['db_username']))
 						$data['database_username']['value'] = $active_accounts['db_username'];
 					else
-						$CI->messages->add("Database username missing from account setting file", 'error');
+						$CI->messages->add('Database username missing from account settings file', 'error');
 
 					if ( ! isset($active_accounts['db_password']))
-						$CI->messages->add("Database password missing from account setting file", 'error');
+						$CI->messages->add('Database password missing from account settings file', 'error');
 				}
 			}
 		}
@@ -271,12 +271,12 @@ class Manage extends Controller {
 			/* Writing the connection string to end of file - writing in 'a' append mode */
 			if ( ! write_file($ini_file, $con_details))
 			{
-				$this->messages->add("Failed to edit account settings file. Please check if \"" . $ini_file . "\" file is writable.", 'error');
-				$this->messages->add("You can manually update the text file \"" . $ini_file . "\" with the following content :<br /><br />" . $con_details_html, 'error');
+				$this->messages->add('Failed to edit account settings file. Check if "' . $ini_file . '" file is writable.', 'error');
+				$this->messages->add('You can manually update the text file "' . $ini_file . '" with the following content :<br /><br />' . $con_details_html, 'error');
 				$this->template->load('admin_template', 'admin/manage/edit', $data);
 				return;
 			} else {
-				$this->messages->add("Successfully updated webzash account settings.", 'success');
+				$this->messages->add('Updated account settings.', 'success');
 				redirect('admin/manage');
 				return;
 			}
@@ -289,8 +289,8 @@ class Manage extends Controller {
 		$this->template->set('page_title', 'Delete a webzash account');
 
 		$ini_file = $this->config->item('config_path') . "accounts/" . $database_label . ".ini";
-		$this->messages->add("Please delete " . $ini_file . " file manually.", 'error');
-		$this->messages->add("Note that only the settings file will be delete. Account database will have to be deleted manually.", 'status');
+		$this->messages->add('Delete ' . $ini_file . ' file manually.', 'error');
+		$this->messages->add('Only the settings file will be delete. Account database will have to be deleted manually.', 'status');
 		/*
 		if ( ! get_file_info($ini_file))
 		{

@@ -225,7 +225,7 @@ class Voucher extends Controller {
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Voucher number.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -414,7 +414,7 @@ class Voucher extends Controller {
 			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, draft, type, tag_id) VALUES (?, ?, ?, ?, ?, ?)", array($data_number, $data_date, $data_narration, $data_draft, $data_type, $data_tag)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding Voucher A/C.', 'error');
+				$this->messages->add('Error addding Voucher.', 'error');
 				$this->logger->write_message("error", "Error adding " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " since failed inserting voucher");
 				$this->template->load('template', 'voucher/add', $data);
 				return;
@@ -475,7 +475,7 @@ class Voucher extends Controller {
 			$voucher_success_links .= anchor('voucher/download/' . strtolower($voucher_type) . "/" . $voucher_id, 'Download', array('class' => 'anchor-link-a'));
 			$voucher_success_links .= " it.";
 
-			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ' added successfully. ' . $voucher_success_links, 'success');
+			$this->messages->add('Added ' . ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . $voucher_success_links, 'success');
 			$this->logger->write_message("success", "Added " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $voucher_type);
 			$this->template->load('template', 'voucher/add', $data);
@@ -510,7 +510,7 @@ class Voucher extends Controller {
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Voucher number.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -754,7 +754,7 @@ class Voucher extends Controller {
 			$voucher_success_links .= anchor('voucher/download/' . strtolower($voucher_type) . "/" . $voucher_id, 'Download', array('class' => 'anchor-link-a'));
 			$voucher_success_links .= " it.";
 
-			$this->messages->add(ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ' updated successfully. ' . $voucher_success_links, 'success');
+			$this->messages->add('Updated ' . ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . $voucher_success_links, 'success');
 			$this->logger->write_message("success", "Updated " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $voucher_type);
 			return;
@@ -767,7 +767,7 @@ class Voucher extends Controller {
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Voucher number.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -790,7 +790,7 @@ class Voucher extends Controller {
 			return;
 		}
 		$this->db->trans_complete();
-		$this->messages->add('Voucher deleted successfully.', 'success');
+		$this->messages->add('Deleted ' .  ucfirst($voucher_type) . ' Voucher.', 'success');
 		$this->logger->write_message("success", "Deleted " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $cur_voucher->number . " [id:" . $voucher_id . "]");
 		redirect('voucher/show/' . $voucher_type);
 		return;
@@ -807,7 +807,7 @@ class Voucher extends Controller {
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Voucher number.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -856,7 +856,7 @@ class Voucher extends Controller {
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Voucher number.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -903,7 +903,7 @@ class Voucher extends Controller {
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Voucher number.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}

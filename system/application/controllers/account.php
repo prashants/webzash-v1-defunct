@@ -11,9 +11,9 @@ class Account extends Controller {
 		$total_op = $this->Ledger_model->get_diff_op_balance();
 		if ($total_op > 0)
 		{
-			$this->messages->add("Difference in Opening Balance is Dr " . convert_cur($total_op) . '.', 'error');
+			$this->messages->add('Difference in Opening Balance is Dr ' . convert_cur($total_op) . '.', 'error');
 		} else if ($total_op < 0) {
-			$this->messages->add("Difference in Opening Balance is Cr " . convert_cur(-$total_op) . '.', 'error');
+			$this->messages->add('Difference in Opening Balance is Cr ' . convert_cur(-$total_op) . '.', 'error');
 		}
 
 		$this->template->load('template', 'account/index');

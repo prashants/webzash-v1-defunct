@@ -94,7 +94,7 @@ class Tag extends Controller {
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add("Added " . $data_tag_title . ' - Tag successfully.', 'success');
+				$this->messages->add('Added ' . $data_tag_title . ' - Tag.', 'success');
 				$this->logger->write_message("success", "Added tag named " . $data_tag_title);
 				redirect('tag');
 				return;
@@ -201,7 +201,7 @@ class Tag extends Controller {
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add("Updated " . $data_tag_title . ' - Tag successfully.', 'success');
+				$this->messages->add('Updated ' . $data_tag_title . ' - Tag.', 'success');
 				$this->logger->write_message("success", "Updated tag named " . $data_tag_title . " [id:" . $id . "]");
 				redirect('tag');
 				return;
@@ -224,7 +224,7 @@ class Tag extends Controller {
 		$data_valid_q = $this->db->query("SELECT * FROM tags WHERE id = ?", array($id));
 		if ($data_valid_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Tag specified.', 'error');
+			$this->messages->add('Invalid Tag.', 'error');
 			redirect('tag');
 			return;
 		}
@@ -235,8 +235,8 @@ class Tag extends Controller {
 		if ( ! $this->db->query("UPDATE vouchers SET tag_id = 0 WHERE tag_id = ?", array($id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error removing Tags.', 'error');
-			$this->logger->write_message("error", "Error removing tag named " . $data_tag->title . " [id:" . $id . "] from vouchers");
+			$this->messages->add('Error deleting Tag from Vouchers.', 'error');
+			$this->logger->write_message("error", "Error deleting tag named " . $data_tag->title . " [id:" . $id . "] from vouchers");
 			redirect('tag');
 			return;
 		} else {
@@ -249,7 +249,7 @@ class Tag extends Controller {
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Tag deleted successfully.', 'success');
+				$this->messages->add('Tag deleted.', 'success');
 				$this->logger->write_message("success", "Deleted tag named " . $data_tag->title . " [id:" . $id . "]");
 				redirect('tag');
 				return;
