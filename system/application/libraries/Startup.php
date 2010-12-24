@@ -91,7 +91,7 @@ class Startup
 			$db_config['dbcollat'] = "utf8_general_ci";
 			$CI->load->database($db_config, FALSE, TRUE);
 		} else {
-			$CI->messages->add('Please select a account.', 'error');
+			$CI->messages->add('Select a valid account.', 'error');
 			redirect('admin');
 		}
 
