@@ -898,7 +898,7 @@ class Voucher extends Controller {
 		$this->load->model('Ledger_model');
 		$this->load->library('email');
 
-		$account = $this->Setting_model->get_current();
+		$account_data = $this->Setting_model->get_current();
 
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
@@ -964,28 +964,34 @@ class Voucher extends Controller {
 			/* Preparing message */
 			$message = $this->load->view('voucher/emailpreview', $voucher_data, TRUE);
 
-			/* Sending email */
-			$config['protocol'] = $this->config->item('account_email_protocol');
-			$config['smtp_host'] = $this->config->item('account_email_host');
-			$config['smtp_port'] = $this->config->item('account_email_port');
+			/* Getting email configuration */
 			$config['smtp_timeout'] = '30';
-			$config['smtp_user'] = $this->config->item('account_email_username');
-			$config['smtp_pass'] = $this->config->item('account_email_password');
 			$config['charset'] = 'utf-8';
 			$config['newline'] = "\r\n";
 			$config['mailtype'] = "html";
+			if ($account_data)
+			{
+				$config['protocol'] = $account_data->email_protocol;
+				$config['smtp_host'] = $account_data->email_host;
+				$config['smtp_port'] = $account_data->email_port;
+				$config['smtp_user'] = $account_data->email_username;
+				$config['smtp_pass'] = $account_data->email_password;
+			} else {
+				$data['error'] = 'Invalid account details.';
+			}
 			$this->email->initialize($config);
 
+			/* Sending email */
 			$this->email->from('', 'Webzash');
 			$this->email->to($this->input->post('email_to', TRUE));
 			$this->email->subject(ucfirst($voucher_type) . ' Voucher No. ' . voucher_number_prefix($voucher_type) . $cur_voucher->number);
 			$this->email->message($message);
 			if ($this->email->send())
 			{
-				$data['message'] = "Successfully sent email !";
+				$data['message'] = "Email sent.";
 				$this->logger->write_message("success", "Emailed " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			} else {
-				$data['error'] = "Error sending email. Please check you email settings";
+				$data['error'] = "Error sending email. Check you email settings.";
 				$this->logger->write_message("error", "Error emailing " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			}
 			$this->load->view('voucher/email', $data);

@@ -155,7 +155,11 @@ class Setting extends Controller {
 		$this->load->helper('file');
 		$this->load->library('accountlist');
 		$this->load->model('Ledger_model');
+		$this->load->model('Setting_model');
 		$this->template->set('page_title', 'Carry forward account');
+
+		/* Current settings */
+		$account_data = $this->Setting_model->get_current();
 
 		/* Form fields */
 		$last_year_end = $this->config->item('account_fy_end');
@@ -282,11 +286,12 @@ class Setting extends Controller {
 			$data_account_currency = $this->config->item('account_currency_symbol');
 			$data_account_date = $this->config->item('account_date_format');
 			$data_account_timezone = $this->config->item('account_timezone');
-			$data_account_email_protocol = $this->config->item('account_email_protocol');
-			$data_account_email_host = $this->config->item('account_email_host');
-			$data_account_email_port = $this->config->item('account_email_port');
-			$data_account_email_username = $this->config->item('account_email_username');
-			$data_account_email_password = $this->config->item('account_email_password');
+
+			$data_account_email_protocol = $account_data->email_protocol;
+			$data_account_email_host = $account_data->email_host;
+			$data_account_email_port = $account_data->email_port;
+			$data_account_email_username = $account_data->email_username;
+			$data_account_email_password = $account_data->email_password;
 
 			$data_database_host = $this->input->post('database_host', TRUE);
 			$data_database_port = $this->input->post('database_port', TRUE);
