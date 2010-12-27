@@ -290,7 +290,7 @@ class Voucher extends Controller {
 		$data['voucher_draft'] = FALSE;
 		$data['voucher_print'] = FALSE;
 		$data['voucher_email'] = FALSE;
-		$data['voucher_pdf'] = FALSE;
+		$data['voucher_download'] = FALSE;
 		$data['voucher_tags'] = $this->Tag_model->get_all_tags();
 		$data['voucher_tag'] = 0;
 
@@ -319,7 +319,7 @@ class Voucher extends Controller {
 			$data['voucher_draft'] = $this->input->post('voucher_draft', TRUE);
 			$data['voucher_print'] = $this->input->post('voucher_print', TRUE);
 			$data['voucher_email'] = $this->input->post('voucher_email', TRUE);
-			$data['voucher_pdf'] = $this->input->post('voucher_pdf', TRUE);
+			$data['voucher_download'] = $this->input->post('voucher_download', TRUE);
 			$data['voucher_tag'] = $this->input->post('voucher_tag', TRUE);
 
 			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
@@ -469,13 +469,33 @@ class Voucher extends Controller {
 			/* Success */
 			$this->db->trans_complete();
 
+			/* Check for Voucher Print, Download, Email */
+			if ($this->input->post('voucher_print', TRUE))
+			{
+				$this->session->set_userdata('print_voucher', TRUE);
+				$this->session->set_userdata('print_voucher_type', strtolower($voucher_type));
+				$this->session->set_userdata('print_voucher_id', $voucher_id);
+			}
+			if ($this->input->post('voucher_email', TRUE))
+			{
+				$this->session->set_userdata('email_voucher', TRUE);
+				$this->session->set_userdata('email_voucher_type', strtolower($voucher_type));
+				$this->session->set_userdata('email_voucher_id', $voucher_id);
+			}
+			if ($this->input->post('voucher_download', TRUE))
+			{
+				$this->session->set_userdata('download_voucher', TRUE);
+				$this->session->set_userdata('download_voucher_type', strtolower($voucher_type));
+				$this->session->set_userdata('download_voucher_id', $voucher_id);
+			}
+
 			/* Voucher Actions */
 			$voucher_success_links = "You can ";
 			$voucher_success_links .= anchor('voucher/view/' . strtolower($voucher_type) . "/" . $voucher_id, 'View', array('class' => 'anchor-link-a')) . " or ";
 			$voucher_success_links .= anchor('voucher/download/' . strtolower($voucher_type) . "/" . $voucher_id, 'Download', array('class' => 'anchor-link-a'));
 			$voucher_success_links .= " it.";
 
-			$this->messages->add('Added ' . ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . $voucher_success_links, 'success');
+			$this->messages->add('Added ' . ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ". " . $voucher_success_links, 'success');
 			$this->logger->write_message("success", "Added " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $voucher_type);
 			$this->template->load('template', 'voucher/add', $data);
@@ -542,7 +562,7 @@ class Voucher extends Controller {
 		$data['voucher_draft'] = ($cur_voucher->draft == 0) ? FALSE : TRUE;
 		$data['voucher_print'] = FALSE;
 		$data['voucher_email'] = FALSE;
-		$data['voucher_pdf'] = FALSE;
+		$data['voucher_download'] = FALSE;
 		$data['voucher_tag'] = $cur_voucher->tag_id;
 		$data['voucher_tags'] = $this->Tag_model->get_all_tags();
 
@@ -607,7 +627,7 @@ class Voucher extends Controller {
 			$data['voucher_draft'] = $this->input->post('voucher_draft', TRUE);
 			$data['voucher_print'] = $this->input->post('voucher_print', TRUE);
 			$data['voucher_email'] = $this->input->post('voucher_email', TRUE);
-			$data['voucher_pdf'] = $this->input->post('voucher_pdf', TRUE);
+			$data['voucher_download'] = $this->input->post('voucher_download', TRUE);
 			$data['voucher_tag'] = $this->input->post('voucher_tag', TRUE);
 
 			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
@@ -748,13 +768,33 @@ class Voucher extends Controller {
 			/* Success */
 			$this->db->trans_complete();
 
+			/* Check for Voucher Print, Download, Email */
+			if ($this->input->post('voucher_print', TRUE))
+			{
+				$this->session->set_userdata('print_voucher', TRUE);
+				$this->session->set_userdata('print_voucher_type', strtolower($voucher_type));
+				$this->session->set_userdata('print_voucher_id', $voucher_id);
+			}
+			if ($this->input->post('voucher_email', TRUE))
+			{
+				$this->session->set_userdata('email_voucher', TRUE);
+				$this->session->set_userdata('email_voucher_type', strtolower($voucher_type));
+				$this->session->set_userdata('email_voucher_id', $voucher_id);
+			}
+			if ($this->input->post('voucher_download', TRUE))
+			{
+				$this->session->set_userdata('download_voucher', TRUE);
+				$this->session->set_userdata('download_voucher_type', strtolower($voucher_type));
+				$this->session->set_userdata('download_voucher_id', $voucher_id);
+			}
+
 			/* Voucher Actions */
 			$voucher_success_links = "You can ";
 			$voucher_success_links .= anchor('voucher/view/' . strtolower($voucher_type) . "/" . $voucher_id, 'View', array('class' => 'anchor-link-a')) . " or ";
 			$voucher_success_links .= anchor('voucher/download/' . strtolower($voucher_type) . "/" . $voucher_id, 'Download', array('class' => 'anchor-link-a'));
 			$voucher_success_links .= " it.";
 
-			$this->messages->add('Updated ' . ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . $voucher_success_links, 'success');
+			$this->messages->add('Updated ' . ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ". " . $voucher_success_links, 'success');
 			$this->logger->write_message("success", "Updated " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $voucher_type);
 			return;
