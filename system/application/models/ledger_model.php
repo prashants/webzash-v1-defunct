@@ -19,6 +19,30 @@ class Ledger_model extends Model {
 		return $options;
 	}
 
+	function get_all_ledgers_bankcash()
+	{
+		$options = array();
+		$options[0] = "(Please Select)";
+		$ledger_q = $this->db->query('SELECT * FROM ledgers WHERE type = ? ORDER BY name ASC', array('B'));
+		foreach ($ledger_q->result() as $row)
+		{
+			$options[$row->id] = $row->name;
+		}
+		return $options;
+	}
+
+	function get_all_ledgers_nobankcash()
+	{
+		$options = array();
+		$options[0] = "(Please Select)";
+		$ledger_q = $this->db->query('SELECT * FROM ledgers WHERE type != ? ORDER BY name ASC', array('B'));
+		foreach ($ledger_q->result() as $row)
+		{
+			$options[$row->id] = $row->name;
+		}
+		return $options;
+	}
+
 	function get_name($ledger_id)
 	{
 		$ledger_q = $this->db->query('SELECT name FROM ledgers WHERE id = ? LIMIT 1', array($ledger_id));

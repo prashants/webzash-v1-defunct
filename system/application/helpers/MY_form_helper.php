@@ -55,11 +55,17 @@ if ( ! function_exists('form_input_date_restrict'))
 
 if ( ! function_exists('form_input_ledger'))
 {
-	function form_input_ledger($name, $selected = NULL, $extra = '')
+	function form_input_ledger($name, $selected = NULL, $extra = '', $type = 'all')
 	{
 		$CI =& get_instance();
 		$CI->load->model('Ledger_model');
-		$options = $CI->Ledger_model->get_all_ledgers();
+
+		if ($type == 'bankcash')
+			$options = $CI->Ledger_model->get_all_ledgers_bankcash();
+		else if ($type == 'nobankcash')
+			$options = $CI->Ledger_model->get_all_ledgers_nobankcash();
+		else
+			$options = $CI->Ledger_model->get_all_ledgers();
 
 		// If no selected state was submitted we will attempt to set it automatically
 		if ( ! ($selected))

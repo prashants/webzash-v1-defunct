@@ -1,3 +1,11 @@
+<?php
+	if ($voucher_type == "contra")
+		$add_type = "bankcash";
+	else if ($voucher_type == "journal")
+		$add_type = "nobankcash";
+	else
+		$add_type = "all";
+?>
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -166,7 +174,7 @@ $(document).ready(function() {
 	$('table td .addrow').live('click', function() {
 		var cur_obj = this;
 		$.ajax({
-			url: <?php echo '\'' . site_url('voucher/addrow') . '\''; ?>,
+			url: <?php echo '\'' . site_url('voucher/addrow/' . $add_type) . '\''; ?>,
 			success: function(data) {
 				$(cur_obj).parent().parent().after(data);
 			}
@@ -222,7 +230,13 @@ $(document).ready(function() {
 
 		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', isset($ledger_dc[$i]) ? $ledger_dc[$i] : "D") . "</td>";
 
-		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0) . "</td>";
+		if ($voucher_type == "contra")
+			echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0, '', $type = 'bankcash') . "</td>";
+		else if ($voucher_type == "journal")
+			echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0, '', $type = 'nobankcash') . "</td>";
+		else
+			echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0) . "</td>";
+
 		echo "<td>" . form_input($dr_amount_item) . "</td>";
 		echo "<td>" . form_input($cr_amount_item) . "</td>";
 

@@ -1040,7 +1040,7 @@ class Voucher extends Controller {
 		return;
 	}
 
-	function addrow()
+	function addrow($add_type = 'all')
 	{
 		$i = time() + rand  (0, time()) + rand  (0, time()) + rand  (0, time());
 		$dr_amount = array(
@@ -1066,9 +1066,16 @@ class Voucher extends Controller {
 		echo '<td>';
 		echo form_dropdown_dc('ledger_dc[' . $i . ']');
 		echo '</td>';
+
 		echo '<td>';
-		echo form_input_ledger('ledger_id[' . $i . ']');
+		if ($add_type == 'bankcash')
+			echo form_input_ledger('ledger_id[' . $i . ']', 0, '', $type = 'bankcash');
+		else if ($add_type == 'nobankcash')
+			echo form_input_ledger('ledger_id[' . $i . ']', 0, '', $type = 'nobankcash');
+		else
+			echo form_input_ledger('ledger_id[' . $i . ']');
 		echo '</td>';
+
 		echo '<td>';
 		echo form_input($dr_amount);
 		echo '</td>';
