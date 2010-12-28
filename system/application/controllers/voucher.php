@@ -349,24 +349,58 @@ class Voucher extends Controller {
 		}
 		else
 		{
-			/* Checking for Debit and Credit Total */
+			/* Checking for Valid Ledgers A/C and Debit and Credit Total */
 			$data_all_ledger_id = $this->input->post('ledger_id', TRUE);
 			$data_all_ledger_dc = $this->input->post('ledger_dc', TRUE);
 			$data_all_dr_amount = $this->input->post('dr_amount', TRUE);
 			$data_all_cr_amount = $this->input->post('cr_amount', TRUE);
 			$dr_total = 0;
 			$cr_total = 0;
+			$bank_cash_present = FALSE; /* Whether atleast one Ledger A/C is Bank or Cash A/C */
 			foreach ($data_all_ledger_dc as $id => $ledger_data)
 			{
 				if ($data_all_ledger_id[$id] < 1)
 					continue;
 
 				/* Check for valid ledger id */
-				if ($this->db->query("SELECT id FROM ledgers WHERE id = ?", array($data_all_ledger_id[$id]))->num_rows() < 1)
+				$valid_ledger_q = $this->db->query("SELECT id, type FROM ledgers WHERE id = ?", array($data_all_ledger_id[$id]));
+				if ($valid_ledger_q->num_rows() < 1)
 				{
 					$this->messages->add('Invalid Ledger A/C.', 'error');
 					$this->template->load('template', 'voucher/add', $data);
 					return;
+				} else {
+					/* Check for valid ledger type */
+					$valid_ledger = $valid_ledger_q->row();
+					if ($voucher_type == 'receipt')
+					{
+						if ($data_all_ledger_dc[$id] == 'D' && $valid_ledger->type == 'B')
+						{
+							$bank_cash_present = TRUE;
+						}
+					} else if ($voucher_type == 'payment')
+					{
+						if ($data_all_ledger_dc[$id] == 'C' && $valid_ledger->type == 'B')
+						{
+							$bank_cash_present = TRUE;
+						}
+					} else if ($voucher_type == 'contra')
+					{
+						if ($valid_ledger->type != 'B')
+						{
+							$this->messages->add('Invalid Ledger A/C. Contra Vouchers can have only Bank and Cash Ledgers A/C\'s.', 'error');
+							$this->template->load('template', 'voucher/add', $data);
+							return;
+						}
+					} else if ($voucher_type == 'journal')
+					{
+						if ($valid_ledger->type == 'B')
+						{
+							$this->messages->add('Invalid Ledger A/C. Journal Vouchers cannot have Bank and Cash Ledgers A/C\'s.', 'error');
+							$this->template->load('template', 'voucher/add', $data);
+							return;
+						}
+					}
 				}
 
 				if ($data_all_ledger_dc[$id] == "D")
@@ -385,6 +419,24 @@ class Voucher extends Controller {
 				$this->messages->add('Cannot save empty voucher.', 'error');
 				$this->template->load('template', 'voucher/add', $data);
 				return;
+			}
+			/* Check if atleast one Bank or Cash Ledger A/C is present */
+			if ($voucher_type == 'receipt')
+			{
+				if ( ! $bank_cash_present)
+				{
+					$this->messages->add('Need to Debit atleast one Bank or Cash A/C', 'error');
+					$this->template->load('template', 'voucher/add', $data);
+					return;
+				}
+			} else if ($voucher_type == 'payment')
+			{
+				if ( ! $bank_cash_present)
+				{
+					$this->messages->add('Need to Credit atleast one Bank or Cash A/C', 'error');
+					$this->template->load('template', 'voucher/add', $data);
+					return;
+				}
 			}
 
 			/* Adding main voucher */
@@ -641,26 +693,59 @@ class Voucher extends Controller {
 			$this->messages->add(validation_errors(), 'error');
 			$this->template->load('template', 'voucher/edit', $data);
 		} else	{
-			/* Checking for Debit and Credit Total */
+			/* Checking for Valid Ledgers A/C and Debit and Credit Total */
 			$data_all_ledger_id = $this->input->post('ledger_id', TRUE);
 			$data_all_ledger_dc = $this->input->post('ledger_dc', TRUE);
 			$data_all_dr_amount = $this->input->post('dr_amount', TRUE);
 			$data_all_cr_amount = $this->input->post('cr_amount', TRUE);
 			$dr_total = 0;
 			$cr_total = 0;
+			$bank_cash_present = FALSE; /* Whether atleast one Ledger A/C is Bank or Cash A/C */
 			foreach ($data_all_ledger_dc as $id => $ledger_data)
 			{
 				if ($data_all_ledger_id[$id] < 1)
 					continue;
 
 				/* Check for valid ledger id */
-				if ($this->db->query("SELECT id FROM ledgers WHERE id = ?", array($data_all_ledger_id[$id]))->num_rows() < 1)
+				$valid_ledger_q = $this->db->query("SELECT id, type FROM ledgers WHERE id = ?", array($data_all_ledger_id[$id]));
+				if ($valid_ledger_q->num_rows() < 1)
 				{
 					$this->messages->add('Invalid Ledger A/C.', 'error');
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
+				} else {
+					/* Check for valid ledger type */
+					$valid_ledger = $valid_ledger_q->row();
+					if ($voucher_type == 'receipt')
+					{
+						if ($data_all_ledger_dc[$id] == 'D' && $valid_ledger->type == 'B')
+						{
+							$bank_cash_present = TRUE;
+						}
+					} else if ($voucher_type == 'payment')
+					{
+						if ($data_all_ledger_dc[$id] == 'C' && $valid_ledger->type == 'B')
+						{
+							$bank_cash_present = TRUE;
+						}
+					} else if ($voucher_type == 'contra')
+					{
+						if ($valid_ledger->type != 'B')
+						{
+							$this->messages->add('Invalid Ledger A/C. Contra Vouchers can have only Bank and Cash Ledgers A/C\'s.', 'error');
+							$this->template->load('template', 'voucher/edit', $data);
+							return;
+						}
+					} else if ($voucher_type == 'journal')
+					{
+						if ($valid_ledger->type == 'B')
+						{
+							$this->messages->add('Invalid Ledger A/C. Journal Vouchers cannot have Bank and Cash Ledgers A/C\'s.', 'error');
+							$this->template->load('template', 'voucher/edit', $data);
+							return;
+						}
+					}
 				}
-
 				if ($data_all_ledger_dc[$id] == "D")
 				{
 					$dr_total += $data_all_dr_amount[$id];
@@ -677,6 +762,24 @@ class Voucher extends Controller {
 				$this->messages->add('Cannot save empty voucher.', 'error');
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
+			}
+			/* Check if atleast one Bank or Cash Ledger A/C is present */
+			if ($voucher_type == 'receipt')
+			{
+				if ( ! $bank_cash_present)
+				{
+					$this->messages->add('Need to Debit atleast one Bank or Cash A/C', 'error');
+					$this->template->load('template', 'voucher/edit', $data);
+					return;
+				}
+			} else if ($voucher_type == 'payment')
+			{
+				if ( ! $bank_cash_present)
+				{
+					$this->messages->add('Need to Credit atleast one Bank or Cash A/C', 'error');
+					$this->template->load('template', 'voucher/edit', $data);
+					return;
+				}
 			}
 
 			/* Updating main voucher */
