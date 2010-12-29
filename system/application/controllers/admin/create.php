@@ -234,7 +234,7 @@ class Create extends Controller {
 				{
 					if ($newacc->query("CREATE DATABASE " . mysql_real_escape_string($data_database_name)))
 					{
-						$this->messages->add('New account database created.', 'success');
+						$this->messages->add('Created account database.', 'success');
 						/* Retrying to connect to new database */
 						$newacc = $this->load->database($dsn, TRUE);
 						$conn_error = $newacc->_error_message();
@@ -261,7 +261,7 @@ class Create extends Controller {
 				return;
 			} else {
 				/* Executing the database setup script */
-				$setup_account = read_file('system/application/controllers/admin/database.sql');
+				$setup_account = read_file('system/application/controllers/admin/schema.sql');
 				$setup_account_array = explode(";", $setup_account);
 				foreach($setup_account_array as $row)
 				{
@@ -269,14 +269,46 @@ class Create extends Controller {
 						continue;
 					$newacc->query($row);
 					if ($newacc->_error_message() != "")
-						$this->messages->add($newacc->_error_message(), 'error');
+					{
+						$this->messages->add('Error initializing account database.', 'error');
+						$this->template->load('admin_template', 'admin/create', $data);
+						return;
+					}
 				}
+				$this->messages->add('Initialized account database.', 'success');
 
-				$this->messages->add('Created account database.', 'success');
+				/* Initial account setup */
+				$setup_initial_data = read_file('system/application/controllers/admin/initialize.sql');
+				$setup_initial_data_array = explode(";", $setup_initial_data);
+				$newacc->trans_start();
+				foreach($setup_initial_data_array as $row)
+				{
+					if (strlen($row) < 5)
+						continue;
+					$newacc->query($row); var_dump($newacc->_error_message());
+					if ($newacc->_error_message() != "")
+					{
+						$newacc->trans_rollback();
+						$this->messages->add('Error initializing basic accounts data.', 'error');
+						$this->template->load('admin_template', 'admin/create', $data);
+						return;
+					}
+				}
+				$newacc->trans_complete();
+				$this->messages->add('Initialized basic accounts data.', 'success');
 
-				/* Adding the account settings */
-				$newacc->query("INSERT INTO settings (id, name, address, email, fy_start, fy_end, currency_symbol, date_format, timezone, database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, $data_account_name, $data_account_address, $data_account_email, $data_fy_start, $data_fy_end, $data_account_currency, $data_account_date, $data_account_timezone, 1));
-				$this->messages->add('Added account information.', 'success');
+				/* Adding account settings */
+				$newacc->trans_start();
+				if ( ! $newacc->query("INSERT INTO settings (id, name, address, email, fy_start, fy_end, currency_symbol, date_format, timezone, database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, $data_account_name, $data_account_address, $data_account_email, $data_fy_start, $data_fy_end, $data_account_currency, $data_account_date, $data_account_timezone, 1)))
+				{
+					$newacc->trans_rollback();
+					$this->messages->add('Error adding account settings.', 'error');
+					$this->template->load('admin_template', 'admin/create', $data);
+					return;
+				} else {
+					$newacc->trans_complete();
+					$this->messages->add('Added account settings.', 'success');
+				}
 
 				/* Adding account settings to file. Code copied from manage controller */
 				$con_details = "[database]" . "\r\n" . "db_hostname = \"" . $data_database_host . "\"" . "\r\n" . "db_port = \"" . $data_database_port . "\"" . "\r\n" . "db_name = \"" . $data_database_name . "\"" . "\r\n" . "db_username = \"" . $data_database_username . "\"" . "\r\n" . "db_password = \"" . $data_database_password . "\"" . "\r\n";

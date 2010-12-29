@@ -334,12 +334,12 @@ class Setting extends Controller {
 				{
 					if ($newacc->query("CREATE DATABASE " . mysql_real_escape_string($data_database_name)))
 					{
-						$this->messages->add('New account database created.', 'success');
+						$this->messages->add('Created account database.', 'success');
 						/* Retrying to connect to new database */
 						$newacc = $this->load->database($dsn, TRUE);
 						$conn_error = $newacc->_error_message();
 					} else {
-						$this->messages->add('Cannot create account database.', 'error');
+						$this->messages->add('Failed to create account database.', 'error');
 						$this->template->load('template', 'setting/cf', $data);
 						return;
 					}
@@ -361,7 +361,7 @@ class Setting extends Controller {
 				return;
 			} else {
 				/* Executing the database setup script */
-				$setup_account = read_file('system/application/controllers/admin/carryforward.sql');
+				$setup_account = read_file('system/application/controllers/admin/schema.sql');
 				$setup_account_array = explode(";", $setup_account);
 				foreach($setup_account_array as $row)
 				{
@@ -369,19 +369,26 @@ class Setting extends Controller {
 						continue;
 					$newacc->query($row);
 					if ($newacc->_error_message() != "")
-						$this->messages->add($newacc->_error_message(), 'error');
+					{
+						$this->messages->add('Error initializing account database.', 'error');
+						$this->template->load('template', 'setting/cf', $data);
+						return;
+					}
 				}
+				$this->messages->add('Initialized account database.', 'success');
 
-				$this->messages->add('Created account database.', 'success');
-
-				/* Adding the account settings */
-				$newacc->query("INSERT INTO settings (id, name, address, email, fy_start, fy_end, currency_symbol, date_format, timezone, email_protocol, email_host, email_port, email_username, email_password,  database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, $data_account_name, $data_account_address, $data_account_email, $data_fy_start, $data_fy_end, $data_account_currency, $data_account_date, $data_account_timezone, $data_account_email_protocol, $data_account_email_host, $data_account_email_port, $data_account_email_username, $data_account_email_password, 1));
-				$this->messages->add('Added account information.', 'success');
-
-				/* Adding account settings to file. Code copied from manage controller */
-				$con_details = "[database]" . "\r\n" . "db_hostname = \"" . $data_database_host . "\"" . "\r\n" . "db_port = \"" . $data_database_port . "\"" . "\r\n" . "db_name = \"" . $data_database_name . "\"" . "\r\n" . "db_username = \"" . $data_database_username . "\"" . "\r\n" . "db_password = \"" . $data_database_password . "\"" . "\r\n";
-
-				$con_details_html = '[database]<br />db_hostname = "' . $data_database_host . '"<br />db_port = "' . $data_database_port . '"<br />db_name = "' . $data_database_name . '"<br />db_username = "' . $data_database_username . '"<br />db_password = "' . $data_database_password . '"<br />';
+				/* Adding account settings */
+				$newacc->trans_start();
+				if ( ! $newacc->query("INSERT INTO settings (id, name, address, email, fy_start, fy_end, currency_symbol, date_format, timezone, email_protocol, email_host, email_port, email_username, email_password,  database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, $data_account_name, $data_account_address, $data_account_email, $data_fy_start, $data_fy_end, $data_account_currency, $data_account_date, $data_account_timezone, $data_account_email_protocol, $data_account_email_host, $data_account_email_port, $data_account_email_username, $data_account_email_password, 1)))
+				{
+					$newacc->trans_rollback();
+					$this->messages->add('Error adding account settings.', 'error');
+					$this->template->load('template', 'setting/cf', $data);
+					return;
+				} else {
+					$newacc->trans_complete();
+					$this->messages->add('Added account settings.', 'success');
+				}
 
 				/**************** Importing the C/F Values : START ***************/
 
@@ -450,6 +457,12 @@ class Setting extends Controller {
 					$this->messages->add('Account carried forward.', 'success');
 				else
 					$this->messages->add('Error carrying forward to new account.', 'error');
+
+
+				/* Adding account settings to file. Code copied from manage controller */
+				$con_details = "[database]" . "\r\n" . "db_hostname = \"" . $data_database_host . "\"" . "\r\n" . "db_port = \"" . $data_database_port . "\"" . "\r\n" . "db_name = \"" . $data_database_name . "\"" . "\r\n" . "db_username = \"" . $data_database_username . "\"" . "\r\n" . "db_password = \"" . $data_database_password . "\"" . "\r\n";
+
+				$con_details_html = '[database]<br />db_hostname = "' . $data_database_host . '"<br />db_port = "' . $data_database_port . '"<br />db_name = "' . $data_database_name . '"<br />db_username = "' . $data_database_username . '"<br />db_password = "' . $data_database_password . '"<br />';
 
 				/* Writing the connection string to end of file - writing in 'a' append mode */
 				if ( ! write_file($ini_file, $con_details))
