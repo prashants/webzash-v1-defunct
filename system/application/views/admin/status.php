@@ -11,6 +11,13 @@
 			}
 			echo "</ul>";
 			echo "</div>";
+		} else {
+			echo "<div id=\"success-box\">";
+			echo "<ul>";
+			echo "<li>Everything is configured correctly.</li>";
+			echo "</ul>";
+			echo "</div>";
+
 		}
 	}
 
