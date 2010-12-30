@@ -252,3 +252,37 @@ ul#pagination-flickr {
 	background-color:#FFC848;
 	text-align:left;
 }
+
+/************************************ HELP ************************************/
+ul#qa-list {
+	margin:0;
+	padding:0;
+}
+
+ul#qa-list li {
+	list-style:none;
+	padding:3px 0 3px 0;
+}
+
+ul#qa-list li .qa-heading {
+	font-weight:bold;
+}
+
+ul#qa-list li ul li {
+	list-style:square;
+	padding:3px 0 3px 0;
+}
+
+.qa-section {
+	margin:0 0 30px 0;
+}
+
+.qa-question {
+	font-weight:bold;
+	border-bottom:1px solid #AAAAAA;
+	margin:0 0 5px 0;
+}
+
+.qa-answer {
+	margin:0 0 0 20px;
+}

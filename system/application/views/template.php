@@ -115,7 +115,7 @@ $(document).ready(function() {
 				<?php echo anchor('setting', 'Settings', array('title' => 'Settings')); ?>
 			</li>
 			<li>
-				<?php echo anchor('', 'Help', array('title' => 'Help', 'class' => 'last')); ?>
+				<?php echo anchor('help', 'Help', array('title' => 'Help', 'class' => 'last')); ?>
 			</li>
 		</ul>
 	</div>
