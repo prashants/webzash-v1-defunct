@@ -656,20 +656,6 @@ class Setting extends Controller {
 			'value' => 'T',
 			'checked' => FALSE,
 		);
-		$data['page_layout'] = array(
-			'name' => 'page_layout',
-			'id' => 'page_layout',
-			'rows' => 10,
-			'cols' => 80,
-			'value' => '',
-		);
-		$data['logo'] = array(
-			'name' => 'logo',
-			'id' => 'logo',
-			'maxlength' => '100',
-			'size' => '40',
-			'value' => '',
-		);
 
 		if ($account_data)
 		{
@@ -679,8 +665,6 @@ class Setting extends Controller {
 			$data['margin_bottom']['value'] = ($account_data->print_margin_bottom) ? print_value($account_data->print_margin_bottom) : '';
 			$data['margin_left']['value'] = ($account_data->print_margin_left) ? print_value($account_data->print_margin_left) : '';
 			$data['margin_right']['value'] = ($account_data->print_margin_right) ? print_value($account_data->print_margin_right) : '';
-			$data['page_layout']['value'] = ($account_data->print_page_layout) ? print_value($account_data->print_page_layout) : '';
-			$data['logo']['value'] = ($account_data->print_logo) ? print_value($account_data->print_logo) : '';
 			if ($account_data->print_orientation)
 			{
 				if ($account_data->print_orientation == "P")
@@ -712,8 +696,6 @@ class Setting extends Controller {
 		$this->form_validation->set_rules('margin_bottom', 'Bottom Margin', 'trim|required|numeric');
 		$this->form_validation->set_rules('margin_left', 'Left Margin', 'trim|required|numeric');
 		$this->form_validation->set_rules('margin_right', 'Right Margin', 'trim|required|numeric');
-		$this->form_validation->set_rules('page_layout', 'Page Layout', 'trim|min_length[2]');
-		$this->form_validation->set_rules('logo', 'Logo Path', 'trim');
 
 		/* Repopulating form */
 		if ($_POST)
@@ -724,8 +706,6 @@ class Setting extends Controller {
 			$data['margin_bottom']['value'] = $this->input->post('margin_bottom', TRUE);
 			$data['margin_left']['value'] = $this->input->post('margin_left', TRUE);
 			$data['margin_right']['value'] = $this->input->post('margin_right', TRUE);
-			$data['page_layout']['value'] = $this->input->post('page_layout', TRUE);
-			$data['logo']['value'] = $this->input->post('logo', TRUE);
 
 			$data['orientation'] = $this->input->post('orientation', TRUE);
 			if ($data['orientation'] == "P")
@@ -762,8 +742,6 @@ class Setting extends Controller {
 			$data_margin_bottom = $this->input->post('margin_bottom', TRUE);
 			$data_margin_left = $this->input->post('margin_left', TRUE);
 			$data_margin_right = $this->input->post('margin_right', TRUE);
-			$data_page_layout = $this->input->post('page_layout', TRUE);
-			$data_logo = $this->input->post('logo', TRUE);
 
 			if ($this->input->post('orientation', TRUE) == "P")
 			{
@@ -780,7 +758,7 @@ class Setting extends Controller {
 
 			/* Update settings */
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE settings SET print_paper_height = ?, print_paper_width = ?, print_margin_top = ?, print_margin_bottom = ?, print_margin_left = ?, print_margin_right = ?, print_orientation = ?, print_page_format = ?, print_page_layout = ?, print_logo = ? WHERE id = 1", array($data_paper_height, $data_paper_width, $data_margin_top, $data_margin_bottom, $data_margin_left, $data_margin_right, $data_orientation, $data_output_format,  $data_page_layout, $data_logo)))
+			if ( ! $this->db->query("UPDATE settings SET print_paper_height = ?, print_paper_width = ?, print_margin_top = ?, print_margin_bottom = ?, print_margin_left = ?, print_margin_right = ?, print_orientation = ?, print_page_format = ? WHERE id = 1", array($data_paper_height, $data_paper_width, $data_margin_top, $data_margin_bottom, $data_margin_left, $data_margin_right, $data_orientation, $data_output_format)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating printer settings.', 'error');

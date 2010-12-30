@@ -85,23 +85,6 @@
 	echo form_fieldset_close();
 	echo "</p>";
 
-
-	echo "<p>";
-	echo form_label('Page Layout', 'page_layout');
-	echo "<br />";
-	echo form_textarea($page_layout);
-	echo "<br />";
-	echo "<span class=\"form-help-text\">HTML Markup</span>";
-	echo "</p>";
-
-	echo "<p>";
-	echo form_label('Logo Path', 'logo');
-	echo "<br />";
-	echo form_input($logo);
-	echo "<br />";
-	echo "<span class=\"form-help-text\">Path to Logo file</span>";
-	echo "</p>";
-
 	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
