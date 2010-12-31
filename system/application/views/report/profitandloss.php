@@ -47,7 +47,7 @@
 
 	/* Showing Gross P/L : Expenses */
 	$grosstotal = $gross_expense_total;
-	echo "<tr class=\"total-area\">";
+	echo "<tr valign=\"top\" class=\"total-area\">";
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"100%\">";
 	echo "<tr valign=\"top\">";
@@ -113,6 +113,7 @@
 	/* Net P/L : Expenses */
 	$net_expense_total = 0;
 	$net_expense_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 4 AND affects_gross != 1");
+	echo "<tr valign=\"top\">";
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"100%\">";
 	echo "<thead><tr><th>Expenses (Net)</th><th align=\"right\">Amount</th></tr></thead>";
@@ -150,7 +151,7 @@
 
 	/* Showing Net P/L : Expenses */
 	$nettotal = $net_expense_total;
-	echo "<tr class=\"total-area\">";
+	echo "<tr valign=\"top\" class=\"total-area\">";
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-total-table\" width=\"100%\">";
 	echo "<tr valign=\"top\">";

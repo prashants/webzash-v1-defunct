@@ -42,7 +42,7 @@
 
 	$total = $liability_total;
 
-	echo "<tr class=\"total-area\">";
+	echo "<tr valign=\"top\" class=\"total-area\">";
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"balance-sheet-total-table\" width=\"100%\">";
 	echo "<tr valign=\"top\">";

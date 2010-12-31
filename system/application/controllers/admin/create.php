@@ -285,7 +285,7 @@ class Create extends Controller {
 				{
 					if (strlen($row) < 5)
 						continue;
-					$newacc->query($row); var_dump($newacc->_error_message());
+					$newacc->query($row);
 					if ($newacc->_error_message() != "")
 					{
 						$newacc->trans_rollback();
