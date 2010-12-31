@@ -63,7 +63,7 @@ class Welcome extends Controller {
 
 		/* Getting Log Messages */
 		$data['logs'] = $this->logger->read_recent_messages();
-		$this->template->load('template', 'welcome_message', $data);
+		$this->template->load('template', 'welcome', $data);
 		return;
 	}
 }

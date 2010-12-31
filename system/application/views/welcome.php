@@ -34,20 +34,20 @@ jQuery(document).ready(function () {
 
 		// Bar width in arbitrary units, 1.0 means the bars will be snuggled
 		// up next to each other
-		barWidth: 0.5, 
+		barWidth: 0.5,
 
 		// The label on top of the bar - can contain HTML
 		// formatNumber inserts commas as thousands separators in a number
 		barLabel:  function(index) {
 			return $.tufteBar.formatNumber(this[0])
-		}, 
+		},
 
 		// The label on the x-axis - can contain HTML
-		axisLabel: function(index) { return this[1].label }, 
+		axisLabel: function(index) { return this[1].label },
 
 		// The color of the bar
 		color:     function(index) {
-			return ['#33CC66', '#C00000'][index % 2] 
+			return ['#33CC66', '#C00000'][index % 2]
 		},
 	});
 
@@ -62,16 +62,16 @@ jQuery(document).ready(function () {
 
 		// Bar width in arbitrary units, 1.0 means the bars will be snuggled
 		// up next to each other
-		barWidth: 0.5, 
+		barWidth: 0.5,
 
 		// The label on top of the bar - can contain HTML
 		// formatNumber inserts commas as thousands separators in a number
 		barLabel:  function(index) {
 			return $.tufteBar.formatNumber(this[0])
-		}, 
+		},
 
 		// The label on the x-axis - can contain HTML
-		axisLabel: function(index) { return this[1].label }, 
+		axisLabel: function(index) { return this[1].label },
 
 		// The color of the bar
 		color:     function(index) {

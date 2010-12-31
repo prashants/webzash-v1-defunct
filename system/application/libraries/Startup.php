@@ -128,7 +128,7 @@ class Startup
 		$account_q = $CI->db->query('SELECT * FROM settings WHERE id = 1');
 		if ( ! ($account_d = $account_q->row()))
 		{
-			$CI->messages->add('Invalid account details.', 'error');
+			$CI->messages->add('Invalid account settings.', 'error');
 			redirect('admin');
 		}
 		$CI->config->set_item('account_name', $account_d->name);
