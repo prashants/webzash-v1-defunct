@@ -116,7 +116,7 @@ class Voucher extends Controller {
 		$config['last_tag_open'] = '<li class="last">';
 		$config['last_tag_close'] = '</li>';
 
-		if ($voucher_type_int > 5)
+		if (($voucher_type_int < 0) || ($voucher_type_int > 4))
 		{
 			$this->messages->add('Invalid voucher type.', 'error');
 			redirect('voucher/show/all');

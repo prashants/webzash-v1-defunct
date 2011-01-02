@@ -115,6 +115,7 @@ if ( ! function_exists('n_to_v'))
 		case 2: return "payment"; break;
 		case 3: return "contra"; break;
 		case 4: return "journal"; break;
+		default: return ""; break;
 		}
 	}
 }
@@ -138,6 +139,7 @@ if ( ! function_exists('v_to_n'))
 		case "payment": return 2; break;
 		case "contra": return 3; break;
 		case "journal": return 4; break;
+		default: return 0; break;
 		}
 	}
 }
