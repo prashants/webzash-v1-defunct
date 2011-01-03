@@ -7,11 +7,29 @@ class Log extends Controller {
 		$this->template->set('page_title', 'Logs');
 		$this->template->set('nav_links', array('log/clear' => 'Clear Log'));
 		$this->template->load('template', 'log/index');
+
+		/* Check access */
+		if ( ! check_access('view log'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("");
+			return;
+		}
+
 		return;
 	}
 
 	function clear()
 	{
+
+		/* Check access */
+		if ( ! check_access('clear log'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("");
+			return;
+		}
+
 		if ($this->db->query('DELETE FROM logs'))
 		{
 			$this->messages->add('Log cleared.', 'success');
@@ -27,6 +45,15 @@ class Log extends Controller {
 	{
 		$this->load->helper('xml');
 		$this->load->helper('text');
+
+		/* Check access */
+		if ( ! check_access('view log'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("");
+			return;
+		}
+
 		$data['feed_name'] = $this->config->item('account_name');
 		$data['feed_url'] = base_url();
 		$data['page_description'] = 'Accounting feed for ' . $data['feed_name'];
@@ -40,5 +67,5 @@ class Log extends Controller {
 	}
 }
 
-/* End of file account.php */
-/* Location: ./system/application/controllers/account.php */
+/* End of file log.php */
+/* Location: ./system/application/controllers/log.php */
