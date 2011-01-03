@@ -27,7 +27,7 @@ if ( ! function_exists('check_access'))
 			'edit group',
 			'delete group',
 			'manage tag',
-			'view report',
+			'view reports',
 			'view log',
 			'clear log',
 			'change account settings',
@@ -48,7 +48,7 @@ if ( ! function_exists('check_access'))
 			'edit group',
 			'delete group',
 			'manage tag',
-			'view report',
+			'view reports',
 			'view log',
 			'clear log',
 		);

@@ -7,6 +7,15 @@ class Report extends Controller {
 	{
 		parent::Controller();
 		$this->load->model('Ledger_model');
+
+		/* Check access */
+		if ( ! check_access('view reports'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("");
+			return;
+		}
+
 		return;
 	}
 	
