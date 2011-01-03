@@ -33,7 +33,8 @@ if ( ! function_exists('check_access'))
 			'view log',
 			'clear log',
 			'change account settings',
-			'backup account database',
+			'cf account',
+			'backup account',
 		);
 		$permissions['accountant'] = array(
 			'view voucher',

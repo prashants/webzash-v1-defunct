@@ -12,7 +12,7 @@ class Report extends Controller {
 		if ( ! check_access('view reports'))
 		{
 			$this->messages->add('Permission denied', 'error');
-			redirect("");
+			redirect('');
 			return;
 		}
 
@@ -622,7 +622,7 @@ class Report extends Controller {
 			if ($data['ledger_id'] < 1)
 			{
 				$this->messages->add('Invalid Ledger A/C.', 'error');
-				redirect("report/ledgerst");
+				redirect('report/ledgerst');
 			}
 			$data['report'] = "report/ledgerst";
 			$data['title'] = "Ledger Statement for '" . $this->Ledger_model->get_name($data['ledger_id']) . "'";

@@ -12,7 +12,7 @@ class Log extends Controller {
 		if ( ! check_access('view log'))
 		{
 			$this->messages->add('Permission denied', 'error');
-			redirect("");
+			redirect('');
 			return;
 		}
 
@@ -25,17 +25,17 @@ class Log extends Controller {
 		if ( ! check_access('clear log'))
 		{
 			$this->messages->add('Permission denied', 'error');
-			redirect("");
+			redirect('');
 			return;
 		}
 
 		if ($this->db->query('DELETE FROM logs'))
 		{
 			$this->messages->add('Log cleared.', 'success');
-			redirect("log");
+			redirect('log');
 		} else {
 			$this->messages->add('Error clearing Log.', 'error');
-			redirect("log");
+			redirect('log');
 		}
 		return;
 	}
@@ -49,7 +49,7 @@ class Log extends Controller {
 		if ( ! check_access('view log'))
 		{
 			$this->messages->add('Permission denied', 'error');
-			redirect("");
+			redirect('');
 			return;
 		}
 

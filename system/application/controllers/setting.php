@@ -6,6 +6,15 @@ class Setting extends Controller {
 	{
 		parent::Controller();
 		$this->load->model('Setting_model');
+
+		/* Check access */
+		if ( ! check_access('change account settings'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect('');
+			return;
+		}
+
 		return;
 	}
 
@@ -157,6 +166,14 @@ class Setting extends Controller {
 		$this->load->model('Ledger_model');
 		$this->load->model('Setting_model');
 		$this->template->set('page_title', 'Carry forward account');
+
+		/* Check access */
+		if ( ! check_access('cf account'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect('setting');
+			return;
+		}
 
 		/* Current settings */
 		$account_data = $this->Setting_model->get_current();
@@ -780,6 +797,15 @@ class Setting extends Controller {
 	{
 		$this->load->dbutil();
 		$this->load->helper('download');
+
+		/* Check access */
+		if ( ! check_access('backup account'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect('setting');
+			return;
+		}
+
 		$backup_filename = "backup" . date("dmYHis") . ".gz";
 
 		/* Backup your entire database and assign it to a variable */
@@ -899,7 +925,7 @@ class Setting extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			redirect("");
+			redirect('');
 			return;
 		} else {
 			/* Unsetting all database configutaion */
@@ -912,7 +938,7 @@ class Setting extends Controller {
 			if ( ! get_file_info($ini_file))
 			{
 				$this->messages->add('Account setting file is missing.', 'error');
-				redirect("");
+				redirect('');
 				return;
 			}
 
@@ -921,14 +947,14 @@ class Setting extends Controller {
 			if ( ! $active_accounts)
 			{
 				$this->messages->add('Invalid account setting file.', 'error');
-				redirect("");
+				redirect('');
 				return;
 			}
 
 			/* Setting new account database details in session */
 			$this->session->set_userdata('db_active_label', $data_select_account);
 			$this->messages->add('Active account changed.', 'success');
-			redirect("");
+			redirect('');
 		}
 	return;
 	}
