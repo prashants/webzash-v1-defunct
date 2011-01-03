@@ -247,7 +247,6 @@ class Ledger extends Controller {
 
 	function delete($id)
 	{
-
 		/* Check access */
 		if ( ! check_access('delete ledger'))
 		{

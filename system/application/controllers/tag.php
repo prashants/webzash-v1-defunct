@@ -21,6 +21,14 @@ class Tag extends Controller {
 	{
 		$this->template->set('page_title', 'New Tag');
 
+		/* Check access */
+		if ( ! check_access('create tag'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("tag");
+			return;
+		}
+
 		/* Colorpicker JS and CSS */
 		$this->template->set('add_css', array(
 			"plugins/colorpicker/css/colorpicker.css",
@@ -107,7 +115,15 @@ class Tag extends Controller {
 	function edit($id = 0)
 	{
 		$this->template->set('page_title', 'Edit Tag');
-		
+
+		/* Check access */
+		if ( ! check_access('edit tag'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("tag");
+			return;
+		}
+
 		/* Colorpicker JS and CSS */
 		$this->template->set('add_css', array(
 			"plugins/colorpicker/css/colorpicker.css",
@@ -213,6 +229,14 @@ class Tag extends Controller {
 
 	function delete($id)
 	{
+		/* Check access */
+		if ( ! check_access('delete tag'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("tag");
+			return;
+		}
+
 		/* Checking for valid data */
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;

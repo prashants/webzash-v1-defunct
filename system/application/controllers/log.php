@@ -21,7 +21,6 @@ class Log extends Controller {
 
 	function clear()
 	{
-
 		/* Check access */
 		if ( ! check_access('clear log'))
 		{
