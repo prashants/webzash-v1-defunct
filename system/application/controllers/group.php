@@ -20,6 +20,14 @@ class Group extends Controller {
 		$this->load->library('validation');
 		$this->template->set('page_title', 'New Group');
 
+		/* Check access */
+		if ( ! check_access('create group'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("account");
+			return;
+		}
+
 		/* Form fields */
 		$data['group_name'] = array(
 			'name' => 'group_name',
