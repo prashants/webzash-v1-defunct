@@ -106,6 +106,14 @@ class Group extends Controller {
 	{
 		$this->template->set('page_title', 'Edit Group');
 
+		/* Check access */
+		if ( ! check_access('edit group'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("account");
+			return;
+		}
+
 		/* Checking for valid data */
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
@@ -217,6 +225,14 @@ class Group extends Controller {
 
 	function delete($id)
 	{
+		/* Check access */
+		if ( ! check_access('delete group'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("account");
+			return;
+		}
+
 		/* Checking for valid data */
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
