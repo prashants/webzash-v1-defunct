@@ -20,6 +20,14 @@ class Ledger extends Controller {
 	{
 		$this->template->set('page_title', 'New Ledger');
 
+		/* Check access */
+		if ( ! check_access('create ledger'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("account");
+			return;
+		}
+
 		/* Form fields */
 		$data['ledger_name'] = array(
 			'name' => 'ledger_name',
@@ -113,6 +121,14 @@ class Ledger extends Controller {
 	function edit($id)
 	{
 		$this->template->set('page_title', 'Edit Ledger');
+
+		/* Check access */
+		if ( ! check_access('edit ledger'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("account");
+			return;
+		}
 
 		/* Checking for valid data */
 		$id = $this->input->xss_clean($id);
@@ -231,6 +247,15 @@ class Ledger extends Controller {
 
 	function delete($id)
 	{
+
+		/* Check access */
+		if ( ! check_access('delete ledger'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect("account");
+			return;
+		}
+
 		/* Checking for valid data */
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
