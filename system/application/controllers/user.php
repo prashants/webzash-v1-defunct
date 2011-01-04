@@ -89,6 +89,12 @@ class User extends Controller {
 	{
 		$this->template->set('page_title', 'Change Account');
 
+		/* Show manage accounts links if user has permission */
+		if (check_access('administer'))
+		{
+			$this->template->set('nav_links', array('admin/manage' => 'Manage accounts'));
+		}
+
 		/* Check access */
 		if ( ! ($this->session->userdata('user_name')))
 		{
