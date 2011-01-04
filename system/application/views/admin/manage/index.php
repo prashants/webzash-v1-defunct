@@ -1,7 +1,7 @@
 <?php
 echo "<p>";
 echo "<b>Currently active account : </b>";
-echo $this->session->userdata('db_active_label');
+echo $this->session->userdata('active_account');
 echo "</p>";
 
 echo "<table border=0 cellpadding=5 class=\"simple-table manage-account-table\">";
@@ -27,7 +27,7 @@ foreach ($accounts as $label)
 	}
 
 	echo "<tr class=\"tr-" . $odd_even;
-	if ($this->session->userdata('db_active_label') == $label)
+	if ($this->session->userdata('active_account') == $label)
 		echo " tr-draft";
 	echo "\">";
 	echo "<td>";
@@ -39,7 +39,7 @@ foreach ($accounts as $label)
 	echo "<td>" . $db_user . "</td>";
 
 	echo "<td>";
-	if ($this->session->userdata('db_active_label') == $label)
+	if ($this->session->userdata('active_account') == $label)
 		echo "Active";
 	else
 		echo anchor("admin/active/index/" . $label, "Activate", array('title' => 'Activate ' . ucfirst($label) . ' Account', 'class' => 'red-link'));

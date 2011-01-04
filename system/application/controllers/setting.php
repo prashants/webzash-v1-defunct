@@ -929,7 +929,7 @@ class Setting extends Controller {
 			return;
 		} else {
 			/* Unsetting all database configutaion */
-			$this->session->unset_userdata('db_active_label');
+			$this->session->unset_userdata('active_account');
 
 			$data_select_account = $this->input->post('select_account', TRUE);
 			$ini_file = $this->config->item('config_path') . "accounts/" . $data_select_account . ".ini";
@@ -952,7 +952,7 @@ class Setting extends Controller {
 			}
 
 			/* Setting new account database details in session */
-			$this->session->set_userdata('db_active_label', $data_select_account);
+			$this->session->set_userdata('active_account', $data_select_account);
 			$this->messages->add('Active account changed.', 'success');
 			redirect('');
 		}

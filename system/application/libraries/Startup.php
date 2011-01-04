@@ -31,11 +31,11 @@ class Startup
 		}
 
 		/* Reading database settings ini file */
-		if ($CI->session->userdata('db_active_label'))
+		if ($CI->session->userdata('active_account'))
 		{
 			/* Fetching database label details from session */
-			$db_active_label = $CI->session->userdata('db_active_label');
-			$ini_file = $CI->config->item('config_path') . "accounts/" . $db_active_label . ".ini";
+			$current_account = $CI->session->userdata('active_account');
+			$ini_file = $CI->config->item('config_path') . "accounts/" . $current_account . ".ini";
 
 			/* Check if database ini file exists */
 			if ( ! get_file_info($ini_file))

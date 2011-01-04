@@ -67,7 +67,7 @@ class User extends Controller {
 			} else {
 				$this->session->unset_userdata('user_name');
 				$this->session->unset_userdata('user_role');
-				$this->session->unset_userdata('db_active_label');
+				$this->session->unset_userdata('active_account');
 				$this->messages->add('Invalid User name or Password.', 'error');
 				$this->template->load('user_template', 'user/login', $data);
 				return;
@@ -79,7 +79,7 @@ class User extends Controller {
 	{
 		$this->session->unset_userdata('user_name');
 		$this->session->unset_userdata('user_role');
-		$this->session->unset_userdata('db_active_label');
+		$this->session->unset_userdata('active_account');
 		$this->session->sess_destroy();
 		$this->messages->add('Logged out.', 'success');
 		redirect('user/login');
@@ -98,7 +98,7 @@ class User extends Controller {
 		}
 
 		/* Currently active account */
-		$data['active_account'] = $this->session->userdata('db_active_label');
+		$data['active_account'] = $this->session->userdata('active_account');
 
 		/* Getting list of files in the config - accounts directory */
 		$accounts_list = get_filenames($this->config->item('config_path') . 'accounts');
@@ -185,7 +185,7 @@ class User extends Controller {
 			}
 
 			/* Setting new account database details in session */
-			$this->session->set_userdata('db_active_label', $data_active_account);
+			$this->session->set_userdata('active_account', $data_active_account);
 			$this->messages->add('Active account changed.', 'success');
 			redirect('');
 		}

@@ -3,7 +3,7 @@
 
 	echo "<p>";
 	echo "<b>Currently active account : </b>";
-	$current_active_account = $this->session->userdata('db_active_label');
+	$current_active_account = $this->session->userdata('active_account');
 	echo ($current_active_account) ? $current_active_account : "(None)";
 	echo "</p>";
 

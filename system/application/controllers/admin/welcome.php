@@ -25,13 +25,13 @@ class Welcome extends Controller {
 
 		/* Reading database settings ini file */
 		$is_label_set = FALSE;
-		if ($this->session->userdata('db_active_label'))
+		if ($this->session->userdata('active_account'))
 		{
 			$is_label_set = TRUE;
 
 			/* Fetching database label details from session */
-			$db_active_label = $this->session->userdata('db_active_label');
-			$ini_file = $this->config->item('config_path') . "accounts/" . $db_active_label . ".ini";
+			$current_account = $this->session->userdata('active_account');
+			$ini_file = $this->config->item('config_path') . "accounts/" . $current_account . ".ini";
 
 			/* Check if database ini file exists */
 			if ( ! get_file_info($ini_file))

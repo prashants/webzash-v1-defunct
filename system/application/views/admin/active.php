@@ -3,7 +3,7 @@
 
 	echo "<p>";
 	echo "<b>Currently active account : </b>";
-	echo $this->session->userdata('db_active_label');
+	echo $this->session->userdata('active_account');
 	echo "</p>";
 
 	echo "<p>";

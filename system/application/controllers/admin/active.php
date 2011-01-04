@@ -56,7 +56,7 @@ class Active extends Controller {
 		if ($_POST)
 		{
 			/* Unsetting all database configutaion */
-			$this->session->unset_userdata('db_active_label');
+			$this->session->unset_userdata('active_account');
 			$data['account'] = $this->input->post('account', TRUE);
 		}
 
@@ -125,7 +125,7 @@ class Active extends Controller {
 			}
 
 			/* Setting new account database details in session */
-			$this->session->set_userdata('db_active_label', $db_label);
+			$this->session->set_userdata('active_account', $db_label);
 			$this->messages->add('Active account settings changed.', 'success');
 			redirect('admin');
 		}
