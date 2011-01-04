@@ -14,14 +14,6 @@
 		</div>
 		<div class="settings-container">
 			<div class="settings-title">
-				<?php echo anchor('admin/active', 'Change Active Account', array('title' => 'Change active account')); ?>
-			</div>
-			<div class="settings-desc">
-				Change existing active account
-			</div>
-		</div>
-		<div class="settings-container">
-			<div class="settings-title">
 				<?php echo anchor('admin/manage', 'Manage Accounts', array('title' => 'Manage existing accounts')); ?>
 			</div>
 			<div class="settings-desc">

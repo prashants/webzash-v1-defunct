@@ -92,7 +92,7 @@ class User extends Controller {
 		/* Show manage accounts links if user has permission */
 		if (check_access('administer'))
 		{
-			$this->template->set('nav_links', array('admin/manage' => 'Manage accounts'));
+			$this->template->set('nav_links', array('admin/create' => 'Create account', 'admin/manage' => 'Manage accounts'));
 		}
 
 		/* Check access */

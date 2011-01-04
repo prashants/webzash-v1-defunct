@@ -94,7 +94,6 @@ class Welcome extends Controller {
 			}
 		} else {
 			$is_label_set = FALSE;
-			$this->messages->add('Select a valid account.', 'error');
 		}
 
 		if ($is_label_set)

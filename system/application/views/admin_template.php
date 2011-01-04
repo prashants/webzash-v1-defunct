@@ -33,7 +33,7 @@ $(document).ready(function(){
 <div id="container">
 	<div id="header">
 		<div id="logo">
-		Webzash <span id="admin-area">Admin area</span>
+		<?php echo anchor('admin', 'Webzash', array('class' => 'anchor-link-b')); ?>  <span id="admin-area">Admin area</span>
 		</div>
 		<div id="admin">
 			<?php echo anchor('', 'Accounts', array('title' => "Back to accounts", 'class' => 'anchor-link-b')); ?> | 
