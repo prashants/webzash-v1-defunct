@@ -36,7 +36,7 @@ $(document).ready(function(){
 		<?php echo anchor('admin', 'Webzash', array('class' => 'anchor-link-b')); ?>  <span id="admin-area">Admin area</span>
 		</div>
 		<div id="admin">
-			<?php echo anchor('', 'Accounts', array('title' => "Back to accounts", 'class' => 'anchor-link-b')); ?> | 
+			<?php echo anchor('', 'Back to Accounts', array('title' => "Back to accounts", 'class' => 'anchor-link-b')); ?> | 
 			<?php echo anchor('user/logout', 'Logout', array('title' => "Logout", 'class' => 'anchor-link-b')); ?>
 		</div>
 		<div id="info">
