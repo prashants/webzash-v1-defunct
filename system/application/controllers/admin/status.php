@@ -5,6 +5,15 @@ class Status extends Controller {
 	function Status()
 	{
 		parent::Controller();
+
+		/* Check access */
+		if ( ! check_access('administer'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect('');
+			return;
+		}
+
 		return;
 	}
 	

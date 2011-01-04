@@ -19,6 +19,17 @@ class Startup
 		if ($CI->uri->segment(1) == "admin")
 			return;
 
+		/* Skip checking if accessing user section*/
+		if ($CI->uri->segment(1) == "user")
+			return;
+
+		/* Check if user is logged in */
+		if ( ! $CI->session->userdata('user_name'))
+		{
+			redirect('user/login');
+			return;
+		}
+
 		/* Reading database settings ini file */
 		if ($CI->session->userdata('db_active_label'))
 		{

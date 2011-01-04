@@ -12,17 +12,6 @@
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/jquery.datepick.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/thickbox.css">
 
-<?php
-/* Dynamically adding css files from controllers */
-if (isset($add_css))
-{
-	foreach ($add_css as $id => $row)
-	{
-		echo "<link type=\"text/css\" rel=\"stylesheet\" href=\"" . asset_url() . $row ."\">";
-	}
-}
-?>
-
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.datepick.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/custom.js"></script>
@@ -31,35 +20,6 @@ if (isset($add_css))
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/supersubs.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/thickbox-compressed.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/ezpz_tooltip.min.js"></script>
-
-<?php
-/* Dynamically adding javascript files from controllers */
-if (isset($add_javascript))
-{
-	foreach ($add_javascript as $id => $row)
-	{
-		echo "<script type=\"text/javascript\" src=\"" . asset_url() . $row ."\"></script>";
-	}
-}
-?>
-
-<script type="text/javascript">
-/* Loading JQuery Superfish menu */
-$(document).ready(function() {
-	$("ul.sf-menu").supersubs({ 
-		minWidth:12,
-		maxWidth:27,
-		extraWidth: 1
-	}).superfish(); // call supersubs first, then superfish, so that subs are 
-	$('.datepicker').datepick({dateFormat: '<?php echo $this->config->item('account_date_format'); ?>'});
-	$('.datepicker-restrict').datepick({
-		dateFormat: '<?php echo $this->config->item('account_date_format'); ?>',
-		minDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_start')); ?>',
-		maxDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_end')); ?>',
-	});
-});
-</script>
-
 </head>
 <body>
 <div id="container">
@@ -67,63 +27,10 @@ $(document).ready(function() {
 		<div id="logo">
 			Webzash <span id="beta-area">(beta)</span>
 		</div>
-		<div id="admin">
-			<?php
-				/* Check if allowed administer rights */
-				if (check_access('administer'))
-				{
-					echo anchor('admin', 'Administer', array('title' => "Administer", 'class' => 'anchor-link-b'));
-					echo " | ";
-				}
-			?>
-			<?php echo anchor('user/logout', 'Logout', array('title' => "Logout", 'class' => 'anchor-link-b')); ?>
-		</div>
-		<div id="info">
-			<?php
-				echo $this->config->item('account_name');
-				echo " (";
-				echo "<a href=\"#TB_inline?height=300&width=300&inlineId=changeActiveAccount\" class=\"thickbox anchor-link-a\" title=\"Change Active Account\">change</a>";
-				echo ")<br />";
-				echo "FY : ";
-				echo date_mysql_to_php_display($this->config->item('account_fy_start'));
-				echo " - ";
-				echo date_mysql_to_php_display($this->config->item('account_fy_end'));
-			?>
-		</div>
 	</div>
 	<div id="menu">
 		<ul class="sf-menu">
 			<li class="current">
-				<a href="<?php print base_url(); ?>" title="Dashboard">Dashboard</a>
-			</li>
-			<li>
-				<?php echo anchor('account', 'Accounts', array('title' => 'Chart of accounts')); ?>
-			</li>
-			<li>
-				<?php echo anchor('voucher', 'Vouchers', array('title' => 'Vouchers')); ?>
-				<ul>
-					<li><?php echo anchor('voucher/show/all', 'All', array('title' => 'All Vouchers')); ?></li>
-					<li><?php echo anchor('voucher/show/receipt', 'Receipt', array('title' => 'Receipt Vouchers')); ?></li>
-					<li><?php echo anchor('voucher/show/payment', 'Payment', array('title' => 'Payment Vouchers')); ?></li>
-					<li><?php echo anchor('voucher/show/contra', 'Contra', array('title' => 'Contra Vouchers')); ?></li>
-					<li><?php echo anchor('voucher/show/journal', 'Journal', array('title' => 'Journal Vouchers')); ?></li>
-					<li><?php echo anchor('voucher/show/draft', 'Draft', array('title' => 'Draft Vouchers')); ?></li>
-				</ul>
-			</li>
-			<li>
-				<?php echo anchor('report', 'Reports', array('title' => 'Reports')); ?>
-				<ul>
-					<li><?php echo anchor('report/balancesheet', 'Balance Sheet', array('title' => 'Balance Sheet')); ?></li>
-					<li><?php echo anchor('report/profitandloss', 'Profit & Loss', array('title' => 'Profit & Loss')); ?></li>
-					<li><?php echo anchor('report/trialbalance', 'Trial Balance', array('title' => 'Trial Balance')); ?></li>
-					<li><?php echo anchor('report/ledgerst', 'Ledger Statement', array('title' => 'Ledger Statement')); ?></li>
-				</ul>
-			</li>
-			<li>
-				<?php echo anchor('setting', 'Settings', array('title' => 'Settings')); ?>
-			</li>
-			<li>
-				<?php echo anchor('help', 'Help', array('title' => 'Help', 'class' => 'last')); ?>
 			</li>
 		</ul>
 	</div>

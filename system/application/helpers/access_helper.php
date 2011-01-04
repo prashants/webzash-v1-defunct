@@ -10,7 +10,6 @@ if ( ! function_exists('check_access'))
 	function check_access($action_name)
 	{
 		$CI =& get_instance();
-		$CI->session->set_userdata('user_role', 'administrator');
 		$user_role = $CI->session->userdata('user_role');
 		$permissions['manager'] = array(
 			'view voucher',
@@ -74,6 +73,9 @@ if ( ! function_exists('check_access'))
 			'email voucher',
 			'download voucher',
 		);
+
+		if ( ! isset($user_role))
+			return FALSE;
 
 		/* If user is administrator then always allow access */
 		if ($user_role == "administrator")
