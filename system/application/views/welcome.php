@@ -161,34 +161,36 @@ jQuery(document).ready(function () {
 		</table>
 	</div>
 </div>
-<div id="dashboard-log">
-	<div id="dashboard-recent-log" class="dashboard-log-item">
-		<div class="dashboard-log-title">Recent Activity <span class="float-right"><?php echo anchor('log/feed', img(array('src'=> asset_url() . "images/icons/rss.png", 'border' => '0', 'alt' => 'Log Feed', 'width' => '16px',))); ?></span></div>
-		<div class="dashboard-log-content">
-			<?php
-			if ($logs)
-			{
-				echo "<ul id=\"recent-activity-list\">";
-				foreach ($logs->result() as $row)
+<?php if (check_access('view log')) { ?>
+	<div id="dashboard-log">
+		<div id="dashboard-recent-log" class="dashboard-log-item">
+			<div class="dashboard-log-title">Recent Activity <span class="float-right"><?php echo anchor('log/feed', img(array('src'=> asset_url() . "images/icons/rss.png", 'border' => '0', 'alt' => 'Log Feed', 'width' => '16px',))); ?></span></div>
+			<div class="dashboard-log-content">
+				<?php
+				if ($logs)
 				{
-					echo "<li>" . $row->message_title . "</li>";
+					echo "<ul id=\"recent-activity-list\">";
+					foreach ($logs->result() as $row)
+					{
+						echo "<li>" . $row->message_title . "</li>";
+					}
+					echo "</ul>";
+				} else {
+					echo "No Recent Activity";
 				}
-				echo "</ul>";
-			} else {
-				echo "No Recent Activity";
-			}
+				?>
+			</div>
+			<?php
+				if ($logs)
+				{
+					echo "<div class=\"dashboard-log-footer\">";
+					echo "<span>";
+					echo anchor("log", "more...", array('class' => 'anchor-link-a'));
+					echo "</span>";
+				}
 			?>
-		</div>
-		<?php
-			if ($logs)
-			{
-				echo "<div class=\"dashboard-log-footer\">";
-				echo "<span>";
-				echo anchor("log", "more...", array('class' => 'anchor-link-a'));
-				echo "</span>";
-			}
-		?>
+			</div>
 		</div>
 	</div>
-</div>
+<?php } ?>
 <div class="clear"></div>

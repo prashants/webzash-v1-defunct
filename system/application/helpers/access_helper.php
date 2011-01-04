@@ -3,6 +3,32 @@
 /*
  * Check if the currently logger in user has the necessary permissions
  * to permform the given action
+ *
+ * Valid permissions strings are given below :
+ *
+ * 'view voucher'
+ * 'create voucher'
+ * 'edit voucher'
+ * 'delete voucher'
+ * 'print voucher'
+ * 'email voucher'
+ * 'download voucher'
+ * 'create ledger'
+ * 'edit ledger'
+ * 'delete ledger'
+ * 'create group'
+ * 'edit group'
+ * 'delete group'
+ * 'create tag'
+ * 'edit tag'
+ * 'delete tag'
+ * 'view reports'
+ * 'view log'
+ * 'clear log'
+ * 'change account settings'
+ * 'cf account'
+ * 'backup account'
+ * 'administer'
  */
 
 if ( ! function_exists('check_access'))

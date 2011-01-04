@@ -5,6 +5,15 @@ class Welcome extends Controller {
 	function Welcome()
 	{
 		parent::Controller();
+
+		/* Check access */
+		if ( ! check_access('administer'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect('');
+			return;
+		}
+
 		return;
 	}
 	
