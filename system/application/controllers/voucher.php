@@ -243,6 +243,14 @@ class Voucher extends Controller {
 
 	function add($voucher_type)
 	{
+		/* Check access */
+		if ( ! check_access('create voucher'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect('voucher/show/' . $voucher_type);
+			return;
+		}
+
 		switch ($voucher_type)
 		{
 		case 'receipt' :
@@ -558,6 +566,14 @@ class Voucher extends Controller {
 
 	function edit($voucher_type, $voucher_id = 0)
 	{
+		/* Check access */
+		if ( ! check_access('edit voucher'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect('voucher/show/' . $voucher_type);
+			return;
+		}
+
 		switch ($voucher_type)
 		{
 		case 'receipt' :
@@ -907,6 +923,14 @@ class Voucher extends Controller {
 
 	function delete($voucher_type, $voucher_id)
 	{
+		/* Check access */
+		if ( ! check_access('delete voucher'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect('voucher/show/' . $voucher_type);
+			return;
+		}
+
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
 		{
@@ -944,6 +968,14 @@ class Voucher extends Controller {
 		$this->load->helper('download');
 		$this->load->model('Setting_model');
 		$this->load->model('Ledger_model');
+
+		/* Check access */
+		if ( ! check_access('download voucher'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect('voucher/show/' . $voucher_type);
+			return;
+		}
 
 		$account = $this->Setting_model->get_current();
 
@@ -994,6 +1026,14 @@ class Voucher extends Controller {
 		$this->load->model('Setting_model');
 		$this->load->model('Ledger_model');
 
+		/* Check access */
+		if ( ! check_access('print voucher'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect('voucher/show/' . $voucher_type);
+			return;
+		}
+
 		$account = $this->Setting_model->get_current();
 
 		/* Load current voucher details */
@@ -1040,6 +1080,14 @@ class Voucher extends Controller {
 		$this->load->model('Setting_model');
 		$this->load->model('Ledger_model');
 		$this->load->library('email');
+
+		/* Check access */
+		if ( ! check_access('email voucher'))
+		{
+			$this->messages->add('Permission denied', 'error');
+			redirect('voucher/show/' . $voucher_type);
+			return;
+		}
 
 		$account_data = $this->Setting_model->get_current();
 

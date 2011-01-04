@@ -79,6 +79,9 @@ if ( ! function_exists('check_access'))
 		if ($user_role == "administrator")
 			return TRUE;
 
+		if ( ! isset($permissions[$user_role]))
+			return FALSE;
+
 		if (in_array($action_name, $permissions[$user_role]))
 			return TRUE;
 		else
