@@ -67,22 +67,23 @@ $(document).ready(function() {
 		<div id="logo">
 			Webzash <span id="beta-area">(beta)</span>
 		</div>
-		<div id="admin">
-			<?php
+		<?php
+			if ($this->session->userdata('user_name')) {
+				echo "<div id=\"admin\">";
 				/* Check if allowed administer rights */
-				if (check_access('administer'))
-				{
+				if (check_access('administer')) {
 					echo anchor('admin', 'Administer', array('title' => "Administer", 'class' => 'anchor-link-b'));
 					echo " | ";
 				}
-			?>
-			<?php echo anchor('user/logout', 'Logout', array('title' => "Logout", 'class' => 'anchor-link-b')); ?>
-		</div>
+				echo anchor('user/logout', 'Logout', array('title' => "Logout", 'class' => 'anchor-link-b'));
+				echo "</div>";
+			}
+		?>
 		<div id="info">
 			<?php
 				echo $this->config->item('account_name');
 				echo " (";
-				echo "<a href=\"#TB_inline?height=300&width=300&inlineId=changeActiveAccount\" class=\"thickbox anchor-link-a\" title=\"Change Active Account\">change</a>";
+				echo anchor('user/account', 'change', array('title' => 'Change active account', 'class' => 'anchor-link-a'));
 				echo ")<br />";
 				echo "FY : ";
 				echo date_mysql_to_php_display($this->config->item('account_fy_start'));
@@ -197,11 +198,6 @@ $(document).ready(function() {
 <div id="footer">
 	<?php if (isset($page_footer)) echo $page_footer ?>
 	<a href="http://webzash.wordpress.com" target="_blank">Webzash<a/> is licensed under <a href="http://www.gnu.org/licenses/agpl-3.0.txt" target="_blank">GNU Affero General Public License, version 3</a> as published by the Free Software Foundation.
-</div>
-<div id="account_change" class="hidden-element">
-	<div id="changeActiveAccount">
-	<?php $this->load->view("setting/change"); ?>
-	</div>
 </div>
 </body>
 </html>

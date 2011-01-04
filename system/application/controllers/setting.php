@@ -914,50 +914,6 @@ class Setting extends Controller {
 		}
 		return;
 	}
-
-	/* Change Active Account */
-	function change()
-	{
-		/* Form validations */
-		$this->form_validation->set_rules('select_account', 'Select Account', 'trim|required');
-
-		/* Validating form : only if label name is not set from URL */
-		if ($this->form_validation->run() == FALSE)
-		{
-			$this->messages->add(validation_errors(), 'error');
-			redirect('');
-			return;
-		} else {
-			/* Unsetting all database configutaion */
-			$this->session->unset_userdata('active_account');
-
-			$data_select_account = $this->input->post('select_account', TRUE);
-			$ini_file = $this->config->item('config_path') . "accounts/" . $data_select_account . ".ini";
-
-			/* Check if database ini file exists */
-			if ( ! get_file_info($ini_file))
-			{
-				$this->messages->add('Account setting file is missing.', 'error');
-				redirect('');
-				return;
-			}
-
-			/* Parsing database ini file */
-			$active_accounts = parse_ini_file($ini_file);
-			if ( ! $active_accounts)
-			{
-				$this->messages->add('Invalid account setting file.', 'error');
-				redirect('');
-				return;
-			}
-
-			/* Setting new account database details in session */
-			$this->session->set_userdata('active_account', $data_select_account);
-			$this->messages->add('Active account changed.', 'success');
-			redirect('');
-		}
-	return;
-	}
 }
 
 /* End of file setting.php */

@@ -27,6 +27,18 @@
 		<div id="logo">
 			Webzash <span id="beta-area">(beta)</span>
 		</div>
+		<?php
+			if ($this->session->userdata('user_name')) {
+				echo "<div id=\"admin\">";
+				/* Check if allowed administer rights */
+				if (check_access('administer')) {
+					echo anchor('admin', 'Administer', array('title' => "Administer", 'class' => 'anchor-link-b'));
+					echo " | ";
+				}
+				echo anchor('user/logout', 'Logout', array('title' => "Logout", 'class' => 'anchor-link-b'));
+				echo "</div>";
+			}
+		?>
 	</div>
 	<div id="menu">
 		<ul class="sf-menu">
@@ -104,11 +116,6 @@
 <div id="footer">
 	<?php if (isset($page_footer)) echo $page_footer ?>
 	<a href="http://webzash.wordpress.com" target="_blank">Webzash<a/> is licensed under <a href="http://www.gnu.org/licenses/agpl-3.0.txt" target="_blank">GNU Affero General Public License, version 3</a> as published by the Free Software Foundation.
-</div>
-<div id="account_change" class="hidden-element">
-	<div id="changeActiveAccount">
-	<?php $this->load->view("setting/change"); ?>
-	</div>
 </div>
 </body>
 </html>
