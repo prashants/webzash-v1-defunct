@@ -65,7 +65,9 @@ class User extends Controller {
 				redirect('');
 				return;
 			} else {
-				$this->session->sess_destroy();
+				$this->session->unset_userdata('user_name');
+				$this->session->unset_userdata('user_role');
+				$this->session->unset_userdata('db_active_label');
 				$this->messages->add('Invalid User name or Password.', 'error');
 				$this->template->load('user_template', 'user/login', $data);
 				return;
@@ -75,6 +77,9 @@ class User extends Controller {
 
 	function logout()
 	{
+		$this->session->unset_userdata('user_name');
+		$this->session->unset_userdata('user_role');
+		$this->session->unset_userdata('db_active_label');
 		$this->session->sess_destroy();
 		$this->messages->add('Logged out.', 'success');
 		redirect('user/login');
