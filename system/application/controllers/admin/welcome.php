@@ -145,7 +145,7 @@ class Welcome extends Controller {
 		}
 
 		if ($data['current_account'] == "")
-			$data['current_account'] = "No account is currently active. You can " . anchor('admin/create', 'create', array('title' => 'Create a new account', 'style' => 'color:#000000')) . " a new account or " . anchor('admin/active', 'activate', array('title' => 'Activate a existing account', 'style' => 'color:#000000')) . " an existing account";
+			$data['current_account'] = "No account is currently active. You can " . anchor('admin/create', 'create', array('title' => 'Create a new account', 'style' => 'color:#000000')) . " a new account or " . anchor('user/account', 'activate', array('title' => 'Activate a existing account', 'style' => 'color:#000000')) . " an existing account";
 
 		/* check status report */
 		$this->load->library('statuscheck');
