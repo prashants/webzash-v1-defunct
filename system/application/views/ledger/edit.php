@@ -16,16 +16,19 @@
 	echo "<p>";
 	echo form_label('Opening balance', 'op_balance');
 	echo "<br />";
+	echo "<span id=\"tooltip-target-1\">";
 	echo form_dropdown_dc('op_balance_dc', $op_balance_dc);
 	echo " ";
 	echo form_input($op_balance);
+	echo "</span>";
+	echo "<span id=\"tooltip-content-1\">&nbsp;&nbsp;Assets / Expenses => Dr. Balance<br />Liabilities / Incomes => Cr. Balance</span>";
 	echo "</p>";
 
 	echo "<p>";
-	echo "<span id=\"tooltip-target-1\">";
+	echo "<span id=\"tooltip-target-2\">";
 	echo form_checkbox('ledger_type_cashbank', 1, $ledger_type_cashbank) . " Cash / Bank Account";
 	echo "</span>";
-	echo "<span id=\"tooltip-content-1\">Select if Ledger A/C is a Bank A/C or a Cash A/C.</span>";
+	echo "<span id=\"tooltip-content-2\">Select if Ledger A/C is a Bank A/C or a Cash A/C.</span>";
 	echo "</p>";
 
 	echo "<p>";

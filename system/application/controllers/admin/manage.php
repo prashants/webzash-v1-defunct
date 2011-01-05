@@ -219,6 +219,8 @@ class Manage extends Controller {
 			if ( ! get_file_info($ini_file))
 			{
 				$this->messages->add('Account settings file labeled ' . $database_label . ' does not exists.', 'error');
+				redirect('admin/manage');
+				return;
 			} else {
 				/* Parsing database ini file */
 				$active_accounts = parse_ini_file($ini_file);
@@ -300,18 +302,6 @@ class Manage extends Controller {
 		$ini_file = $this->config->item('config_path') . "accounts/" . $database_label . ".ini";
 		$this->messages->add('Delete ' . $ini_file . ' file manually.', 'error');
 		$this->messages->add('Only the settings file will be delete. Account database will have to be deleted manually.', 'status');
-		/*
-		if ( ! get_file_info($ini_file))
-		{
-			$this->messages->add("Cannot delete account settings. Account setting file labeled " . $database_label . " does not exists.", 'error');
-		} else {
-			if (unlink($ini_file))
-			{
-				$this->messages->add("Account settings file delete", 'success');
-			} else {
-				$this->messages->add("Cannot delete account settings. Please delete " . $ini_file . " file manually.", 'error');				
-			}
-		} */
 		redirect('admin/manage');
 		return;
 	}

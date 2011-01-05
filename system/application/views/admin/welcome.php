@@ -20,6 +20,14 @@
 				Manage existing accounts
 			</div>
 		</div>
+		<div class="settings-container">
+			<div class="settings-title">
+				<?php echo anchor('admin/user', 'Manage Users', array('title' => 'Manage users')); ?>
+			</div>
+			<div class="settings-desc">
+				Manage users and permissions
+			</div>
+		</div>
 	</div>
 	<div id="right-col">
 		<div class="settings-container">
