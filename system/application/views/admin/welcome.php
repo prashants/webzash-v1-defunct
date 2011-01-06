@@ -1,8 +1,4 @@
 <div>
-	<div id="current-active-account">
-	<?php echo $current_account; ?>
-	</div>
-
 	<div id="left-col">
 		<div class="settings-container">
 			<div class="settings-title">
