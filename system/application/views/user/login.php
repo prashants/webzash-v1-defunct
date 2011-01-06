@@ -14,11 +14,11 @@
 	echo "</p>";
 
 	echo "<p>";
-	echo form_submit('submit', 'Login');
+	echo "<span class=\"form-help-text\">Hint : You may login with user name as 'admin' and password as 'admin'</span>";
 	echo "</p>";
 
 	echo "<p>";
-	echo "<span class=\"form-help-text\">Hint : You may login with user name as 'admin' and password as 'admin'</span>";
+	echo form_submit('submit', 'Login');
 	echo "</p>";
 
 	echo form_close();

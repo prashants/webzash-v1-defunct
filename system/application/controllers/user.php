@@ -49,30 +49,63 @@ class User extends Controller {
 			$data_user_name = $this->input->post('user_name', TRUE);
 			$data_user_password = $this->input->post('user_password', TRUE);
 
-			/* Dummy accounts */
-			if ($data_user_name == "admin" && $data_user_password = "admin")
+			/* User validation */
+			$ini_file = $this->config->item('config_path') . "users/" . $data_user_name . ".ini";
+
+			/* Check if user ini file exists */
+			if ( ! get_file_info($ini_file))
 			{
-				$this->messages->add('Logged in as ' . 'admin' . '.', 'success');
-				$this->session->set_userdata('user_name', 'admin');
-				$this->session->set_userdata('user_role', 'administrator');
-				redirect('');
-				return;
-			} else if ($data_user_name == "guest" && $data_user_password = "guest")
-			{
-				$this->messages->add('Logged in as ' . 'guest' . '.', 'success');
-				$this->session->set_userdata('user_name', 'guest');
-				$this->session->set_userdata('user_role', 'guest');
-				redirect('');
-				return;
-			} else {
-				$this->session->unset_userdata('user_name');
-				$this->session->unset_userdata('user_role');
-				$this->session->unset_userdata('active_account');
-				$this->messages->add('Invalid User name or Password.', 'error');
+				$this->messages->add('User does not exists.', 'error');
 				$this->template->load('user_template', 'user/login', $data);
 				return;
+			} else {
+				/* Parsing user ini file */
+				$active_users = parse_ini_file($ini_file);
+				if ( ! $active_users)
+				{
+					$this->messages->add('Invalid user file.', 'error');
+					$this->template->load('user_template', 'user/login', $data);
+					return;
+				} else {
+					/* Password check */
+					if (isset($active_users['password']))
+					{
+						$password = $active_users['password'];
+
+						/* Role check */
+						if (isset($active_users['role']))
+						{
+							$data_user_role = $active_users['role'];
+						} else {
+							$this->messages->add('Invalid role. Defaulting to "guest" role.', 'success');
+							$data_user_role = 'guest';
+						}
+
+						/* Password verify */
+						if ($password == $data_user_password)
+						{
+							$this->messages->add('Logged in as ' . $data_user_name . '.', 'success');
+							$this->session->set_userdata('user_name', $data_user_name);
+							$this->session->set_userdata('user_role', $data_user_role);
+							redirect('');
+							return;
+						} else {
+							$this->session->unset_userdata('user_name');
+							$this->session->unset_userdata('user_role');
+							$this->session->unset_userdata('active_account');
+							$this->messages->add('Authentication failed.', 'error');
+							$this->template->load('user_template', 'user/login', $data);
+							return;
+						}
+					} else {
+						$this->messages->add('Password missing from user file.', 'error');
+						$this->template->load('user_template', 'user/login', $data);
+						return;
+					}
+				}
 			}
 		}
+		return;
 	}
 
 	function logout()
@@ -98,7 +131,7 @@ class User extends Controller {
 		/* Check access */
 		if ( ! ($this->session->userdata('user_name')))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('');
 			return;
 		}

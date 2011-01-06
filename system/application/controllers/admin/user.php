@@ -9,7 +9,7 @@ class User extends Controller {
 		/* Check access */
 		if ( ! check_access('administer'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('');
 			return;
 		}
@@ -202,33 +202,33 @@ class User extends Controller {
 				$active_users = parse_ini_file($ini_file);
 				if ( ! $active_users)
 				{
-					$this->messages->add('Invalid user file', 'error');
+					$this->messages->add('Invalid user file.', 'error');
 				} else {
 					/* Check if all needed variables are set in ini file */
 					if (isset($active_users['username']))
 						$data['user_name'] = $user_name;
 					else
-						$this->messages->add('Username missing from user file', 'error');
+						$this->messages->add('Username missing from user file.', 'error');
 
 					if (isset($active_users['password']))
 						$data['user_password']['value'] = $active_users['password'];
 					else
-						$this->messages->add('Password missing from user file', 'error');
+						$this->messages->add('Password missing from user file.', 'error');
 
 					if (isset($active_users['email']))
 						$data['user_email']['value'] = $active_users['email'];
 					else
-						$this->messages->add('Email missing from user file', 'error');
+						$this->messages->add('Email missing from user file.', 'error');
 
 					if (isset($active_users['role']))
 						$data['active_user_role'] = $active_users['role'];
 					else
-						$this->messages->add('Role missing from user file', 'error');
+						$this->messages->add('Role missing from user file.', 'error');
 
 					if (isset($active_users['status']))
 						$data['user_status'] = $active_users['status'];
 					else
-						$this->messages->add('Status missing from user file', 'error');
+						$this->messages->add('Status missing from user file.', 'error');
 				}
 			}
 		}
@@ -284,7 +284,7 @@ class User extends Controller {
 
 		if ($this->session->userdata('user_name') == $user_name)
 		{
-			$this->messages->add('Cannot delete currently logged in user', 'error');
+			$this->messages->add('Cannot delete currently logged in user.', 'error');
 			redirect('admin/user');
 			return;
 		}
