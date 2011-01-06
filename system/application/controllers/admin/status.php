@@ -16,7 +16,7 @@ class Status extends Controller {
 
 		return;
 	}
-	
+
 	function index()
 	{
 		$this->load->library('statuscheck');
