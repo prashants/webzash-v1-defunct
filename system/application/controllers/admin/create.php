@@ -9,7 +9,7 @@ class Create extends Controller {
 		/* Check access */
 		if ( ! check_access('administer'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('');
 			return;
 		}
@@ -20,7 +20,7 @@ class Create extends Controller {
 	function index()
 	{
 		$this->load->helper('file');
-		$this->template->set('page_title', 'Create new webzash account');
+		$this->template->set('page_title', 'Create account');
 
 		/* Form fields */
 		$default_start = '01/04/';

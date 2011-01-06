@@ -23,7 +23,7 @@ class Group extends Controller {
 		/* Check access */
 		if ( ! check_access('create group'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('account');
 			return;
 		}
@@ -109,7 +109,7 @@ class Group extends Controller {
 		/* Check access */
 		if ( ! check_access('edit group'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('account');
 			return;
 		}
@@ -228,7 +228,7 @@ class Group extends Controller {
 		/* Check access */
 		if ( ! check_access('delete group'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('account');
 			return;
 		}

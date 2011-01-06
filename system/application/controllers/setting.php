@@ -10,7 +10,7 @@ class Setting extends Controller {
 		/* Check access */
 		if ( ! check_access('change account settings'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('');
 			return;
 		}
@@ -170,7 +170,7 @@ class Setting extends Controller {
 		/* Check access */
 		if ( ! check_access('cf account'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('setting');
 			return;
 		}
@@ -801,7 +801,7 @@ class Setting extends Controller {
 		/* Check access */
 		if ( ! check_access('backup account'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('setting');
 			return;
 		}

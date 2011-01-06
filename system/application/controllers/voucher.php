@@ -246,7 +246,7 @@ class Voucher extends Controller {
 		/* Check access */
 		if ( ! check_access('create voucher'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -569,7 +569,7 @@ class Voucher extends Controller {
 		/* Check access */
 		if ( ! check_access('edit voucher'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -926,7 +926,7 @@ class Voucher extends Controller {
 		/* Check access */
 		if ( ! check_access('delete voucher'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -972,7 +972,7 @@ class Voucher extends Controller {
 		/* Check access */
 		if ( ! check_access('download voucher'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -1029,7 +1029,7 @@ class Voucher extends Controller {
 		/* Check access */
 		if ( ! check_access('print voucher'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -1084,7 +1084,7 @@ class Voucher extends Controller {
 		/* Check access */
 		if ( ! check_access('email voucher'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}

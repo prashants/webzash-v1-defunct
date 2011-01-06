@@ -23,7 +23,7 @@ class Ledger extends Controller {
 		/* Check access */
 		if ( ! check_access('create ledger'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('account');
 			return;
 		}
@@ -125,7 +125,7 @@ class Ledger extends Controller {
 		/* Check access */
 		if ( ! check_access('edit ledger'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('account');
 			return;
 		}
@@ -250,7 +250,7 @@ class Ledger extends Controller {
 		/* Check access */
 		if ( ! check_access('delete ledger'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('account');
 			return;
 		}

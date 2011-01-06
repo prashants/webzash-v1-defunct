@@ -24,7 +24,7 @@ class Tag extends Controller {
 		/* Check access */
 		if ( ! check_access('create tag'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('tag');
 			return;
 		}
@@ -119,7 +119,7 @@ class Tag extends Controller {
 		/* Check access */
 		if ( ! check_access('edit tag'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('tag');
 			return;
 		}
@@ -232,7 +232,7 @@ class Tag extends Controller {
 		/* Check access */
 		if ( ! check_access('delete tag'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('tag');
 			return;
 		}

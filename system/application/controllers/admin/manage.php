@@ -9,7 +9,7 @@ class Manage extends Controller {
 		/* Check access */
 		if ( ! check_access('administer'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('');
 			return;
 		}
@@ -20,7 +20,7 @@ class Manage extends Controller {
 	function index()
 	{
 		$this->load->helper('file');
-		$this->template->set('page_title', 'Manage webzash accounts');
+		$this->template->set('page_title', 'Manage accounts');
 		$this->template->set('nav_links', array('admin/manage/add' => 'New account'));
 
 		/* Getting list of files in the config - accounts directory */
@@ -45,7 +45,7 @@ class Manage extends Controller {
 
 	function add()
 	{
-		$this->template->set('page_title', 'Add a webzash account');
+		$this->template->set('page_title', 'Add account');
 
 		/* Form fields */
 		$data['database_label'] = array(
@@ -160,7 +160,7 @@ class Manage extends Controller {
 	
 	function edit($database_label)
 	{
-		$this->template->set('page_title', 'Edit a webzash account');
+		$this->template->set('page_title', 'Edit account');
 
 		$ini_file = $this->config->item('config_path') . "accounts/" . $database_label . ".ini";
 
@@ -297,7 +297,7 @@ class Manage extends Controller {
 
 	function delete($database_label)
 	{
-		$this->template->set('page_title', 'Delete a webzash account');
+		$this->template->set('page_title', 'Delete account');
 
 		$ini_file = $this->config->item('config_path') . "accounts/" . $database_label . ".ini";
 		$this->messages->add('Delete ' . $ini_file . ' file manually.', 'error');

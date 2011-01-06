@@ -11,7 +11,7 @@ class Report extends Controller {
 		/* Check access */
 		if ( ! check_access('view reports'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('');
 			return;
 		}

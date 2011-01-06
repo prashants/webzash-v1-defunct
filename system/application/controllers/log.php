@@ -11,7 +11,7 @@ class Log extends Controller {
 		/* Check access */
 		if ( ! check_access('view log'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('');
 			return;
 		}
@@ -24,7 +24,7 @@ class Log extends Controller {
 		/* Check access */
 		if ( ! check_access('clear log'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('');
 			return;
 		}
@@ -48,7 +48,7 @@ class Log extends Controller {
 		/* Check access */
 		if ( ! check_access('view log'))
 		{
-			$this->messages->add('Permission denied', 'error');
+			$this->messages->add('Permission denied.', 'error');
 			redirect('');
 			return;
 		}
