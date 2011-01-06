@@ -171,6 +171,10 @@ class Startup
 				{
 					$CI->config->set_item('row_count', $cur_setting['row_count']);
 				}
+				if (isset($cur_setting['log']))
+				{
+					$CI->config->set_item('log', $cur_setting['log']);
+				}
 			}
 		}
 		return;

@@ -23,6 +23,7 @@ class Setting extends Controller {
 
 		/* Default settings */
 		$data['row_count'] = 20;
+		$data['log'] = 1;
 
 		/* Loading settings from ini file */
 		$ini_file = $this->config->item('config_path') . "settings/general.ini";
@@ -35,6 +36,7 @@ class Setting extends Controller {
 			if ($cur_setting)
 			{
 				$data['row_count'] = isset($cur_setting['row_count']) ? $cur_setting['row_count'] : "20";
+				$data['log'] = isset($cur_setting['log']) ? $cur_setting['log'] : "1";
 			}
 		}
 
@@ -49,11 +51,13 @@ class Setting extends Controller {
 
 		/* Form validations */
 		$this->form_validation->set_rules('row_count', 'Row Count', 'trim|required|is_natural_no_zero');
+		$this->form_validation->set_rules('log', 'Log Messages', 'trim');
 
 		/* Repopulating form */
 		if ($_POST)
 		{
 			$data['row_count'] = $this->input->post('row_count', TRUE);
+			$data['log'] = $this->input->post('log', TRUE);
 		}
 
 		/* Validating form */
@@ -66,6 +70,7 @@ class Setting extends Controller {
 		else
 		{
 			$data_row_count = $this->input->post('row_count', TRUE);
+			$data_log = $this->input->post('log', TRUE);
 
 			if ($data_row_count < 0 || $data_row_count > 200)
 			{
@@ -74,9 +79,14 @@ class Setting extends Controller {
 				return;
 			}
 
-			$new_setting = "[general]" . "\r\n" . "row_count = \"" . $data_row_count . "\"" . "\r\n";
+			if ($data_log == 1)
+				$data_log = 1;
+			else
+				$data_log = 0;
 
-			$new_setting_html = '[general]<br />row_count = "' . $data_row_count . '"<br />';
+			$new_setting = "[general]" . "\r\n" . "row_count = \"" . $data_row_count . "\"" . "\r\n" . "log = \"" . $data_log . "\"" . "\r\n";
+
+			$new_setting_html = '[general]<br />row_count = "' . $data_row_count . '"<br />' . "log = \"" . $data_log . "\"" . "<br />";
 
 			/* Writing the connection string to end of file - writing in 'a' append mode */
 			if ( ! write_file($ini_file, $new_setting))

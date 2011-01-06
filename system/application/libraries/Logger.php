@@ -18,15 +18,20 @@ class Logger
 	function write_message($level = "debug", $title = "", $desc = "")
 	{
 		$CI =& get_instance();
+
+		/* Check if logging is enabled. Skip if it is not enabled */
+		if ($CI->config->item('log') != "1")
+			return;
+
 		$data['date'] = date("Y-m-d H:i:s");
 		$data['level'] = 3;
 		switch ($level)
 		{
-		case "error": $data['level'] = 0; break;
-		case "success": $data['level'] = 1; break;
-		case "info": $data['level'] = 2; break;
-		case "debug": $data['level'] = 3; break;
-		default: $data['level'] = 0; break;
+			case "error": $data['level'] = 0; break;
+			case "success": $data['level'] = 1; break;
+			case "info": $data['level'] = 2; break;
+			case "debug": $data['level'] = 3; break;
+			default: $data['level'] = 0; break;
 		}
 		$data['host_ip'] = $CI->input->ip_address();
 		$data['url'] = uri_string();
@@ -34,6 +39,7 @@ class Logger
 		$data['message_title'] = $title;
 		$data['message_desc'] = $desc;
 		$CI->db->insert('logs', $data);
+		return;
 	}
 
 	function read_recent_messages()

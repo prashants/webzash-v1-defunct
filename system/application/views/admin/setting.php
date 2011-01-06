@@ -8,6 +8,10 @@
 	echo "</p>";
 
 	echo "<p>";
+	echo form_checkbox('log', 1, $log) . " Log Messages";
+	echo "</p>";
+
+	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
 	echo anchor('admin', 'Back', array('title' => 'Back to admin'));
