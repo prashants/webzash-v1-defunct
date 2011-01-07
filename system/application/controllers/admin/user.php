@@ -83,6 +83,25 @@ class User extends Controller {
 		$data['active_user_role'] = "administrator";
 		$data['user_status'] = TRUE;
 
+		/* Accounts Form fields */
+		$data['accounts_all'] = TRUE;
+		$data['accounts_active'] = array();
+		/* Getting list of files in the config - accounts directory */
+		$accounts_list = get_filenames($this->config->item('config_path') . 'accounts');
+		$data['accounts'] = array();
+		if ($accounts_list)
+		{
+			foreach ($accounts_list as $row)
+			{
+				/* Only include file ending with .ini */
+				if (substr($row, -4) == ".ini")
+				{
+					$ini_label = substr($row, 0, -4);
+					$data['accounts'][$ini_label] = $ini_label;
+				}
+			}
+		}
+
 		/* Repopulating form */
 		if ($_POST)
 		{
@@ -91,6 +110,8 @@ class User extends Controller {
 			$data['user_email']['value'] = $this->input->post('user_email', TRUE);
 			$data['active_user_role'] = $this->input->post('user_role', TRUE);
 			$data['user_status'] = $this->input->post('user_status', TRUE);
+			$data['accounts_all'] = $this->input->post('accounts_all', TRUE);
+			$data['accounts_active'] = $this->input->post('accounts', TRUE);
 		}
 
 		/* Form validations */
@@ -99,6 +120,7 @@ class User extends Controller {
 		$this->form_validation->set_rules('user_email', 'Email', 'trim|required|valid_email');
 		$this->form_validation->set_rules('user_role', 'Role', 'trim|required');
 		$this->form_validation->set_rules('user_status', 'Active', 'trim');
+		$this->form_validation->set_rules('accounts_all', 'All Accounts', 'trim');
 
 		/* Validating form */
 		if ($this->form_validation->run() == FALSE)
@@ -118,6 +140,24 @@ class User extends Controller {
 				$data_user_status = 1;
 			else
 				$data_user_status = 0;
+			$data_accounts_all = $this->input->post('accounts_all', TRUE);
+			$data_accounts = $this->input->post('accounts', TRUE);
+
+			/* Forming account querry string */
+			$data_accounts_string = '';
+			if ($data_accounts_all == 1)
+			{
+				$data_accounts_string = '*';
+			} else {
+				if ( ! $data_accounts)
+				{
+					$this->messages->add('Please select account.', 'error');
+					$this->template->load('admin_template', 'admin/user/add', $data);
+					return;
+				} else {
+					$data_accounts_string = implode(",", $data_accounts);
+				}
+			}
 
 			$ini_file = $this->config->item('config_path') . "users/" . $data_user_name . ".ini";
 
@@ -129,8 +169,8 @@ class User extends Controller {
 				return;
 			}
 
-			$user_details = "[user]" . "\r\n" . "username = \"" . $data_user_name . "\"" . "\r\n" . "password = \"" . $data_user_password . "\"" . "\r\n" . "email = \"" . $data_user_email . "\"" . "\r\n" . "role = \"" . $data_user_role . "\"" . "\r\n" . "status = \"" . $data_user_status . "\"" . "\r\n";
-			$user_details_html = "[user]" . "<br />" . "username = \"" . $data_user_name . "\"" . "<br />" . "password = \"" . $data_user_password . "\"" . "<br />" . "email = \"" . $data_user_email . "\"" . "<br />" . "role = \"" . $data_user_role . "\"" . "<br />" . "status = \"" . $data_user_status . "\"" . "<br />";
+			$user_details = "[user]" . "\r\n" . "username = \"" . $data_user_name . "\"" . "\r\n" . "password = \"" . $data_user_password . "\"" . "\r\n" . "email = \"" . $data_user_email . "\"" . "\r\n" . "role = \"" . $data_user_role . "\"" . "\r\n" . "status = \"" . $data_user_status . "\"" . "\r\n" . "accounts = \"" . $data_accounts_string . "\"" . "\r\n";
+			$user_details_html = "[user]" . "<br />" . "username = \"" . $data_user_name . "\"" . "<br />" . "password = \"" . $data_user_password . "\"" . "<br />" . "email = \"" . $data_user_email . "\"" . "<br />" . "role = \"" . $data_user_role . "\"" . "<br />" . "status = \"" . $data_user_status . "\"" . "<br />" . "accounts = \"" . $data_accounts_string . "\"" . "<br />";
 
 			/* Writing the connection string to end of file - writing in 'a' append mode */
 			if ( ! write_file($ini_file, $user_details))
@@ -183,6 +223,25 @@ class User extends Controller {
 		$data['active_user_role'] = "";
 		$data['user_status'] = TRUE;
 
+		/* Accounts Form fields */
+		$data['accounts_all'] = TRUE;
+		$data['accounts_active'] = array();
+		/* Getting list of files in the config - accounts directory */
+		$accounts_list = get_filenames($this->config->item('config_path') . 'accounts');
+		$data['accounts'] = array();
+		if ($accounts_list)
+		{
+			foreach ($accounts_list as $row)
+			{
+				/* Only include file ending with .ini */
+				if (substr($row, -4) == ".ini")
+				{
+					$ini_label = substr($row, 0, -4);
+					$data['accounts'][$ini_label] = $ini_label;
+				}
+			}
+		}
+
 		/* Repopulating form */
 		if ($_POST)
 		{
@@ -190,6 +249,8 @@ class User extends Controller {
 			$data['user_email']['value'] = $this->input->post('user_email', TRUE);
 			$data['active_user_role'] = $this->input->post('user_role', TRUE);
 			$data['user_status'] = $this->input->post('user_status', TRUE);
+			$data['accounts_all'] = $this->input->post('accounts_all', TRUE);
+			$data['accounts_active'] = $this->input->post('accounts', TRUE);
 		} else {
 			/* Check if user ini file exists */
 			if ( ! get_file_info($ini_file))
@@ -229,6 +290,20 @@ class User extends Controller {
 						$data['user_status'] = $active_users['status'];
 					else
 						$this->messages->add('Status missing from user file.', 'error');
+
+					if (isset($active_users['accounts']))
+					{
+						if ($active_users['accounts'] == "*")
+						{
+							$data['accounts_all'] = TRUE;
+							$data['accounts_active'] = array();
+						} else {
+							$data['accounts_all'] = FALSE;
+							$data['accounts_active'] = explode(",", $active_users['accounts']);
+						}
+					} else {
+						$this->messages->add('Accounts missing from user file.', 'error');
+					}
 				}
 			}
 		}
@@ -238,6 +313,7 @@ class User extends Controller {
 		$this->form_validation->set_rules('user_email', 'Email', 'trim|required|valid_email');
 		$this->form_validation->set_rules('user_role', 'Role', 'trim|required');
 		$this->form_validation->set_rules('user_status', 'Active', 'trim');
+		$this->form_validation->set_rules('accounts_all', 'All Accounts', 'trim');
 
 		/* Validating form */
 		if ($this->form_validation->run() == FALSE)
@@ -256,11 +332,29 @@ class User extends Controller {
 				$data_user_status = 1;
 			else
 				$data_user_status = 0;
+			$data_accounts_all = $this->input->post('accounts_all', TRUE);
+			$data_accounts = $this->input->post('accounts', TRUE);
+
+			/* Forming account querry string */
+			$data_accounts_string = '';
+			if ($data_accounts_all == 1)
+			{
+				$data_accounts_string = '*';
+			} else {
+				if ( ! $data_accounts)
+				{
+					$this->messages->add('Please select account.', 'error');
+					$this->template->load('admin_template', 'admin/user/edit', $data);
+					return;
+				} else {
+					$data_accounts_string = implode(",", $data_accounts);
+				}
+			}
 
 			$ini_file = $this->config->item('config_path') . "users/" . $user_name . ".ini";
 
-			$user_details = "[user]" . "\r\n" . "username = \"" . $user_name . "\"" . "\r\n" . "password = \"" . $data_user_password . "\"" . "\r\n" . "email = \"" . $data_user_email . "\"" . "\r\n" . "role = \"" . $data_user_role . "\"" . "\r\n" . "status = \"" . $data_user_status . "\"" . "\r\n";
-			$user_details_html = "[user]" . "<br />" . "username = \"" . $user_name . "\"" . "<br />" . "password = \"" . $data_user_password . "\"" . "<br />" . "email = \"" . $data_user_email . "\"" . "<br />" . "role = \"" . $data_user_role . "\"" . "<br />" . "status = \"" . $data_user_status . "\"" . "<br />";
+			$user_details = "[user]" . "\r\n" . "username = \"" . $user_name . "\"" . "\r\n" . "password = \"" . $data_user_password . "\"" . "\r\n" . "email = \"" . $data_user_email . "\"" . "\r\n" . "role = \"" . $data_user_role . "\"" . "\r\n" . "status = \"" . $data_user_status . "\"" . "\r\n" . "accounts = \"" . $data_accounts_string . "\"" . "\r\n";
+			$user_details_html = "[user]" . "<br />" . "username = \"" . $user_name . "\"" . "<br />" . "password = \"" . $data_user_password . "\"" . "<br />" . "email = \"" . $data_user_email . "\"" . "<br />" . "role = \"" . $data_user_role . "\"" . "<br />" . "status = \"" . $data_user_status . "\"" . "<br />" . "accounts = \"" . $data_accounts_string . "\"" . "<br />";
 
 			/* Writing the connection string to end of file - writing in 'a' append mode */
 			if ( ! write_file($ini_file, $user_details))

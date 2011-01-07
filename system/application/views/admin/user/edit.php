@@ -30,6 +30,12 @@
 	echo "</p>";
 
 	echo "<p>";
+	echo form_checkbox('accounts_all', 1, $accounts_all) . " All Accounts or Select accounts";
+	echo "<br />";
+	echo form_multiselect('accounts[]', $accounts, $accounts_active);
+	echo "</p>";
+
+	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
 	echo anchor('admin/user', 'Back', array('title' => 'Back to user list'));

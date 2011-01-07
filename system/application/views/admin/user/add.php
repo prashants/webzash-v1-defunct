@@ -26,7 +26,13 @@
 	echo "</p>";
 
 	echo "<p>";
-	echo form_checkbox('user_status', 1, $user_status) . "Active";
+	echo form_checkbox('user_status', 1, $user_status) . " Active";
+	echo "</p>";
+
+	echo "<p>";
+	echo form_checkbox('accounts_all', 1, $accounts_all) . " All Accounts or Select accounts";
+	echo "<br />";
+	echo form_multiselect('accounts[]', $accounts, $accounts_active);
 	echo "</p>";
 
 	echo "<p>";
