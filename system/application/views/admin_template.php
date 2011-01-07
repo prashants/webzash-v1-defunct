@@ -37,6 +37,7 @@ $(document).ready(function(){
 		</div>
 		<div id="admin">
 			<?php echo anchor('', 'Back to Accounts', array('title' => "Back to accounts", 'class' => 'anchor-link-b')); ?> | 
+			<?php echo anchor('user/profile', 'Profile', array('title' => "Profile", 'class' => 'anchor-link-b')); ?> |
 			<?php echo anchor('user/logout', 'Logout', array('title' => "Logout", 'class' => 'anchor-link-b')); ?>
 		</div>
 		<div id="info">

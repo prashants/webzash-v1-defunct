@@ -11,6 +11,10 @@ class User extends Controller {
 	{
 		$this->template->set('page_title', 'Login');
 
+		/* If user already logged in then redirect to profile page */
+		if ($this->session->userdata('user_name'))
+			redirect('user/profile');
+
 		/* Form fields */
 		$data['user_name'] = array(
 			'name' => 'user_name',
@@ -154,6 +158,9 @@ class User extends Controller {
 		/* Currently active account */
 		$data['active_account'] = $this->session->userdata('active_account');
 
+		/* User validation */
+		$ini_file = $this->config->item('config_path') . "users/" . $this->session->userdata('user_name') . ".ini";
+
 		/* Getting list of files in the config - accounts directory */
 		$accounts_list = get_filenames($this->config->item('config_path') . 'accounts');
 		$data['accounts'] = array();
@@ -166,6 +173,37 @@ class User extends Controller {
 				{
 					$ini_label = substr($row, 0, -4);
 					$data['accounts'][$ini_label] = $ini_label;
+				}
+			}
+		}
+
+		/* Check if user ini file exists */
+		if ( ! get_file_info($ini_file))
+		{
+			$this->messages->add('User does not exists.', 'error');
+			redirect('user/profile');
+			return;
+		} else {
+			/* Parsing user ini file */
+			$active_users = parse_ini_file($ini_file);
+			if ( ! $active_users)
+			{
+				$this->messages->add('Invalid user file.', 'error');
+				redirect('user/profile');
+				return;
+			} else {
+				/* Account check */
+				if (isset($active_users['accounts']))
+				{
+					if ($active_users['accounts'] != '*')
+					{
+						$valid_accounts = explode(",", $active_users['accounts']);
+						$data['accounts'] = array_intersect($data['accounts'], $valid_accounts);
+					}
+				} else {
+					$this->messages->add('Invalid accounts in user file.', 'error');
+					redirect('user/profile');
+					return;
 				}
 			}
 		}
@@ -187,6 +225,15 @@ class User extends Controller {
 			return;
 		} else {
 			$data_active_account = $this->input->post('account', TRUE);
+
+			/* Check for valid account */
+			if ( ! array_key_exists($data_active_account, $data['accounts']))
+			{
+				$this->messages->add('Invalid account selected.', 'error');
+				$this->template->load('user_template', 'user/account', $data);
+				return;
+			}
+
 			$ini_file = $this->config->item('config_path') . "accounts/" . $data_active_account . ".ini";
 
 			/* Check if database ini file exists */
@@ -243,6 +290,22 @@ class User extends Controller {
 			$this->messages->add('Active account changed.', 'success');
 			redirect('');
 		}
+		return;
+	}
+
+	function profile()
+	{
+		$this->template->set('page_title', 'User Profile');
+
+		/* Check access */
+		if ( ! ($this->session->userdata('user_name')))
+		{
+			$this->messages->add('Permission denied.', 'error');
+			redirect('');
+			return;
+		}
+
+		$this->template->load('user_template', 'user/profile');
 		return;
 	}
 }
