@@ -155,7 +155,9 @@ class User extends Controller {
 					$this->template->load('admin_template', 'admin/user/add', $data);
 					return;
 				} else {
-					$data_accounts_string = implode(",", $data_accounts);
+					/* Filtering out bogus accounts */
+					$data_accounts_valid = array_intersect($data['accounts'], $data_accounts);
+					$data_accounts_string = implode(",", $data_accounts_valid);
 				}
 			}
 
@@ -347,7 +349,9 @@ class User extends Controller {
 					$this->template->load('admin_template', 'admin/user/edit', $data);
 					return;
 				} else {
-					$data_accounts_string = implode(",", $data_accounts);
+					/* Filtering out bogus accounts */
+					$data_accounts_valid = array_intersect($data['accounts'], $data_accounts);
+					$data_accounts_string = implode(",", $data_accounts_valid);
 				}
 			}
 
