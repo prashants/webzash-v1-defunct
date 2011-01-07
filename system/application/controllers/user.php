@@ -67,6 +67,21 @@ class User extends Controller {
 					$this->template->load('user_template', 'user/login', $data);
 					return;
 				} else {
+					/* Status check */
+					if (isset($active_users['status']))
+					{
+						if ($active_users['status'] != 1)
+						{
+							$this->messages->add('User disabled.', 'error');
+							$this->template->load('user_template', 'user/login', $data);
+							return;
+						}
+					} else {
+						$this->messages->add('Invalid status.', 'error');
+						$this->template->load('user_template', 'user/login', $data);
+						return;
+					}
+
 					/* Password check */
 					if (isset($active_users['password']))
 					{
