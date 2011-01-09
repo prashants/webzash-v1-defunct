@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS vouchers (
   dr_total decimal(15,2) NOT NULL DEFAULT '0.00',
   cr_total decimal(15,2) NOT NULL DEFAULT '0.00',
   narration text NOT NULL,
-  draft int(1) NOT NULL,
   type int(2) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;

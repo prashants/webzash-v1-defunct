@@ -40,14 +40,11 @@ if ($cur_voucher->dr_total != $cur_voucher->cr_total)
 <span class="bold"><?php echo $cur_voucher->narration; ?></span>
 </p>
 <p>
-Status : <span class="bold"><?php echo ($cur_voucher->draft == 0) ? "Active" : "Draft"; ?></span>
-</p>
-<p>
 Tag : 
 <?php
 $cur_voucher_tag = $this->Tag_model->show_voucher_tag($cur_voucher->tag_id);
 if ($cur_voucher_tag == "")
-	echo "None";
+	echo "(None)";
 else
 	echo $cur_voucher_tag;
 ?>

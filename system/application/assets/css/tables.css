@@ -23,7 +23,7 @@
 	padding:8px 8px 8px 8px;
 }
 
-.simple-table tr.tr-draft {
+.simple-table tr.tr-active {
 	background-color:#FFFFE6;
 }
 
@@ -108,7 +108,7 @@ tr.total-area {
 }
 
 .balance-sheet-table tr.tr-group td {
-	background-color:#FFFFF0;
+	background-color:#FFFFE6;
 }
 
 .balance-sheet-total-table {
@@ -133,7 +133,7 @@ tr.total-area {
 }
 
 .profit-loss-table tr.tr-group td {
-	background-color:#FFFFF0;
+	background-color:#FFFFE6;
 }
 
 .profit-loss-total-table {

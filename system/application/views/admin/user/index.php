@@ -28,7 +28,7 @@ foreach ($users as $row)
 
 	echo "<tr class=\"tr-" . $odd_even;
 	if ($this->session->userdata('user_name') == $row)
-		echo " tr-draft";
+		echo " tr-active";
 	echo "\">";
 	echo "<td>" . $username . "</td>";
 	echo "<td>" . $email . "</td>";

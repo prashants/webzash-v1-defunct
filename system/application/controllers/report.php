@@ -204,7 +204,6 @@ class Report extends Controller {
 			$ledgerst[$counter][0]= "Date";
 			$ledgerst[$counter][1]= "Number";
 			$ledgerst[$counter][2]= "Ledger Name";
-			$ledgerst[$counter][3]= "Status";
 			$ledgerst[$counter][4]= "Type";
 			$ledgerst[$counter][5]= "";
 			$ledgerst[$counter][6]= "Dr Amount";
@@ -216,14 +215,14 @@ class Report extends Controller {
 
 			/* Opening Balance */
 			list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id);
-			$ledgerst[$counter] = array ("Opening Balance", "", "", "", "", "", "", "", "", convert_dc($optype), $opbalance);
+			$ledgerst[$counter] = array ("Opening Balance", "", "", "", "", "", "", "", convert_dc($optype), $opbalance);
 			if ($optype == "D")
 				$cur_balance += $opbalance;
 			else
 				$cur_balance -= $opbalance;
 			$counter++;
 
-			$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC", array($ledger_id));
+			$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC", array($ledger_id));
 			foreach ($ledgerst_q->result() as $row)
 			{
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
@@ -259,43 +258,34 @@ class Report extends Controller {
 	
 				}
 
-				$ledgerst[$counter][3] = ($row->vdraft == 1) ? "Draft" : "Active";
-				$ledgerst[$counter][4] = ucfirst(n_to_v($row->vtype));
+				$ledgerst[$counter][3] = ucfirst(n_to_v($row->vtype));
 
 				if ($row->ldc == "D")
 				{
-					if ($row->vdraft == 0)
-						$cur_balance += $row->lamount;
-					$ledgerst[$counter][5] = convert_dc($row->ldc);
-					$ledgerst[$counter][6] = $row->lamount;
+					$cur_balance += $row->lamount;
+					$ledgerst[$counter][4] = convert_dc($row->ldc);
+					$ledgerst[$counter][5] = $row->lamount;
+					$ledgerst[$counter][6] = "";
 					$ledgerst[$counter][7] = "";
-					$ledgerst[$counter][8] = "";
 
 				} else {
-					if ($row->vdraft == 0)
-						$cur_balance -= $row->lamount;
+					$cur_balance -= $row->lamount;
+					$ledgerst[$counter][4] = "";
 					$ledgerst[$counter][5] = "";
-					$ledgerst[$counter][6] = "";
-					$ledgerst[$counter][7] = convert_dc($row->ldc);
-					$ledgerst[$counter][8] = $row->lamount;
+					$ledgerst[$counter][6] = convert_dc($row->ldc);
+					$ledgerst[$counter][7] = $row->lamount;
 				}
 
-				if ($row->vdraft == 0)
+				if ($cur_balance == 0)
 				{
-					if ($cur_balance == 0)
-					{
-						$ledgerst[$counter][9] = "";
-						$ledgerst[$counter][10] = 0;	
-					} else if ($cur_balance < 0) {
-						$ledgerst[$counter][9] = "Cr";
-						$ledgerst[$counter][10] = convert_cur(-$cur_balance);
-					} else {
-						$ledgerst[$counter][9] = "Dr";
-						$ledgerst[$counter][10] =  convert_cur($cur_balance);
-					}
+					$ledgerst[$counter][8] = "";
+					$ledgerst[$counter][9] = 0;
+				} else if ($cur_balance < 0) {
+					$ledgerst[$counter][8] = "Cr";
+					$ledgerst[$counter][9] = convert_cur(-$cur_balance);
 				} else {
-					$ledgerst[$counter][9] = "";
-					$ledgerst[$counter][10] = "";
+					$ledgerst[$counter][8] = "Dr";
+					$ledgerst[$counter][9] =  convert_cur($cur_balance);
 				}
 				$counter++;
 			}
@@ -304,7 +294,6 @@ class Report extends Controller {
 			$ledgerst[$counter][1]= "";
 			$ledgerst[$counter][2]= "";
 			$ledgerst[$counter][3]= "";
-			$ledgerst[$counter][4]= "";
 			$ledgerst[$counter][5]= "";
 			$ledgerst[$counter][6]= "";
 			$ledgerst[$counter][7]= "";
@@ -319,21 +308,21 @@ class Report extends Controller {
 			}
 			$counter++;
 
-			$ledgerst[$counter] = array ("", "", "", "", "", "", "", "", "", "", "");
+			$ledgerst[$counter] = array ("", "", "", "", "", "", "", "", "", "");
 			$counter++;
 
 			/* Final Opening and Closing Balance */
 			$clbalance = $this->Ledger_model->get_ledger_balance($ledger_id);
 
-			$ledgerst[$counter] = array ("Opening Balance", convert_dc($optype), $opbalance, "", "", "", "", "", "", "", "");
+			$ledgerst[$counter] = array ("Opening Balance", convert_dc($optype), $opbalance, "", "", "", "", "", "", "");
 			$counter++;
 
 			if ($clbalance == 0)
-				$ledgerst[$counter] = array ("Closing Balance", "", 0, "", "", "", "", "", "", "", "");
+				$ledgerst[$counter] = array ("Closing Balance", "", 0, "", "", "", "", "", "", "");
 			else if ($clbalance < 0)
-				$ledgerst[$counter] = array ("Closing Balance", "Cr", convert_cur(-$clbalance), "", "", "", "", "", "", "", "");
+				$ledgerst[$counter] = array ("Closing Balance", "Cr", convert_cur(-$clbalance), "", "", "", "", "", "", "");
 			else
-				$ledgerst[$counter] = array ("Closing Balance", "Dr", convert_cur($clbalance), "", "", "", "", "", "", "", "");
+				$ledgerst[$counter] = array ("Closing Balance", "Dr", convert_cur($clbalance), "", "", "", "", "", "", "");
 
 			$this->load->helper('csv');
 			echo array_to_csv($ledgerst, "ledgerst.csv");

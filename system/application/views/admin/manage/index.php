@@ -28,7 +28,7 @@ foreach ($accounts as $label)
 
 	echo "<tr class=\"tr-" . $odd_even;
 	if ($this->session->userdata('active_account') == $label)
-		echo " tr-draft";
+		echo " tr-active";
 	echo "\">";
 	echo "<td>";
 	echo $label;

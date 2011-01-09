@@ -82,15 +82,12 @@ jQuery(document).ready(function () {
 </script>
 <div id="dashboard-summary">
 	<div id="dashboard-welcome-back" class="dashboard-item">
-		<div class="dashboard-title">Account Summary</div>
+		<div class="dashboard-title">Account Details</div>
 		<div class="dashboard-content">
 			<table class="dashboard-summary-table">
 				<tbody>
 					<tr>
 						<td><div>Welcome back, <strong><?php echo $this->config->item('account_name');?> !</strong></div></td>
-					</tr>
-					<tr class="hidden-element">
-						<td><div id="dashboard-draft">You have <?php echo anchor("voucher/show/draft", $draft_count . " draft", array('class' => 'anchor-link-a')); ?> voucher(s)</div></td>
 					</tr>
 				</tbody>
 			</table>

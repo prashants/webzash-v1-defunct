@@ -265,11 +265,6 @@ $(document).ready(function() {
 
 	echo "<p>";
 	echo form_fieldset('Options', array('class' => "fieldset-auto-width"));
-	echo "<span id=\"tooltip-target-3\" class=\"hidden-element\">";
-	echo form_checkbox('voucher_draft', 1, $voucher_draft) . "Draft";
-	echo "</span>";
-	echo "<span id=\"tooltip-content-3\">Draft vouchers do not affect any accouting caluculations.</span>";
-	echo "<br /><br />";
 	echo form_checkbox('voucher_print', 1, $voucher_print) . "Print";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo form_checkbox('voucher_email', 1, $voucher_email) . "Email";

@@ -61,15 +61,15 @@
 		echo "</table>";
 		echo "<br />";
 		if ( ! $print_preview) {
-			$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT ${page_count}, ${pagination_counter}", array($ledger_id));
+			$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT ${page_count}, ${pagination_counter}", array($ledger_id));
 		} else {
 			$page_count = 0;
-			$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC", array($ledger_id));
+			$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC", array($ledger_id));
 		}
 
 		echo "<table border=0 cellpadding=5 class=\"simple-table ledgerst-table\">";
 
-		echo "<thead><tr><th>Date</th><th>No.</th><th>Ledger Name</th><th>Status</th><th>Type</th><th>Dr Amount</th><th>Cr Amount</th><th>Balance</th></tr></thead>";
+		echo "<thead><tr><th>Date</th><th>No.</th><th>Ledger Name</th><th>Type</th><th>Dr Amount</th><th>Cr Amount</th><th>Balance</th></tr></thead>";
 		$odd_even = "odd";
 
 		$cur_balance = 0;
@@ -79,10 +79,10 @@
 			/* Opening balance */
 			if ($optype == "D")
 			{
-				echo "<tr class=\"tr-balance\"><td colspan=7>Opening Balance</td><td>" . convert_opening($opbalance, $optype) . "</td></tr>";
+				echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>" . convert_opening($opbalance, $optype) . "</td></tr>";
 				$cur_balance += $opbalance;
 			} else {
-				echo "<tr class=\"tr-balance\"><td colspan=7>Opening Balance</td><td>" . convert_opening($opbalance, $optype) . "</td></tr>";
+				echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>" . convert_opening($opbalance, $optype) . "</td></tr>";
 				$cur_balance -= $opbalance;
 			}
 		} else {
@@ -95,12 +95,10 @@
 			}
 
 			/* Calculating previous balance */
-			$prevbal_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.draft as vdraft, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT 0, ${page_count}", array($ledger_id));
+			$prevbal_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT 0, ${page_count}", array($ledger_id));
 
 			foreach ($prevbal_q->result() as $row )
 			{
-				if ($row->vdraft == 1)
-					continue;
 				if ($row->ldc == "D")
 					$cur_balance += $row->lamount;
 				else
@@ -108,14 +106,12 @@
 			}
 
 			/* Show new current total */
-			echo "<tr class=\"tr-balance\"><td colspan=7>Opening</td><td>" . convert_amount_dc($cur_balance) . "</td></tr>";
+			echo "<tr class=\"tr-balance\"><td colspan=6>Opening</td><td>" . convert_amount_dc($cur_balance) . "</td></tr>";
 		}
 
 		foreach ($ledgerst_q->result() as $row)
 		{
-			echo "<tr class=\"tr-" . $odd_even;
-			echo ($row->vdraft == 1) ? " tr-draft " : "";
-			echo "\">";
+			echo "<tr class=\"tr-" . $odd_even . "\">";
 			echo "<td>";
 			echo date_mysql_to_php_display($row->vdate);
 			echo "</td>";
@@ -156,15 +152,11 @@
 			echo "</td>";
 
 			echo "<td>";
-			echo ($row->vdraft == 1) ? "Draft" : "Active";
-			echo "</td>";
-			echo "<td>";
 			echo ucfirst(n_to_v($row->vtype));
 			echo "</td>";
 			if ($row->ldc == "D")
 			{
-				if ($row->vdraft == 0)
-					$cur_balance += $row->lamount;
+				$cur_balance += $row->lamount;
 				echo "<td>";
 				echo convert_dc($row->ldc);
 				echo " ";
@@ -172,8 +164,7 @@
 				echo "</td>";
 				echo "<td></td>";
 			} else {
-				if ($row->vdraft == 0)
-					$cur_balance -= $row->lamount;
+				$cur_balance -= $row->lamount;
 				echo "<td></td>";
 				echo "<td>";
 				echo convert_dc($row->ldc);
@@ -182,17 +173,14 @@
 				echo "</td>";
 			}
 			echo "<td>";
-			if ($row->vdraft == 0)
-				echo convert_amount_dc($cur_balance);
-			else
-				echo "-";
+			echo convert_amount_dc($cur_balance);
 			echo "</td>";
 			echo "</tr>";
 			$odd_even = ($odd_even == "odd") ? "even" : "odd";
 		}
 
 		/* Current Page Closing Balance */
-		echo "<tr class=\"tr-balance\"><td colspan=7>Closing</td><td>" .  convert_amount_dc($cur_balance) . "</td></tr>";
+		echo "<tr class=\"tr-balance\"><td colspan=6>Closing</td><td>" .  convert_amount_dc($cur_balance) . "</td></tr>";
 		echo "</table>";
 	}
 ?>

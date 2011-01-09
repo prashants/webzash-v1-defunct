@@ -53,10 +53,6 @@ class Voucher extends Controller {
 			$this->template->set('nav_links', array('voucher/add/journal' => 'New Journal Voucher'));
 			$data['voucher_type'] = "journal";
 			break;
-		case 'draft' :
-			$this->template->set('page_title', 'Draft Vouchers');
-			$data['voucher_type'] = "";
-			break;
 		case 'tag' :
 			$tag_name = $this->Tag_model->tag_name($tag_id);
 			$this->template->set('page_title', 'Vouchers Tagged "' . $tag_name . '"');
@@ -121,10 +117,7 @@ class Voucher extends Controller {
 			$this->messages->add('Invalid voucher type.', 'error');
 			redirect('voucher/show/all');
 			return;
-		} else if ($voucher_type == "draft") {
-			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE draft = 1 ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}");
-			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE draft = 1")->num_rows();
-		}  else if ($voucher_type == "tag") {
+		} else if ($voucher_type == "tag") {
 			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE tag_id = ? ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}", array($tag_id));
 			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE tag_id = ?", array($tag_id))->num_rows();
 		} else if ($voucher_type_int > 0) {
@@ -139,7 +132,7 @@ class Voucher extends Controller {
 		$this->pagination->initialize($config);
 
 		$html = "<table border=0 cellpadding=5 class=\"simple-table\">";
-		$html .= "<thead><tr><th>Date</th><th>No</th><th>Ledger A/C</th><th>Type</th><th>Status</th><th>DR Amount</th><th>CR Amount</th><th></th></tr></thead>";
+		$html .= "<thead><tr><th>Date</th><th>No</th><th>Ledger A/C</th><th>Type</th><th>DR Amount</th><th>CR Amount</th><th></th></tr></thead>";
 		$html .= "<tbody>";
 
 		$odd_even = "odd";
@@ -153,9 +146,7 @@ class Voucher extends Controller {
 			$ledger_multiple = ($ledger_q->num_rows() > 1) ? TRUE : FALSE;
 			$ledger = $ledger_q->row();
 
-			$html .= "<tr class=\"tr-" . $odd_even;
-			$html .= ($row->draft == 1) ? " tr-draft " : "";
-			$html .= "\">";
+			$html .= "<tr class=\"tr-" . $odd_even . "\">";
 
 			$html .= "<td>" . date_mysql_to_php_display($row->date) . "</td>";
 			$html .= "<td>" . anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, voucher_number_prefix($html_voucher_type) . $row->number, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'anchor-link-a')) . "</td>";
@@ -170,10 +161,6 @@ class Voucher extends Controller {
 			$html .= "</td>";
 
 			$html .= "<td>" . ucfirst($html_voucher_type) . "</td>";
-			if ($row->draft == 0)
-				$html .= "<td>Active</td>";
-			else
-				$html .= "<td>Draft</td>";
 			$html .= "<td>" . $row->dr_total . "</td>";
 			$html .= "<td>" . $row->cr_total . "</td>";
 
@@ -295,7 +282,6 @@ class Voucher extends Controller {
 			'value' => '',
 		);
 		$data['voucher_type'] = $voucher_type;
-		$data['voucher_draft'] = FALSE;
 		$data['voucher_print'] = FALSE;
 		$data['voucher_email'] = FALSE;
 		$data['voucher_download'] = FALSE;
@@ -324,7 +310,6 @@ class Voucher extends Controller {
 			$data['voucher_number']['value'] = $this->input->post('voucher_number', TRUE);
 			$data['voucher_date']['value'] = $this->input->post('voucher_date', TRUE);
 			$data['voucher_narration']['value'] = $this->input->post('voucher_narration', TRUE);
-			$data['voucher_draft'] = $this->input->post('voucher_draft', TRUE);
 			$data['voucher_print'] = $this->input->post('voucher_print', TRUE);
 			$data['voucher_email'] = $this->input->post('voucher_email', TRUE);
 			$data['voucher_download'] = $this->input->post('voucher_download', TRUE);
@@ -456,13 +441,6 @@ class Voucher extends Controller {
 			$data_date = $this->input->post('voucher_date', TRUE);
 			$data_narration = $this->input->post('voucher_narration', TRUE);
 			$data_tag = $this->input->post('voucher_tag', TRUE);
-
-			$data_draft = $this->input->post('voucher_draft', TRUE);
-			if ($data_draft == "1")
-				$data_draft = "1";
-			else
-				$data_draft = "0";
-
 			$data_type = 0;
 			switch ($voucher_type)
 			{
@@ -475,7 +453,7 @@ class Voucher extends Controller {
 			$voucher_id = NULL;
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, draft, type, tag_id) VALUES (?, ?, ?, ?, ?, ?)", array($data_number, $data_date, $data_narration, $data_draft, $data_type, $data_tag)))
+			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, type, tag_id) VALUES (?, ?, ?, ?, ?)", array($data_number, $data_date, $data_narration, $data_type, $data_tag)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Voucher.', 'error');
@@ -631,7 +609,6 @@ class Voucher extends Controller {
 		);
 		$data['voucher_type'] = $voucher_type;
 		$data['voucher_id'] = $voucher_id;
-		$data['voucher_draft'] = ($cur_voucher->draft == 0) ? FALSE : TRUE;
 		$data['voucher_print'] = FALSE;
 		$data['voucher_email'] = FALSE;
 		$data['voucher_download'] = FALSE;
@@ -696,7 +673,6 @@ class Voucher extends Controller {
 			$data['voucher_number']['value'] = $this->input->post('voucher_number', TRUE);
 			$data['voucher_date']['value'] = $this->input->post('voucher_date', TRUE);
 			$data['voucher_narration']['value'] = $this->input->post('voucher_narration', TRUE);
-			$data['voucher_draft'] = $this->input->post('voucher_draft', TRUE);
 			$data['voucher_print'] = $this->input->post('voucher_print', TRUE);
 			$data['voucher_email'] = $this->input->post('voucher_email', TRUE);
 			$data['voucher_download'] = $this->input->post('voucher_download', TRUE);
@@ -807,13 +783,6 @@ class Voucher extends Controller {
 			$data_date = $this->input->post('voucher_date', TRUE);
 			$data_narration = $this->input->post('voucher_narration', TRUE);
 			$data_tag = $this->input->post('voucher_tag', TRUE);
-
-			$data_draft = $this->input->post('voucher_draft', TRUE);
-			if ($data_draft == "1")
-				$data_draft = "1";
-			else
-				$data_draft = "0";
-
 			$data_type = 0;
 			switch ($voucher_type)
 			{
@@ -825,7 +794,7 @@ class Voucher extends Controller {
 			$data_date = date_php_to_mysql($data_date); // Converting date to MySQL
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE vouchers SET number = ?, date = ?, narration = ?, draft = ?, tag_id = ? WHERE id = ?", array($data_number, $data_date, $data_narration, $data_draft, $data_tag, $voucher_id)))
+			if ( ! $this->db->query("UPDATE vouchers SET number = ?, date = ?, narration = ?, tag_id = ? WHERE id = ?", array($data_number, $data_date, $data_narration, $data_tag, $voucher_id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Voucher A/C.', 'error');
@@ -997,7 +966,6 @@ class Voucher extends Controller {
 		$data['voucher_dr_total'] =  $cur_voucher->dr_total;
 		$data['voucher_cr_total'] =  $cur_voucher->cr_total;
 		$data['voucher_narration'] = $cur_voucher->narration;
-		$data['voucher_draft'] = $cur_voucher->draft;
 
 		/* Getting Ledger details */
 		$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
@@ -1054,7 +1022,6 @@ class Voucher extends Controller {
 		$data['voucher_dr_total'] =  $cur_voucher->dr_total;
 		$data['voucher_cr_total'] =  $cur_voucher->cr_total;
 		$data['voucher_narration'] = $cur_voucher->narration;
-		$data['voucher_draft'] = $cur_voucher->draft;
 
 		/* Getting Ledger details */
 		$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
@@ -1135,7 +1102,6 @@ class Voucher extends Controller {
 			$voucher_data['voucher_dr_total'] =  $cur_voucher->dr_total;
 			$voucher_data['voucher_cr_total'] =  $cur_voucher->cr_total;
 			$voucher_data['voucher_narration'] = $cur_voucher->narration;
-			$voucher_data['voucher_draft'] = $cur_voucher->draft;
 	
 			/* Getting Ledger details */
 			$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);

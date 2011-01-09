@@ -16,10 +16,6 @@ class Welcome extends Controller {
 		$this->template->set('add_css', array("css/tufte-graph.css"));
 		$this->template->set('add_javascript', array("js/raphael.js", "js/jquery.enumerable.js", "js/jquery.tufte-graph.js"));
 
-		/* Draft voucher count */
-		$draft_q = $this->db->query("SELECT * FROM vouchers WHERE draft = 1");
-		$data['draft_count'] = $draft_q->num_rows();
-
 		/* Bank and Cash Ledger accounts */
 		$bank_q = $this->db->query("SELECT * FROM ledgers WHERE type = ?", array('B'));
 		if ($bank_q->num_rows() > 0)
