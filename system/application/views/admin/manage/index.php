@@ -41,9 +41,8 @@ foreach ($accounts as $label)
 	echo "<td>";
 	if ($this->session->userdata('active_account') == $label)
 		echo "Active";
-	else
-		echo anchor("admin/active/index/" . $label, "Activate", array('title' => 'Activate ' . ucfirst($label) . ' Account', 'class' => 'red-link'));
 	echo "</td>";
+
 	echo "<td>";
 	echo anchor("admin/manage/edit/" . $label, "Edit", array('title' => 'Edit ' . ucfirst($label) . ' Account', 'class' => 'red-link'));
 	echo " &nbsp;" . anchor('admin/manage/delete/' .  $label, img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Account Settings', 'class' => "confirmClick", 'title' => "Delete Account Settings")), array('title' => 'Delete Account Settings')) . " ";
