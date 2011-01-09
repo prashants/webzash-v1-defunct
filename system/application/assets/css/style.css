@@ -37,7 +37,7 @@ body {
 	background:none repeat scroll 0 0 #E5F1F4;
 	padding:0 15px 5px 15px;
 	-moz-border-radius:0 0 5px 5px;
-	margin:0 0 0 500px;
+	margin:0 0 0 350px;
 }
 
 #header #info {
@@ -45,7 +45,7 @@ body {
 	display:block;
 	position:absolute;
 	right:18px;
-	top:10px;
+	top:20px;
 	background:none repeat scroll 0 0 #EEEEEE;
 	padding:10px;
 	font-size:15px;

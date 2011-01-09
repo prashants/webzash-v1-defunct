@@ -89,7 +89,7 @@ jQuery(document).ready(function () {
 					<tr>
 						<td><div>Welcome back, <strong><?php echo $this->config->item('account_name');?> !</strong></div></td>
 					</tr>
-					<tr>
+					<tr class="hidden-element">
 						<td><div id="dashboard-draft">You have <?php echo anchor("voucher/show/draft", $draft_count . " draft", array('class' => 'anchor-link-a')); ?> voucher(s)</div></td>
 					</tr>
 				</tbody>

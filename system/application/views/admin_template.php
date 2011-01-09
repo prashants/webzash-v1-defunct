@@ -35,11 +35,22 @@ $(document).ready(function(){
 		<div id="logo">
 		<?php echo anchor('admin', 'Webzash', array('class' => 'anchor-link-b')); ?>  <span id="admin-area">Admin area</span>
 		</div>
-		<div id="admin">
-			<?php echo anchor('', 'Back to Accounts', array('title' => "Back to accounts", 'class' => 'anchor-link-b')); ?> | 
-			<?php echo anchor('user/profile', 'Profile', array('title' => "Profile", 'class' => 'anchor-link-b')); ?> |
-			<?php echo anchor('user/logout', 'Logout', array('title' => "Logout", 'class' => 'anchor-link-b')); ?>
-		</div>
+		<?php
+			if ($this->session->userdata('user_name')) {
+				echo "<div id=\"admin\">";
+				echo anchor('', 'Accounts', array('title' => "Accounts", 'class' => 'anchor-link-b'));
+				echo " | ";
+				/* Check if allowed administer rights */
+				if (check_access('administer')) {
+					echo anchor('admin', 'Administer', array('title' => "Administer", 'class' => 'anchor-link-b'));
+					echo " | ";
+				}
+				echo anchor('user/profile', 'Profile', array('title' => "Profile", 'class' => 'anchor-link-b'));
+				echo " | ";
+				echo anchor('user/logout', 'Logout', array('title' => "Logout", 'class' => 'anchor-link-b'));
+				echo "</div>";
+			}
+		?>
 		<div id="info">
 		</div>
 	</div>

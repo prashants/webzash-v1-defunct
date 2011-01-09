@@ -70,6 +70,8 @@ $(document).ready(function() {
 		<?php
 			if ($this->session->userdata('user_name')) {
 				echo "<div id=\"admin\">";
+				echo anchor('', 'Accounts', array('title' => "Accounts", 'class' => 'anchor-link-b'));
+				echo " | ";
 				/* Check if allowed administer rights */
 				if (check_access('administer')) {
 					echo anchor('admin', 'Administer', array('title' => "Administer", 'class' => 'anchor-link-b'));
@@ -110,7 +112,7 @@ $(document).ready(function() {
 					<li><?php echo anchor('voucher/show/payment', 'Payment', array('title' => 'Payment Vouchers')); ?></li>
 					<li><?php echo anchor('voucher/show/contra', 'Contra', array('title' => 'Contra Vouchers')); ?></li>
 					<li><?php echo anchor('voucher/show/journal', 'Journal', array('title' => 'Journal Vouchers')); ?></li>
-					<li><?php echo anchor('voucher/show/draft', 'Draft', array('title' => 'Draft Vouchers')); ?></li>
+					<li><?php // echo anchor('voucher/show/draft', 'Draft', array('title' => 'Draft Vouchers')); ?></li>
 				</ul>
 			</li>
 			<li>

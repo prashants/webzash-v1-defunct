@@ -30,6 +30,8 @@
 		<?php
 			if ($this->session->userdata('user_name')) {
 				echo "<div id=\"admin\">";
+				echo anchor('', 'Accounts', array('title' => "Accounts", 'class' => 'anchor-link-b'));
+				echo " | ";
 				/* Check if allowed administer rights */
 				if (check_access('administer')) {
 					echo anchor('admin', 'Administer', array('title' => "Administer", 'class' => 'anchor-link-b'));
