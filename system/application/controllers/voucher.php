@@ -59,7 +59,7 @@ class Voucher extends Controller {
 			$data['voucher_type'] = "";
 			break;
 		default :
-			$this->messages->add('Invalid voucher type.', 'error');
+			$this->messages->add('Invalid voucher type(1).', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -114,7 +114,7 @@ class Voucher extends Controller {
 
 		if (($voucher_type_int < 0) || ($voucher_type_int > 4))
 		{
-			$this->messages->add('Invalid voucher type.', 'error');
+			$this->messages->add('Invalid voucher type(2).', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else if ($voucher_type == "tag") {
@@ -203,7 +203,7 @@ class Voucher extends Controller {
 			$this->template->set('page_title', 'View Journal Voucher');
 			break;
 		default :
-			$this->messages->add('Invalid voucher type.', 'error');
+			$this->messages->add('Invalid voucher type(3).', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -261,7 +261,7 @@ class Voucher extends Controller {
 			$this->template->set('page_title', 'New Journal Voucher');
 			break;
 		default :
-			$this->messages->add('Invalid voucher type.', 'error');
+			$this->messages->add('Invalid voucher type(4).', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -587,7 +587,7 @@ class Voucher extends Controller {
 			$this->template->set('page_title', 'Edit Journal Voucher');
 			break;
 		default :
-			$this->messages->add('Invalid voucher type.', 'error');
+			$this->messages->add('Invalid voucher type(5).', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
