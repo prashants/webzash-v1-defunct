@@ -94,7 +94,7 @@ jQuery(document).ready(function () {
 					</tr>
 					<?php if ($this->config->item('account_locked') == 1) { ?>
 						<tr>
-							<td><div>Account is currently <strong>locked</strong> to prevent any further modification.</div></td>
+							<td><div>Account is currently <strong>locked</strong> to prevent any further modifications.</div></td>
 						</tr>
 					<?php } ?>
 				</tbody>
