@@ -47,31 +47,6 @@ class Log extends Controller {
 		}
 		return;
 	}
-
-	function feed()
-	{
-		$this->load->helper('xml');
-		$this->load->helper('text');
-
-		/* Check access */
-		if ( ! check_access('view log'))
-		{
-			$this->messages->add('Permission denied.', 'error');
-			redirect('');
-			return;
-		}
-
-		$data['feed_name'] = $this->config->item('account_name');
-		$data['feed_url'] = base_url();
-		$data['page_description'] = 'Accounting feed for ' . $data['feed_name'];
-		$data['page_language'] = 'en-en';
-		$data['creator_email'] = $this->config->item('account_email');
-
-		$data['feed_data'] = $this->db->query('SELECT * FROM logs ORDER BY id DESC');
-
-		header("Content-Type: application/rss+xml");
-		$this->load->view('rss', $data);
-	}
 }
 
 /* End of file log.php */

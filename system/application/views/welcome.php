@@ -169,7 +169,7 @@ jQuery(document).ready(function () {
 <?php if (check_access('view log')) { ?>
 	<div id="dashboard-log">
 		<div id="dashboard-recent-log" class="dashboard-log-item">
-			<div class="dashboard-log-title">Recent Activity <span class="float-right"><?php echo anchor('log/feed', img(array('src'=> asset_url() . "images/icons/rss.png", 'border' => '0', 'alt' => 'Log Feed', 'width' => '16px',))); ?></span></div>
+			<div class="dashboard-log-title">Recent Activity</div>
 			<div class="dashboard-log-content">
 				<?php
 				if ($logs)
