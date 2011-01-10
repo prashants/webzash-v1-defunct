@@ -50,6 +50,13 @@
 	echo "</p>";
 
 	echo "<p>";
+	echo "<span id=\"tooltip-target-1\">";
+	echo form_checkbox('account_locked', 1, $account_locked) . " Account Locked";
+	echo "</span>";
+	echo "<span id=\"tooltip-content-1\">If enabled prevents any future modifications to the account. Makes the account read-only.</span>";
+	echo "</p>";
+
+	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
 	echo anchor('setting', 'Back', 'Back to Settings');

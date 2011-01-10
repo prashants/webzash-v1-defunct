@@ -81,6 +81,7 @@ class Setting extends Controller {
 		);
 		$data['account_date'] = 'dd/mm/yyyy';
 		$data['account_timezone'] = 'UTC';
+		$data['account_locked'] = FALSE;
 
 		/* Current account settings */
 		if ($account_data)
@@ -93,6 +94,7 @@ class Setting extends Controller {
 			$data['account_timezone'] = print_value($account_data->timezone);
 			$data['fy_start'] = date_mysql_to_php(print_value($account_data->fy_start));
 			$data['fy_end'] = date_mysql_to_php(print_value($account_data->fy_end));
+			$data['account_locked'] = print_value($account_data->account_locked);
 		}
 
 		/* Form validations */
@@ -102,6 +104,7 @@ class Setting extends Controller {
 		$this->form_validation->set_rules('account_currency', 'Currency', 'trim|max_length[10]');
 		$this->form_validation->set_rules('account_date', 'Date', 'trim|max_length[10]');
 		$this->form_validation->set_rules('account_timezone', 'Timezone', 'trim|max_length[6]');
+		$this->form_validation->set_rules('account_locked', 'Account Locked', 'trim');
 
 		/* Repopulating form */
 		if ($_POST)
@@ -112,6 +115,7 @@ class Setting extends Controller {
 			$data['account_currency']['value'] = $this->input->post('account_currency', TRUE);
 			$data['account_date'] = $this->input->post('account_date', TRUE);
 			$data['account_timezone'] = $this->input->post('account_timezone', TRUE);
+			$data['account_locked'] = $this->input->post('account_locked', TRUE);
 		}
 
 		/* Validating form */
@@ -137,11 +141,16 @@ class Setting extends Controller {
 				$data_account_date = "yyyy/mm/dd";
 			else
 				$data_account_date = "dd/mm/yyyy";
+
 			$data_account_timezone = $this->input->post('timezones', TRUE);
+
+			$data_account_locked = $this->input->post('account_locked', TRUE);
+			if ($data_account_locked != 1)
+				$data_account_locked = 0;
 
 			/* Update settings */
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE settings SET name = ?, address = ?, email = ?, currency_symbol = ?, date_format = ?, timezone = ? WHERE id = 1", array($data_account_name, $data_account_address, $data_account_email, $data_account_currency, $data_account_date, $data_account_timezone)))
+			if ( ! $this->db->query("UPDATE settings SET name = ?, address = ?, email = ?, currency_symbol = ?, date_format = ?, timezone = ?, account_locked = ? WHERE id = 1", array($data_account_name, $data_account_address, $data_account_email, $data_account_currency, $data_account_date, $data_account_timezone, $data_account_locked)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating account settings.', 'error');
