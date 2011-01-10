@@ -25,7 +25,15 @@ class Log extends Controller {
 		if ( ! check_access('clear log'))
 		{
 			$this->messages->add('Permission denied.', 'error');
-			redirect('');
+			redirect('log');
+			return;
+		}
+
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
+			redirect('log');
 			return;
 		}
 

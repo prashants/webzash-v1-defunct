@@ -28,6 +28,14 @@ class Ledger extends Controller {
 			return;
 		}
 
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
+			redirect('account');
+			return;
+		}
+
 		/* Form fields */
 		$data['ledger_name'] = array(
 			'name' => 'ledger_name',
@@ -126,6 +134,14 @@ class Ledger extends Controller {
 		if ( ! check_access('edit ledger'))
 		{
 			$this->messages->add('Permission denied.', 'error');
+			redirect('account');
+			return;
+		}
+
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
 			redirect('account');
 			return;
 		}
@@ -251,6 +267,14 @@ class Ledger extends Controller {
 		if ( ! check_access('delete ledger'))
 		{
 			$this->messages->add('Permission denied.', 'error');
+			redirect('account');
+			return;
+		}
+
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
 			redirect('account');
 			return;
 		}

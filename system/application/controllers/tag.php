@@ -29,6 +29,14 @@ class Tag extends Controller {
 			return;
 		}
 
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
+			redirect('tag');
+			return;
+		}
+
 		/* Colorpicker JS and CSS */
 		$this->template->set('add_css', array(
 			"plugins/colorpicker/css/colorpicker.css",
@@ -120,6 +128,14 @@ class Tag extends Controller {
 		if ( ! check_access('edit tag'))
 		{
 			$this->messages->add('Permission denied.', 'error');
+			redirect('tag');
+			return;
+		}
+
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
 			redirect('tag');
 			return;
 		}
@@ -233,6 +249,14 @@ class Tag extends Controller {
 		if ( ! check_access('delete tag'))
 		{
 			$this->messages->add('Permission denied.', 'error');
+			redirect('tag');
+			return;
+		}
+
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
 			redirect('tag');
 			return;
 		}

@@ -238,6 +238,14 @@ class Voucher extends Controller {
 			return;
 		}
 
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
+			redirect('voucher/show/' . $voucher_type);
+			return;
+		}
+
 		switch ($voucher_type)
 		{
 		case 'receipt' :
@@ -552,6 +560,14 @@ class Voucher extends Controller {
 		if ( ! check_access('edit voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
+			redirect('voucher/show/' . $voucher_type);
+			return;
+		}
+
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
@@ -900,6 +916,14 @@ class Voucher extends Controller {
 		if ( ! check_access('delete voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
+			redirect('voucher/show/' . $voucher_type);
+			return;
+		}
+
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}

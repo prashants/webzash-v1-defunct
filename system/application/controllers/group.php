@@ -28,6 +28,14 @@ class Group extends Controller {
 			return;
 		}
 
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
+			redirect('account');
+			return;
+		}
+
 		/* Form fields */
 		$data['group_name'] = array(
 			'name' => 'group_name',
@@ -110,6 +118,14 @@ class Group extends Controller {
 		if ( ! check_access('edit group'))
 		{
 			$this->messages->add('Permission denied.', 'error');
+			redirect('account');
+			return;
+		}
+
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
 			redirect('account');
 			return;
 		}
@@ -229,6 +245,14 @@ class Group extends Controller {
 		if ( ! check_access('delete group'))
 		{
 			$this->messages->add('Permission denied.', 'error');
+			redirect('account');
+			return;
+		}
+
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
 			redirect('account');
 			return;
 		}
