@@ -9,7 +9,8 @@ class Setting_model extends Model {
 
 	function get_current()
 	{
-		$account_q = $this->db->query('SELECT * FROM settings WHERE id = 1');
+		$this->db->from('settings')->where('id', 1);
+		$account_q = $this->db->get();
 		return $account_q->row();
 	}
 }
