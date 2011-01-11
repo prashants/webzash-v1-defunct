@@ -168,7 +168,8 @@ class Tag extends Controller {
 		}
 
 		/* Loading current group */
-		$tag_data_q = $this->db->query("SELECT * FROM tags WHERE id = ?", array($id));
+		$this->db->from('tags')->where('id', $id);
+		$tag_data_q = $this->db->get();
 		if ($tag_data_q->num_rows() < 1)
 		{
 			$this->messages->add('Invalid Tag.', 'error');
