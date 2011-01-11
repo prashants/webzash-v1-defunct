@@ -23,7 +23,7 @@
 		$config['num_links'] = 10;
 		$config['per_page'] = $pagination_counter;
 		$config['uri_segment'] = 4;
-		$config['total_rows'] = $this->db->query('SELECT * FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ?', array($ledger_id))->num_rows();
+		$config['total_rows'] = (int)$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->count_all_results();
 		$config['full_tag_open'] = '<ul id="pagination-flickr">';
 		$config['full_close_open'] = '</ul>';
 		$config['num_tag_open'] = '<li>';
@@ -61,10 +61,14 @@
 		echo "</table>";
 		echo "<br />";
 		if ( ! $print_preview) {
-			$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT ${page_count}, ${pagination_counter}", array($ledger_id));
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc');
+			$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($pagination_counter, $page_count);
+			$ledgerst_q = $this->db->get();
 		} else {
 			$page_count = 0;
-			$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC", array($ledger_id));
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc');
+			$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+			$ledgerst_q = $this->db->get();
 		}
 
 		echo "<table border=0 cellpadding=5 class=\"simple-table ledgerst-table\">";
@@ -95,8 +99,9 @@
 			}
 
 			/* Calculating previous balance */
-			$prevbal_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC LIMIT 0, ${page_count}", array($ledger_id));
-
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc');
+			$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($page_count, 0);
+			$prevbal_q = $this->db->get();
 			foreach ($prevbal_q->result() as $row )
 			{
 				if ($row->ldc == "D")
@@ -123,10 +128,10 @@
 			echo "<td>";
 			if ($row->ldc == "D")
 			{
-
-				if ($opp_voucher_name_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? AND dc = ?",  array($row->vid, "C")))
+				$this->db->from('voucher_items')->where('voucher_id', $row->vid)->where('dc', 'C');
+				$opp_voucher_name_q = $this->db->get();
+				if ($opp_voucher_name_d = $opp_voucher_name_q->row())
 				{
-					$opp_voucher_name_d = $opp_voucher_name_q->row();
 					$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
 					if ($opp_voucher_name_q->num_rows() > 1)
 					{
@@ -136,9 +141,10 @@
 					}
 				}
 			} else {
-				if ($opp_voucher_name_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? AND dc = ?",  array($row->vid, "D")))
+				$this->db->from('voucher_items')->where('voucher_id', $row->vid)->where('dc', 'D');
+				$opp_voucher_name_q = $this->db->get();
+				if ($opp_voucher_name_d = $opp_voucher_name_q->row())
 				{
-					$opp_voucher_name_d = $opp_voucher_name_q->row();
 					$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
 					if ($opp_voucher_name_q->num_rows() > 1)
 					{

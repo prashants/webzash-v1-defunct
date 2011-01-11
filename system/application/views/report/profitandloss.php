@@ -9,7 +9,8 @@
 
 	/* Gross P/L : Expenses */
 	$gross_expense_total = 0;
-	$gross_expense_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 4 AND affects_gross = 1");
+	$this->db->from('groups')->where('parent_id', 4)->where('affects_gross', 1);
+	$gross_expense_list_q = $this->db->get();
 	echo "<td width=\"" . $left_width . "\">";
 	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"100%\">";
 	echo "<thead><tr><th>Expenses (Gross)</th><th align=\"right\">Amount</th></tr></thead>";
@@ -25,7 +26,8 @@
 
 	/* Gross P/L : Incomes */
 	$gross_income_total = 0;
-	$gross_income_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 3 AND affects_gross = 1");
+	$this->db->from('groups')->where('parent_id', 3)->where('affects_gross' , 1);
+	$gross_income_list_q = $this->db->get();
 	echo "<td width=\"" . $right_width . "\">";
 	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"100%\">";
 	echo "<thead><tr><th>Incomes (Gross)</th><th align=\"right\">Amount</th></tr></thead>";
@@ -112,7 +114,8 @@
 
 	/* Net P/L : Expenses */
 	$net_expense_total = 0;
-	$net_expense_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 4 AND affects_gross != 1");
+	$this->db->from('groups')->where('parent_id', 4)->where('affects_gross !=', 1);
+	$net_expense_list_q = $this->db->get();
 	echo "<tr valign=\"top\">";
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"100%\">";
@@ -129,7 +132,8 @@
 
 	/* Net P/L : Incomes */
 	$net_income_total = 0;
-	$net_income_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 3 AND affects_gross != 1");
+	$this->db->from('groups')->where('parent_id', 3)->where('affects_gross !=', 1);
+	$net_income_list_q = $this->db->get();
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"100%\">";
 	echo "<thead><tr><th>Incomes (Net)</th><th align=\"right\">Amount</th></tr></thead>";
