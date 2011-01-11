@@ -36,7 +36,7 @@ class Log extends Controller {
 			return;
 		}
 
-		if ($this->db->query('DELETE FROM logs'))
+		if ($this->db->truncate('logs'))
 		{
 			$this->messages->add('Log cleared.', 'success');
 			redirect('log');
