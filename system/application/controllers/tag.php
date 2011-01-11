@@ -101,7 +101,12 @@ class Tag extends Controller {
 			$data_tag_background = strtoupper($data_tag_background);
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("INSERT INTO tags (title, color, background) VALUES (?, ?, ?)", array($data_tag_title, $data_tag_color, $data_tag_background)))
+			$insert_data = array(
+				'title' => $data_tag_title,
+				'color' => $data_tag_color,
+				'background' => $data_tag_background,
+			);
+			if ( ! $this->db->insert('tags', $insert_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding ' . $data_tag_title . ' - Tag.', 'error');
@@ -224,7 +229,12 @@ class Tag extends Controller {
 			$data_tag_background = strtoupper($data_tag_background);
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE tags SET title = ?, color = ?, background = ? WHERE id = ?", array($data_tag_title, $data_tag_color, $data_tag_background, $id)))
+			$update_data = array(
+				'title' => $data_tag_title,
+				'color' => $data_tag_color,
+				'background' => $data_tag_background,
+			);
+			if ( ! $this->db->where('id', $id)->update('tags', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating ' . $data_tag_title . ' - Tag.', 'error');
@@ -269,7 +279,8 @@ class Tag extends Controller {
 			redirect('tag');
 			return;
 		}
-		$data_valid_q = $this->db->query("SELECT * FROM tags WHERE id = ?", array($id));
+		$this->db->from('tags')->where('id', $id);
+		$data_valid_q = $this->db->get();
 		if ($data_valid_q->num_rows() < 1)
 		{
 			$this->messages->add('Invalid Tag.', 'error');
@@ -280,7 +291,10 @@ class Tag extends Controller {
 
 		/* Deleting Tag */
 		$this->db->trans_start();
-		if ( ! $this->db->query("UPDATE vouchers SET tag_id = 0 WHERE tag_id = ?", array($id)))
+		$update_data = array(
+			'tag_id' => 0,
+		);
+		if ( !  $this->db->where('tag_id', $id)->update('vouchers', $update_data))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Tag from Vouchers.', 'error');
@@ -288,7 +302,7 @@ class Tag extends Controller {
 			redirect('tag');
 			return;
 		} else {
-			if ( ! $this->db->query("DELETE FROM tags WHERE id = ?", array($id)))
+			if ( ! $this->db->delete('tags', array('id' => $id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting Tag.', 'error');
