@@ -150,7 +150,16 @@ class Setting extends Controller {
 
 			/* Update settings */
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE settings SET name = ?, address = ?, email = ?, currency_symbol = ?, date_format = ?, timezone = ?, account_locked = ? WHERE id = 1", array($data_account_name, $data_account_address, $data_account_email, $data_account_currency, $data_account_date, $data_account_timezone, $data_account_locked)))
+			$update_data = array(
+				'name' => $data_account_name,
+				'address' => $data_account_address,
+				'email' => $data_account_email,
+				'currency_symbol' => $data_account_currency,
+				'date_format' => $data_account_date,
+				'timezone' => $data_account_timezone,
+				'account_locked' => $data_account_locked,
+			);
+			if ( ! $this->db->where('id', 1)->update('settings', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating account settings.', 'error');
@@ -420,7 +429,8 @@ class Setting extends Controller {
 
 				$cf_status = TRUE;
 				/* Importing Groups */
-				$group_q = $this->db->query("SELECT * FROM groups ORDER BY id");
+				$this->db->from('groups')->order_by('id', 'asc');
+				$group_q = $this->db->get();
 				foreach ($group_q->result() as $row)
 				{
 					if ( ! $newacc->query("INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (?, ?, ?, ?)", array($row->id, $row->parent_id, $row->name, $row->affects_gross)))
@@ -438,7 +448,8 @@ class Setting extends Controller {
 				$cf_ledgers = array_merge($assets->get_ledger_ids(), $liability->get_ledger_ids());
 
 				/* Importing Ledgers */
-				$ledger_q = $this->db->query("SELECT * FROM ledgers ORDER BY id");
+				$this->db->from('ledgers')->order_by('id', 'asc');
+				$ledger_q = $this->db->get();
 				foreach ($ledger_q->result() as $row)
 				{
 					/* CF only Assets and Liability with Closing Balance */
@@ -469,7 +480,8 @@ class Setting extends Controller {
 				}
 
 				/* Importing Tags */
-				$tag_q = $this->db->query("SELECT * FROM tags ORDER BY id");
+				$this->db->from('tags')->order_by('id', 'asc');
+				$tag_q = $this->db->get();
 				foreach ($tag_q->result() as $row)
 				{
 					if ( ! $newacc->query("INSERT INTO tags (id, title, color, background) VALUES (?, ?, ?, ?)", array($row->id, $row->title, $row->color, $row->background)))
@@ -592,7 +604,14 @@ class Setting extends Controller {
 
 			/* Update settings */
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE settings SET email_protocol = ?, email_host = ?, email_port = ?, email_username = ?, email_password = ? WHERE id = 1", array($data_email_protocol, $data_email_host, $data_email_port, $data_email_username, $data_email_password)))
+			$update_data = array(
+				'email_protocol' => $data_email_protocol,
+				'email_host' => $data_email_host,
+				'email_port' => $data_email_port,
+				'email_username' => $data_email_username,
+				'email_password' => $data_email_password,
+			);
+			if ( ! $this->db->where('id', 1)->update('settings', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating email settings.', 'error');
@@ -784,7 +803,17 @@ class Setting extends Controller {
 
 			/* Update settings */
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE settings SET print_paper_height = ?, print_paper_width = ?, print_margin_top = ?, print_margin_bottom = ?, print_margin_left = ?, print_margin_right = ?, print_orientation = ?, print_page_format = ? WHERE id = 1", array($data_paper_height, $data_paper_width, $data_margin_top, $data_margin_bottom, $data_margin_left, $data_margin_right, $data_orientation, $data_output_format)))
+			$update_data = array(
+				'print_paper_height' => $data_paper_height,
+				'print_paper_width' => $data_paper_width,
+				'print_margin_top' => $data_margin_top,
+				'print_margin_bottom' => $data_margin_bottom,
+				'print_margin_left' => $data_margin_left,
+				'print_margin_right' => $data_margin_right,
+				'print_orientation' => $data_orientation,
+				'print_page_format' => $data_output_format,
+			);
+			if ( ! $this->db->where('id', 1)->update('settings', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating printer settings.', 'error');
@@ -906,7 +935,13 @@ class Setting extends Controller {
 
 			/* Update settings */
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE settings SET receipt_voucher_prefix  = ?, payment_voucher_prefix = ?, contra_voucher_prefix = ?, journal_voucher_prefix = ? WHERE id = 1", array($data_receipt_prefix, $data_payment_prefix, $data_contra_prefix, $data_journal_prefix)))
+			$update_data = array(
+				'receipt_voucher_prefix' => $data_receipt_prefix,
+				'payment_voucher_prefix' => $data_payment_prefix,
+				'contra_voucher_prefix' => $data_contra_prefix,
+				'journal_voucher_prefix' => $data_journal_prefix,
+			);
+			if ( ! $this->db->where('id', 1)->update('settings', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating voucher settings.', 'error');
