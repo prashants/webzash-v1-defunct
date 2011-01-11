@@ -11,10 +11,10 @@ class Group_model extends Model {
 	{
 		$options = array();
 		if ($id == NULL)
-			$group_parent_q = $this->db->query('SELECT * FROM groups WHERE id > 0 ORDER BY name');
+			$this->db->from('groups')->where('id >', 0)->order_by('name', 'asc');
 		else
-			$group_parent_q = $this->db->query('SELECT * FROM groups WHERE id > 0 AND id != ? ORDER BY name', array($id));
-
+			$this->db->from('groups')->where('id >', 0)->where('id !=', $id)->order_by('name', 'asc');
+		$group_parent_q = $this->db->get();
 		foreach ($group_parent_q->result() as $row)
 		{
 			$options[$row->id] = $row->name;
@@ -25,7 +25,8 @@ class Group_model extends Model {
 	function get_ledger_groups()
 	{
 		$options = array();
-		$group_parent_q = $this->db->query('SELECT * FROM groups WHERE id > 4 ORDER BY name');
+		$this->db->from('groups')->where('id >', 4)->order_by('name', 'asc');
+		$group_parent_q = $this->db->get();
 		foreach ($group_parent_q->result() as $row)
 		{
 			$options[$row->id] = $row->name;
