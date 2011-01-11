@@ -72,7 +72,8 @@ class Group extends Controller {
 			$data_parent_id = $this->input->post('group_parent', TRUE);
 
 			/* Check if parent group id present */
-			if ($this->db->query("SELECT id FROM groups WHERE id = ?", array($data_parent_id))->num_rows() < 1)
+			$this->db->select('id')->from('groups')->where('id', $data_parent_id);
+			if ($this->db->get()->num_rows() < 1)
 			{
 				$this->messages->add('Invalid Parent group.', 'error');
 				$this->template->load('template', 'group/add', $data);
@@ -92,7 +93,12 @@ class Group extends Controller {
 			}
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("INSERT INTO groups (name, parent_id, affects_gross) VALUES (?, ?, ?)", array($data_name, $data_parent_id, $data_affects_gross)))
+			$insert_data = array(
+				'name' => $data_name,
+				'parent_id' => $data_parent_id,
+				'affects_gross' => $data_affects_gross,
+			);
+			if ( ! $this->db->insert('groups', $insert_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding ' . $data_name . ' - Group A/C.', 'error');
@@ -145,7 +151,8 @@ class Group extends Controller {
 		}
 
 		/* Loading current group */
-		$group_data_q = $this->db->query("SELECT * FROM groups WHERE id = ?", array($id));
+		$this->db->from('groups')->where('id', $id);
+		$group_data_q = $this->db->get();
 		if ($group_data_q->num_rows() < 1)
 		{
 			$this->messages->add('Invalid Group A/C.', 'error');
@@ -193,7 +200,8 @@ class Group extends Controller {
 			$data_id = $id;
 
 			/* Check if parent group id present */
-			if ($this->db->query("SELECT id FROM groups WHERE id = ?", array($data_parent_id))->num_rows() < 1)
+			$this->db->select('id')->from('groups')->where('id', $data_parent_id);
+			if ($this->db->get()->num_rows() < 1)
 			{
 				$this->messages->add('Invalid Parent group.', 'error');
 				$this->template->load('template', 'group/edit', $data);
@@ -221,7 +229,12 @@ class Group extends Controller {
 			}
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE groups SET name = ?, parent_id = ?, affects_gross = ? WHERE id = ?", array($data_name, $data_parent_id, $data_affects_gross, $data_id)))
+			$update_data = array(
+				'name' => $data_name,
+				'parent_id' => $data_parent_id,
+				'affects_gross' => $data_affects_gross,
+			);
+			if ( ! $this->db->where('id', $data_id)->update('groups', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating ' . $data_name . ' - Group A/C.', 'error');
@@ -270,15 +283,15 @@ class Group extends Controller {
 			redirect('account');
 			return;
 		}
-		$data_present_q = $this->db->query("SELECT * FROM groups WHERE parent_id = ?", array($id));
-		if ($data_present_q->num_rows() > 0)
+		$this->db->from('groups')->where('parent_id', $id);
+		if ($this->db->get()->num_rows() > 0)
 		{
 			$this->messages->add('Cannot delete non-empty Group A/C.', 'error');
 			redirect('account');
 			return;
 		}
-		$data_present_q = $this->db->query("SELECT * FROM ledgers WHERE group_id = ?", array($id));
-		if ($data_present_q->num_rows() > 0)
+		$this->db->from('ledgers')->where('group_id', $id);
+		if ($this->db->get()->num_rows() > 0)
 		{
 			$this->messages->add('Cannot delete non-empty Group A/C.', 'error');
 			redirect('account');
@@ -286,7 +299,8 @@ class Group extends Controller {
 		}
 
 		/* Get the group details */
-		$group_q = $this->db->query("SELECT * FROM groups WHERE id = ?", array($id));
+		$this->db->from('groups')->where('id', $id);
+		$group_q = $this->db->get();
 		if ($group_q->num_rows() < 1)
 		{
 			$this->messages->add('Invalid Group A/C.', 'error');
@@ -298,7 +312,7 @@ class Group extends Controller {
 
 		/* Deleting group */
 		$this->db->trans_start();
-		if ( ! $this->db->query("DELETE FROM groups WHERE id = ?", array($id)))
+		if ( ! $this->db->delete('groups', array('id' => $id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting ' . $group_data->name . ' - Group A/C.', 'error');

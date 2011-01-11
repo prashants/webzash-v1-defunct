@@ -15,7 +15,6 @@ class Log extends Controller {
 			redirect('');
 			return;
 		}
-
 		return;
 	}
 
