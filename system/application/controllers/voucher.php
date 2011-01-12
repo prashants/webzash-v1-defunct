@@ -142,7 +142,9 @@ class Voucher extends Controller {
 
 			/* Showing the credit ledger name for payment and debit for other voucher types */
 			$ledger_type = ($row->type == 2) ? "C" : "D";
-			$ledger_q = $this->db->query("SELECT ledgers.name as name FROM voucher_items join ledgers on voucher_items.ledger_id = ledgers.id WHERE voucher_items.voucher_id = ? AND voucher_items.dc = ?", array($row->id, $ledger_type));
+			$this->db->select('ledgers.name as name');
+			$this->db->from('voucher_items')->join('ledgers', 'voucher_items.ledger_id = ledgers.id')->where('voucher_items.voucher_id', $row->id)->where('voucher_items.dc', $ledger_type);
+			$ledger_q = $this->db->get();
 			$ledger_multiple = ($ledger_q->num_rows() > 1) ? TRUE : FALSE;
 			$ledger = $ledger_q->row();
 
@@ -217,7 +219,9 @@ class Voucher extends Controller {
 			return;
 		}
 		/* Load current voucher details */
-		if ( ! $cur_voucher_ledgers = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY id ASC", array($voucher_id)))
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
+		$cur_voucher_ledgers = $this->db->get();
+		if ($cur_voucher_ledgers->num_rows() < 1)
 		{
 			$this->messages->add('Voucher has no associated ledger data.', 'error');
 		}
@@ -364,7 +368,8 @@ class Voucher extends Controller {
 					continue;
 
 				/* Check for valid ledger id */
-				$valid_ledger_q = $this->db->query("SELECT id, type FROM ledgers WHERE id = ?", array($data_all_ledger_id[$id]));
+				$this->db->from('ledgers')->where('id', $data_all_ledger_id[$id]);
+				$valid_ledger_q = $this->db->get();
 				if ($valid_ledger_q->num_rows() < 1)
 				{
 					$this->messages->add('Invalid Ledger A/C.', 'error');
@@ -461,7 +466,14 @@ class Voucher extends Controller {
 			$voucher_id = NULL;
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("INSERT INTO vouchers (number, date, narration, type, tag_id) VALUES (?, ?, ?, ?, ?)", array($data_number, $data_date, $data_narration, $data_type, $data_tag)))
+			$insert_data = array(
+				'number' => $data_number,
+				'date' => $data_date,
+				'narration' => $data_narration,
+				'type' => $data_type,
+				'tag_id' => $data_tag,
+			);
+			if ( ! $this->db->insert('vouchers', $insert_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Voucher.', 'error');
@@ -495,8 +507,13 @@ class Voucher extends Controller {
 					$data_amount = $data_all_cr_amount[$id];
 					$cr_total += $data_all_cr_amount[$id];
 				}
-
-				if ( ! $this->db->query("INSERT INTO voucher_items (voucher_id, ledger_id, amount, dc) VALUES (?, ?, ?, ?)", array($voucher_id, $data_ledger_id, $data_amount, $data_ledger_dc)))
+				$insert_ledger_data = array(
+					'voucher_id' => $voucher_id,
+					'ledger_id' => $data_ledger_id,
+					'amount' => $data_amount,
+					'dc' => $data_ledger_dc,
+				);
+				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error addding Ledger A/C ' . $data_ledger_id . '.', 'error');
@@ -507,7 +524,11 @@ class Voucher extends Controller {
 			}
 
 			/* Updating Debit and Credit Total in vouchers table */
-			if ( ! $this->db->query("UPDATE vouchers SET dr_total = ?, cr_total = ? WHERE id = ?", array($dr_total, $cr_total, $voucher_id)))
+			$update_data = array(
+				'dr_total' => $dr_total,
+				'cr_total' => $cr_total,
+			);
+			if ( ! $this->db->where('id', $voucher_id)->update('vouchers', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating voucher total.', 'error');
@@ -634,7 +655,8 @@ class Voucher extends Controller {
 		/* Load current ledger details if not $_POST */
 		if ( ! $_POST)
 		{
-			$cur_ledgers_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ?", array($voucher_id));
+			$this->db->from('voucher_items')->where('voucher_id', $voucher_id);
+			$cur_ledgers_q = $this->db->get();
 			if ($cur_ledgers_q->num_rows <= 0)
 			{
 				$this->messages->add('No Ledger A/C\'s found!', 'error');
@@ -719,7 +741,8 @@ class Voucher extends Controller {
 					continue;
 
 				/* Check for valid ledger id */
-				$valid_ledger_q = $this->db->query("SELECT id, type FROM ledgers WHERE id = ?", array($data_all_ledger_id[$id]));
+				$this->db->from('ledgers')->where('id', $data_all_ledger_id[$id]);
+				$valid_ledger_q = $this->db->get();
 				if ($valid_ledger_q->num_rows() < 1)
 				{
 					$this->messages->add('Invalid Ledger A/C.', 'error');
@@ -810,7 +833,13 @@ class Voucher extends Controller {
 			$data_date = date_php_to_mysql($data_date); // Converting date to MySQL
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE vouchers SET number = ?, date = ?, narration = ?, tag_id = ? WHERE id = ?", array($data_number, $data_date, $data_narration, $data_tag, $voucher_id)))
+			$update_data = array(
+				'number' => $data_number,
+				'date' => $data_date,
+				'narration' => $data_narration,
+				'tag_id' => $data_tag,
+			);
+			if ( ! $this->db->where('id', $voucher_id)->update('vouchers', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Voucher A/C.', 'error');
@@ -820,7 +849,7 @@ class Voucher extends Controller {
 			}
 
 			/* TODO : Deleting all old ledger data, Bad solution */
-			if ( ! $this->db->query("DELETE FROM voucher_items WHERE voucher_id = ?", array($voucher_id)))
+			if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting old Ledger A/C\'s', 'error');
@@ -853,7 +882,13 @@ class Voucher extends Controller {
 					$cr_total += $data_all_cr_amount[$id];
 				}
 
-				if ( ! $this->db->query("INSERT INTO voucher_items (voucher_id, ledger_id, amount, dc) VALUES (?, ?, ?, ?)", array($voucher_id, $data_ledger_id, $data_amount, $data_ledger_dc)))
+				$insert_ledger_data = array(
+					'voucher_id' => $voucher_id,
+					'ledger_id' => $data_ledger_id,
+					'amount' => $data_amount,
+					'dc' => $data_ledger_dc,
+				);
+				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error updating Ledger A/C ' . $data_ledger_id . '.', 'error');
@@ -864,7 +899,11 @@ class Voucher extends Controller {
 			}
 
 			/* Updating Debit and Credit Total in vouchers table */
-			if ( ! $this->db->query("UPDATE vouchers SET dr_total = ?, cr_total = ? WHERE id = ?", array($dr_total, $cr_total, $voucher_id)))
+			$update_data = array(
+				'dr_total' => $dr_total,
+				'cr_total' => $cr_total,
+			);
+			if ( ! $this->db->where('id', $voucher_id)->update('vouchers', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating voucher total.', 'error');
@@ -937,7 +976,7 @@ class Voucher extends Controller {
 		}
 
 		$this->db->trans_start();
-		if ( ! $this->db->query("DELETE FROM voucher_items WHERE voucher_id = ?", array($voucher_id)))
+		if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Voucher - Ledgers entry.', 'error');
@@ -945,7 +984,7 @@ class Voucher extends Controller {
 			redirect('voucher/' . $voucher_type . '/' . $voucher_id);
 			return;
 		}
-		if ( ! $this->db->query("DELETE FROM vouchers WHERE id = ?", array($voucher_id)))
+		if ( ! $this->db->delete('vouchers', array('id' => $voucher_id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Voucher entry.', 'error');
@@ -992,8 +1031,8 @@ class Voucher extends Controller {
 		$data['voucher_narration'] = $cur_voucher->narration;
 
 		/* Getting Ledger details */
-		$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
-
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->order_by('dc', 'desc');
+		$ledger_q = $this->db->get();
 		$counter = 0;
 		$data['ledger_data'] = array();
 		if ($ledger_q->num_rows() > 0)
@@ -1048,8 +1087,8 @@ class Voucher extends Controller {
 		$data['voucher_narration'] = $cur_voucher->narration;
 
 		/* Getting Ledger details */
-		$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
-
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->order_by('dc', 'desc');
+		$ledger_q = $this->db->get();
 		$counter = 0;
 		$data['ledger_data'] = array();
 		if ($ledger_q->num_rows() > 0)
@@ -1128,8 +1167,8 @@ class Voucher extends Controller {
 			$voucher_data['voucher_narration'] = $cur_voucher->narration;
 	
 			/* Getting Ledger details */
-			$ledger_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? ORDER BY dc DESC", $voucher_id);
-	
+			$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->order_by('dc', 'desc');
+			$ledger_q = $this->db->get();
 			$counter = 0;
 			$voucher_data['ledger_data'] = array();
 			if ($ledger_q->num_rows() > 0)
