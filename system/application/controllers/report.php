@@ -72,6 +72,19 @@ class Report extends Controller {
 		}
 		$data['print_preview'] = FALSE;
 		$data['ledger_id'] = $ledger_id;
+
+		/* Checking for valid ledger id */
+		if ($data['ledger_id'] > 0)
+		{
+			$this->db->from('ledgers')->where('id', $data['ledger_id'])->limit(1);
+			if ($this->db->get()->num_rows() < 1)
+			{
+				$this->messages->add('Invalid Ledger A/C.', 'error');
+				redirect('report/ledgerst');
+				return;
+			}
+		}
+
 		$this->template->load('template', 'report/ledgerst', $data);
 		return;
 	}
@@ -618,6 +631,14 @@ class Report extends Controller {
 			{
 				$this->messages->add('Invalid Ledger A/C.', 'error');
 				redirect('report/ledgerst');
+				return;
+			}
+			$this->db->from('ledgers')->where('id', $data['ledger_id'])->limit(1);
+			if ($this->db->get()->num_rows() < 1)
+			{
+				$this->messages->add('Invalid Ledger A/C.', 'error');
+				redirect('report/ledgerst');
+				return;
 			}
 			$data['report'] = "report/ledgerst";
 			$data['title'] = "Ledger Statement for '" . $this->Ledger_model->get_name($data['ledger_id']) . "'";
