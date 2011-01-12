@@ -1,0 +1,14 @@
+Webzash Version 1.0-beta2 2011-01-12
+------------------------------------
+
+    * Added user authentication
+    * Added role based permissions
+    * Added voucher auto numbering
+    * Added Account Locked
+    * Added Help
+    * Added Tooltips
+    * Added jQuery colorpicker plugin
+    * Added Status report
+    * Updated normal SQL queries with active record queries
+    * Updated status messages
+    * Removed support for draft vouchers
