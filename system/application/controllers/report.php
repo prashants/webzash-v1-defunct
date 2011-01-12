@@ -222,7 +222,9 @@ class Report extends Controller {
 				$cur_balance -= $opbalance;
 			$counter++;
 
-			$ledgerst_q = $this->db->query("SELECT vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc FROM vouchers join voucher_items on vouchers.id = voucher_items.voucher_id WHERE voucher_items.ledger_id = ? ORDER BY vouchers.date ASC, vouchers.number ASC", array($ledger_id));
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc');
+			$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+			$ledgerst_q = $this->db->get();
 			foreach ($ledgerst_q->result() as $row)
 			{
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
@@ -231,10 +233,10 @@ class Report extends Controller {
 				/* Opposite voucher name */
 				if ($row->ldc == "D")
 				{
-	
-					if ($opp_voucher_name_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? AND dc = ?",  array($row->vid, "C")))
+					$this->db->from('voucher_items')->where('voucher_id', $row->vid)->where('dc', 'C');
+					$opp_voucher_name_q = $this->db->get();
+					if ($opp_voucher_name_d = $opp_voucher_name_q->row())
 					{
-						$opp_voucher_name_d = $opp_voucher_name_q->row();
 						$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
 						if ($opp_voucher_name_q->num_rows() > 1)
 						{
@@ -244,9 +246,10 @@ class Report extends Controller {
 						}
 					}
 				} else {
-					if ($opp_voucher_name_q = $this->db->query("SELECT * FROM voucher_items WHERE voucher_id = ? AND dc = ?",  array($row->vid, "D")))
+					$this->db->from('voucher_items')->where('voucher_id', $row->vid)->where('dc', 'D');
+					$opp_voucher_name_q = $this->db->get();
+					if ($opp_voucher_name_d = $opp_voucher_name_q->row())
 					{
-						$opp_voucher_name_d = $opp_voucher_name_q->row();
 						$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
 						if ($opp_voucher_name_q->num_rows() > 1)
 						{
@@ -431,7 +434,8 @@ class Report extends Controller {
 
 			/* Gross P/L : Expenses */
 			$gross_expense_total = 0;
-			$gross_expense_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 4 AND affects_gross = 1");
+			$this->db->from('groups')->where('parent_id', 4)->where('affects_gross', 1);
+			$gross_expense_list_q = $this->db->get();
 			foreach ($gross_expense_list_q->result() as $row)
 			{
 				$gross_expense = new Accountlist();
@@ -444,7 +448,8 @@ class Report extends Controller {
 
 			/* Gross P/L : Incomes */
 			$gross_income_total = 0;
-			$gross_income_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 3 AND affects_gross = 1");
+			$this->db->from('groups')->where('parent_id', 3)->where('affects_gross', 1);
+			$gross_income_list_q = $this->db->get();
 			foreach ($gross_income_list_q->result() as $row)
 			{
 				$gross_income = new Accountlist();
@@ -493,8 +498,8 @@ class Report extends Controller {
 
 			/* Net P/L : Expenses */
 			$net_expense_total = 0;
-			$net_expense_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 4 AND affects_gross != 1");
-
+			$this->db->from('groups')->where('parent_id', 4)->where('affects_gross !=', 1);
+			$net_expense_list_q = $this->db->get();
 			foreach ($net_expense_list_q->result() as $row)
 			{
 				$net_expense = new Accountlist();
@@ -507,7 +512,8 @@ class Report extends Controller {
 
 			/* Net P/L : Incomes */
 			$net_income_total = 0;
-			$net_income_list_q = $this->db->query("SELECT * FROM groups WHERE parent_id = 3 AND affects_gross != 1");
+			$this->db->from('groups')->where('parent_id', 3)->where('affects_gross !=', 1);
+			$net_income_list_q = $this->db->get();
 			foreach ($net_income_list_q->result() as $row)
 			{
 				$net_income = new Accountlist();
