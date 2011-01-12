@@ -17,7 +17,8 @@ class Welcome extends Controller {
 		$this->template->set('add_javascript', array("js/raphael.js", "js/jquery.enumerable.js", "js/jquery.tufte-graph.js"));
 
 		/* Bank and Cash Ledger accounts */
-		$bank_q = $this->db->query("SELECT * FROM ledgers WHERE type = ?", array('B'));
+		$this->db->from('ledgers')->where('type', 'B');
+		$bank_q = $this->db->get();
 		if ($bank_q->num_rows() > 0)
 		{
 			foreach ($bank_q->result() as $row)
