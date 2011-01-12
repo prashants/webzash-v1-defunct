@@ -95,7 +95,8 @@ class Ledger extends Controller {
 			}
 
 			/* Check if parent group id present */
-			if ($this->db->query("SELECT id FROM groups WHERE id = ?", array($data_group_id))->num_rows() < 1)
+			$this->db->select('id')->from('groups')->where('id', $data_group_id);
+			if ($this->db->get()->num_rows() < 1)
 			{
 				$this->messages->add('Invalid Parent group.', 'error');
 				$this->template->load('template', 'ledger/add', $data);
@@ -108,7 +109,14 @@ class Ledger extends Controller {
 			}
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("INSERT INTO ledgers (name, group_id, op_balance, op_balance_dc, type) VALUES (?, ?, ?, ?, ?)", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_ledger_type_cashbank)))
+			$insert_data = array(
+				'name' => $data_name,
+				'group_id' => $data_group_id,
+				'op_balance' => $data_op_balance,
+				'op_balance_dc' => $data_op_balance_dc,
+				'type' => $data_ledger_type_cashbank,
+			);
+			if ( ! $this->db->insert('ledgers', $insert_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding ' . $data_name . ' - Ledger A/C.', 'error');
@@ -157,7 +165,8 @@ class Ledger extends Controller {
 		}
 
 		/* Loading current group */
-		$ledger_data_q = $this->db->query("SELECT * FROM ledgers WHERE id = ?", array($id));
+		$this->db->from('ledgers')->where('id', $id);
+		$ledger_data_q = $this->db->get();
 		if ($ledger_data_q->num_rows() < 1)
 		{
 			$this->messages->add('Invalid Ledger A/C.', 'error');
@@ -230,7 +239,8 @@ class Ledger extends Controller {
 			}
 
 			/* Check if parent group id present */
-			if ($this->db->query("SELECT id FROM groups WHERE id = ?", array($data_group_id))->num_rows() < 1)
+			$this->db->select('id')->from('groups')->where('id', $data_group_id);
+			if ($this->db->get()->num_rows() < 1)
 			{
 				$this->messages->add('Invalid Parent group.', 'error');
 				$this->template->load('template', 'ledger/edit', $data);
@@ -243,7 +253,14 @@ class Ledger extends Controller {
 			}
 
 			$this->db->trans_start();
-			if ( ! $this->db->query("UPDATE ledgers SET name = ?, group_id = ?, op_balance = ?, op_balance_dc = ?, type = ? WHERE id = ?", array($data_name, $data_group_id, $data_op_balance, $data_op_balance_dc, $data_ledger_type_cashbank, $data_id)))
+			$update_data = array(
+				'name' => $data_name,
+				'group_id' => $data_group_id,
+				'op_balance' => $data_op_balance,
+				'op_balance_dc' => $data_op_balance_dc,
+				'type' => $data_ledger_type_cashbank,
+			);
+			if ( ! $this->db->where('id', $data_id)->update('ledgers', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating ' . $data_name . ' - Ledger A/C.', 'error');
@@ -288,8 +305,8 @@ class Ledger extends Controller {
 			redirect('account');
 			return;
 		}
-		$data_present_q = $this->db->query("SELECT * FROM voucher_items WHERE ledger_id = ?", array($id));
-		if ($data_present_q->num_rows() > 0)
+		$this->db->from('voucher_items')->where('ledger_id', $id);
+		if ($this->db->get()->num_rows() > 0)
 		{
 			$this->messages->add('Cannot delete non-empty Ledger A/C.', 'error');
 			redirect('account');
@@ -297,7 +314,8 @@ class Ledger extends Controller {
 		}
 
 		/* Get the ledger details */
-		$ledger_q = $this->db->query("SELECT * FROM ledgers WHERE id = ?", array($id));
+		$this->db->from('ledgers')->where('id', $id);
+		$ledger_q = $this->db->get();
 		if ($ledger_q->num_rows() < 1)
 		{
 			$this->messages->add('Invalid Ledger A/C.', 'error');
@@ -309,7 +327,7 @@ class Ledger extends Controller {
 
 		/* Deleting ledger */
 		$this->db->trans_start();
-		if ( ! $this->db->query("DELETE FROM ledgers WHERE id = ?", array($id)))
+		if ( ! $this->db->delete('ledgers', array('id' => $id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting ' . $ledger_data->name . ' - Ledger A/C.', 'error');
