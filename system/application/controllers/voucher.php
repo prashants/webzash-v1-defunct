@@ -59,7 +59,7 @@ class Voucher extends Controller {
 			$data['voucher_type'] = "";
 			break;
 		default :
-			$this->messages->add('Invalid voucher type(1).', 'error');
+			$this->messages->add('Invalid Voucher type(1).', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -114,7 +114,7 @@ class Voucher extends Controller {
 
 		if (($voucher_type_int < 0) || ($voucher_type_int > 4))
 		{
-			$this->messages->add('Invalid voucher type(2).', 'error');
+			$this->messages->add('Invalid Voucher type(2).', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else if ($voucher_type == "tag") {
@@ -208,7 +208,7 @@ class Voucher extends Controller {
 			$this->template->set('page_title', 'View Journal Voucher');
 			break;
 		default :
-			$this->messages->add('Invalid voucher type(3).', 'error');
+			$this->messages->add('Invalid Voucher type(3).', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -226,7 +226,7 @@ class Voucher extends Controller {
 		$cur_voucher_ledgers = $this->db->get();
 		if ($cur_voucher_ledgers->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated ledger data.', 'error');
+			$this->messages->add('Voucher has no associated Ledger A/C\'s.', 'error');
 		}
 		$data['cur_voucher'] = $cur_voucher;
 		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
@@ -268,7 +268,7 @@ class Voucher extends Controller {
 			$this->template->set('page_title', 'New Journal Voucher');
 			break;
 		default :
-			$this->messages->add('Invalid voucher type(4).', 'error');
+			$this->messages->add('Invalid Voucher type(4).', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -425,7 +425,7 @@ class Voucher extends Controller {
 				$this->template->load('template', 'voucher/add', $data);
 				return;
 			} else if ($dr_total == 0 && $cr_total == 0) {
-				$this->messages->add('Cannot save empty voucher.', 'error');
+				$this->messages->add('Cannot save empty Voucher.', 'error');
 				$this->template->load('template', 'voucher/add', $data);
 				return;
 			}
@@ -434,7 +434,7 @@ class Voucher extends Controller {
 			{
 				if ( ! $bank_cash_present)
 				{
-					$this->messages->add('Need to Debit atleast one Bank or Cash A/C', 'error');
+					$this->messages->add('Need to Debit atleast one Bank or Cash A/C.', 'error');
 					$this->template->load('template', 'voucher/add', $data);
 					return;
 				}
@@ -442,7 +442,7 @@ class Voucher extends Controller {
 			{
 				if ( ! $bank_cash_present)
 				{
-					$this->messages->add('Need to Credit atleast one Bank or Cash A/C', 'error');
+					$this->messages->add('Need to Credit atleast one Bank or Cash A/C.', 'error');
 					$this->template->load('template', 'voucher/add', $data);
 					return;
 				}
@@ -519,7 +519,7 @@ class Voucher extends Controller {
 				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error addding Ledger A/C ' . $data_ledger_id . '.', 'error');
+					$this->messages->add('Error adding Ledger A/C - ' . $data_ledger_id . ' to Voucher.', 'error');
 					$this->logger->write_message("error", "Error adding " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " since failed inserting voucher ledger items " . "[id:" . $data_ledger_id . "]");
 					$this->template->load('template', 'voucher/add', $data);
 					return;
@@ -534,7 +534,7 @@ class Voucher extends Controller {
 			if ( ! $this->db->where('id', $voucher_id)->update('vouchers', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating voucher total.', 'error');
+				$this->messages->add('Error updating Voucher total.', 'error');
 				$this->logger->write_message("error", "Error adding " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " since failed updating debit and credit total");
 				$this->template->load('template', 'voucher/add', $data);
 				return;
@@ -611,7 +611,7 @@ class Voucher extends Controller {
 			$this->template->set('page_title', 'Edit Journal Voucher');
 			break;
 		default :
-			$this->messages->add('Invalid voucher type(5).', 'error');
+			$this->messages->add('Invalid Voucher type(5).', 'error');
 			redirect('voucher/show/all');
 			return;
 			break;
@@ -797,7 +797,7 @@ class Voucher extends Controller {
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			} else if ($dr_total == 0 && $cr_total == 0) {
-				$this->messages->add('Cannot save empty voucher.', 'error');
+				$this->messages->add('Cannot save empty Voucher.', 'error');
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			}
@@ -806,7 +806,7 @@ class Voucher extends Controller {
 			{
 				if ( ! $bank_cash_present)
 				{
-					$this->messages->add('Need to Debit atleast one Bank or Cash A/C', 'error');
+					$this->messages->add('Need to Debit atleast one Bank or Cash A/C.', 'error');
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				}
@@ -814,7 +814,7 @@ class Voucher extends Controller {
 			{
 				if ( ! $bank_cash_present)
 				{
-					$this->messages->add('Need to Credit atleast one Bank or Cash A/C', 'error');
+					$this->messages->add('Need to Credit atleast one Bank or Cash A/C.', 'error');
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				}
@@ -855,7 +855,7 @@ class Voucher extends Controller {
 			if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error deleting old Ledger A/C\'s', 'error');
+				$this->messages->add('Error deleting previous Ledger A/C\'s from Voucher.', 'error');
 				$this->logger->write_message("error", "Error updating old voucher items for " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
@@ -894,7 +894,7 @@ class Voucher extends Controller {
 				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error updating Ledger A/C ' . $data_ledger_id . '.', 'error');
+					$this->messages->add('Error adding Ledger A/C - ' . $data_ledger_id . ' to Voucher.', 'error');
 					$this->logger->write_message("error", "Error updating new voucher item [id:" . $data_ledger_id . "] for " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
@@ -909,7 +909,7 @@ class Voucher extends Controller {
 			if ( ! $this->db->where('id', $voucher_id)->update('vouchers', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating voucher total.', 'error');
+				$this->messages->add('Error updating Voucher total.', 'error');
 				$this->logger->write_message("error", "Error updating voucher total for " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
@@ -982,7 +982,7 @@ class Voucher extends Controller {
 		if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Voucher - Ledgers entry.', 'error');
+			$this->messages->add('Error deleting Voucher - Ledger A/C\'s.', 'error');
 			$this->logger->write_message("error", "Error deleting ledger entries for " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			redirect('voucher/' . $voucher_type . '/' . $voucher_id);
 			return;

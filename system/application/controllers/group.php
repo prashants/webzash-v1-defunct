@@ -101,13 +101,13 @@ class Group extends Controller {
 			if ( ! $this->db->insert('groups', $insert_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding ' . $data_name . ' - Group A/C.', 'error');
+				$this->messages->add('Error addding Group A/C - ' . $data_name . '.', 'error');
 				$this->logger->write_message("error", "Error adding Group A/C named " . $data_name);
 				$this->template->load('template', 'group/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Added ' . $data_name . ' - Group A/C.', 'success');
+				$this->messages->add('Added Group A/C - ' . $data_name . '.', 'success');
 				$this->logger->write_message("success", "Added Group A/C named " . $data_name);
 				redirect('account');
 				return;
@@ -237,13 +237,13 @@ class Group extends Controller {
 			if ( ! $this->db->where('id', $data_id)->update('groups', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating ' . $data_name . ' - Group A/C.', 'error');
+				$this->messages->add('Error updating Group A/C - ' . $data_name . '.', 'error');
 				$this->logger->write_message("error", "Error updating Group A/C named " . $data_name . " [id:" . $data_id . "]");
 				$this->template->load('template', 'group/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Updated ' . $data_name . ' - Group A/C.', 'success');
+				$this->messages->add('Updated Group A/C - ' . $data_name . '.', 'success');
 				$this->logger->write_message("success", "Updated Group A/C named " . $data_name . " [id:" . $data_id . "]");
 				redirect('account');
 				return;
@@ -315,13 +315,13 @@ class Group extends Controller {
 		if ( ! $this->db->delete('groups', array('id' => $id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting ' . $group_data->name . ' - Group A/C.', 'error');
+			$this->messages->add('Error deleting Group A/C - ' . $group_data->name . '.', 'error');
 			$this->logger->write_message("error", "Error deleting Group A/C named " . $group_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;
 		} else {
 			$this->db->trans_complete();
-			$this->messages->add('Deleted ' . $group_data->name . ' - Group A/C.', 'success');
+			$this->messages->add('Deleted Group A/C - ' . $group_data->name . '.', 'success');
 			$this->logger->write_message("success", "Deleted Group A/C named " . $group_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;

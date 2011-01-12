@@ -89,7 +89,7 @@ class Ledger extends Controller {
 
 			if ($data_group_id < 5)
 			{
-				$this->messages->add('Invalid parent group.', 'error');
+				$this->messages->add('Invalid Parent group.', 'error');
 				$this->template->load('template', 'ledger/add', $data);
 				return;
 			}
@@ -119,13 +119,13 @@ class Ledger extends Controller {
 			if ( ! $this->db->insert('ledgers', $insert_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding ' . $data_name . ' - Ledger A/C.', 'error');
+				$this->messages->add('Error addding Ledger A/C - ' . $data_name . '.', 'error');
 				$this->logger->write_message("error", "Error adding Ledger A/C named " . $data_name);
 				$this->template->load('template', 'group/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Added ' . $data_name . ' - Ledger A/C.', 'success');
+				$this->messages->add('Added Ledger A/C - ' . $data_name . '.', 'success');
 				$this->logger->write_message("success", "Added Ledger A/C named " . $data_name);
 				redirect('account');
 				return;
@@ -233,7 +233,7 @@ class Ledger extends Controller {
 
 			if ($data_group_id < 5)
 			{
-				$this->messages->add('Invalid parent group.', 'error');
+				$this->messages->add('Invalid Parent group.', 'error');
 				$this->template->load('template', 'ledger/edit', $data);
 				return;
 			}
@@ -263,13 +263,13 @@ class Ledger extends Controller {
 			if ( ! $this->db->where('id', $data_id)->update('ledgers', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating ' . $data_name . ' - Ledger A/C.', 'error');
+				$this->messages->add('Error updating Ledger A/C - ' . $data_name . '.', 'error');
 				$this->logger->write_message("error", "Error updating Ledger A/C named " . $data_name . " [id:" . $data_id . "]");
 				$this->template->load('template', 'ledger/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Updated ' . $data_name . ' - Ledger A/C.', 'success');
+				$this->messages->add('Updated Ledger A/C - ' . $data_name . '.', 'success');
 				$this->logger->write_message("success", "Updated Ledger A/C named " . $data_name . " [id:" . $data_id . "]");
 				redirect('account');
 				return;
@@ -330,13 +330,13 @@ class Ledger extends Controller {
 		if ( ! $this->db->delete('ledgers', array('id' => $id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting ' . $ledger_data->name . ' - Ledger A/C.', 'error');
+			$this->messages->add('Error deleting Ledger A/C - ' . $ledger_data->name . '.', 'error');
 			$this->logger->write_message("error", "Error deleting Ledger A/C named " . $ledger_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;
 		} else {
 			$this->db->trans_complete();
-			$this->messages->add('Deleted ' . $ledger_data->name . ' - Ledger A/C.', 'success');
+			$this->messages->add('Deleted Ledger A/C - ' . $ledger_data->name . '.', 'success');
 			$this->logger->write_message("success", "Deleted Ledger A/C named " . $ledger_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;

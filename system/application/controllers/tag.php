@@ -109,13 +109,13 @@ class Tag extends Controller {
 			if ( ! $this->db->insert('tags', $insert_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding ' . $data_tag_title . ' - Tag.', 'error');
+				$this->messages->add('Error addding Tag - ' . $data_tag_title . '.', 'error');
 				$this->logger->write_message("error", "Error adding tag named " . $data_tag_title);
 				$this->template->load('template', 'tag/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Added ' . $data_tag_title . ' - Tag.', 'success');
+				$this->messages->add('Added Tag - ' . $data_tag_title . '.', 'success');
 				$this->logger->write_message("success", "Added tag named " . $data_tag_title);
 				redirect('tag');
 				return;
@@ -238,13 +238,13 @@ class Tag extends Controller {
 			if ( ! $this->db->where('id', $id)->update('tags', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating ' . $data_tag_title . ' - Tag.', 'error');
+				$this->messages->add('Error updating Tag - ' . $data_tag_title . '.', 'error');
 				$this->logger->write_message("error", "Error updating tag named " . $data_tag_title . " [id:" . $id . "]");
 				$this->template->load('template', 'tag/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Updated ' . $data_tag_title . ' - Tag.', 'success');
+				$this->messages->add('Updated Tag - ' . $data_tag_title . '.', 'success');
 				$this->logger->write_message("success", "Updated tag named " . $data_tag_title . " [id:" . $id . "]");
 				redirect('tag');
 				return;

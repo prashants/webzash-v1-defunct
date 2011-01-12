@@ -262,7 +262,7 @@ class User extends Controller {
 			}
 			if ( ! isset($current_account['db_port']))
 			{
-				$this->messages->add('Port missing from account settings file. Default MySQL port is 3306.', 'error');
+				$this->messages->add('Port missing from account settings file.', 'error');
 				$this->template->load('user_template', 'user/account', $data);
 				return;
 			}
