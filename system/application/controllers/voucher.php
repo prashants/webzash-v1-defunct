@@ -118,13 +118,16 @@ class Voucher extends Controller {
 			redirect('voucher/show/all');
 			return;
 		} else if ($voucher_type == "tag") {
-			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE tag_id = ? ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}", array($tag_id));
-			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE tag_id = ?", array($tag_id))->num_rows();
+			$this->db->from('vouchers')->where('tag_id', $tag_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
+			$voucher_q = $this->db->get();
+			$config['total_rows'] = $this->db->from('vouchers')->where('tag_id', $tag_id)->get()->num_rows();
 		} else if ($voucher_type_int > 0) {
-			$voucher_q = $this->db->query("SELECT * FROM vouchers WHERE type = ? ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}", array($voucher_type_int));
-			$config['total_rows'] = $this->db->query("SELECT * FROM vouchers WHERE type = ?", array($voucher_type_int))->num_rows();
+			$this->db->from('vouchers')->where('type', $voucher_type_int)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
+			$voucher_q = $this->db->get();
+			$config['total_rows'] = $this->db->from('vouchers')->where('type', $voucher_type_int)->get()->num_rows();
 		} else {
-			$voucher_q = $this->db->query("SELECT * FROM vouchers ORDER BY date DESC, number DESC LIMIT ${page_count}, ${pagination_counter}");
+			$this->db->from('vouchers')->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
+			$voucher_q = $this->db->get();
 			$config['total_rows'] = $this->db->count_all('vouchers');
 		}
 
