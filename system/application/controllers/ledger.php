@@ -55,6 +55,7 @@ class Ledger extends Controller {
 		$data['ledger_group_active'] = 0;
 		$data['op_balance_dc'] = "D";
 		$data['ledger_type_cashbank'] = FALSE;
+		$data['reconciliation'] = FALSE;
 
 		/* Form validations */
 		$this->form_validation->set_rules('ledger_name', 'Ledger name', 'trim|required|min_length[2]|max_length[100]|unique[ledgers.name]');
@@ -70,6 +71,7 @@ class Ledger extends Controller {
 			$data['ledger_group_active'] = $this->input->post('ledger_group_id', TRUE);
 			$data['op_balance_dc'] = $this->input->post('op_balance_dc', TRUE);
 			$data['ledger_type_cashbank'] = $this->input->post('ledger_type_cashbank', TRUE);
+			$data['reconciliation'] = $this->input->post('reconciliation', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -85,7 +87,7 @@ class Ledger extends Controller {
 			$data_op_balance = $this->input->post('op_balance', TRUE);
 			$data_op_balance_dc = $this->input->post('op_balance_dc', TRUE);
 			$data_ledger_type_cashbank_value = $this->input->post('ledger_type_cashbank', TRUE);
-			$data_ledger_type_cashbank = "N";
+			$data_reconciliation = $this->input->post('reconciliation', TRUE);
 
 			if ($data_group_id < 5)
 			{
@@ -106,6 +108,15 @@ class Ledger extends Controller {
 			if ($data_ledger_type_cashbank_value == "1")
 			{
 				$data_ledger_type_cashbank = "B";
+			} else {
+				$data_ledger_type_cashbank = "N";
+			}
+
+			if ($data_reconciliation == "1")
+			{
+				$data_reconciliation = 1;
+			} else {
+				$data_reconciliation = 0;
 			}
 
 			$this->db->trans_start();
@@ -115,6 +126,7 @@ class Ledger extends Controller {
 				'op_balance' => $data_op_balance,
 				'op_balance_dc' => $data_op_balance_dc,
 				'type' => $data_ledger_type_cashbank,
+				'reconciliation' => $data_reconciliation,
 			);
 			if ( ! $this->db->insert('ledgers', $insert_data))
 			{
@@ -198,6 +210,7 @@ class Ledger extends Controller {
 			$data['ledger_type_cashbank'] = TRUE;
 		else
 			$data['ledger_type_cashbank'] = FALSE;
+		$data['reconciliation'] = $ledger_data->reconciliation;
 
 		/* Form validations */
 		$this->form_validation->set_rules('ledger_name', 'Ledger name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[ledgers.name.' . $id . ']');
@@ -213,6 +226,7 @@ class Ledger extends Controller {
 			$data['op_balance']['value'] = $this->input->post('op_balance', TRUE);
 			$data['op_balance_dc'] = $this->input->post('op_balance_dc', TRUE);
 			$data['ledger_type_cashbank'] = $this->input->post('ledger_type_cashbank', TRUE);
+			$data['reconciliation'] = $this->input->post('reconciliation', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -229,7 +243,7 @@ class Ledger extends Controller {
 			$data_op_balance_dc = $this->input->post('op_balance_dc', TRUE);
 			$data_id = $id;
 			$data_ledger_type_cashbank_value = $this->input->post('ledger_type_cashbank', TRUE);
-			$data_ledger_type_cashbank = "N";
+			$data_reconciliation = $this->input->post('reconciliation', TRUE);
 
 			if ($data_group_id < 5)
 			{
@@ -250,6 +264,15 @@ class Ledger extends Controller {
 			if ($data_ledger_type_cashbank_value == "1")
 			{
 				$data_ledger_type_cashbank = "B";
+			} else {
+				$data_ledger_type_cashbank = "N";
+			}
+
+			if ($data_reconciliation == "1")
+			{
+				$data_reconciliation = 1;
+			} else {
+				$data_reconciliation = 0;
 			}
 
 			$this->db->trans_start();
@@ -259,6 +282,7 @@ class Ledger extends Controller {
 				'op_balance' => $data_op_balance,
 				'op_balance_dc' => $data_op_balance_dc,
 				'type' => $data_ledger_type_cashbank,
+				'reconciliation' => $data_reconciliation,
 			);
 			if ( ! $this->db->where('id', $data_id)->update('ledgers', $update_data))
 			{

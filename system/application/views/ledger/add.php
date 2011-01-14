@@ -32,6 +32,13 @@
 	echo "</p>";
 
 	echo "<p>";
+	echo "<span id=\"tooltip-target-3\">";
+	echo form_checkbox('reconciliation', 1, $reconciliation) . " Reconciliation";
+	echo "</span>";
+	echo "<span id=\"tooltip-content-3\">If enabled account can be reconciled from Reports > Reconciliation</span>";
+	echo "</p>";
+
+	echo "<p>";
 	echo form_submit('submit', 'Create');
 	echo " ";
 	echo anchor('account', 'Back', 'Back to Chart of Accounts');
