@@ -120,4 +120,15 @@ class Ledger_model extends Model {
 		else
 			return 0;
 	}
+
+	/* Delete reconciliation entries for a Ledger A/C */
+	function delete_reconciliation($ledger_id)
+	{
+		$this->db->select('reconciliation.id as reconid');
+		$this->db->from('reconciliation')->join('voucher_items', 'reconciliation.voucher_item_id = voucher_items.id')->where('voucher_items.ledger_id', $ledger_id);
+		$reconciliation_id_q = $this->db->get();
+		foreach ($reconciliation_id_q->result() as $row)
+			$this->db->delete('reconciliation', array('id' => $row->reconid));
+		return;
+	}
 }

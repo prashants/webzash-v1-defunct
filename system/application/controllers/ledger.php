@@ -292,6 +292,11 @@ class Ledger extends Controller {
 				$this->template->load('template', 'ledger/edit', $data);
 				return;
 			} else {
+				/* Deleting reconciliation data if reconciliation disabled */
+				if (($ledger_data->reconciliation == 1) AND ($data_reconciliation == 0))
+				{
+					$this->Ledger_model->delete_reconciliation($data_id);
+				}
 				$this->db->trans_complete();
 				$this->messages->add('Updated Ledger A/C - ' . $data_name . '.', 'success');
 				$this->logger->write_message("success", "Updated Ledger A/C named " . $data_name . " [id:" . $data_id . "]");
@@ -359,6 +364,8 @@ class Ledger extends Controller {
 			redirect('account');
 			return;
 		} else {
+			/* Deleting reconciliation data if present */
+			$this->Ledger_model->delete_reconciliation($id);
 			$this->db->trans_complete();
 			$this->messages->add('Deleted Ledger A/C - ' . $ledger_data->name . '.', 'success');
 			$this->logger->write_message("success", "Deleted Ledger A/C named " . $ledger_data->name . " [id:" . $id . "]");
