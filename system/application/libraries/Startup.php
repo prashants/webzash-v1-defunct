@@ -114,13 +114,13 @@ class Startup
 			if ($CI->db->query("SHOW TABLES"))
 			{
 				/* Check for valid webzash database */
-				$table_names = array('settings', 'groups', 'ledgers', 'vouchers', 'voucher_items', 'tags', 'logs');
+				$table_names = array('groups', 'ledgers', 'vouchers', 'voucher_items', 'reconciliation', 'tags', 'logs', 'settings');
 				foreach ($table_names as $id => $tbname)
 				{
 					$valid_db_q = mysql_query('DESC ' . $tbname);
 					if ( ! $valid_db_q)
 					{
-						$CI->messages->add('Invalid account database.', 'error');
+						$CI->messages->add('Invalid account database. Table "' . $tbname . '" missing.', 'error');
 						redirect('admin');
 						return;
 					}

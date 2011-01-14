@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS ledgers (
   op_balance decimal(15,2) NOT NULL DEFAULT '0.00',
   op_balance_dc char(1) NOT NULL,
   type char(1) NOT NULL,
+  reconciliation int(1) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=1;
 
@@ -55,6 +56,13 @@ CREATE TABLE IF NOT EXISTS logs (
   user_agent varchar(100) NOT NULL,
   message_title varchar(255) NOT NULL,
   message_desc mediumtext NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS reconciliation (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  voucher_item_id int(11) NOT NULL,
+  bank_date datetime NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
