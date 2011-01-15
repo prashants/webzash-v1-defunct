@@ -1,10 +1,6 @@
 //--------------------------------- VERSION 2 ----------------------------------
-CREATE TABLE reconciliation (
-id INT(11) NOT NULL AUTO_INCREMENT,
-voucher_item_id INT(11) NOT NULL,
-bank_date DATETIME NOT NULL,
-PRIMARY KEY (id)
-) ENGINE = InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
+ALTER TABLE voucher_items ADD reconciliation_date DATETIME NULL;
 
 ALTER TABLE ledgers ADD reconciliation INT(1) NOT NULL;
 

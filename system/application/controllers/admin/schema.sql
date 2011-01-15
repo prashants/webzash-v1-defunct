@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS voucher_items (
   ledger_id int(11) NOT NULL,
   amount decimal(15,2) NOT NULL DEFAULT '0.00',
   dc char(1) NOT NULL,
+  reconciliation_date datetime NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
@@ -56,13 +57,6 @@ CREATE TABLE IF NOT EXISTS logs (
   user_agent varchar(100) NOT NULL,
   message_title varchar(255) NOT NULL,
   message_desc mediumtext NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-
-CREATE TABLE IF NOT EXISTS reconciliation (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  voucher_item_id int(11) NOT NULL,
-  bank_date datetime NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
