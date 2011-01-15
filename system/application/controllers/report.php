@@ -83,9 +83,75 @@ class Report extends Controller {
 				redirect('report/ledgerst');
 				return;
 			}
+		} else if ($data['ledger_id'] < 0) {
+			$this->messages->add('Invalid Ledger A/C.', 'error');
+			redirect('report/ledgerst');
+			return;
 		}
 
 		$this->template->load('template', 'report/ledgerst', $data);
+		return;
+	}
+
+	function reconciliation($reconciliation_type = '', $ledger_id = 0)
+	{
+		/* Pagination setup */
+		$this->load->library('pagination');
+
+		$this->template->set('page_title', 'Reconciliation');
+
+		/* Check if path is 'all' or 'pending' */
+		$data['show_all'] = FALSE;
+		$data['print_preview'] = FALSE;
+		$data['ledger_id'] = $ledger_id;
+		if ($reconciliation_type == 'all')
+		{
+			$data['reconciliation_type'] = 'all';
+			$data['show_all'] = TRUE;
+		} else if ($reconciliation_type == 'pending') {
+			$data['reconciliation_type'] = 'pending';
+			$data['show_all'] = FALSE;
+		} else {
+			$this->messages->add('Invalid path.', 'error');
+			redirect('report/reconciliation/pending');
+			return;
+		}
+
+		/* Checking for valid ledger id and reconciliation status */
+		if ($data['ledger_id'] > 0)
+		{
+			$this->db->from('ledgers')->where('id', $data['ledger_id'])->where('reconciliation', 1)->limit(1);
+			if ($this->db->get()->num_rows() < 1)
+			{
+				$this->messages->add('Invalid Ledger A/C or Reconciliation is not enabled for the Ledger A/C.', 'error');
+				redirect('report/reconciliation/' . $reconciliation_type);
+				return;
+			}
+		} else if ($data['ledger_id'] < 0) {
+			$this->messages->add('Invalid Ledger A/C.', 'error');
+			redirect('report/reconciliation/' . $reconciliation_type);
+			return;
+		}
+
+		if ($_POST)
+		{
+			if ($_POST['submit'] == 'Submit')
+			{
+				$ledger_id = $this->input->post('ledger_id', TRUE);
+				if ($this->input->post('show_all', TRUE))
+				{
+					redirect('report/reconciliation/all/' . $ledger_id);
+					return;
+				} else {
+					redirect('report/reconciliation/pending/' . $ledger_id);
+					return;
+				}
+			} else if ($_POST['submit'] == 'Update') {
+				$this->messages->add('Reconciliation updated.', 'success');
+			}
+		}
+
+		$this->template->load('template', 'report/reconciliation', $data);
 		return;
 	}
 
