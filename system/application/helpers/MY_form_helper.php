@@ -64,6 +64,8 @@ if ( ! function_exists('form_input_ledger'))
 			$options = $CI->Ledger_model->get_all_ledgers_bankcash();
 		else if ($type == 'nobankcash')
 			$options = $CI->Ledger_model->get_all_ledgers_nobankcash();
+		else if ($type == 'reconciliation')
+			$options = $CI->Ledger_model->get_all_ledgers_reconciliation();
 		else
 			$options = $CI->Ledger_model->get_all_ledgers();
 

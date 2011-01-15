@@ -46,6 +46,19 @@ class Ledger_model extends Model {
 		return $options;
 	}
 
+	function get_all_ledgers_reconciliation()
+	{
+		$options = array();
+		$options[0] = "(Please Select)";
+		$this->db->from('ledgers')->where('reconciliation', 1)->order_by('name', 'asc');
+		$ledger_q = $this->db->get();
+		foreach ($ledger_q->result() as $row)
+		{
+			$options[$row->id] = $row->name;
+		}
+		return $options;
+	}
+
 	function get_name($ledger_id)
 	{
 		$this->db->from('ledgers')->where('id', $ledger_id)->limit(1);
@@ -124,11 +137,10 @@ class Ledger_model extends Model {
 	/* Delete reconciliation entries for a Ledger A/C */
 	function delete_reconciliation($ledger_id)
 	{
-		$this->db->select('reconciliation.id as reconid');
-		$this->db->from('reconciliation')->join('voucher_items', 'reconciliation.voucher_item_id = voucher_items.id')->where('voucher_items.ledger_id', $ledger_id);
-		$reconciliation_id_q = $this->db->get();
-		foreach ($reconciliation_id_q->result() as $row)
-			$this->db->delete('reconciliation', array('id' => $row->reconid));
+		$update_data = array(
+			'reconciliation_date' => NULL,
+		);
+		$this->db->where('ledger_id', $ledger_id)->update('voucher_items', $update_data);
 		return;
 	}
 }
