@@ -80,6 +80,14 @@ if ( ! function_exists('date_mysql_to_php'))
 	}
 }
 
+if ( ! function_exists('date_mysql_to_timestamp'))
+{
+	function date_mysql_to_timestamp($dt)
+	{
+		return strtotime($dt);
+	}
+}
+
 if ( ! function_exists('date_mysql_to_php_display'))
 {
 	function date_mysql_to_php_display($dt)

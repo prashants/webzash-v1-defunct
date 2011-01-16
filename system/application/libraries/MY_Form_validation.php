@@ -21,7 +21,7 @@ class MY_Form_validation extends CI_Form_validation {
 		$CI =& get_instance();
 		list ($table, $column) = explode('.', $field, 2);
 
-		$CI->form_validation->set_message('unique', 'The %s that you requested is already in use');
+		$CI->form_validation->set_message('unique', 'The %s that you requested is already in use.');
 
 		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM $table WHERE $column = '$str'");
 		$row = $query->row();
@@ -32,7 +32,7 @@ class MY_Form_validation extends CI_Form_validation {
 	{
 		$CI =& get_instance();
 
-		$CI->form_validation->set_message('uniquevoucherno', 'The %s that you requested is already in use');
+		$CI->form_validation->set_message('uniquevoucherno', 'The %s that you requested is already in use.');
 
 		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM vouchers WHERE number = ? AND type = ?", array((int)$str, (int)$type));
 		$row = $query->row();
@@ -44,7 +44,7 @@ class MY_Form_validation extends CI_Form_validation {
 		$CI =& get_instance();
 
 		list ($type, $id) = explode('.', $field, 2);
-		$CI->form_validation->set_message('uniquevouchernowithid', 'The %s that you requested is already in use');
+		$CI->form_validation->set_message('uniquevouchernowithid', 'The %s that you requested is already in use.');
 
 		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM vouchers WHERE number = ? AND type = ? AND id != ?", array((int)$str, (int)$type, $id));
 		$row = $query->row();
@@ -56,7 +56,7 @@ class MY_Form_validation extends CI_Form_validation {
 		$CI =& get_instance();
 		list($table, $column, $id) = explode('.', $field, 3);
 
-		$CI->form_validation->set_message('uniquewithid', 'The %s that you requested is already in use');
+		$CI->form_validation->set_message('uniquewithid', 'The %s that you requested is already in use.');
 
 		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM $table WHERE $column = '$str' AND id != ?", array($id));
 		$row = $query->row();
@@ -67,7 +67,7 @@ class MY_Form_validation extends CI_Form_validation {
 	{
 		$CI =& get_instance();
 
-		$CI->form_validation->set_message('is_dc', '%s can only be "Dr" or "Cr"');
+		$CI->form_validation->set_message('is_dc', '%s can only be "Dr" or "Cr".');
 		return ($str == "D" || $str == "C") ? TRUE : FALSE;
 	}
 
@@ -76,7 +76,7 @@ class MY_Form_validation extends CI_Form_validation {
 		$CI =& get_instance();
 		if (preg_match('/^[\-]/', $str))
 		{
-			$CI->form_validation->set_message('currency', '%s cannot be negative');
+			$CI->form_validation->set_message('currency', '%s cannot be negative.');
 			return FALSE;
 		}
 
@@ -84,7 +84,7 @@ class MY_Form_validation extends CI_Form_validation {
 		{
 			return TRUE;
 		} else {
-			$CI->form_validation->set_message('currency', '%s must be a valid amount. Maximum 2 decimal places is allowed');
+			$CI->form_validation->set_message('currency', '%s must be a valid amount. Maximum 2 decimal places is allowed.');
 			return FALSE;
 		}
 	}
@@ -93,7 +93,7 @@ class MY_Form_validation extends CI_Form_validation {
 	{
 		$CI =& get_instance();
 
-		$CI->form_validation->set_message('is_date', 'The %s is a invalid date');
+		$CI->form_validation->set_message('is_date', 'The %s is a invalid date.');
 
 		$current_date_format = $CI->config->item('account_date_format');
 		list($d, $m, $y) = array(0, 0, 0);
@@ -124,11 +124,33 @@ class MY_Form_validation extends CI_Form_validation {
 
 		if ($cur_date < $start_date)
 		{
-			$CI->form_validation->set_message('is_date_within_range', 'The %s is less than start of current financial year');
+			$CI->form_validation->set_message('is_date_within_range', 'The %s is less than start of current financial year.');
 			return FALSE;
 		} else if ($cur_date > $end_date)
 		{
-			$CI->form_validation->set_message('is_date_within_range', 'The %s is more than end of current financial year');
+			$CI->form_validation->set_message('is_date_within_range', 'The %s is more than end of current financial year.');
+			return FALSE;
+		} else {
+			return TRUE;
+		}
+	}
+
+	function is_date_within_range_reconcil($str)
+	{
+		$CI =& get_instance();
+		$cur_date = date_php_to_mysql($str);
+		$start_date = $CI->config->item('account_fy_start');
+		$end_date_orig = $CI->config->item('account_fy_end');
+		$end_date_ts = date_mysql_to_timestamp($end_date_orig);
+		$end_date = date("Y-m-d H:i:s", $end_date_ts + (30 * 24 * 60 * 60)); /* Adding one extra month for reconciliation */
+
+		if ($cur_date < $start_date)
+		{
+			$CI->form_validation->set_message('is_date_within_range_reconcil', 'The %s is less than start of current financial year.');
+			return FALSE;
+		} else if ($cur_date > $end_date)
+		{
+			$CI->form_validation->set_message('is_date_within_range_reconcil', 'The %s is more than end of current financial year plus one month.');
 			return FALSE;
 		} else {
 			return TRUE;
@@ -139,7 +161,7 @@ class MY_Form_validation extends CI_Form_validation {
 	{
 		$CI =& get_instance();
 
-		$CI->form_validation->set_message('is_hex', 'The %s is a invalid value');
+		$CI->form_validation->set_message('is_hex', 'The %s is a invalid value.');
 
 		if (preg_match('/^[0-9A-Fa-f]*$/', $str))
 			return TRUE;
