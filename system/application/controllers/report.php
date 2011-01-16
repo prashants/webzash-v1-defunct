@@ -108,9 +108,13 @@ class Report extends Controller {
 		{
 			$data['reconciliation_type'] = 'all';
 			$data['show_all'] = TRUE;
+			if ($ledger_id > 0)
+				$this->template->set('nav_links', array('report/printpreview/reconciliation/' . $ledger_id . '/all' => 'Print Preview'));
 		} else if ($reconciliation_type == 'pending') {
 			$data['reconciliation_type'] = 'pending';
 			$data['show_all'] = FALSE;
+			if ($ledger_id > 0)
+				$this->template->set('nav_links', array('report/printpreview/reconciliation/' . $ledger_id . '/pending'  => 'Print Preview'));
 		} else {
 			$this->messages->add('Invalid path.', 'error');
 			redirect('report/reconciliation/pending');
@@ -752,6 +756,48 @@ class Report extends Controller {
 			}
 			$data['report'] = "report/ledgerst";
 			$data['title'] = "Ledger Statement for '" . $this->Ledger_model->get_name($data['ledger_id']) . "'";
+			$data['print_preview'] = TRUE;
+			$this->load->view('report/report_template', $data);
+			return;
+		}
+
+		if ($statement == "reconciliation")
+		{
+			$data['show_all'] = FALSE;
+			$data['ledger_id'] = $this->uri->segment(4);
+
+			/* Check if path is 'all' or 'pending' */
+			if ($this->uri->segment(5) == 'all')
+			{
+				$data['reconciliation_type'] = 'all';
+				$data['show_all'] = TRUE;
+			} else if ($this->uri->segment(5) == 'pending') {
+				$data['reconciliation_type'] = 'pending';
+				$data['show_all'] = FALSE;
+			} else {
+				$this->messages->add('Invalid path.', 'error');
+				redirect('report/reconciliation/pending');
+				return;
+			}
+
+			/* Checking for valid ledger id and reconciliation status */
+			if ($data['ledger_id'] > 0)
+			{
+				$this->db->from('ledgers')->where('id', $data['ledger_id'])->where('reconciliation', 1)->limit(1);
+				if ($this->db->get()->num_rows() < 1)
+				{
+					$this->messages->add('Invalid Ledger A/C or Reconciliation is not enabled for the Ledger A/C.', 'error');
+					redirect('report/reconciliation/' . $reconciliation_type);
+					return;
+				}
+			} else if ($data['ledger_id'] < 0) {
+				$this->messages->add('Invalid Ledger A/C.', 'error');
+				redirect('report/reconciliation/' . $reconciliation_type);
+				return;
+			}
+
+			$data['report'] = "report/reconciliation";
+			$data['title'] = "Reconciliation Statement for '" . $this->Ledger_model->get_name($data['ledger_id']) . "'";
 			$data['print_preview'] = TRUE;
 			$this->load->view('report/report_template', $data);
 			return;

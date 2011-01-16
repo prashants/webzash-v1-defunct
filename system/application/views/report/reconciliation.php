@@ -91,7 +91,8 @@
 		echo "</table>";
 
 		echo "<br />";
-		if ( ! $print_preview) {
+		if ( ! $print_preview)
+		{
 			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.id as lid, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($pagination_counter, $page_count);
@@ -101,11 +102,17 @@
 		} else {
 			$page_count = 0;
 			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.id as lid, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
-			$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+			if ($reconciliation_type == 'all')
+				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+			else
+				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.reconciliation_date', NULL)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			$ledgerst_q = $this->db->get();
 		}
 
-		echo form_open('report/reconciliation/' . $reconciliation_type . '/' . $ledger_id . "/" . $page_count);
+		if ( ! $print_preview)
+		{
+			echo form_open('report/reconciliation/' . $reconciliation_type . '/' . $ledger_id . "/" . $page_count);
+		}
 		echo "<table border=0 cellpadding=5 class=\"simple-table reconciliation-table\">";
 
 		echo "<thead><tr><th>Date</th><th>No.</th><th>Ledger Name</th><th>Type</th><th>Dr Amount</th><th>Cr Amount</th><th>Reconciliation Date</th></tr></thead>";
@@ -176,27 +183,39 @@
 				echo $row->lamount;
 				echo "</td>";
 			}
+
 			echo "<td>";
-			$reconciliation_date = array(
-				'name' => 'reconciliation_date[' . $row->lid . ']',
-				'id' => 'reconciliation_date',
-				'maxlength' => '11',
-				'size' => '11',
-				'value' => '',
-			);
-			if ($row->lreconciliation)
-				$reconciliation_date['value'] = date_mysql_to_php($row->lreconciliation);
-			echo form_input_date_restrict($reconciliation_date);
+			if ( ! $print_preview)
+			{
+				$reconciliation_date = array(
+					'name' => 'reconciliation_date[' . $row->lid . ']',
+					'id' => 'reconciliation_date',
+					'maxlength' => '11',
+					'size' => '11',
+					'value' => '',
+				);
+				if ($row->lreconciliation)
+					$reconciliation_date['value'] = date_mysql_to_php($row->lreconciliation);
+				echo form_input_date_restrict($reconciliation_date);
+			} else {
+				if ($row->lreconciliation)
+					echo date_mysql_to_php($row->lreconciliation);
+				else
+					echo "-";
+			}
 			echo "</td>";
 			echo "</tr>";
 			$odd_even = ($odd_even == "odd") ? "even" : "odd";
 		}
 
 		echo "</table>";
-		echo "<p>";
-		echo form_submit('submit', 'Update');
-		echo "</p>";
-		echo form_close();
+		if ( ! $print_preview)
+		{
+			echo "<p>";
+			echo form_submit('submit', 'Update');
+			echo "</p>";
+			echo form_close();
+		}
 	}
 ?>
 <?php if ( ! $print_preview) { ?>
