@@ -203,6 +203,26 @@ tr.total-area {
 	padding: 8px 8px 8px 8px;
 }
 
+.reconciliation-table .tr-reconciled {
+	background-color:#FFFFE6;
+}
+
+.reconciliation-summary {
+	font-size:14px;
+	border-collapse: collapse;
+	text-align: left;
+	border: 1px solid #BBBBBB;
+	background-color:#FFFFCC;
+}
+
+.reconciliation-summary tr {
+	border: 1px solid #BBBBBB;
+}
+
+.reconciliation-summary td {
+	padding: 8px 8px 8px 8px;
+}
+
 .manage-account-table td {
 	padding-right: 20px;
 }

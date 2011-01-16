@@ -57,18 +57,42 @@
 		list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id); /* Opening Balance */
 		$clbalance = $this->Ledger_model->get_ledger_balance($ledger_id); /* Final Closing Balance */
 
-		/* Ledger Summary */
-		echo "<table class=\"ledger-summary\">";
+		/* Reconciliation Balance - Dr */
+		$this->db->select_sum('amount', 'drtotal')->from('voucher_items')->join('vouchers', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.dc', 'D')->where('voucher_items.reconciliation_date IS NOT NULL');
+		$dr_total_q = $this->db->get();
+		if ($dr_total = $dr_total_q->row())
+			$reconciliation_dr_total = $dr_total->drtotal;
+		else
+			$reconciliation_dr_total = 0;
+
+		/* Reconciliation Balance - Cr */
+		$this->db->select_sum('amount', 'crtotal')->from('voucher_items')->join('vouchers', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.dc', 'C')->where('voucher_items.reconciliation_date IS NOT NULL');
+		$cr_total_q = $this->db->get();
+		if ($cr_total = $cr_total_q->row())
+			$reconciliation_cr_total = $cr_total->crtotal;
+		else
+			$reconciliation_cr_total = 0;
+
+		$reconciliation_balance = $reconciliation_dr_total - $reconciliation_cr_total;
+		$reconciliation_balance_pending = $clbalance - $reconciliation_balance;
+
+		/* Ledger and Reconciliation Summary */
+		echo "<table class=\"reconciliation-summary\">";
 		echo "<tr>";
 		echo "<td><b>Opening Balance</b></td><td>" . convert_opening($opbalance, $optype) . "</td>";
+		echo "<td width=\"20px\"></td>";
+		echo "<td><b>Reconciliation Balance</b></td><td>" . convert_amount_dc($reconciliation_balance) . "</td>";
 		echo "</tr>";
 		echo "<tr>";
 		echo "<td><b>Closing Balance</b></td><td>" . convert_amount_dc($clbalance) . "</td>";
+		echo "<td width=\"20px\"></td>";
+		echo "<td><b>Pending Reconciliation Balance</b></td><td>" . convert_amount_dc($reconciliation_balance_pending) . "</td>";
 		echo "</tr>";
 		echo "</table>";
+
 		echo "<br />";
 		if ( ! $print_preview) {
-			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.id as lid, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($pagination_counter, $page_count);
 			else
@@ -76,13 +100,13 @@
 			$ledgerst_q = $this->db->get();
 		} else {
 			$page_count = 0;
-			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.id as lid, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
 			$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			$ledgerst_q = $this->db->get();
 		}
 
-		echo form_open('report/reconciliation/' . $ledger_id);
-		echo "<table border=0 cellpadding=5 class=\"simple-table ledgerst-table\">";
+		echo form_open('report/reconciliation/' . $reconciliation_type . '/' . $ledger_id . "/" . $page_count);
+		echo "<table border=0 cellpadding=5 class=\"simple-table reconciliation-table\">";
 
 		echo "<thead><tr><th>Date</th><th>No.</th><th>Ledger Name</th><th>Type</th><th>Dr Amount</th><th>Cr Amount</th><th>Reconciliation Date</th></tr></thead>";
 		$odd_even = "odd";
@@ -91,7 +115,7 @@
 		{
 			echo "<tr class=\"tr-" . $odd_even;
 			if ($row->lreconciliation)
-				echo " tr-group";
+				echo " tr-reconciled";
 			echo "\">";
 			echo "<td>";
 			echo date_mysql_to_php_display($row->vdate);
@@ -154,7 +178,7 @@
 			}
 			echo "<td>";
 			$reconciliation_date = array(
-				'name' => 'reconciliation_date[' . $row->vid . ']',
+				'name' => 'reconciliation_date[' . $row->lid . ']',
 				'id' => 'reconciliation_date',
 				'maxlength' => '11',
 				'size' => '11',

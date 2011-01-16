@@ -135,6 +135,7 @@ class Report extends Controller {
 
 		if ($_POST)
 		{
+			/* Check if Ledger A/C is changed or reconciliation is updated */
 			if ($_POST['submit'] == 'Submit')
 			{
 				$ledger_id = $this->input->post('ledger_id', TRUE);
@@ -147,10 +148,53 @@ class Report extends Controller {
 					return;
 				}
 			} else if ($_POST['submit'] == 'Update') {
-				$this->messages->add('Reconciliation updated.', 'success');
+
+				$data_reconciliation_date = $this->input->post('reconciliation_date', TRUE);
+
+				/* Form validations */
+				foreach ($data_reconciliation_date as $id => $row)
+				{
+					/* If reconciliation date is present then check for valid date else only trim */
+					if ($row)
+						$this->form_validation->set_rules('reconciliation_date[' . $id . ']', 'Reconciliation date', 'trim|required|is_date|is_date_within_range_reconcil');
+					else
+						$this->form_validation->set_rules('reconciliation_date[' . $id . ']', 'Reconciliation date', 'trim');
+				}
+
+				if ($this->form_validation->run() == FALSE)
+				{
+					$this->messages->add(validation_errors(), 'error');
+					$this->template->load('template', 'report/reconciliation', $data);
+					return;
+				} else {
+					/* Updating reconciliation date */
+					foreach ($data_reconciliation_date as $id => $row)
+					{
+						$this->db->trans_start();
+						if ($row)
+						{
+							$update_data = array(
+								'reconciliation_date' => date_php_to_mysql($row),
+							);
+						} else {
+							$update_data = array(
+								'reconciliation_date' => NULL,
+							);
+						}
+						if ( ! $this->db->where('id', $id)->update('voucher_items', $update_data))
+						{
+							$this->db->trans_rollback();
+							$this->messages->add('Error updating reconciliation.', 'error');
+							$this->logger->write_message("error", "Error updating reconciliation for voucher item [id:" . $id . "]");
+						} else {
+							$this->db->trans_complete();
+						}
+					}
+					$this->messages->add('Updated reconciliation.', 'success');
+					$this->logger->write_message("success", 'Updated reconciliation.');
+				}
 			}
 		}
-
 		$this->template->load('template', 'report/reconciliation', $data);
 		return;
 	}
