@@ -73,20 +73,20 @@
 		else
 			$reconciliation_cr_total = 0;
 
-		$reconciliation_balance = $reconciliation_dr_total - $reconciliation_cr_total;
-		$reconciliation_balance_pending = $clbalance - $reconciliation_balance;
+		$reconciliation_total = $reconciliation_dr_total - $reconciliation_cr_total;
+		$reconciliation_pending = $clbalance - $reconciliation_total;
 
 		/* Ledger and Reconciliation Summary */
 		echo "<table class=\"reconciliation-summary\">";
 		echo "<tr>";
 		echo "<td><b>Opening Balance</b></td><td>" . convert_opening($opbalance, $optype) . "</td>";
 		echo "<td width=\"20px\"></td>";
-		echo "<td><b>Reconciliation Balance</b></td><td>" . convert_amount_dc($reconciliation_balance) . "</td>";
+		echo "<td><b>Reconciliation Pending</b></td><td>" . convert_amount_dc($reconciliation_pending) . "</td>";
 		echo "</tr>";
 		echo "<tr>";
 		echo "<td><b>Closing Balance</b></td><td>" . convert_amount_dc($clbalance) . "</td>";
 		echo "<td width=\"20px\"></td>";
-		echo "<td><b>Pending Reconciliation Balance</b></td><td>" . convert_amount_dc($reconciliation_balance_pending) . "</td>";
+		echo "<td><b>Reconciliation Total</b></td><td>" . convert_amount_dc($reconciliation_total) . "</td>";
 		echo "</tr>";
 		echo "</table>";
 
