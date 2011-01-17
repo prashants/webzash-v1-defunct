@@ -156,6 +156,7 @@ class Startup
 		$CI->config->set_item('account_payment_prefix', $account_d->payment_voucher_prefix);
 		$CI->config->set_item('account_contra_prefix', $account_d->contra_voucher_prefix);
 		$CI->config->set_item('account_journal_prefix', $account_d->journal_voucher_prefix);
+		$CI->config->set_item('account_database_version', $account_d->database_version);
 
 		/************** Load general application settings *************/
 		$setting_ini_file = $CI->config->item('config_path') . "settings/general.ini";

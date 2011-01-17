@@ -21,3 +21,7 @@
 	echo anchor('user/account', 'Change', array('title' => 'Change Account', 'class' => 'anchor-link-a'));
 	echo ")";
 	echo "</p>";
+
+	echo "<p>";
+	echo "Application version is: " . "<strong>" .  $this->config->item('application_version') . "</strong>";
+	echo "</p>";

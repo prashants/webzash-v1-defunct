@@ -368,5 +368,15 @@ $config['config_path'] = 'config/';
 */
 $config['backup_path'] = 'backups/';
 
+/*
+|--------------------------------------------------------------------------
+| Custom : Application Version
+|--------------------------------------------------------------------------
+|
+| Sets the current application version
+|
+*/
+$config['application_version'] = '1.0-beta3';
+
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */
