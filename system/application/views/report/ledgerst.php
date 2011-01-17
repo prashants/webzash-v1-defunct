@@ -126,35 +126,7 @@
 
 			/* Getting opposite Ledger name */
 			echo "<td>";
-			if ($row->ldc == "D")
-			{
-				$this->db->from('voucher_items')->where('voucher_id', $row->vid)->where('dc', 'C');
-				$opp_voucher_name_q = $this->db->get();
-				if ($opp_voucher_name_d = $opp_voucher_name_q->row())
-				{
-					$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
-					if ($opp_voucher_name_q->num_rows() > 1)
-					{
-						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
-					} else {
-						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
-					}
-				}
-			} else {
-				$this->db->from('voucher_items')->where('voucher_id', $row->vid)->where('dc', 'D');
-				$opp_voucher_name_q = $this->db->get();
-				if ($opp_voucher_name_d = $opp_voucher_name_q->row())
-				{
-					$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
-					if ($opp_voucher_name_q->num_rows() > 1)
-					{
-						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
-					} else {
-						echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
-					}
-				}
-
-			}
+			echo $this->Ledger_model->get_opp_ledger_name($row->vid, $row->vtype, $row->ldc, 'html');
 			echo "</td>";
 
 			echo "<td>";

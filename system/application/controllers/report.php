@@ -358,35 +358,7 @@ class Report extends Controller {
 				$ledgerst[$counter][1] = voucher_number_prefix(n_to_v($row->vtype)) . $row->vnumber;
 
 				/* Opposite voucher name */
-				if ($row->ldc == "D")
-				{
-					$this->db->from('voucher_items')->where('voucher_id', $row->vid)->where('dc', 'C');
-					$opp_voucher_name_q = $this->db->get();
-					if ($opp_voucher_name_d = $opp_voucher_name_q->row())
-					{
-						$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
-						if ($opp_voucher_name_q->num_rows() > 1)
-						{
-							$ledgerst[$counter][2] = "(" . $opp_ledger_name . ")";
-						} else {
-							$ledgerst[$counter][2] = $opp_ledger_name;
-						}
-					}
-				} else {
-					$this->db->from('voucher_items')->where('voucher_id', $row->vid)->where('dc', 'D');
-					$opp_voucher_name_q = $this->db->get();
-					if ($opp_voucher_name_d = $opp_voucher_name_q->row())
-					{
-						$opp_ledger_name = $this->Ledger_model->get_name($opp_voucher_name_d->ledger_id);
-						if ($opp_voucher_name_q->num_rows() > 1)
-						{
-							$ledgerst[$counter][2] = "(" . $opp_ledger_name . ")";
-						} else {
-							$ledgerst[$counter][2] = $opp_ledger_name;
-						}
-					}
-	
-				}
+				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $row->vtype, $row->ldc, 'text');
 
 				$ledgerst[$counter][3] = ucfirst(n_to_v($row->vtype));
 
