@@ -158,11 +158,7 @@ class Voucher extends Controller {
 
 			$html .= "<td>";
 			$html .= $this->Tag_model->show_voucher_tag($row->tag_id);
-			if ($ledger)
-				if ($ledger_multiple)
-					$html .= anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, "(" . $ledger->name . ")", array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'anchor-link-a'));
-				else
-					$html .= anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, $ledger->name, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'anchor-link-a'));
+			$html .= $this->Ledger_model->get_voucher_name($row->id, $row->type);
 			$html .= "</td>";
 
 			$html .= "<td>" . ucfirst($html_voucher_type) . "</td>";
