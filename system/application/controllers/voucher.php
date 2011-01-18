@@ -59,7 +59,7 @@ class Voucher extends Controller {
 			$data['voucher_type'] = "";
 			break;
 		default :
-			$this->messages->add('Invalid Voucher type(1).', 'error');
+			/* TODO $this->messages->add('Invalid Voucher type(1).', 'error'); */
 			redirect('voucher/show/all');
 			return;
 			break;
