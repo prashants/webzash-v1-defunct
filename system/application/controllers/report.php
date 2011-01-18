@@ -109,12 +109,12 @@ class Report extends Controller {
 			$data['reconciliation_type'] = 'all';
 			$data['show_all'] = TRUE;
 			if ($ledger_id > 0)
-				$this->template->set('nav_links', array('report/printpreview/reconciliation/' . $ledger_id . '/all' => 'Print Preview'));
+				$this->template->set('nav_links', array('report/download/reconciliation/' . $ledger_id . '/all'  => 'Download CSV', 'report/printpreview/reconciliation/' . $ledger_id . '/all' => 'Print Preview'));
 		} else if ($reconciliation_type == 'pending') {
 			$data['reconciliation_type'] = 'pending';
 			$data['show_all'] = FALSE;
 			if ($ledger_id > 0)
-				$this->template->set('nav_links', array('report/printpreview/reconciliation/' . $ledger_id . '/pending'  => 'Print Preview'));
+				$this->template->set('nav_links', array('report/download/reconciliation/' . $ledger_id . '/pending'  => 'Download CSV', 'report/printpreview/reconciliation/' . $ledger_id . '/pending'  => 'Print Preview'));
 		} else {
 			$this->messages->add('Invalid path.', 'error');
 			redirect('report/reconciliation/pending');
@@ -428,6 +428,139 @@ class Report extends Controller {
 
 			$this->load->helper('csv');
 			echo array_to_csv($ledgerst, "ledgerst.csv");
+			return;
+		}
+
+		/********************** RECONCILIATION ************************/
+		if ($statement == "reconciliation")
+		{
+			$ledger_id = (int)$this->uri->segment(4);
+			$reconciliation_type = $this->uri->segment(5);
+
+			if ($ledger_id < 1)
+				return;
+			if ( ! (($reconciliation_type == 'all') or ($reconciliation_type == 'pending')))
+				return;
+
+			$this->load->model('Ledger_model');
+			$cur_balance = 0;
+			$counter = 0;
+			$ledgerst = array();
+
+			$ledgerst[$counter] = array ("", "", "RECONCILIATION STATEMENT FOR " . strtoupper($this->Ledger_model->get_name($ledger_id)), "", "", "", "", "", "", "", "");
+			$counter++;
+			$ledgerst[$counter] = array ("", "", "FY " . date_mysql_to_php($this->config->item('account_fy_start')) . " - " . date_mysql_to_php($this->config->item('account_fy_end')), "", "", "", "", "", "", "", "");
+			$counter++;
+
+			$ledgerst[$counter][0]= "Date";
+			$ledgerst[$counter][1]= "Number";
+			$ledgerst[$counter][2]= "Ledger Name";
+			$ledgerst[$counter][4]= "Type";
+			$ledgerst[$counter][5]= "";
+			$ledgerst[$counter][6]= "Dr Amount";
+			$ledgerst[$counter][7]= "";
+			$ledgerst[$counter][8]= "Cr Amount";
+			$ledgerst[$counter][9]= "Reconciliation Date";
+			$counter++;
+
+			/* Opening Balance */
+			list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id);
+
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
+			if ($reconciliation_type == 'all')
+				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+			else
+				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.reconciliation_date', NULL)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+			$ledgerst_q = $this->db->get();
+			foreach ($ledgerst_q->result() as $row)
+			{
+				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
+				$ledgerst[$counter][1] = voucher_number_prefix(n_to_v($row->vtype)) . $row->vnumber;
+
+				/* Opposite voucher name */
+				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $row->vtype, $row->ldc, 'text');
+
+				$ledgerst[$counter][3] = ucfirst(n_to_v($row->vtype));
+
+				if ($row->ldc == "D")
+				{
+					$ledgerst[$counter][4] = convert_dc($row->ldc);
+					$ledgerst[$counter][5] = $row->lamount;
+					$ledgerst[$counter][6] = "";
+					$ledgerst[$counter][7] = "";
+
+				} else {
+					$ledgerst[$counter][4] = "";
+					$ledgerst[$counter][5] = "";
+					$ledgerst[$counter][6] = convert_dc($row->ldc);
+					$ledgerst[$counter][7] = $row->lamount;
+				}
+
+				if ($row->lreconciliation)
+				{
+					$ledgerst[$counter][8] = date_mysql_to_php($row->lreconciliation);
+				} else {
+					$ledgerst[$counter][8] = "";
+				}
+				$counter++;
+			}
+
+			$counter++;
+			$ledgerst[$counter] = array ("", "", "", "", "", "", "", "", "", "");
+			$counter++;
+
+			/* Final Opening and Closing Balance */
+			$clbalance = $this->Ledger_model->get_ledger_balance($ledger_id);
+
+			$ledgerst[$counter] = array ("Opening Balance", convert_dc($optype), $opbalance, "", "", "", "", "", "", "");
+			$counter++;
+
+			if ($clbalance == 0)
+				$ledgerst[$counter] = array ("Closing Balance", "", 0, "", "", "", "", "", "", "");
+			else if ($clbalance < 0)
+				$ledgerst[$counter] = array ("Closing Balance", "Cr", convert_cur(-$clbalance), "", "", "", "", "", "", "");
+			else
+				$ledgerst[$counter] = array ("Closing Balance", "Dr", convert_cur($clbalance), "", "", "", "", "", "", "");
+
+			/************* Final Reconciliation Balance ***********/
+
+			/* Reconciliation Balance - Dr */
+			$this->db->select_sum('amount', 'drtotal')->from('voucher_items')->join('vouchers', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.dc', 'D')->where('voucher_items.reconciliation_date IS NOT NULL');
+			$dr_total_q = $this->db->get();
+			if ($dr_total = $dr_total_q->row())
+				$reconciliation_dr_total = $dr_total->drtotal;
+			else
+				$reconciliation_dr_total = 0;
+
+			/* Reconciliation Balance - Cr */
+			$this->db->select_sum('amount', 'crtotal')->from('voucher_items')->join('vouchers', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.dc', 'C')->where('voucher_items.reconciliation_date IS NOT NULL');
+			$cr_total_q = $this->db->get();
+			if ($cr_total = $cr_total_q->row())
+				$reconciliation_cr_total = $cr_total->crtotal;
+			else
+				$reconciliation_cr_total = 0;
+
+			$reconciliation_total = $reconciliation_dr_total - $reconciliation_cr_total;
+			$reconciliation_pending = $clbalance - $reconciliation_total;
+
+			$counter++;
+			if ($reconciliation_pending == 0)
+				$ledgerst[$counter] = array ("Reconciliation Pending", "", 0, "", "", "", "", "", "", "");
+			else if ($reconciliation_pending < 0)
+				$ledgerst[$counter] = array ("Reconciliation Pending", "Cr", convert_cur(-$reconciliation_pending), "", "", "", "", "", "", "");
+			else
+				$ledgerst[$counter] = array ("Reconciliation Pending", "Dr", convert_cur($reconciliation_pending), "", "", "", "", "", "", "");
+
+			$counter++;
+			if ($reconciliation_total == 0)
+				$ledgerst[$counter] = array ("Reconciliation Total", "", 0, "", "", "", "", "", "", "");
+			else if ($reconciliation_total < 0)
+				$ledgerst[$counter] = array ("Reconciliation Total", "Cr", convert_cur(-$reconciliation_total), "", "", "", "", "", "", "");
+			else
+				$ledgerst[$counter] = array ("Reconciliation Total", "Dr", convert_cur($reconciliation_total), "", "", "", "", "", "", "");
+
+			$this->load->helper('csv');
+			echo array_to_csv($ledgerst, "reconciliation.csv");
 			return;
 		}
 		
