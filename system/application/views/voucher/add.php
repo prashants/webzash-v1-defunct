@@ -173,10 +173,13 @@ $(document).ready(function() {
 	/* Add ledger row */
 	$('table td .addrow').live('click', function() {
 		var cur_obj = this;
+		var add_image_url = $(cur_obj).attr('src');
+		$(cur_obj).attr('src', <?php echo '\'' . asset_url() . 'images/icons/ajax.gif' . '\''; ?>);
 		$.ajax({
 			url: <?php echo '\'' . site_url('voucher/addrow/' . $add_type) . '\''; ?>,
 			success: function(data) {
 				$(cur_obj).parent().parent().after(data);
+				$(cur_obj).attr('src', add_image_url);
 			}
 		});
 	});
