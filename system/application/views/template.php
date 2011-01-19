@@ -140,18 +140,18 @@ $(document).ready(function() {
 			<div id="main-title">
 				<?php if (isset($page_title)) echo $page_title; ?>
 			</div>
-			<div id="main-links">
-				<?php if (isset($nav_links)) {
-					echo "<ul id=\"main-links-nav\">";
-					foreach ($nav_links as $link => $title) {
-						if ($title == "Print Preview")
-							echo "<li>" . anchor_popup($link, $title, array('title' => $title, 'class' => 'nav-links-item', 'style' => 'background-image:url(\'' . asset_url() . 'images/buttons/navlink.png\');', 'width' => '1024')) . "</li>";
-						else
-							echo "<li>" . anchor($link, $title, array('title' => $title, 'class' => 'nav-links-item', 'style' => 'background-image:url(\'' . asset_url() . 'images/buttons/navlink.png\');')) . "</li>";
-					}
-					echo "</ul>";
-				} ?>
-			</div>
+			<?php if (isset($nav_links)) {
+				echo "<div id=\"main-links\">";
+				echo "<ul id=\"main-links-nav\">";
+				foreach ($nav_links as $link => $title) {
+					if ($title == "Print Preview")
+						echo "<li>" . anchor_popup($link, $title, array('title' => $title, 'class' => 'nav-links-item', 'style' => 'background-image:url(\'' . asset_url() . 'images/buttons/navlink.png\');', 'width' => '1024')) . "</li>";
+					else
+						echo "<li>" . anchor($link, $title, array('title' => $title, 'class' => 'nav-links-item', 'style' => 'background-image:url(\'' . asset_url() . 'images/buttons/navlink.png\');')) . "</li>";
+				}
+				echo "</ul>";
+				echo "</div>";
+			} ?>
 			<div class="clear">
 			</div>
 			<div id="main-content">

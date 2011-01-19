@@ -55,7 +55,7 @@ body {
 
 #content #main #main-title {
 	font-size:19px;
-	padding:10px 0 10px 0;
+	padding:8px 0 8px 0;
 }
 
 #content #main  #main-content {
@@ -115,24 +115,30 @@ body {
 	border:solid 1px #787878;
 	background:#F0F0F0;
 	color:#222222;
-	margin:10px 0 10px 0;
+	margin:5px 0 12px 0px;
 	text-align:left;
+	display:block;
+	padding-right:20px;
 }
 
 #error-box {
 	border:solid 1px #C34A2C;
 	background:#FFBABA;
 	color:#222222;
-	margin:10px 0 10px 0;
+	margin:5px 0 12px 0px;
 	text-align:left;
+	display:block;
+	padding-right:20px;
 }
 
 #success-box {
 	border:solid 1px #FFEC8B;
 	background:#FFF8C6;
 	color:#222222;
-	margin:10px 0 10px 0;
+	margin:5px 0 12px 0px;
 	text-align:left;
+	display:block;
+	padding-right:20px;
 }
 
 /* COMMON */
