@@ -650,6 +650,7 @@ class Voucher extends Controller {
 		$data['voucher_download'] = FALSE;
 		$data['voucher_tag'] = $cur_voucher->tag_id;
 		$data['voucher_tags'] = $this->Tag_model->get_all_tags();
+		$data['has_reconciliation'] = FALSE;
 
 		/* Load current ledger details if not $_POST */
 		if ( ! $_POST)
@@ -673,6 +674,8 @@ class Voucher extends Controller {
 					$data['dr_amount'][$counter] = "";
 					$data['cr_amount'][$counter] = $row->amount;
 				}
+				if ($row->reconciliation_date)
+					$data['has_reconciliation'] = TRUE;
 				$counter++;
 			}
 			/* Two extra rows */
@@ -714,6 +717,7 @@ class Voucher extends Controller {
 			$data['voucher_email'] = $this->input->post('voucher_email', TRUE);
 			$data['voucher_download'] = $this->input->post('voucher_download', TRUE);
 			$data['voucher_tag'] = $this->input->post('voucher_tag', TRUE);
+			$data['has_reconciliation'] = $this->input->post('has_reconciliation', TRUE);
 
 			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
 			$data['ledger_id'] = $this->input->post('ledger_id', TRUE);
@@ -830,6 +834,7 @@ class Voucher extends Controller {
 				case "journal": $data_type = 4; break;
 			}
 			$data_date = date_php_to_mysql($data_date); // Converting date to MySQL
+			$data_has_reconciliation = $this->input->post('has_reconciliation', TRUE);
 
 			$this->db->trans_start();
 			$update_data = array(
@@ -942,6 +947,10 @@ class Voucher extends Controller {
 
 			$this->messages->add('Updated ' . ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ". " . $voucher_success_links, 'success');
 			$this->logger->write_message("success", "Updated " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
+
+			if ($data_has_reconciliation)
+				$this->messages->add('Previous reconciliations for this voucher are no longer valid. You need to redo the reconciliations for this voucher.', 'success');
+
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}

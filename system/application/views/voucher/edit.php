@@ -280,6 +280,8 @@ $(document).ready(function() {
 	echo form_dropdown('voucher_tag', $voucher_tags, $voucher_tag);
 	echo "</p>";
 
+	echo form_hidden('has_reconciliation', $has_reconciliation);
+
 	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
