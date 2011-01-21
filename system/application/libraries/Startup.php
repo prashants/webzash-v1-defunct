@@ -14,6 +14,7 @@ class Startup
 	{
 		$CI =& get_instance();
 		$CI->db->trans_strict(FALSE);
+		$CI->load->library('general');
 
 		/* Skip checking if accessing admin section*/
 		if ($CI->uri->segment(1) == "admin")
@@ -33,65 +34,20 @@ class Startup
 		/* Reading database settings ini file */
 		if ($CI->session->userdata('active_account'))
 		{
-			/* Fetching database label details from session */
-			$current_account = $CI->session->userdata('active_account');
-			$ini_file = $CI->config->item('config_path') . "accounts/" . $current_account . ".ini";
-
-			/* Check if database ini file exists */
-			if ( ! get_file_info($ini_file))
+			/* Fetching database label details from session and checking the database ini file */
+			if ( ! $active_account = $CI->general->check_account($CI->session->userdata('active_account')))
 			{
-				$CI->messages->add('Account settings file is missing.', 'error');
-				redirect('admin');
-				return;
-			}
-
-			/* Parsing database ini file */
-			$active_accounts = parse_ini_file($ini_file);
-			if ( ! $active_accounts)
-			{
-				$CI->messages->add('Invalid account settings.', 'error');
-				redirect('admin');
-				return;
-			}
-
-			/* Check if all needed variables are set in ini file */
-			if ( ! isset($active_accounts['db_hostname']))
-			{
-				$CI->messages->add('Hostname missing from account settings file.', 'error');
-				redirect('admin');
-				return;
-			}
-			if ( ! isset($active_accounts['db_port']))
-			{
-				$CI->messages->add('Port missing from account setting file. Default MySQL port is 3306.', 'error');
-				redirect('admin');
-				return;
-			}
-			if ( ! isset($active_accounts['db_name']))
-			{
-				$CI->messages->add('Database name missing from account setting file.', 'error');
-				redirect('admin');
-				return;
-			}
-			if ( ! isset($active_accounts['db_username']))
-			{
-				$CI->messages->add('Database username missing from account setting file.', 'error');
-				redirect('admin');
-				return;
-			}
-			if ( ! isset($active_accounts['db_password']))
-			{
-				$CI->messages->add('Database password missing from account setting file.', 'error');
-				redirect('admin');
+				$CI->session->unset_userdata('active_account');
+				redirect('user/account');
 				return;
 			}
 
 			/* Preparing database settings */
-			$db_config['hostname'] = $active_accounts['db_hostname'];
-			$db_config['hostname'] .= ":" . $active_accounts['db_port'];
-			$db_config['database'] = $active_accounts['db_name'];
-			$db_config['username'] = $active_accounts['db_username'];
-			$db_config['password'] = $active_accounts['db_password'];
+			$db_config['hostname'] = $active_account['db_hostname'];
+			$db_config['hostname'] .= ":" . $active_account['db_port'];
+			$db_config['database'] = $active_account['db_name'];
+			$db_config['username'] = $active_account['db_username'];
+			$db_config['password'] = $active_account['db_password'];
 			$db_config['dbdriver'] = "mysql";
 			$db_config['dbprefix'] = "";
 			$db_config['pconnect'] = FALSE;
@@ -108,31 +64,10 @@ class Startup
 		}
 
 		/* Checking for valid database connection */
-		if ($CI->db->conn_id)
+		if ( ! $CI->general->check_database())
 		{
-			/* Checking for valid database name, username, password */
-			if ($CI->db->query("SHOW TABLES"))
-			{
-				/* Check for valid webzash database */
-				$table_names = array('groups', 'ledgers', 'vouchers', 'voucher_items', 'tags', 'logs', 'settings');
-				foreach ($table_names as $id => $tbname)
-				{
-					$valid_db_q = mysql_query('DESC ' . $tbname);
-					if ( ! $valid_db_q)
-					{
-						$CI->messages->add('Invalid account database. Table "' . $tbname . '" missing.', 'error');
-						redirect('admin');
-						return;
-					}
-				}
-			} else {
-				$CI->messages->add('Invalid database connection settings. Check whether the provided database name, username and password are valid.', 'error');
-				redirect('admin');
-				return;
-			}
-		} else {
-			$CI->messages->add('Cannot connect to database server. Check whether database server is running.', 'error');
-			redirect('admin');
+			$CI->session->unset_userdata('active_account');
+			redirect('user/account');
 			return;
 		}
 
@@ -141,7 +76,8 @@ class Startup
 		if ( ! ($account_d = $account_q->row()))
 		{
 			$CI->messages->add('Invalid account settings.', 'error');
-			redirect('admin');
+			redirect('user/account');
+			return;
 		}
 		$CI->config->set_item('account_name', $account_d->name);
 		$CI->config->set_item('account_address', $account_d->address);
@@ -158,27 +94,9 @@ class Startup
 		$CI->config->set_item('account_journal_prefix', $account_d->journal_voucher_prefix);
 		$CI->config->set_item('account_database_version', $account_d->database_version);
 
-		/************** Load general application settings *************/
-		$setting_ini_file = $CI->config->item('config_path') . "settings/general.ini";
-		$CI->config->set_item('row_count', 20);
+		/* Load general application settings */
+		$CI->general->check_setting();
 
-		/* Check if general application settings ini file exists */
-		if (get_file_info($setting_ini_file))
-		{
-			/* Parsing general application settings ini file */
-			$cur_setting = parse_ini_file($setting_ini_file);
-			if ($cur_setting)
-			{
-				if (isset($cur_setting['row_count']))
-				{
-					$CI->config->set_item('row_count', $cur_setting['row_count']);
-				}
-				if (isset($cur_setting['log']))
-				{
-					$CI->config->set_item('log', $cur_setting['log']);
-				}
-			}
-		}
 		return;
 	}
 }

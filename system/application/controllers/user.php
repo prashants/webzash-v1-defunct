@@ -140,6 +140,7 @@ class User extends Controller {
 	function account()
 	{
 		$this->template->set('page_title', 'Change Account');
+		$this->load->library('general');
 
 		/* Show manage accounts links if user has permission */
 		if (check_access('administer'))
@@ -234,60 +235,15 @@ class User extends Controller {
 				return;
 			}
 
-			$ini_file = $this->config->item('config_path') . "accounts/" . $data_active_account . ".ini";
-
-			/* Check if database ini file exists */
-			if ( ! get_file_info($ini_file))
+			if ( ! $this->general->check_account($data_active_account))
 			{
-				$this->messages->add('Account settings file is missing.', 'error');
-				$this->template->load('user_template', 'user/account', $data);
-				return;
-			}
-
-			/* Parsing database ini file */
-			$current_account = parse_ini_file($ini_file);
-			if ( ! $current_account)
-			{
-				$this->messages->add('Invalid account settings file.', 'error');
-				$this->template->load('user_template', 'user/account', $data);
-				return;
-			}
-
-			/* Check if all needed variables are set in ini file */
-			if ( ! isset($current_account['db_hostname']))
-			{
-				$this->messages->add('Hostname missing from account settings file.', 'error');
-				$this->template->load('user_template', 'user/account', $data);
-				return;
-			}
-			if ( ! isset($current_account['db_port']))
-			{
-				$this->messages->add('Port missing from account settings file.', 'error');
-				$this->template->load('user_template', 'user/account', $data);
-				return;
-			}
-			if ( ! isset($current_account['db_name']))
-			{
-				$this->messages->add('Database name missing from account settings file.', 'error');
-				$this->template->load('user_template', 'user/account', $data);
-				return;
-			}
-			if ( ! isset($current_account['db_username']))
-			{
-				$this->messages->add('Database username missing from account settings file.', 'error');
-				$this->template->load('user_template', 'user/account', $data);
-				return;
-			}
-			if ( ! isset($current_account['db_password']))
-			{
-				$this->messages->add('Database password missing from account settings file.', 'error');
 				$this->template->load('user_template', 'user/account', $data);
 				return;
 			}
 
 			/* Setting new account database details in session */
 			$this->session->set_userdata('active_account', $data_active_account);
-			$this->messages->add('Active account changed.', 'success');
+			$this->messages->add('Account changed.', 'success');
 			redirect('');
 		}
 		return;
