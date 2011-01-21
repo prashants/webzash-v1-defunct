@@ -10,6 +10,7 @@ class User extends Controller {
 	function login()
 	{
 		$this->template->set('page_title', 'Login');
+		$this->load->library('general');
 
 		/* If user already logged in then redirect to profile page */
 		if ($this->session->userdata('user_name'))
@@ -53,75 +54,36 @@ class User extends Controller {
 			$data_user_name = $this->input->post('user_name', TRUE);
 			$data_user_password = $this->input->post('user_password', TRUE);
 
-			/* User validation */
-			$ini_file = $this->config->item('config_path') . "users/" . $data_user_name . ".ini";
-
-			/* Check if user ini file exists */
-			if ( ! get_file_info($ini_file))
+			/* Check user ini file */
+			if ( ! $active_user = $this->general->check_user($data_user_name))
 			{
-				$this->messages->add('User does not exists.', 'error');
 				$this->template->load('user_template', 'user/login', $data);
 				return;
+			}
+
+			/* Check user status */
+			if ($active_user['status'] != 1)
+			{
+				$this->messages->add('User disabled.', 'error');
+				$this->template->load('user_template', 'user/login', $data);
+				return;
+			}
+
+			/* Password verify */
+			if ($active_user['password'] == $data_user_password)
+			{
+				$this->messages->add('Logged in as ' . $data_user_name . '.', 'success');
+				$this->session->set_userdata('user_name', $data_user_name);
+				$this->session->set_userdata('user_role', $active_user['role']);
+				redirect('');
+				return;
 			} else {
-				/* Parsing user ini file */
-				$active_users = parse_ini_file($ini_file);
-				if ( ! $active_users)
-				{
-					$this->messages->add('Invalid user file.', 'error');
-					$this->template->load('user_template', 'user/login', $data);
-					return;
-				} else {
-					/* Status check */
-					if (isset($active_users['status']))
-					{
-						if ($active_users['status'] != 1)
-						{
-							$this->messages->add('User disabled.', 'error');
-							$this->template->load('user_template', 'user/login', $data);
-							return;
-						}
-					} else {
-						$this->messages->add('Invalid status.', 'error');
-						$this->template->load('user_template', 'user/login', $data);
-						return;
-					}
-
-					/* Password check */
-					if (isset($active_users['password']))
-					{
-						$password = $active_users['password'];
-
-						/* Role check */
-						if (isset($active_users['role']))
-						{
-							$data_user_role = $active_users['role'];
-						} else {
-							$this->messages->add('Invalid role. Defaulting to "guest" role.', 'success');
-							$data_user_role = 'guest';
-						}
-
-						/* Password verify */
-						if ($password == $data_user_password)
-						{
-							$this->messages->add('Logged in as ' . $data_user_name . '.', 'success');
-							$this->session->set_userdata('user_name', $data_user_name);
-							$this->session->set_userdata('user_role', $data_user_role);
-							redirect('');
-							return;
-						} else {
-							$this->session->unset_userdata('user_name');
-							$this->session->unset_userdata('user_role');
-							$this->session->unset_userdata('active_account');
-							$this->messages->add('Authentication failed.', 'error');
-							$this->template->load('user_template', 'user/login', $data);
-							return;
-						}
-					} else {
-						$this->messages->add('Password missing from user file.', 'error');
-						$this->template->load('user_template', 'user/login', $data);
-						return;
-					}
-				}
+				$this->session->unset_userdata('user_name');
+				$this->session->unset_userdata('user_role');
+				$this->session->unset_userdata('active_account');
+				$this->messages->add('Authentication failed.', 'error');
+				$this->template->load('user_template', 'user/login', $data);
+				return;
 			}
 		}
 		return;
@@ -159,9 +121,6 @@ class User extends Controller {
 		/* Currently active account */
 		$data['active_account'] = $this->session->userdata('active_account');
 
-		/* User validation */
-		$ini_file = $this->config->item('config_path') . "users/" . $this->session->userdata('user_name') . ".ini";
-
 		/* Getting list of files in the config - accounts directory */
 		$accounts_list = get_filenames($this->config->item('config_path') . 'accounts');
 		$data['accounts'] = array();
@@ -178,35 +137,18 @@ class User extends Controller {
 			}
 		}
 
-		/* Check if user ini file exists */
-		if ( ! get_file_info($ini_file))
+		/* Check user ini file */
+		if ( ! $active_user = $this->general->check_user($this->session->userdata('user_name')))
 		{
-			$this->messages->add('User does not exists.', 'error');
 			redirect('user/profile');
 			return;
-		} else {
-			/* Parsing user ini file */
-			$active_users = parse_ini_file($ini_file);
-			if ( ! $active_users)
-			{
-				$this->messages->add('Invalid user file.', 'error');
-				redirect('user/profile');
-				return;
-			} else {
-				/* Account check */
-				if (isset($active_users['accounts']))
-				{
-					if ($active_users['accounts'] != '*')
-					{
-						$valid_accounts = explode(",", $active_users['accounts']);
-						$data['accounts'] = array_intersect($data['accounts'], $valid_accounts);
-					}
-				} else {
-					$this->messages->add('Invalid accounts in user file.', 'error');
-					redirect('user/profile');
-					return;
-				}
-			}
+		}
+
+		/* Filter user access to accounts */
+		if ($active_user['accounts'] != '*')
+		{
+			$valid_accounts = explode(",", $active_user['accounts']);
+			$data['accounts'] = array_intersect($data['accounts'], $valid_accounts);
 		}
 
 		/* Form validations */

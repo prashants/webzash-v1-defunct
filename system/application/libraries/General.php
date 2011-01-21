@@ -121,6 +121,55 @@ class General {
 			}
 		}
 	}
+
+	function check_user($user_name)
+	{
+		$CI =& get_instance();
+
+		/* User validation */
+		$ini_file = $CI->config->item('config_path') . "users/" . $user_name . ".ini";
+
+		/* Check if user ini file exists */
+		if ( ! get_file_info($ini_file))
+		{
+			$CI->messages->add('User does not exists.', 'error');
+			return FALSE;
+		}
+
+		/* Parsing user ini file */
+		$user_data = parse_ini_file($ini_file);
+		if ( ! $user_data)
+		{
+			$CI->messages->add('Invalid user file.', 'error');
+			return FALSE;
+		}
+
+		if ( ! isset($user_data['username']))
+		{
+			$CI->messages->add('Username missing from user file.', 'error');
+			return FALSE;
+		}
+		if ( ! isset($user_data['password']))
+		{
+			$CI->messages->add('Password missing from user file.', 'error');
+			return FALSE;
+		}
+		if ( ! isset($user_data['status']))
+		{
+			$CI->messages->add('Status missing from user file.', 'error');
+			return FALSE;
+		}
+		if ( ! isset($user_data['role']))
+		{
+			$CI->messages->add('Role missing from user file. Defaulting to "guest" role.', 'error');
+			$user_data['role'] = 'guest';
+		}
+		if ( ! isset($user_data['accounts']))
+		{
+			$CI->messages->add('Accounts missing from user file.', 'error');
+		}
+		return $user_data;
+	}
 }
 
 /* End of file General.php */
