@@ -84,11 +84,10 @@ class User extends Controller {
 		$data['user_status'] = TRUE;
 
 		/* Accounts Form fields */
-		$data['accounts_all'] = TRUE;
-		$data['accounts_active'] = array();
+		$data['accounts_active'] = array('(All Accounts)');
 		/* Getting list of files in the config - accounts directory */
 		$accounts_list = get_filenames($this->config->item('config_path') . 'accounts');
-		$data['accounts'] = array();
+		$data['accounts'] = array('(All Accounts)' => '(All Accounts)');
 		if ($accounts_list)
 		{
 			foreach ($accounts_list as $row)
@@ -110,7 +109,6 @@ class User extends Controller {
 			$data['user_email']['value'] = $this->input->post('user_email', TRUE);
 			$data['active_user_role'] = $this->input->post('user_role', TRUE);
 			$data['user_status'] = $this->input->post('user_status', TRUE);
-			$data['accounts_all'] = $this->input->post('accounts_all', TRUE);
 			$data['accounts_active'] = $this->input->post('accounts', TRUE);
 		}
 
@@ -120,7 +118,6 @@ class User extends Controller {
 		$this->form_validation->set_rules('user_email', 'Email', 'trim|required|valid_email');
 		$this->form_validation->set_rules('user_role', 'Role', 'trim|required');
 		$this->form_validation->set_rules('user_status', 'Active', 'trim');
-		$this->form_validation->set_rules('accounts_all', 'All Accounts', 'trim');
 
 		/* Validating form */
 		if ($this->form_validation->run() == FALSE)
@@ -140,20 +137,19 @@ class User extends Controller {
 				$data_user_status = 1;
 			else
 				$data_user_status = 0;
-			$data_accounts_all = $this->input->post('accounts_all', TRUE);
 			$data_accounts = $this->input->post('accounts', TRUE);
 
 			/* Forming account querry string */
 			$data_accounts_string = '';
-			if ($data_accounts_all == 1)
+			if ( ! $data_accounts)
 			{
-				$data_accounts_string = '*';
+				$this->messages->add('Please select account.', 'error');
+				$this->template->load('admin_template', 'admin/user/add', $data);
+				return;
 			} else {
-				if ( ! $data_accounts)
+				if (in_array('(All Accounts)', $data_accounts))
 				{
-					$this->messages->add('Please select account.', 'error');
-					$this->template->load('admin_template', 'admin/user/add', $data);
-					return;
+					$data_accounts_string = '*';
 				} else {
 					/* Filtering out bogus accounts */
 					$data_accounts_valid = array_intersect($data['accounts'], $data_accounts);
@@ -226,11 +222,10 @@ class User extends Controller {
 		$data['user_status'] = TRUE;
 
 		/* Accounts Form fields */
-		$data['accounts_all'] = TRUE;
-		$data['accounts_active'] = array();
+		$data['accounts_active'] = array('(All Accounts)');
 		/* Getting list of files in the config - accounts directory */
 		$accounts_list = get_filenames($this->config->item('config_path') . 'accounts');
-		$data['accounts'] = array();
+		$data['accounts'] = array('(All Accounts)' => '(All Accounts)');
 		if ($accounts_list)
 		{
 			foreach ($accounts_list as $row)
@@ -251,7 +246,6 @@ class User extends Controller {
 			$data['user_email']['value'] = $this->input->post('user_email', TRUE);
 			$data['active_user_role'] = $this->input->post('user_role', TRUE);
 			$data['user_status'] = $this->input->post('user_status', TRUE);
-			$data['accounts_all'] = $this->input->post('accounts_all', TRUE);
 			$data['accounts_active'] = $this->input->post('accounts', TRUE);
 		} else {
 			/* Check if user ini file exists */
@@ -297,10 +291,8 @@ class User extends Controller {
 					{
 						if ($active_users['accounts'] == "*")
 						{
-							$data['accounts_all'] = TRUE;
-							$data['accounts_active'] = array();
+							$data['accounts_active'] = array('(All Accounts)');
 						} else {
-							$data['accounts_all'] = FALSE;
 							$data['accounts_active'] = explode(",", $active_users['accounts']);
 						}
 					} else {
@@ -315,7 +307,6 @@ class User extends Controller {
 		$this->form_validation->set_rules('user_email', 'Email', 'trim|required|valid_email');
 		$this->form_validation->set_rules('user_role', 'Role', 'trim|required');
 		$this->form_validation->set_rules('user_status', 'Active', 'trim');
-		$this->form_validation->set_rules('accounts_all', 'All Accounts', 'trim');
 
 		/* Validating form */
 		if ($this->form_validation->run() == FALSE)
@@ -334,20 +325,19 @@ class User extends Controller {
 				$data_user_status = 1;
 			else
 				$data_user_status = 0;
-			$data_accounts_all = $this->input->post('accounts_all', TRUE);
 			$data_accounts = $this->input->post('accounts', TRUE);
 
 			/* Forming account querry string */
 			$data_accounts_string = '';
-			if ($data_accounts_all == 1)
+			if ( ! $data_accounts)
 			{
-				$data_accounts_string = '*';
+				$this->messages->add('Please select account.', 'error');
+				$this->template->load('admin_template', 'admin/user/edit', $data);
+				return;
 			} else {
-				if ( ! $data_accounts)
+				if (in_array('(All Accounts)', $data_accounts))
 				{
-					$this->messages->add('Please select account.', 'error');
-					$this->template->load('admin_template', 'admin/user/edit', $data);
-					return;
+					$data_accounts_string = '*';
 				} else {
 					/* Filtering out bogus accounts */
 					$data_accounts_valid = array_intersect($data['accounts'], $data_accounts);

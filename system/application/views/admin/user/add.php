@@ -30,7 +30,7 @@
 	echo "</p>";
 
 	echo "<p>";
-	echo form_checkbox('accounts_all', 1, $accounts_all) . " All Accounts or Select accounts";
+	echo form_label('Select accounts', 'accounts[]');
 	echo "<br />";
 	echo form_multiselect('accounts[]', $accounts, $accounts_active);
 	echo "</p>";
