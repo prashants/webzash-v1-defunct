@@ -25,7 +25,7 @@
 <div id="container">
 	<div id="header">
 		<div id="logo">
-			<?php echo anchor('', 'Webzash', array('class' => 'anchor-link-b')); ?> <span id="beta-area">(beta)</span>
+			<?php echo anchor('', 'Webzash', array('class' => 'anchor-link-b')); ?>
 		</div>
 		<?php
 			if ($this->session->userdata('user_name')) {
