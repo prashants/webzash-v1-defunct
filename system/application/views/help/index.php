@@ -14,6 +14,7 @@
 <li><span class="qa-heading">Email</span>
 	<ul>
 	<li><a href="#email-1" class="anchor-link-a">How do I modify the voucher email format ?</a></li>
+	<li><a href="#email-2" class="anchor-link-a">How do send vouchers using gmail ?</a></li>
 	</ul>
 </li>
 </ul>
@@ -50,3 +51,14 @@
 	<div class="qa-answer">Voucher email template is located at "system/application/views/voucher/emailpreview.php". Modify this file to change the voucher email format.</div>
 </div>
 
+<div class="qa-section" id="email-2">
+	<a name="email-2"></a>
+	<div class="qa-question">Q. How do I send vouchers using gmail ?</div>
+	<div class="qa-answer">You need to use the following gmail settings in Settings > Email Settings<br /><br />
+	Email protocol : smtp<br />
+	Hostname : ssl://smtp.googlemail.com<br />
+	Port : 465<br />
+	Email username : your-username@gmail.com<br />
+	Email Password : your-password<br />
+	</div>
+</div>
