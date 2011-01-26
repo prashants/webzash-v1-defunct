@@ -231,36 +231,49 @@ class Create extends Controller {
 			if ($data_database_port == "")
 				$data_database_port = "3306";
 
-			/* Setting database */
-			$dsn = "mysql://${data_database_username}:${data_database_password}@${data_database_host}:${data_database_port}/${data_database_name}";
-			$newacc = $this->load->database($dsn, TRUE);
-			$conn_error = $newacc->_error_message();
-
-			/* Creating database if it does not exist */
+			/* Creating account database */
 			if ($this->input->post('create_database', TRUE) == "1")
 			{
-				if ((substr($conn_error, 0, 16) == "Unknown database"))
+				$new_link = @mysql_connect($data_database_host . ':' . $data_database_port, $data_database_username, $data_database_password);
+				if ($new_link)
 				{
-					if ($newacc->query("CREATE DATABASE " . mysql_real_escape_string($data_database_name)))
-					{
-						$this->messages->add('Created account database.', 'success');
-						/* Retrying to connect to new database */
-						$newacc = $this->load->database($dsn, TRUE);
-						$conn_error = $newacc->_error_message();
-					} else {
-						$this->messages->add('Failed to create account database.', 'error');
+					/* Check if database already exists */
+					$db_selected = mysql_select_db($data_database_name, $new_link);
+					if ($db_selected) {
+						mysql_close($new_link);
+						$this->messages->add('Database already exists.', 'error');
 						$this->template->load('admin_template', 'admin/create', $data);
 						return;
 					}
+
+					/* Creating account database */
+					$db_create_q = 'CREATE DATABASE ' . mysql_real_escape_string($data_database_name);
+					if (mysql_query($db_create_q, $new_link))
+					{
+						$this->messages->add('Created account database.', 'success');
+					} else {
+						$this->messages->add('Error creating account database. ' . mysql_error(), 'error');
+						$this->template->load('admin_template', 'admin/create', $data);
+						return;
+					}
+					mysql_close($new_link);
+				} else {
+					$this->messages->add('Error connecting to database. ' . mysql_error(), 'error');
+					$this->template->load('admin_template', 'admin/create', $data);
+					return;
 				}
 			}
+
+			/* Setting database */
+			$dsn = "mysql://${data_database_username}:${data_database_password}@${data_database_host}:${data_database_port}/${data_database_name}";
+			$newacc = $this->load->database($dsn, TRUE);
 
 			if ( ! $newacc->conn_id)
 			{
 				$this->messages->add('Error connecting to database.', 'error');
 				$this->template->load('admin_template', 'admin/create', $data);
 				return;
-			}  else if ($conn_error != "") {
+			} else if ($newacc->_error_message() != "") {
 				$this->messages->add('Error connecting to database. ' . $newacc->_error_message(), 'error');
 				$this->template->load('admin_template', 'admin/create', $data);
 				return;
