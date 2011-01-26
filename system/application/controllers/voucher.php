@@ -361,6 +361,7 @@ class Voucher extends Controller {
 			$dr_total = 0;
 			$cr_total = 0;
 			$bank_cash_present = FALSE; /* Whether atleast one Ledger A/C is Bank or Cash A/C */
+			$non_bank_cash_present = FALSE;  /* Whether atleast one Ledger A/C is NOT a Bank or Cash A/C */
 			foreach ($data_all_ledger_dc as $id => $ledger_data)
 			{
 				if ($data_all_ledger_id[$id] < 1)
@@ -383,12 +384,16 @@ class Voucher extends Controller {
 						{
 							$bank_cash_present = TRUE;
 						}
+						if ($valid_ledger->type != 'B')
+							$non_bank_cash_present = TRUE;
 					} else if ($voucher_type == 'payment')
 					{
 						if ($data_all_ledger_dc[$id] == 'C' && $valid_ledger->type == 'B')
 						{
 							$bank_cash_present = TRUE;
 						}
+						if ($valid_ledger->type != 'B')
+							$non_bank_cash_present = TRUE;
 					} else if ($voucher_type == 'contra')
 					{
 						if ($valid_ledger->type != 'B')
@@ -434,11 +439,23 @@ class Voucher extends Controller {
 					$this->template->load('template', 'voucher/add', $data);
 					return;
 				}
+				if ( ! $non_bank_cash_present)
+				{
+					$this->messages->add('Use Contra Vouchers if it affects only Bank or Cash A/C\'s.', 'error');
+					$this->template->load('template', 'voucher/add', $data);
+					return;
+				}
 			} else if ($voucher_type == 'payment')
 			{
 				if ( ! $bank_cash_present)
 				{
 					$this->messages->add('Need to Credit atleast one Bank or Cash A/C.', 'error');
+					$this->template->load('template', 'voucher/add', $data);
+					return;
+				}
+				if ( ! $non_bank_cash_present)
+				{
+					$this->messages->add('Use Contra Vouchers if it affects only Bank or Cash A/C\'s.', 'error');
 					$this->template->load('template', 'voucher/add', $data);
 					return;
 				}
@@ -738,6 +755,7 @@ class Voucher extends Controller {
 			$dr_total = 0;
 			$cr_total = 0;
 			$bank_cash_present = FALSE; /* Whether atleast one Ledger A/C is Bank or Cash A/C */
+			$non_bank_cash_present = FALSE;  /* Whether atleast one Ledger A/C is NOT a Bank or Cash A/C */
 			foreach ($data_all_ledger_dc as $id => $ledger_data)
 			{
 				if ($data_all_ledger_id[$id] < 1)
@@ -760,12 +778,16 @@ class Voucher extends Controller {
 						{
 							$bank_cash_present = TRUE;
 						}
+						if ($valid_ledger->type != 'B')
+							$non_bank_cash_present = TRUE;
 					} else if ($voucher_type == 'payment')
 					{
 						if ($data_all_ledger_dc[$id] == 'C' && $valid_ledger->type == 'B')
 						{
 							$bank_cash_present = TRUE;
 						}
+						if ($valid_ledger->type != 'B')
+							$non_bank_cash_present = TRUE;
 					} else if ($voucher_type == 'contra')
 					{
 						if ($valid_ledger->type != 'B')
@@ -810,11 +832,23 @@ class Voucher extends Controller {
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				}
+				if ( ! $non_bank_cash_present)
+				{
+					$this->messages->add('Use Contra Vouchers if it affects only Bank or Cash A/C\'s.', 'error');
+					$this->template->load('template', 'voucher/edit', $data);
+					return;
+				}
 			} else if ($voucher_type == 'payment')
 			{
 				if ( ! $bank_cash_present)
 				{
 					$this->messages->add('Need to Credit atleast one Bank or Cash A/C.', 'error');
+					$this->template->load('template', 'voucher/edit', $data);
+					return;
+				}
+				if ( ! $non_bank_cash_present)
+				{
+					$this->messages->add('Use Contra Vouchers if it affects only Bank or Cash A/C\'s.', 'error');
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				}
