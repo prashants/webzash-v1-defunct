@@ -261,6 +261,19 @@ class Ledger extends Controller {
 				return;
 			}
 
+			/* Check if contra voucher present for non Bank or Cash A/C */
+			if ($data_ledger_type_cashbank_value != "1")
+			{
+				$this->db->from('voucher_items')->join('vouchers', 'voucher_items.voucher_id = vouchers.id')->where('vouchers.type', 3)->where('voucher_items.ledger_id', $id);
+				$contra_count = $this->db->get()->num_rows();
+				if ($contra_count > 0)
+				{
+					$this->messages->add('Cannot remove the  Bank or Cash Account status of this Ledger A/C since it is still linked with ' . $contra_count . ' Contra Vouchers entries.', 'error');
+					$this->template->load('template', 'ledger/edit', $data);
+					return;
+				}
+			}
+
 			if ($data_ledger_type_cashbank_value == "1")
 			{
 				$data_ledger_type_cashbank = "B";
