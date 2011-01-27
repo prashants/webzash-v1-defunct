@@ -23,6 +23,10 @@ if (isset($add_css))
 }
 ?>
 
+<script type="text/javascript">
+	var jsSiteUrl = '<?php echo base_url(); ?>';
+</script>
+
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.datepick.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/custom.js"></script>
@@ -31,6 +35,8 @@ if (isset($add_css))
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/supersubs.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/thickbox-compressed.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/ezpz_tooltip.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcutslibrary.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcuts.js"></script>
 
 <?php
 /* Dynamically adding javascript files from controllers */

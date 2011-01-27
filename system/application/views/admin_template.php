@@ -10,12 +10,18 @@
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/custom.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/jquery.datepick.css">
 
+<script type="text/javascript">
+	var jsSiteUrl = '<?php echo base_url(); ?>';
+</script>
+
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.datepick.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/custom.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/hoverIntent.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/superfish.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/supersubs.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcutslibrary.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcuts.js"></script>
 
 <script type="text/javascript">
 /* Loading JQuery Superfish menu */
