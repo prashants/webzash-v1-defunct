@@ -57,6 +57,23 @@ class Startup
 			$db_config['char_set'] = "utf8";
 			$db_config['dbcollat'] = "utf8_general_ci";
 			$CI->load->database($db_config, FALSE, TRUE);
+
+			/* Checking for valid database connection */
+			if ( ! $CI->db->conn_id)
+			{
+				$CI->session->unset_userdata('active_account');
+				$CI->messages->add('Error connecting to database server. Check whether database server is running.', 'error');
+				redirect('user/account');
+				return;
+			}
+			/* Check for any database connection error messages */
+			if ($CI->db->_error_message() != "")
+			{
+				$CI->session->unset_userdata('active_account');
+				$CI->messages->add('Error connecting to database server. ' . $CI->db->_error_message(), 'error');
+				redirect('user/account');
+				return;
+			}
 		} else {
 			$CI->messages->add('Select a account.', 'error');
 			redirect('user/account');

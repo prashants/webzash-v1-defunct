@@ -331,7 +331,7 @@ class Voucher extends Controller {
 			$data['dr_amount'] = $this->input->post('dr_amount', TRUE);
 			$data['cr_amount'] = $this->input->post('cr_amount', TRUE);
 		} else {
-			for ($count = 0; $count <= 5; $count++)
+			for ($count = 0; $count <= 3; $count++)
 			{
 				if ($count == 0 && $voucher_type == "payment")
 					$data['ledger_dc'][$count] = "C";
