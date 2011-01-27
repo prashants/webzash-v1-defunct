@@ -8,7 +8,7 @@
 	echo "<td width=\"" . $left_width . "\">";
 	$liability->init(2);
 	echo "<table border=0 cellpadding=5 class=\"simple-table balance-sheet-table\" width=\"100%\">";
-	echo "<thead><tr><th>Liabilities</th><th align=\"right\">Amount</th></tr></thead>";
+	echo "<thead><tr><th>Liabilities and Owners Equity</th><th align=\"right\">Amount</th></tr></thead>";
 	$liability->account_st_short(0);
 	echo "</table>";
 	echo "</td>";
@@ -46,7 +46,7 @@
 	echo "<td>";
 	echo "<table border=0 cellpadding=5 class=\"balance-sheet-total-table\" width=\"100%\">";
 	echo "<tr valign=\"top\">";
-	echo "<td class=\"bold\">Liability Total</td>";
+	echo "<td class=\"bold\">Liability and Owners Equity Total</td>";
 	echo "<td align=\"right\" class=\"bold\">" . convert_cur($liability_total) . "</td>";
 	echo "</tr>";
 

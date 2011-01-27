@@ -1,5 +1,5 @@
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (1, 0, 'Assets', 0);
-INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (2, 0, 'Liabilities', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (2, 0, 'Liabilities and Owners Equity', 0);
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (3, 0, 'Incomes', 0);
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (4, 0, 'Expenses', 0);
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (5, 1, 'Fixed Assets', 0);

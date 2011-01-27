@@ -600,7 +600,7 @@ class Report extends Controller {
 			Accountlist::add_blank_csv();
 			/* Liability side */
 			$total = $liability_total;
-			Accountlist::add_row_csv(array("Liability Total", convert_cur($liability_total)));
+			Accountlist::add_row_csv(array("Liabilities and Owners Equity Total", convert_cur($liability_total)));
 		
 			/* If Profit then Liability side, If Loss then Asset side */
 			if ($pandl != 0)
@@ -622,7 +622,7 @@ class Report extends Controller {
 				}
 			}
 		
-			Accountlist::add_row_csv(array("Total - Liabilities", convert_cur($total)));
+			Accountlist::add_row_csv(array("Total - Liabilities and Owners Equity", convert_cur($total)));
 
 			/* Asset side */
 			$total = $asset_total;
