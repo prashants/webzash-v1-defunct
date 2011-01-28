@@ -134,6 +134,27 @@ class Voucher extends Controller {
 		/* Pagination initializing */
 		$this->pagination->initialize($config);
 
+		/* Show voucher add actions */
+		if ($this->session->userdata('voucher_added_show_action'))
+		{
+			$voucher_added_id_temp = $this->session->userdata('voucher_added_id');
+			$voucher_added_type_temp = $this->session->userdata('voucher_added_type');
+			$voucher_added_number_temp = $this->session->userdata('voucher_added_number');
+			$voucher_added_message = 'Added ' . ucfirst($voucher_added_type_temp) . ' Voucher number ' . voucher_number_prefix($voucher_added_type_temp) . $voucher_added_number_temp . ".";
+			$voucher_added_message .= " You can [ ";
+			$voucher_added_message .= anchor('voucher/view/' . strtolower($voucher_added_type_temp) . "/" . $voucher_added_id_temp, 'View', array('class' => 'anchor-link-a')) . " | ";
+			$voucher_added_message .= anchor('voucher/edit/' . strtolower($voucher_added_type_temp) . "/" . $voucher_added_id_temp, 'Edit', array('class' => 'anchor-link-a')) . " | ";
+			$voucher_added_message .= anchor_popup('voucher/printpreview/' . strtolower($voucher_added_type_temp) . "/" . $voucher_added_id_temp , 'Print', array('class' => 'anchor-link-a', 'width' => '600', 'height' => '600')) . " | ";
+			$voucher_added_message .= anchor_popup('voucher/email/' . strtolower($voucher_added_type_temp) . "/" . $voucher_added_id_temp, 'Email', array('class' => 'anchor-link-a', 'width' => '500', 'height' => '300')) . " | ";
+			$voucher_added_message .= anchor('voucher/download/' . strtolower($voucher_added_type_temp) . "/" . $voucher_added_id_temp, 'Download', array('class' => 'anchor-link-a'));
+			$voucher_added_message .= " ] it.";
+			$this->messages->add($voucher_added_message, 'success');
+			$this->session->unset_userdata('voucher_added_show_action');
+			$this->session->unset_userdata('voucher_added_id');
+			$this->session->unset_userdata('voucher_added_type');
+			$this->session->unset_userdata('voucher_added_number');
+		}
+
 		$html = "<table border=0 cellpadding=5 class=\"simple-table\">";
 		$html .= "<thead><tr><th>Date</th><th>No</th><th>Ledger A/C</th><th>Type</th><th>DR Amount</th><th>CR Amount</th><th></th></tr></thead>";
 		$html .= "<tbody>";
@@ -576,13 +597,12 @@ class Voucher extends Controller {
 				$this->session->set_userdata('download_voucher_id', $voucher_id);
 			}
 
-			/* Voucher Actions */
-			$voucher_success_links = "You can ";
-			$voucher_success_links .= anchor('voucher/view/' . strtolower($voucher_type) . "/" . $voucher_id, 'View', array('class' => 'anchor-link-a')) . " or ";
-			$voucher_success_links .= anchor('voucher/download/' . strtolower($voucher_type) . "/" . $voucher_id, 'Download', array('class' => 'anchor-link-a'));
-			$voucher_success_links .= " it.";
+			$this->session->set_userdata('voucher_added_show_action', TRUE);
+			$this->session->set_userdata('voucher_added_id', $voucher_id);
+			$this->session->set_userdata('voucher_added_type', $voucher_type);
+			$this->session->set_userdata('voucher_added_number', $data_number);
 
-			$this->messages->add('Added ' . ucfirst($voucher_type) . ' Voucher number ' . voucher_number_prefix($voucher_type) . $data_number . ". " . $voucher_success_links, 'success');
+			/* Showing success message in show() method since message is too long for storing it in session */
 			$this->logger->write_message("success", "Added " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $data_number . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $voucher_type);
 			$this->template->load('template', 'voucher/add', $data);
@@ -1177,6 +1197,7 @@ class Voucher extends Controller {
 
 		$data['voucher_type'] = $voucher_type;
 		$data['voucher_id'] = $voucher_id;
+		$data['voucher_number'] = $cur_voucher->number;
 		$data['email_to'] = array(
 			'name' => 'email_to',
 			'id' => 'email_to',
