@@ -1,5 +1,3 @@
-Priority - Task - Person responsible
+Webzash TODO is now available online at :
 
-It is now available online at
-
-http://codaset.com/pshahmumbai/webzash/wiki/Project-Plan
+https://github.com/prashants/webzash/wiki

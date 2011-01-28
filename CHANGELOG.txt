@@ -1,3 +1,11 @@
+Webzash Version 1.1 2011-01-28
+------------------------------
+
+    * Added application shortcuts
+    * Fixed many bugs
+    * Removed options to Print, Edit and Delete from voucher add and edit
+    * Updated some pending database code to use active record
+
 Webzash Version 1.0 2011-01-22
 ------------------------------
 
