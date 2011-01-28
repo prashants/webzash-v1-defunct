@@ -144,8 +144,8 @@ class Group extends Controller {
 			redirect('account');
 			return;
 		}
-		if ($id < 5) {
-			$this->messages->add('Cannot edit system created Group A/C.', 'error');
+		if ($id <= 16) {
+			$this->messages->add('Cannot edit System Group A/C.', 'error');
 			redirect('account');
 			return;
 		}
@@ -278,8 +278,8 @@ class Group extends Controller {
 			redirect('account');
 			return;
 		}
-		if ($id < 5) {
-			$this->messages->add('Cannot delete system created Group A/C.', 'error');
+		if ($id <= 16) {
+			$this->messages->add('Cannot delete System Group A/C.', 'error');
 			redirect('account');
 			return;
 		}

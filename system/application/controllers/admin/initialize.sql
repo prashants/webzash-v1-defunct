@@ -7,7 +7,7 @@ INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (6, 1, 'Current A
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (7, 1, 'Investments', 0);
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (8, 2, 'Capital A/C', 0);
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (9, 2, 'Current Liabilities', 0);
-INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (10, 2, 'Loans (Liability)', 0);
+INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (10, 2, 'Loans (Liabilities)', 0);
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (11, 3, 'Direct Incomes', 1);
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (12, 4, 'Direct Expenses', 1);
 INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (13, 3, 'Indirect Incomes', 0);

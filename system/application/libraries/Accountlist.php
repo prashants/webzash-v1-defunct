@@ -125,7 +125,7 @@ class Accountlist
 			echo "<td>-</td>";
 			echo "<td>-</td>";
 
-			if ($this->id <= 4)
+			if ($this->id <= 16)
 			{
 				echo "<td class=\"td-actions\"></tr>";
 			} else {
