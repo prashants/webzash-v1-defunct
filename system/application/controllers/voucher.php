@@ -340,9 +340,6 @@ class Voucher extends Controller {
 			'value' => '',
 		);
 		$data['voucher_type'] = $voucher_type;
-		$data['voucher_print'] = FALSE;
-		$data['voucher_email'] = FALSE;
-		$data['voucher_download'] = FALSE;
 		$data['voucher_tags'] = $this->Tag_model->get_all_tags();
 		$data['voucher_tag'] = 0;
 
@@ -368,9 +365,6 @@ class Voucher extends Controller {
 			$data['voucher_number']['value'] = $this->input->post('voucher_number', TRUE);
 			$data['voucher_date']['value'] = $this->input->post('voucher_date', TRUE);
 			$data['voucher_narration']['value'] = $this->input->post('voucher_narration', TRUE);
-			$data['voucher_print'] = $this->input->post('voucher_print', TRUE);
-			$data['voucher_email'] = $this->input->post('voucher_email', TRUE);
-			$data['voucher_download'] = $this->input->post('voucher_download', TRUE);
 			$data['voucher_tag'] = $this->input->post('voucher_tag', TRUE);
 
 			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
@@ -688,9 +682,6 @@ class Voucher extends Controller {
 		);
 		$data['voucher_type'] = $voucher_type;
 		$data['voucher_id'] = $voucher_id;
-		$data['voucher_print'] = FALSE;
-		$data['voucher_email'] = FALSE;
-		$data['voucher_download'] = FALSE;
 		$data['voucher_tag'] = $cur_voucher->tag_id;
 		$data['voucher_tags'] = $this->Tag_model->get_all_tags();
 		$data['has_reconciliation'] = FALSE;
@@ -756,9 +747,6 @@ class Voucher extends Controller {
 			$data['voucher_number']['value'] = $this->input->post('voucher_number', TRUE);
 			$data['voucher_date']['value'] = $this->input->post('voucher_date', TRUE);
 			$data['voucher_narration']['value'] = $this->input->post('voucher_narration', TRUE);
-			$data['voucher_print'] = $this->input->post('voucher_print', TRUE);
-			$data['voucher_email'] = $this->input->post('voucher_email', TRUE);
-			$data['voucher_download'] = $this->input->post('voucher_download', TRUE);
 			$data['voucher_tag'] = $this->input->post('voucher_tag', TRUE);
 			$data['has_reconciliation'] = $this->input->post('has_reconciliation', TRUE);
 

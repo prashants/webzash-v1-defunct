@@ -264,17 +264,6 @@ $(document).ready(function() {
 	echo "</p>";
 
 	echo "<p>";
-	echo form_fieldset('Options', array('class' => "fieldset-auto-width"));
-	echo form_checkbox('voucher_print', 1, $voucher_print) . "Print";
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	echo form_checkbox('voucher_email', 1, $voucher_email) . "Email";
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	echo form_checkbox('voucher_download', 1, $voucher_download) . "Download";
-	echo form_fieldset_close();
-	echo "</p>";
-	echo "<br /><br />";
-
-	echo "<p>";
 	echo form_label('Tag', 'voucher_tag');
 	echo " ";
 	echo form_dropdown('voucher_tag', $voucher_tags, $voucher_tag);
