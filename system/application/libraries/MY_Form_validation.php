@@ -22,10 +22,12 @@ class MY_Form_validation extends CI_Form_validation {
 		list ($table, $column) = explode('.', $field, 2);
 
 		$CI->form_validation->set_message('unique', 'The %s that you requested is already in use.');
-
-		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM $table WHERE $column = '$str'");
-		$row = $query->row();
-		return ($row->dupe > 0) ? FALSE : TRUE;
+		$CI->db->from($table)->where($column, $str);
+		$dup_query = $CI->db->get();
+		if ($dup_query->num_rows() > 0)
+			return FALSE;
+		else
+			return TRUE;
 	}
 
 	function uniquevoucherno($str, $type)
@@ -34,9 +36,12 @@ class MY_Form_validation extends CI_Form_validation {
 
 		$CI->form_validation->set_message('uniquevoucherno', 'The %s that you requested is already in use.');
 
-		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM vouchers WHERE number = ? AND type = ?", array((int)$str, (int)$type));
-		$row = $query->row();
-		return ($row->dupe > 0) ? FALSE : TRUE;
+		$CI->db->from('vouchers')->where('number', $str)->where('type', $type);
+		$dup_query = $CI->db->get();
+		if ($dup_query->num_rows() > 0)
+			return FALSE;
+		else
+			return TRUE;
 	}
 
 	function uniquevouchernowithid($str, $field)
@@ -46,9 +51,12 @@ class MY_Form_validation extends CI_Form_validation {
 		list ($type, $id) = explode('.', $field, 2);
 		$CI->form_validation->set_message('uniquevouchernowithid', 'The %s that you requested is already in use.');
 
-		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM vouchers WHERE number = ? AND type = ? AND id != ?", array((int)$str, (int)$type, $id));
-		$row = $query->row();
-		return ($row->dupe > 0) ? FALSE : TRUE;
+		$CI->db->from('vouchers')->where('number', $str)->where('type', $type)->where('id !=', $id);
+		$dup_query = $CI->db->get();
+		if ($dup_query->num_rows() > 0)
+			return FALSE;
+		else
+			return TRUE;
 	}
 
 	function uniquewithid($str, $field)
@@ -58,9 +66,12 @@ class MY_Form_validation extends CI_Form_validation {
 
 		$CI->form_validation->set_message('uniquewithid', 'The %s that you requested is already in use.');
 
-		$query = $CI->db->query("SELECT COUNT(*) AS dupe FROM $table WHERE $column = '$str' AND id != ?", array($id));
-		$row = $query->row();
-		return ($row->dupe > 0) ? FALSE : TRUE;
+		$CI->db->from($table)->where($column, $str)->where('id !=', $id);
+		$dup_query = $CI->db->get();
+		if ($dup_query->num_rows() > 0)
+			return FALSE;
+		else
+			return TRUE;
 	}
 
 	function is_dc($str)

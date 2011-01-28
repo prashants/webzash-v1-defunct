@@ -89,7 +89,8 @@ class Startup
 		}
 
 		/* Loading account data */
-		$account_q = $CI->db->query('SELECT * FROM settings WHERE id = 1');
+		$CI->db->from('settings')->where('id', 1)->limit(1);
+		$account_q = $CI->db->get();
 		if ( ! ($account_d = $account_q->row()))
 		{
 			$CI->messages->add('Invalid account settings.', 'error');

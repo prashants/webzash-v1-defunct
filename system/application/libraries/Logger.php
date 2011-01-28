@@ -46,7 +46,8 @@ class Logger
 	function read_recent_messages()
 	{
 		$CI =& get_instance();
-		$logs_q = $CI->db->query("SELECT * FROM logs ORDER BY id DESC LIMIT 20");
+		$CI->db->from('logs')->order_by('id', 'desc')->limit(20);
+		$logs_q = $CI->db->get();
 		if ($logs_q->num_rows() > 0)
 		{
 			return $logs_q;

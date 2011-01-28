@@ -30,7 +30,8 @@ class Accountlist
 			$this->total = 0;
 
 		} else {
-			$group_q = $CI->db->query('SELECT * FROM groups WHERE id = ?', array($id));
+			$CI->db->from('groups')->where('id', $id)->limit(1);
+			$group_q = $CI->db->get();
 			$group = $group_q->row();
 			$this->id = $group->id;
 			$this->name = $group->name;
@@ -43,7 +44,8 @@ class Accountlist
 	function add_sub_groups()
 	{
 		$CI =& get_instance();
-		$child_group_q = $CI->db->query('SELECT * FROM groups WHERE parent_id = ?', array($this->id));
+		$CI->db->from('groups')->where('parent_id', $this->id);
+		$child_group_q = $CI->db->get();
 		$counter = 0;
 		foreach ($child_group_q->result() as $row)
 		{
@@ -57,7 +59,8 @@ class Accountlist
 	{
 		$CI =& get_instance();
 		$CI->load->model('Ledger_model');
-		$child_ledger_q = $CI->db->query('SELECT * FROM ledgers WHERE group_id = ?', array($this->id));
+		$CI->db->from('ledgers')->where('group_id', $this->id);
+		$child_ledger_q = $CI->db->get();
 		$counter = 0;
 		foreach ($child_ledger_q->result() as $row)
 		{
