@@ -145,36 +145,91 @@ if ( ! function_exists('v_to_n'))
 }
 
 /**
+ * Return Voucher Type information
+ *
+ * @access	public
+ * @param	int voucher type id
+ * @return	array
+ */
+if ( ! function_exists('voucher_type_info'))
+{
+	function voucher_type_info($voucher_type_id)
+	{
+		$CI =& get_instance();
+		$voucher_type_all = $CI->config->item('account_voucher_types');
+
+		if ($voucher_type_all[$voucher_type_id])
+		{
+			return array(
+				'id' => $voucher_type_all[$voucher_type_id],
+				'label' => $voucher_type_all[$voucher_type_id]['label'],
+				'name' => $voucher_type_all[$voucher_type_id]['name'],
+				'numbering' => $voucher_type_all[$voucher_type_id]['numbering'],
+				'prefix' => $voucher_type_all[$voucher_type_id]['prefix'],
+				'suffix' => $voucher_type_all[$voucher_type_id]['suffix'],
+				'zero_padding' => $voucher_type_all[$voucher_type_id]['zero_padding'],
+				'bank_cash_ledger_restriction' => $voucher_type_all[$voucher_type_id]['bank_cash_ledger_restriction'],
+			);
+		} else {
+			return array(
+				'id' => $voucher_type_all[$voucher_type_id],
+				'label' => '',
+				'name' => '(Unkonwn)',
+				'numbering' => 1,
+				'prefix' => '',
+				'suffix' => '',
+				'zero_padding' => 0,
+				'bank_cash_ledger_restriction' => 5,
+			);
+		}
+	}
+}
+
+/**
+ * Return Voucher Type Id from Voucher Type Name
+ *
+ * @access	public
+ * @param	string voucher type name
+ * @return	int voucher type id
+ */
+if ( ! function_exists('voucher_type_name_to_id'))
+{
+	function voucher_type_name_to_id($voucher_type_name)
+	{
+		$CI =& get_instance();
+		$voucher_type_all = $CI->config->item('account_voucher_types');
+		foreach ($voucher_type_all as $id => $row)
+		{
+			if ($row['label'] == $voucher_type_name)
+			{
+				return $id;
+				break;
+			}
+		}
+		return FALSE;
+	}
+}
+
+/**
  * Converts Voucher number to proper voucher prefix formats
  *
  * @access	public
- * @param	voucher type
+ * @param	int voucher type id
  * @return	string
  */
 if ( ! function_exists('voucher_number_prefix'))
 {
-	function voucher_number_prefix($voucher_type)
+	function voucher_number_prefix($voucher_type_id)
 	{
 		$CI =& get_instance();
+		$voucher_type_all = $CI->config->item('account_voucher_types');
 
-		$voucher_prefix = "";
-
-		switch ($voucher_type)
+		if ( ! $voucher_type_all[$voucher_type_id])
 		{
-		case "receipt":
-			$voucher_prefix = $CI->config->item('account_receipt_prefix');
-			break;
-		case "payment":
-			$voucher_prefix = $CI->config->item('account_payment_prefix');
-			break;
-		case "contra":
-			$voucher_prefix = $CI->config->item('account_contra_prefix');
-			break;
-		case "journal":
-			$voucher_prefix = $CI->config->item('account_journal_prefix');
-			break;
+			return '';
+		} else {
+			return $voucher_type_all[$voucher_type_id]['prefix'];
 		}
-		return $voucher_prefix;
 	}
 }
 

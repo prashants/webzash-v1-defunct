@@ -69,13 +69,15 @@ class Ledger_model extends Model {
 			return "(Error)";
 	}
 
-	function get_voucher_name($voucher_id, $voucher_type)
+	function get_voucher_name($voucher_id, $voucher_type_id)
 	{
-		/* If receipt voucher (1) then select the credit ledger */
-		if ($voucher_type == 1)
-			$ledger_type = 'C';
-		else
+		/* Selecting whether to show debit side Ledger or credit side Ledger */
+		$current_voucher_type = voucher_type_info($voucher_type_id);
+		$ledger_type = 'C';
+
+		if ($current_voucher_type['bank_cash_ledger_restriction'] == 3)
 			$ledger_type = 'D';
+
 		$this->db->select('ledgers.name as name');
 		$this->db->from('voucher_items')->join('ledgers', 'voucher_items.ledger_id = ledgers.id')->where('voucher_items.voucher_id', $voucher_id)->where('voucher_items.dc', $ledger_type);
 		$ledger_q = $this->db->get();
@@ -86,9 +88,9 @@ class Ledger_model extends Model {
 			$ledger_multiple = ($ledger_q->num_rows() > 1) ? TRUE : FALSE;
 			$html = '';
 			if ($ledger_multiple)
-				$html .= anchor('voucher/view/' . n_to_v($voucher_type) . "/" . $voucher_id, "(" . $ledger->name . ")", array('title' => 'View ' . ucfirst(n_to_v($voucher_type)) . ' Voucher', 'class' => 'anchor-link-a'));
+				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
 			else
-				$html .= anchor('voucher/view/' . n_to_v($voucher_type) . "/" . $voucher_id, $ledger->name, array('title' => 'View ' . ucfirst(n_to_v($voucher_type)) . ' Voucher', 'class' => 'anchor-link-a'));
+				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
 			return $html;
 		}
 		return;

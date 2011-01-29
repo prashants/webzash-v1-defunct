@@ -20,52 +20,30 @@ class Voucher extends Controller {
 	function show($voucher_type)
 	{
 		$this->load->model('Tag_model');
+
 		$data['tag_id'] = 0;
-		if ($voucher_type == "tag")
+		$voucher_type_id = 0;
+
+		if ($voucher_type == 'tag')
 		{
 			$tag_id = (int)$this->uri->segment(4);
 			$data['tag_id'] = $tag_id;
-		}
-
-		switch ($voucher_type)
-		{
-		case 'all' :
+		} else if ($voucher_type == 'all') {
+			$voucher_type_id = 0;
 			$this->template->set('page_title', 'All Vouchers');
-			$data['voucher_type'] = "";
-			break;
-		case 'receipt' :
-			$this->template->set('page_title', 'Receipt Vouchers');
-			$this->template->set('nav_links', array('voucher/add/receipt' => 'New Receipt Voucher'));
-			$data['voucher_type'] = "receipt";
-			break;
-		case 'payment' :
-			$this->template->set('page_title', 'Payment Vouchers');
-			$this->template->set('nav_links', array('voucher/add/payment' => 'New Payment Voucher'));
-			$data['voucher_type'] = "payment";
-			break;
-		case 'contra' :
-			$this->template->set('page_title', 'Contra Vouchers');
-			$this->template->set('nav_links', array('voucher/add/contra' => 'New Contra Voucher'));
-			$data['voucher_type'] = "contra";
-			break;
-		case 'journal' :
-			$this->template->set('page_title', 'Journal Vouchers');
-			$this->template->set('nav_links', array('voucher/add/journal' => 'New Journal Voucher'));
-			$data['voucher_type'] = "journal";
-			break;
-		case 'tag' :
-			$tag_name = $this->Tag_model->tag_name($tag_id);
-			$this->template->set('page_title', 'Vouchers Tagged "' . $tag_name . '"');
-			$data['voucher_type'] = "";
-			break;
-		default :
-			/* TODO $this->messages->add('Invalid Voucher type(1).', 'error'); */
-			redirect('voucher/show/all');
-			return;
-			break;
+		} else {
+			$voucher_type_id = voucher_type_name_to_id($voucher_type);
+			if ( ! $voucher_type_id)
+			{
+				$this->messages->add('Invalid Voucher type specified. Showing all Vouchers.', 'error');
+				redirect('voucher/show/all');
+				return;
+			} else {
+				$current_voucher_type = voucher_type_info($voucher_type_id);
+				$this->template->set('page_title', $current_voucher_type['name'] . ' Vouchers');
+				$this->template->set('nav_links', array('voucher/add/' . $current_voucher_type['label'] => 'New ' . $current_voucher_type['name'] . ' Voucher'));
+			}
 		}
-
-		$voucher_type_int = v_to_n($voucher_type);
 
 		$voucher_q = NULL;
 
@@ -82,12 +60,15 @@ class Voucher extends Controller {
 			$page_count = "0";
 
 		/* Pagination configuration */
-		if ($voucher_type == "tag")
+		if ($voucher_type == 'tag')
 		{
-			$config['base_url'] = site_url('voucher/show/' . $voucher_type. "/" . $tag_id);
+			$config['base_url'] = site_url('voucher/show/tag' . $tag_id);
 			$config['uri_segment'] = 5;
+		} else if ($voucher_type == 'all') {
+			$config['base_url'] = site_url('voucher/show/all');
+			$config['uri_segment'] = 4;
 		} else {
-			$config['base_url'] = site_url('voucher/show/' . $voucher_type);
+			$config['base_url'] = site_url('voucher/show/' . $current_voucher_type['label']);
 			$config['uri_segment'] = 4;
 		}
 		$pagination_counter = $this->config->item('row_count');
@@ -112,19 +93,14 @@ class Voucher extends Controller {
 		$config['last_tag_open'] = '<li class="last">';
 		$config['last_tag_close'] = '</li>';
 
-		if (($voucher_type_int < 0) || ($voucher_type_int > 4))
-		{
-			$this->messages->add('Invalid Voucher type(2).', 'error');
-			redirect('voucher/show/all');
-			return;
-		} else if ($voucher_type == "tag") {
+		if ($voucher_type == "tag") {
 			$this->db->from('vouchers')->where('tag_id', $tag_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
 			$voucher_q = $this->db->get();
 			$config['total_rows'] = $this->db->from('vouchers')->where('tag_id', $tag_id)->get()->num_rows();
-		} else if ($voucher_type_int > 0) {
-			$this->db->from('vouchers')->where('type', $voucher_type_int)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
+		} else if ($voucher_type_id > 0) {
+			$this->db->from('vouchers')->where('type', $voucher_type_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
 			$voucher_q = $this->db->get();
-			$config['total_rows'] = $this->db->from('vouchers')->where('type', $voucher_type_int)->get()->num_rows();
+			$config['total_rows'] = $this->db->from('vouchers')->where('type', $voucher_type_id)->get()->num_rows();
 		} else {
 			$this->db->from('vouchers')->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
 			$voucher_q = $this->db->get();
@@ -181,53 +157,7 @@ class Voucher extends Controller {
 			$this->session->unset_userdata('voucher_updated_has_reconciliation');
 		}
 
-		$html = "<table border=0 cellpadding=5 class=\"simple-table\">";
-		$html .= "<thead><tr><th>Date</th><th>No</th><th>Ledger A/C</th><th>Type</th><th>DR Amount</th><th>CR Amount</th><th></th></tr></thead>";
-		$html .= "<tbody>";
-
-		$odd_even = "odd";
-		foreach ($voucher_q->result() as $row)
-		{
-			$html_voucher_type = n_to_v($row->type);
-
-			/* Showing the credit ledger name for payment and debit for other voucher types */
-			$ledger_type = ($row->type == 2) ? "C" : "D";
-			$this->db->select('ledgers.name as name');
-			$this->db->from('voucher_items')->join('ledgers', 'voucher_items.ledger_id = ledgers.id')->where('voucher_items.voucher_id', $row->id)->where('voucher_items.dc', $ledger_type);
-			$ledger_q = $this->db->get();
-			$ledger_multiple = ($ledger_q->num_rows() > 1) ? TRUE : FALSE;
-			$ledger = $ledger_q->row();
-
-			$html .= "<tr class=\"tr-" . $odd_even . "\">";
-
-			$html .= "<td>" . date_mysql_to_php_display($row->date) . "</td>";
-			$html .= "<td>" . anchor('voucher/view/' . strtolower($html_voucher_type) . "/" . $row->id, voucher_number_prefix($html_voucher_type) . $row->number, array('title' => 'View ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'anchor-link-a')) . "</td>";
-
-			$html .= "<td>";
-			$html .= $this->Tag_model->show_voucher_tag($row->tag_id);
-			$html .= $this->Ledger_model->get_voucher_name($row->id, $row->type);
-			$html .= "</td>";
-
-			$html .= "<td>" . ucfirst($html_voucher_type) . "</td>";
-			$html .= "<td>" . $row->dr_total . "</td>";
-			$html .= "<td>" . $row->cr_total . "</td>";
-
-			$html .= "<td>" . anchor('voucher/edit/' . strtolower($html_voucher_type) . "/" . $row->id , "Edit", array('title' => 'Edit ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => 'red-link')) . " ";
-
-			$html .= " &nbsp;" . anchor('voucher/delete/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . ucfirst($html_voucher_type) . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Delete  ' . ucfirst($html_voucher_type) . ' Voucher')) . " ";
-
-			$html .= " &nbsp;" . anchor_popup('voucher/printpreview/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Print ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '600', 'height' => '600')) . " ";
-
-			$html .= " &nbsp;" . anchor_popup('voucher/email/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher')), array('title' => 'Email ' . ucfirst($html_voucher_type) . ' Voucher', 'width' => '500', 'height' => '300')) . " ";
-
-			$html .= " &nbsp;" . anchor('voucher/download/' . strtolower($html_voucher_type) . "/" . $row->id , img(array('src' => asset_url() . "images/icons/save.png", 'border' => '0', 'alt' => 'Download ' . ucfirst($html_voucher_type) . ' Voucher', 'title' => "Download voucher")), array('title' => 'Download  ' . ucfirst($html_voucher_type) . ' Voucher')) . "</td>";
-
-			$html .= "</tr>";
-			$odd_even = ($odd_even == "odd") ? "even" : "odd";
-		}
-		$html .= "</tbody>";
-		$html .= "</table>";
-		$data['voucher_table'] = $html;
+		$data['voucher_data'] = $voucher_q;
 
 		$this->template->load('template', 'voucher/index', $data);
 		return;

@@ -1,3 +1,19 @@
+//--------------------------------- VERSION 3 ----------------------------------
+
+CREATE TABLE IF NOT EXISTS voucher_types (
+  id int(5) NOT NULL,
+  label varchar(15) NOT NULL,
+  name varchar(100) NOT NULL,
+  description varchar(255) NOT NULL,
+  base_type int(2) NOT NULL,
+  numbering int(2) NOT NULL,
+  prefix varchar(10) NOT NULL,
+  suffix varchar(10) NOT NULL,
+  zero_padding int(2) NOT NULL,
+  bank_cash_ledger_restriction int(2) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 //--------------------------------- VERSION 2 ----------------------------------
 
 ALTER TABLE voucher_items ADD reconciliation_date DATETIME NULL;

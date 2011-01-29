@@ -170,6 +170,34 @@ class General {
 		}
 		return $user_data;
 	}
+
+	function setup_voucher_types()
+	{
+		$CI =& get_instance();
+
+		$CI->db->from('voucher_types');
+		$voucher_types = $CI->db->get();
+		if ($voucher_types->num_rows() < 1)
+		{
+			$CI->messages->add('You need to create a voucher type before you can create any vouchers.', 'error');
+		}
+		$voucher_type_config = array();
+		foreach ($voucher_types->result() as $id => $row)
+		{
+			$voucher_type_config[$row->id] = array(
+				'label' => $row->label,
+				'name' => $row->name,
+				'description' => $row->description,
+				'base_type' => $row->base_type,
+				'numbering' => $row->numbering,
+				'prefix' => $row->prefix,
+				'suffix' => $row->suffix,
+				'zero_padding' => $row->zero_padding,
+				'bank_cash_ledger_restriction' => $row->bank_cash_ledger_restriction,
+			);
+		}
+		$CI->config->set_item('account_voucher_types', $voucher_type_config);
+	}
 }
 
 /* End of file General.php */

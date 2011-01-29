@@ -115,6 +115,9 @@ class Startup
 		/* Load general application settings */
 		$CI->general->check_setting();
 
+		/* Load voucher types */
+		$CI->general->setup_voucher_types();
+
 		return;
 	}
 }
