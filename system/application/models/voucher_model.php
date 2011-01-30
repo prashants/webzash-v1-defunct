@@ -22,10 +22,9 @@ class Voucher_model extends Model {
 		}
 	}
 
-	function get_voucher($voucher_id, $type_string)
+	function get_voucher($voucher_id, $voucher_type_id)
 	{
-		$type_number = v_to_n($type_string);
-		$this->db->from('vouchers')->where('id', $voucher_id)->where('type', $type_number)->limit(1);
+		$this->db->from('vouchers')->where('id', $voucher_id)->where('type', $voucher_type_id)->limit(1);
 		$voucher_q = $this->db->get();
 		return $voucher_q->row();
 	}

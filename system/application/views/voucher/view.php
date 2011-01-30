@@ -1,4 +1,4 @@
-<p>Voucher Number : <span class="bold"><?php echo voucher_number_prefix($voucher_type) . $cur_voucher->number; ?></span>
+<p>Voucher Number : <span class="bold"><?php echo voucher_number_prefix($voucher_type_id) . $cur_voucher->number; ?></span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Voucher Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_voucher->date); ?></span>
 </p>
@@ -50,15 +50,15 @@ else
 ?>
 </p>
 <?php 
-	echo anchor('voucher/show/' . $voucher_type, 'Back', array('title' => 'Back to ' . ucfirst($voucher_type) . ' Vouchers'));
+	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' .  $current_voucher_type['name'] . ' Vouchers'));
 	echo " | ";
-	echo anchor('voucher/edit/' . $voucher_type . "/" . $cur_voucher->id, 'Edit', array('title' => 'Edit ' . ucfirst($voucher_type) . ' Voucher'));
+	echo anchor('voucher/edit/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Edit', array('title' => 'Edit ' . $current_voucher_type['name'] . ' Voucher'));
 	echo " | ";
-	echo anchor('voucher/delete/' . $voucher_type . "/" . $cur_voucher->id, 'Delete', array('class' => "confirmClick", 'title' => "Delete voucher", 'title' => 'Delete this ' . ucfirst($voucher_type) . ' Voucher'));
+	echo anchor('voucher/delete/' . $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Delete', array('class' => "confirmClick", 'title' => "Delete voucher", 'title' => 'Delete this ' . $current_voucher_type['name'] . ' Voucher'));
 	echo " | ";
-	echo anchor_popup('voucher/printpreview/' . $voucher_type . "/" . $cur_voucher->id, 'Print', array('title' => 'Print this ' . ucfirst($voucher_type) . ' Voucher', 'width' => '600', 'height' => '600'));
+	echo anchor_popup('voucher/printpreview/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Print', array('title' => 'Print this ' . $current_voucher_type['name'] . ' Voucher', 'width' => '600', 'height' => '600'));
 	echo " | ";
-	echo anchor_popup('voucher/email/' . $voucher_type . "/" . $cur_voucher->id, 'Email', array('title' => 'Email this ' . ucfirst($voucher_type) . ' Voucher', 'width' => '400', 'height' => '200'));
+	echo anchor_popup('voucher/email/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Email', array('title' => 'Email this ' . $current_voucher_type['name'] . ' Voucher', 'width' => '400', 'height' => '200'));
 	echo " | ";
-	echo anchor('voucher/download/' . $voucher_type . "/" . $cur_voucher->id, 'Download', array('title' => "Download voucher", 'title' => 'Download this ' . ucfirst($voucher_type) . ' Voucher'));
+	echo anchor('voucher/download/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Download', array('title' => "Download voucher", 'title' => 'Download this ' . $current_voucher_type['name'] . ' Voucher'));
 
