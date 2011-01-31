@@ -113,14 +113,29 @@ $(document).ready(function() {
 				<?php echo anchor('account', 'Accounts', array('title' => 'Chart of accounts')); ?>
 			</li>
 			<li>
-				<?php echo anchor('voucher', 'Vouchers', array('title' => 'Vouchers')); ?>
-				<ul>
-					<li><?php echo anchor('voucher/show/all', 'All', array('title' => 'All Vouchers')); ?></li>
-					<li><?php echo anchor('voucher/show/receipt', 'Receipt', array('title' => 'Receipt Vouchers')); ?></li>
-					<li><?php echo anchor('voucher/show/payment', 'Payment', array('title' => 'Payment Vouchers')); ?></li>
-					<li><?php echo anchor('voucher/show/contra', 'Contra', array('title' => 'Contra Vouchers')); ?></li>
-					<li><?php echo anchor('voucher/show/journal', 'Journal', array('title' => 'Journal Vouchers')); ?></li>
-				</ul>
+				<?php
+					/* Showing Voucher Type sub-menu */
+					$voucher_type_all = $this->config->item('account_voucher_types');
+					$voucher_type_count = count($voucher_type_all);
+					if ($voucher_type_count < 1)
+					{
+						echo "";
+					} else if ($voucher_type_count == 1) {
+						foreach ($voucher_type_all as $id => $row)
+						{
+							echo anchor('voucher/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Vouchers'));
+						}
+					} else {
+						echo anchor('voucher', 'Vouchers', array('title' => 'Vouchers'));
+						echo "<ul>";
+						echo "<li>" . anchor('voucher/show/all', 'All', array('title' => 'All Vouchers')) . "</li>";
+						foreach ($voucher_type_all as $id => $row)
+						{
+							echo "<li>" . anchor('voucher/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Vouchers')) . "</li>";
+						}
+						echo "</ul>";
+					}
+				?>
 			</li>
 			<li>
 				<?php echo anchor('report', 'Reports', array('title' => 'Reports')); ?>

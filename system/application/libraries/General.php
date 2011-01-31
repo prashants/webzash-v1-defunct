@@ -175,7 +175,7 @@ class General {
 	{
 		$CI =& get_instance();
 
-		$CI->db->from('voucher_types');
+		$CI->db->from('voucher_types')->order_by('id', 'asc');
 		$voucher_types = $CI->db->get();
 		if ($voucher_types->num_rows() < 1)
 		{

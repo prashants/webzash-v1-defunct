@@ -261,16 +261,24 @@ class Ledger extends Controller {
 				return;
 			}
 
-			/* Check if contra voucher present for non Bank or Cash A/C */
+			/* Check if bank_cash_ledger_restriction both voucher present */
 			if ($data_ledger_type_cashbank_value != "1")
 			{
-				$this->db->from('voucher_items')->join('vouchers', 'voucher_items.voucher_id = vouchers.id')->where('vouchers.type', 3)->where('voucher_items.ledger_id', $id);
-				$contra_count = $this->db->get()->num_rows();
-				if ($contra_count > 0)
+				$voucher_type_all = $this->config->item('account_voucher_types');
+				foreach ($voucher_type_all as $voucher_type_id => $row)
 				{
-					$this->messages->add('Cannot remove the  Bank or Cash Account status of this Ledger A/C since it is still linked with ' . $contra_count . ' Contra Vouchers entries.', 'error');
-					$this->template->load('template', 'ledger/edit', $data);
-					return;
+					/* Check for Voucher types where bank_cash_ledger_restriction is for all ledgers */
+					if ($row['bank_cash_ledger_restriction'] == 4)
+					{
+						$this->db->from('voucher_items')->join('vouchers', 'voucher_items.voucher_id = vouchers.id')->where('vouchers.voucher_type', $voucher_type_id)->where('voucher_items.ledger_id', $id);
+						$all_ledger_bank_cash_count = $this->db->get()->num_rows();
+						if ($all_ledger_bank_cash_count > 0)
+						{
+							$this->messages->add('Cannot remove the Bank or Cash Account status of this Ledger A/C since it is still linked with ' . $all_ledger_bank_cash_count . ' ' . $row['name'] . ' Vouchers entries.', 'error');
+							$this->template->load('template', 'ledger/edit', $data);
+							return;
+						}
+					}
 				}
 			}
 
