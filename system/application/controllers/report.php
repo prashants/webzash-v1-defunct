@@ -354,13 +354,16 @@ class Report extends Controller {
 			$ledgerst_q = $this->db->get();
 			foreach ($ledgerst_q->result() as $row)
 			{
+				/* Voucher Type */
+				$current_voucher_type = voucher_type_info($row->vtype);
+
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
-				$ledgerst[$counter][1] = voucher_number_prefix(n_to_v($row->vtype)) . $row->vnumber;
+				$ledgerst[$counter][1] = voucher_number_prefix($row->vtype) . $row->vnumber;
 
 				/* Opposite voucher name */
 				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $row->vtype, $row->ldc, 'text');
 
-				$ledgerst[$counter][3] = ucfirst(n_to_v($row->vtype));
+				$ledgerst[$counter][3] = $current_voucher_type['name'];
 
 				if ($row->ldc == "D")
 				{
@@ -474,13 +477,16 @@ class Report extends Controller {
 			$ledgerst_q = $this->db->get();
 			foreach ($ledgerst_q->result() as $row)
 			{
+				/* Voucher Type */
+				$current_voucher_type = voucher_type_info($row->vtype);
+
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
-				$ledgerst[$counter][1] = voucher_number_prefix(n_to_v($row->vtype)) . $row->vnumber;
+				$ledgerst[$counter][1] = voucher_number_prefix($row->vtype) . $row->vnumber;
 
 				/* Opposite voucher name */
 				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $row->vtype, $row->ldc, 'text');
 
-				$ledgerst[$counter][3] = ucfirst(n_to_v($row->vtype));
+				$ledgerst[$counter][3] = $current_voucher_type['name'];
 
 				if ($row->ldc == "D")
 				{

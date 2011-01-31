@@ -120,6 +120,8 @@
 
 		foreach ($ledgerst_q->result() as $row)
 		{
+			$current_voucher_type = voucher_type_info($row->vtype);
+
 			echo "<tr class=\"tr-" . $odd_even;
 			if ($row->lreconciliation)
 				echo " tr-reconciled";
@@ -128,7 +130,7 @@
 			echo date_mysql_to_php_display($row->vdate);
 			echo "</td>";
 			echo "<td>";
-			echo anchor('voucher/view/' . n_to_v($row->vtype) . '/' . $row->vid, voucher_number_prefix(n_to_v($row->vtype)) . $row->vnumber, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
+			echo anchor('voucher/view/' . $current_voucher_type['label'] . '/' . $row->vid, voucher_number_prefix($row->vtype) . $row->vnumber, array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
 			echo "</td>";
 
 			/* Getting opposite Ledger name */
@@ -137,7 +139,7 @@
 			echo "</td>";
 
 			echo "<td>";
-			echo ucfirst(n_to_v($row->vtype));
+			echo $current_voucher_type['name'];
 			echo "</td>";
 			if ($row->ldc == "D")
 			{
