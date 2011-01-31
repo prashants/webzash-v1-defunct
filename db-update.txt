@@ -20,6 +20,8 @@ ALTER TABLE settings DROP contra_voucher_prefix;
 ALTER TABLE settings DROP journal_voucher_prefix;
 ALTER TABLE settings DROP voucher_number_padding;
 
+ALTER TABLE vouchers CHANGE type voucher_type INT(5) NOT NULL;
+
 //--------------------------------- VERSION 2 ----------------------------------
 
 ALTER TABLE voucher_items ADD reconciliation_date DATETIME NULL;

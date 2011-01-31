@@ -96,7 +96,7 @@ class Ledger_model extends Model {
 		return;
 	}
 
-	function get_opp_ledger_name($voucher_id, $voucher_type, $ledger_type, $output_type)
+	function get_opp_ledger_name($voucher_id, $voucher_type_label, $ledger_type, $output_type)
 	{
 		$output = '';
 		if ($ledger_type == 'D')
@@ -111,12 +111,12 @@ class Ledger_model extends Model {
 			if ($opp_voucher_name_q->num_rows() > 1)
 			{
 				if ($output_type == 'html')
-					$output = anchor('voucher/view/' . n_to_v($voucher_type) . '/' . $voucher_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
+					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $voucher_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
 				else
 					$output = "(" . $opp_ledger_name . ")";
 			} else {
 				if ($output_type == 'html')
-					$output = anchor('voucher/view/' . n_to_v($voucher_type) . '/' . $voucher_id, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
+					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $voucher_id, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
 				else
 					$output = $opp_ledger_name;
 			}

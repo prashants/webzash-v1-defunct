@@ -100,9 +100,9 @@ class Voucher extends Controller {
 			$voucher_q = $this->db->get();
 			$config['total_rows'] = $this->db->from('vouchers')->where('tag_id', $tag_id)->get()->num_rows();
 		} else if ($voucher_type_id > 0) {
-			$this->db->from('vouchers')->where('type', $voucher_type_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
+			$this->db->from('vouchers')->where('voucher_type', $voucher_type_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
 			$voucher_q = $this->db->get();
-			$config['total_rows'] = $this->db->from('vouchers')->where('type', $voucher_type_id)->get()->num_rows();
+			$config['total_rows'] = $this->db->from('vouchers')->where('voucher_type', $voucher_type_id)->get()->num_rows();
 		} else {
 			$this->db->from('vouchers')->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
 			$voucher_q = $this->db->get();
@@ -432,7 +432,7 @@ class Voucher extends Controller {
 			if ($this->input->post('voucher_number', TRUE))
 				$data_number = $this->input->post('voucher_number', TRUE);
 			else
-				$data_number = $this->Voucher_model->next_voucher_number($voucher_type);
+				$data_number = $this->Voucher_model->next_voucher_number($voucher_type_id);
 
 			$data_date = $this->input->post('voucher_date', TRUE);
 			$data_narration = $this->input->post('voucher_narration', TRUE);
@@ -446,7 +446,7 @@ class Voucher extends Controller {
 				'number' => $data_number,
 				'date' => $data_date,
 				'narration' => $data_narration,
-				'type' => $data_type,
+				'voucher_type' => $data_type,
 				'tag_id' => $data_tag,
 			);
 			if ( ! $this->db->insert('vouchers', $insert_data))
@@ -640,7 +640,7 @@ class Voucher extends Controller {
 		}
 
 		/* Form validations */
-		$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|required|is_natural_no_zero|uniquevouchernowithid[' . v_to_n($voucher_type) . '.' . $voucher_id . ']');
+		$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|required|is_natural_no_zero|uniquevouchernowithid[' . $voucher_type_id . '.' . $voucher_id . ']');
 		$this->form_validation->set_rules('voucher_date', 'Voucher Date', 'trim|required|is_date|is_date_within_range');
 		$this->form_validation->set_rules('voucher_narration', 'trim');
 		$this->form_validation->set_rules('voucher_tag', 'Tag', 'trim|is_natural');
@@ -894,7 +894,7 @@ class Voucher extends Controller {
 		return;
 	}
 
-	function delete($voucher_type, $voucher_id)
+	function delete($voucher_type, $voucher_id = 0)
 	{
 		/* Check access */
 		if ( ! check_access('delete voucher'))
@@ -955,7 +955,7 @@ class Voucher extends Controller {
 		return;
 	}
 
-	function download($voucher_type, $voucher_id)
+	function download($voucher_type, $voucher_id = 0)
 	{
 		$this->load->helper('download');
 		$this->load->model('Setting_model');
@@ -1022,7 +1022,7 @@ class Voucher extends Controller {
 		return;
 	}
 
-	function printpreview($voucher_type, $voucher_id)
+	function printpreview($voucher_type, $voucher_id = 0)
 	{
 		$this->load->model('Setting_model');
 		$this->load->model('Ledger_model');
@@ -1085,7 +1085,7 @@ class Voucher extends Controller {
 		return;
 	}
 
-	function email($voucher_type, $voucher_id)
+	function email($voucher_type, $voucher_id = 0)
 	{
 		$this->load->model('Setting_model');
 		$this->load->model('Ledger_model');

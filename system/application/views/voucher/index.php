@@ -18,16 +18,16 @@
 	<?php
 		foreach ($voucher_data->result() as $row)
 		{
-			$current_voucher_type = voucher_type_info($row->type);
+			$current_voucher_type = voucher_type_info($row->voucher_type);
 
 			echo "<tr>";
 
 			echo "<td>" . date_mysql_to_php_display($row->date) . "</td>";
-			echo "<td>" . anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a')) . "</td>";
+			echo "<td>" . anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a')) . "</td>";
 
 			echo "<td>";
 			echo $this->Tag_model->show_voucher_tag($row->tag_id);
-			echo $this->Ledger_model->get_voucher_name($row->id, $row->type);
+			echo $this->Ledger_model->get_voucher_name($row->id, $row->voucher_type);
 			echo "</td>";
 
 			echo "<td>" . $current_voucher_type['name'] . "</td>";

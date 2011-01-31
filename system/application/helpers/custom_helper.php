@@ -97,54 +97,6 @@ if ( ! function_exists('print_value'))
 }
 
 /**
- * Return Voucher Type String from Number
- *
- * Return the account information
- *
- * @access	public
- * @param	a varaible
- * @return	string value
- */	
-if ( ! function_exists('n_to_v'))
-{
-	function n_to_v($type_number)
-	{
-		switch ($type_number)
-		{
-		case 1: return "receipt"; break;
-		case 2: return "payment"; break;
-		case 3: return "contra"; break;
-		case 4: return "journal"; break;
-		default: return ""; break;
-		}
-	}
-}
-
-/**
- * Return Number from Voucher Type String
- *
- * Return the account information
- *
- * @access	public
- * @param	a varaible
- * @return	string value
- */	
-if ( ! function_exists('v_to_n'))
-{
-	function v_to_n($type_string)
-	{
-		switch ($type_string)
-		{
-		case "receipt": return 1; break;
-		case "payment": return 2; break;
-		case "contra": return 3; break;
-		case "journal": return 4; break;
-		default: return 0; break;
-		}
-	}
-}
-
-/**
  * Return Voucher Type information
  *
  * @access	public
