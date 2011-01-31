@@ -955,7 +955,7 @@ class Voucher extends Controller {
 		return;
 	}
 
-	function download($voucher_type, $voucher_id = 0)
+	function download($voucher_type, $voucher_id)
 	{
 		$this->load->helper('download');
 		$this->load->model('Setting_model');
@@ -969,17 +969,27 @@ class Voucher extends Controller {
 			return;
 		}
 
-		$account = $this->Setting_model->get_current();
+		/* Voucher Type */
+		$voucher_type_id = voucher_type_name_to_id($voucher_type);
+		if ( ! $voucher_type_id)
+		{
+			$this->messages->add('Invalid Voucher type.', 'error');
+			redirect('voucher/show/all');
+			return;
+		} else {
+			$current_voucher_type = voucher_type_info($voucher_type_id);
+		}
 
 		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
+		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
 		{
-			$this->messages->add('Invalid Voucher number.', 'error');
+			$this->messages->add('Invalid Voucher.', 'error');
 			redirect('voucher/show/' . $voucher_type);
 			return;
 		}
 
-		$data['voucher_type'] = $voucher_type;
+		$data['current_voucher_type'] = $current_voucher_type;
+		$data['voucher_type_id'] = $voucher_type_id;
 		$data['voucher_number'] =  $cur_voucher->number;
 		$data['voucher_date'] = date_mysql_to_php_display($cur_voucher->date);
 		$data['voucher_dr_total'] =  $cur_voucher->dr_total;
@@ -1006,7 +1016,7 @@ class Voucher extends Controller {
 		}
 
 		/* Download Voucher */
-		$file_name = $voucher_type . '_voucher_' . $cur_voucher->number . ".html";
+		$file_name = $current_voucher_type['name'] . '_voucher_' . $cur_voucher->number . ".html";
 		$download_data = $this->load->view('voucher/downloadpreview', $data, TRUE);
 		force_download($file_name, $download_data);
 		return;
