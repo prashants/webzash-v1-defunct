@@ -1,7 +1,8 @@
 <?php
-	if ($voucher_type == "contra")
+	/* Add row ledger type */
+	if ($current_voucher_type['bank_cash_ledger_restriction'] == '4')
 		$add_type = "bankcash";
-	else if ($voucher_type == "journal")
+	else if ($current_voucher_type['bank_cash_ledger_restriction'] == '5')
 		$add_type = "nobankcash";
 	else
 		$add_type = "all";
@@ -194,11 +195,11 @@ $(document).ready(function() {
 </script>
 
 <?php
-	echo form_open('voucher/edit/' . $voucher_type . "/" . $voucher_id);
+	echo form_open('voucher/edit/' . $current_voucher_type['label'] . "/" . $voucher_id);
 	echo "<p>";
 	echo form_label('Voucher Number', 'voucher_number');
 	echo " ";
-	echo voucher_number_prefix($voucher_type) . form_input($voucher_number);
+	echo voucher_number_prefix($voucher_type_id) . form_input($voucher_number);
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo "<span id=\"tooltip-target-1\">";
 	echo form_label('Voucher Date', 'voucher_date');
@@ -233,9 +234,9 @@ $(document).ready(function() {
 
 		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', isset($ledger_dc[$i]) ? $ledger_dc[$i] : "D") . "</td>";
 
-		if ($voucher_type == "contra")
+		if ($current_voucher_type['bank_cash_ledger_restriction'] == '4')
 			echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0, '', $type = 'bankcash') . "</td>";
-		else if ($voucher_type == "journal")
+		else if ($current_voucher_type['bank_cash_ledger_restriction'] == '5')
 			echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0, '', $type = 'nobankcash') . "</td>";
 		else
 			echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0) . "</td>";
@@ -250,11 +251,11 @@ $(document).ready(function() {
 
 		echo "</tr>";
 	}
+
 	echo "<tr><td colspan=7></td></tr>";
-
 	echo "<tr id=\"total\"><td colspan=2><strong>Total</strong></td><td id=\"dr-total\">0</td><td id=\"cr-total\">0</td><td>" . img(array('src' => asset_url() . "images/icons/gear.png", 'border' => '0', 'alt' => 'Recalculate Total', 'class' => 'recalculate', 'title' => 'Recalculate Total')) . "</td><td></td><td></td></tr>";
-
 	echo "<tr id=\"difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\"></td><td id=\"cr-diff\"></td><td></td><td></td><td></td></tr>";
+
 	echo "</table>";
 
 	echo "<p>";
@@ -274,9 +275,9 @@ $(document).ready(function() {
 	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
-	echo anchor('voucher/edit/' . $voucher_type . "/" . $voucher_id, 'Reload', array('title' => 'Reload ' . ucfirst($voucher_type) . ' Voucher Original Data'));
+	echo anchor('voucher/edit/' . $current_voucher_type['label'] . "/" . $voucher_id, 'Reload', array('title' => 'Reload ' . $current_voucher_type['name'] . ' Voucher Original Data'));
 	echo " | ";
-	echo anchor('voucher/show/' . $voucher_type, 'Back', array('title' => 'Back to ' . ucfirst($voucher_type) . ' Vouchers'));
+	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' . $current_voucher_type['name'] . ' Vouchers'));
 	echo "</p>";
 
 	echo form_close();
