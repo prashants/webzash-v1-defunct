@@ -984,12 +984,12 @@ class Voucher extends Controller {
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
 		{
 			$this->messages->add('Invalid Voucher.', 'error');
-			redirect('voucher/show/' . $voucher_type);
+			redirect('voucher/show/' . $current_voucher_type['label']);
 			return;
 		}
 
-		$data['current_voucher_type'] = $current_voucher_type;
 		$data['voucher_type_id'] = $voucher_type_id;
+		$data['current_voucher_type'] = $current_voucher_type;
 		$data['voucher_number'] =  $cur_voucher->number;
 		$data['voucher_date'] = date_mysql_to_php_display($cur_voucher->date);
 		$data['voucher_dr_total'] =  $cur_voucher->dr_total;
@@ -1035,17 +1035,27 @@ class Voucher extends Controller {
 			return;
 		}
 
-		$account = $this->Setting_model->get_current();
+		/* Voucher Type */
+		$voucher_type_id = voucher_type_name_to_id($voucher_type);
+		if ( ! $voucher_type_id)
+		{
+			$this->messages->add('Invalid Voucher type.', 'error');
+			redirect('voucher/show/all');
+			return;
+		} else {
+			$current_voucher_type = voucher_type_info($voucher_type_id);
+		}
 
 		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
+		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
 		{
-			$this->messages->add('Invalid Voucher number.', 'error');
-			redirect('voucher/show/' . $voucher_type);
+			$this->messages->add('Invalid Voucher.', 'error');
+			redirect('voucher/show/' . $current_voucher_type['label']);
 			return;
 		}
 
-		$data['voucher_type'] = $voucher_type;
+		$data['voucher_type_id'] = $voucher_type_id;
+		$data['current_voucher_type'] = $current_voucher_type;
 		$data['voucher_number'] =  $cur_voucher->number;
 		$data['voucher_date'] = date_mysql_to_php_display($cur_voucher->date);
 		$data['voucher_dr_total'] =  $cur_voucher->dr_total;
@@ -1089,17 +1099,29 @@ class Voucher extends Controller {
 			return;
 		}
 
+		/* Voucher Type */
+		$voucher_type_id = voucher_type_name_to_id($voucher_type);
+		if ( ! $voucher_type_id)
+		{
+			$this->messages->add('Invalid Voucher type.', 'error');
+			redirect('voucher/show/all');
+			return;
+		} else {
+			$current_voucher_type = voucher_type_info($voucher_type_id);
+		}
+
 		$account_data = $this->Setting_model->get_current();
 
 		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type))
+		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
 		{
-			$this->messages->add('Invalid Voucher number.', 'error');
-			redirect('voucher/show/' . $voucher_type);
+			$this->messages->add('Invalid Voucher.', 'error');
+			redirect('voucher/show/' . $current_voucher_type['label']);
 			return;
 		}
 
-		$data['voucher_type'] = $voucher_type;
+		$data['voucher_type_id'] = $voucher_type_id;
+		$data['current_voucher_type'] = $current_voucher_type;
 		$data['voucher_id'] = $voucher_id;
 		$data['voucher_number'] = $cur_voucher->number;
 		$data['email_to'] = array(
@@ -1126,7 +1148,8 @@ class Voucher extends Controller {
 		}
 		else
 		{
-			$voucher_data['voucher_type'] = $voucher_type;
+			$voucher_data['voucher_type_id'] = $voucher_type_id;
+			$voucher_data['current_voucher_type'] = $current_voucher_type;
 			$voucher_data['voucher_number'] =  $cur_voucher->number;
 			$voucher_data['voucher_date'] = date_mysql_to_php_display($cur_voucher->date);
 			$voucher_data['voucher_dr_total'] =  $cur_voucher->dr_total;
@@ -1168,22 +1191,22 @@ class Voucher extends Controller {
 				$config['smtp_user'] = $account_data->email_username;
 				$config['smtp_pass'] = $account_data->email_password;
 			} else {
-				$data['error'] = 'Invalid account details.';
+				$data['error'] = 'Invalid account settings.';
 			}
 			$this->email->initialize($config);
 
 			/* Sending email */
 			$this->email->from('', 'Webzash');
 			$this->email->to($this->input->post('email_to', TRUE));
-			$this->email->subject(ucfirst($voucher_type) . ' Voucher No. ' . voucher_number_prefix($voucher_type) . $cur_voucher->number);
+			$this->email->subject($current_voucher_type['name'] . ' Voucher No. ' . voucher_number_prefix($voucher_type_id) . $cur_voucher->number);
 			$this->email->message($message);
 			if ($this->email->send())
 			{
 				$data['message'] = "Email sent.";
-				$this->logger->write_message("success", "Emailed " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $cur_voucher->number . " [id:" . $voucher_id . "]");
+				$this->logger->write_message("success", "Emailed " . $current_voucher_type['name'] . " Voucher number " . voucher_number_prefix($voucher_type_id) . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			} else {
 				$data['error'] = "Error sending email. Check you email settings.";
-				$this->logger->write_message("error", "Error emailing " . ucfirst($voucher_type) . " Voucher number " . voucher_number_prefix($voucher_type) . $cur_voucher->number . " [id:" . $voucher_id . "]");
+				$this->logger->write_message("error", "Error emailing " . $current_voucher_type['name'] . " Voucher number " . voucher_number_prefix($voucher_type_id) . $cur_voucher->number . " [id:" . $voucher_id . "]");
 			}
 			$this->load->view('voucher/email', $data);
 			return;
