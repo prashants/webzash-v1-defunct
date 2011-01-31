@@ -17,6 +17,20 @@ CREATE TABLE IF NOT EXISTS ledgers (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=1;
 
+CREATE TABLE IF NOT EXISTS voucher_types (
+  id int(5) NOT NULL,
+  label varchar(15) NOT NULL,
+  name varchar(100) NOT NULL,
+  description varchar(255) NOT NULL,
+  base_type int(2) NOT NULL,
+  numbering int(2) NOT NULL,
+  prefix varchar(10) NOT NULL,
+  suffix varchar(10) NOT NULL,
+  zero_padding int(2) NOT NULL,
+  bank_cash_ledger_restriction int(2) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE IF NOT EXISTS vouchers (
   id int(11) NOT NULL AUTO_INCREMENT,
   tag_id int(11) NOT NULL DEFAULT '0',
@@ -85,10 +99,5 @@ CREATE TABLE IF NOT EXISTS settings (
   print_margin_right float NOT NULL,
   print_orientation varchar(1) NOT NULL,
   print_page_format varchar(1) NOT NULL,
-  receipt_voucher_prefix varchar(10) NOT NULL,
-  payment_voucher_prefix varchar(10) NOT NULL,
-  contra_voucher_prefix varchar(10) NOT NULL,
-  journal_voucher_prefix varchar(10) NOT NULL,
-  voucher_number_padding int(5) NOT NULL,
   database_version int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;

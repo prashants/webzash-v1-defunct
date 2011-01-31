@@ -7,7 +7,7 @@
 	<p><?php echo $this->config->item('account_name'); ?></p>
 	<p><?php echo $this->config->item('account_address'); ?></p>
 	<p><strong><?php echo $current_voucher_type['name']; ?> Voucher</strong></p>
-	<p><?php echo $current_voucher_type['name']; ?> Voucher Number : <strong><?php echo voucher_number_prefix($voucher_type_id) . $voucher_number; ?></strong></p>
+	<p><?php echo $current_voucher_type['name']; ?> Voucher Number : <strong><?php echo full_voucher_number($voucher_type_id, $voucher_number); ?></strong></p>
 	<p><?php echo $current_voucher_type['name']; ?> Voucher Date : <strong><?php echo $voucher_date; ?></strong></p>
 	<table border=1 cellpadding=6>
 		<thead>

@@ -130,7 +130,7 @@
 			echo date_mysql_to_php_display($row->vdate);
 			echo "</td>";
 			echo "<td>";
-			echo anchor('voucher/view/' . $current_voucher_type['label'] . '/' . $row->vid, voucher_number_prefix($row->vtype) . $row->vnumber, array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+			echo anchor('voucher/view/' . $current_voucher_type['label'] . '/' . $row->vid, full_voucher_number($row->vtype, $row->vnumber), array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
 			echo "</td>";
 
 			/* Getting opposite Ledger name */

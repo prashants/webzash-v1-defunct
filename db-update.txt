@@ -14,6 +14,12 @@ CREATE TABLE IF NOT EXISTS voucher_types (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+ALTER TABLE settings DROP receipt_voucher_prefix;
+ALTER TABLE settings DROP payment_voucher_prefix;
+ALTER TABLE settings DROP contra_voucher_prefix;
+ALTER TABLE settings DROP journal_voucher_prefix;
+ALTER TABLE settings DROP voucher_number_padding;
+
 //--------------------------------- VERSION 2 ----------------------------------
 
 ALTER TABLE voucher_items ADD reconciliation_date DATETIME NULL;

@@ -106,10 +106,6 @@ class Startup
 		$CI->config->set_item('account_date_format', $account_d->date_format);
 		$CI->config->set_item('account_timezone', $account_d->timezone);
 		$CI->config->set_item('account_locked', $account_d->account_locked);
-		$CI->config->set_item('account_receipt_prefix', $account_d->receipt_voucher_prefix);
-		$CI->config->set_item('account_payment_prefix', $account_d->payment_voucher_prefix);
-		$CI->config->set_item('account_contra_prefix', $account_d->contra_voucher_prefix);
-		$CI->config->set_item('account_journal_prefix', $account_d->journal_voucher_prefix);
 		$CI->config->set_item('account_database_version', $account_d->database_version);
 
 		/* Load general application settings */

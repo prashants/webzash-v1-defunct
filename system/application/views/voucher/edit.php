@@ -199,7 +199,7 @@ $(document).ready(function() {
 	echo "<p>";
 	echo form_label('Voucher Number', 'voucher_number');
 	echo " ";
-	echo voucher_number_prefix($voucher_type_id) . form_input($voucher_number);
+	echo $current_voucher_type['prefix'] . form_input($voucher_number) . $current_voucher_type['suffix'];
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo "<span id=\"tooltip-target-1\">";
 	echo form_label('Voucher Date', 'voucher_date');

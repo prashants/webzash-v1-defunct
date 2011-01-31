@@ -328,6 +328,7 @@ class Setting extends Controller {
 			$data_account_email_username = $account_data->email_username;
 			$data_account_email_password = $account_data->email_password;
 
+			$data_database_type = 'mysql';
 			$data_database_host = $this->input->post('database_host', TRUE);
 			$data_database_port = $this->input->post('database_port', TRUE);
 			$data_database_name = $this->input->post('database_name', TRUE);
@@ -427,7 +428,7 @@ class Setting extends Controller {
 
 				/* Adding account settings */
 				$newacc->trans_start();
-				if ( ! $newacc->query("INSERT INTO settings (id, name, address, email, fy_start, fy_end, currency_symbol, date_format, timezone, account_locked, email_protocol, email_host, email_port, email_username, email_password, database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, $data_account_name, $data_account_address, $data_account_email, $data_fy_start, $data_fy_end, $data_account_currency, $data_account_date, $data_account_timezone, 0, $data_account_email_protocol, $data_account_email_host, $data_account_email_port, $data_account_email_username, $data_account_email_password, 2)))
+				if ( ! $newacc->query("INSERT INTO settings (id, name, address, email, fy_start, fy_end, currency_symbol, date_format, timezone, account_locked, email_protocol, email_host, email_port, email_username, email_password, database_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(1, $data_account_name, $data_account_address, $data_account_email, $data_fy_start, $data_fy_end, $data_account_currency, $data_account_date, $data_account_timezone, 0, $data_account_email_protocol, $data_account_email_host, $data_account_email_port, $data_account_email_username, $data_account_email_password, 3)))
 				{
 					$newacc->trans_rollback();
 					$this->messages->add('Error adding account settings.', 'error');
@@ -492,6 +493,18 @@ class Setting extends Controller {
 					}
 				}
 
+				/* Importing Voucher Types */
+				$this->db->from('voucher_types')->order_by('id', 'asc');
+				$voucher_type_q = $this->db->get();
+				foreach ($voucher_type_q->result() as $row)
+				{
+					if ( ! $newacc->query("INSERT INTO voucher_types (id, label, name, description, base_type, numbering, prefix, suffix, zero_padding, bank_cash_ledger_restriction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($row->id, $row->label, $row->name, $row->description, $row->base_type, $row->numbering, $row->prefix, $row->suffix, $row->zero_padding, $row->bank_cash_ledger_restriction)))
+					{
+						$this->messages->add('Failed to add Voucher type  - ' . $row->name . '.', 'error');
+						$cf_status = FALSE;
+					}
+				}
+
 				/* Importing Tags */
 				$this->db->from('tags')->order_by('id', 'asc');
 				$tag_q = $this->db->get();
@@ -511,9 +524,9 @@ class Setting extends Controller {
 
 
 				/* Adding account settings to file. Code copied from manage controller */
-				$con_details = "[database]" . "\r\n" . "db_hostname = \"" . $data_database_host . "\"" . "\r\n" . "db_port = \"" . $data_database_port . "\"" . "\r\n" . "db_name = \"" . $data_database_name . "\"" . "\r\n" . "db_username = \"" . $data_database_username . "\"" . "\r\n" . "db_password = \"" . $data_database_password . "\"" . "\r\n";
+				$con_details = "[database]" . "\r\n" . "db_type = \"" . $data_database_type . "\"" . "\r\n" . "db_hostname = \"" . $data_database_host . "\"" . "\r\n" . "db_port = \"" . $data_database_port . "\"" . "\r\n" . "db_name = \"" . $data_database_name . "\"" . "\r\n" . "db_username = \"" . $data_database_username . "\"" . "\r\n" . "db_password = \"" . $data_database_password . "\"" . "\r\n";
 
-				$con_details_html = '[database]<br />db_hostname = "' . $data_database_host . '"<br />db_port = "' . $data_database_port . '"<br />db_name = "' . $data_database_name . '"<br />db_username = "' . $data_database_username . '"<br />db_password = "' . $data_database_password . '"<br />';
+				$con_details_html = '[database]' . '<br />db_type = "' . $data_database_type . '"<br />db_hostname = "' . $data_database_host . '"<br />db_port = "' . $data_database_port . '"<br />db_name = "' . $data_database_name . '"<br />db_username = "' . $data_database_username . '"<br />db_password = "' . $data_database_password . '"<br />';
 
 				/* Writing the connection string to end of file - writing in 'a' append mode */
 				if ( ! write_file($ini_file, $con_details))
@@ -957,7 +970,7 @@ class Setting extends Controller {
 			if ( ! $this->db->where('id', 1)->update('settings', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating voucher settings.', 'error');
+				$this->messages->add('Error updating Voucher settings.', 'error');
 				$this->logger->write_message("error", "Error updating voucher settings");
 				$this->template->load('template', 'setting/voucher');
 				return;

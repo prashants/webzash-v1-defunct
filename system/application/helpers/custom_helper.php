@@ -217,18 +217,18 @@ if ( ! function_exists('voucher_type_name_to_id'))
  * @param	int voucher type id
  * @return	string
  */
-if ( ! function_exists('voucher_number_prefix'))
+if ( ! function_exists('full_voucher_number'))
 {
-	function voucher_number_prefix($voucher_type_id)
+	function full_voucher_number($voucher_type_id, $voucher_number)
 	{
 		$CI =& get_instance();
 		$voucher_type_all = $CI->config->item('account_voucher_types');
 
 		if ( ! $voucher_type_all[$voucher_type_id])
 		{
-			return '';
+			return $voucher_number;
 		} else {
-			return $voucher_type_all[$voucher_type_id]['prefix'];
+			return $voucher_type_all[$voucher_type_id]['prefix'] . $voucher_number . $voucher_type_all[$voucher_type_id]['suffix'];
 		}
 	}
 }
