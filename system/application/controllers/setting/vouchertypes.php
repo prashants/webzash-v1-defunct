@@ -29,6 +29,165 @@ class VoucherTypes extends Controller {
 		$this->template->load('template', 'setting/vouchertypes/index', $data);
 		return;
 	}
+
+	function add()
+	{
+		$this->template->set('page_title', 'Add Voucher Type');
+
+		/* Form fields */
+		$data['voucher_type_label'] = array(
+			'name' => 'voucher_type_label',
+			'id' => 'voucher_type_label',
+			'maxlength' => '15',
+			'size' => '15',
+			'value' => '',
+		);
+
+		$data['voucher_type_name'] = array(
+			'name' => 'voucher_type_name',
+			'id' => 'voucher_type_name',
+			'maxlength' => '100',
+			'size' => '40',
+			'value' => '',
+		);
+
+		$data['voucher_type_description'] = array(
+			'name' => 'voucher_type_description',
+			'id' => 'voucher_type_description',
+			'cols' => '47',
+			'rows' => '5',
+			'value' => '',
+		);
+
+		$data['voucher_type_prefix'] = array(
+			'name' => 'voucher_type_prefix',
+			'id' => 'voucher_type_prefix',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+
+		$data['voucher_type_suffix'] = array(
+			'name' => 'voucher_type_suffix',
+			'id' => 'voucher_type_suffix',
+			'maxlength' => '10',
+			'size' => '10',
+			'value' => '',
+		);
+
+		$data['voucher_type_zero_padding'] = array(
+			'name' => 'voucher_type_zero_padding',
+			'id' => 'voucher_type_zero_padding',
+			'maxlength' => '2',
+			'size' => '2',
+			'value' => '',
+		);
+
+		$data['voucher_type_base_types'] = array('1' => 'Normal Vocuher', '2' => 'Stock Voucher');
+		$data['voucher_type_numberings'] = array('1' => 'Auto', '2' => 'Manual');
+		$data['bank_cash_ledger_restrictions'] = array(
+			'1' => 'Unrestricted',
+			'2' => 'Atleast one Bank or Cash A/C must be present on Debit side',
+			'3' => 'Atleast one Bank or Cash A/C must be present on Credit side',
+			'4' => 'Only Bank or Cash A/C can be present on both Debit and Credit side',
+			'5' => 'None of Debit and Credit side can be Bank or Cash A/C',
+		);
+
+		$data['voucher_type_base_type_active'] = '1';
+		$data['voucher_type_numbering_active'] = '1';
+		$data['bank_cash_ledger_restriction_active'] = '1';
+
+		/* Repopulating form */
+		if ($_POST)
+		{
+			$data['voucher_type_label']['value'] = $this->input->post('voucher_type_label', TRUE);
+			$data['voucher_type_name']['value'] = $this->input->post('voucher_type_name', TRUE);
+			$data['voucher_type_description']['value'] = $this->input->post('voucher_type_description', TRUE);
+			$data['voucher_type_prefix']['value'] = $this->input->post('voucher_type_prefix', TRUE);
+			$data['voucher_type_suffix']['value'] = $this->input->post('voucher_type_suffix', TRUE);
+			$data['voucher_type_zero_padding']['value'] = $this->input->post('voucher_type_zero_padding', TRUE);
+
+			$data['voucher_type_base_type_active'] = $this->input->post('voucher_type_base_type', TRUE);
+			$data['voucher_type_numbering_active'] = $this->input->post('voucher_type_numbering', TRUE);
+			$data['bank_cash_ledger_restriction_active'] = $this->input->post('bank_cash_ledger_restriction', TRUE);
+		}
+
+		/* Form validations */
+		$this->form_validation->set_rules('voucher_type_label', 'Label', 'trim|required|min_length[2]|max_length[15]|alpha');
+		$this->form_validation->set_rules('voucher_type_name', 'Name', 'trim|required|min_length[2]|max_length[100]');
+		$this->form_validation->set_rules('voucher_type_description', 'Description', 'trim');
+		$this->form_validation->set_rules('voucher_type_prefix', 'Prefix', 'trim|max_length[10]');
+		$this->form_validation->set_rules('voucher_type_suffix', 'Suffix', 'trim|max_length[10]');
+		$this->form_validation->set_rules('voucher_type_zero_padding', 'Zero Padding', 'trim|max_length[2]|is_natural');
+
+		/* Validating form */
+		if ($this->form_validation->run() == FALSE)
+		{
+			$this->messages->add(validation_errors(), 'error');
+			$this->template->load('template', 'setting/vouchertypes/add', $data);
+			return;
+		}
+		else
+		{
+			$data_voucher_type_label = strtolower($this->input->post('voucher_type_label', TRUE));
+			$data_voucher_type_name = ucfirst($this->input->post('voucher_type_name', TRUE));
+			$data_voucher_type_description = $this->input->post('voucher_type_description', TRUE);
+			$data_voucher_type_prefix = $this->input->post('voucher_type_prefix', TRUE);
+			$data_voucher_type_suffix = $this->input->post('voucher_type_suffix', TRUE);
+			$data_voucher_type_zero_padding = $this->input->post('voucher_type_zero_padding', TRUE);
+			$data_voucher_type_base_type = $this->input->post('voucher_type_base_type', TRUE);
+			$data_voucher_type_numbering = $this->input->post('voucher_type_numbering', TRUE);
+			$data_bank_cash_ledger_restriction = $this->input->post('bank_cash_ledger_restriction', TRUE);
+
+			if (($data_voucher_type_base_type < 1) or ($data_voucher_type_base_type > 2))
+				$data_voucher_type_base_type = 1;
+
+			if (($data_voucher_type_numbering < 1) or ($data_voucher_type_numbering > 2))
+				$data_voucher_type_numbering = 1;
+
+			if (($data_bank_cash_ledger_restriction < 1) or ($data_bank_cash_ledger_restriction > 5))
+				$data_bank_cash_ledger_restriction = 1;
+
+			/* Calculating Voucher Type Id */
+			$last_id = 1;
+			$this->db->select_max('id', 'lastid')->from('voucher_types');
+			$last_id_q = $this->db->get();
+			if ($row = $last_id_q->row())
+			{
+				$last_id = (int)$row->lastid;
+				$last_id++;
+			}
+
+			$this->db->trans_start();
+			$insert_data = array(
+				'id' => $last_id,
+				'label' => $data_voucher_type_label,
+				'name' => $data_voucher_type_name,
+				'description' => $data_voucher_type_description,
+				'base_type' => $data_voucher_type_base_type,
+				'numbering' => $data_voucher_type_numbering,
+				'prefix' => $data_voucher_type_prefix,
+				'suffix' => $data_voucher_type_suffix,
+				'zero_padding' => $data_voucher_type_zero_padding,
+				'bank_cash_ledger_restriction' => $data_bank_cash_ledger_restriction,
+			);
+			if ( ! $this->db->insert('voucher_types', $insert_data))
+			{
+				$this->db->trans_rollback();
+				$this->messages->add('Error addding Voucher Type - ' . $data_voucher_type_name . '.', 'error');
+				$this->logger->write_message("error", "Error adding Voucher Type named " . $data_voucher_type_name);
+				$this->template->load('template', 'setting/vouchertypes/add', $data);
+				return;
+			} else {
+				$this->db->trans_complete();
+				$this->messages->add('Added Voucher Type - ' . $data_voucher_type_name . '.', 'success');
+				$this->logger->write_message("success", "Added Voucher Type named " . $data_voucher_type_name);
+				redirect('setting/vouchertypes');
+				return;
+			}
+		}
+		return;
+	}
 }
 
 /* End of file vouchertypes.php */
