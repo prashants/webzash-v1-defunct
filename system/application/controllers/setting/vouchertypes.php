@@ -34,6 +34,14 @@ class VoucherTypes extends Controller {
 	{
 		$this->template->set('page_title', 'Add Voucher Type');
 
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
+			redirect('setting/vouchertypes');
+			return;
+		}
+
 		/* Form fields */
 		$data['voucher_type_label'] = array(
 			'name' => 'voucher_type_label',
@@ -193,6 +201,14 @@ class VoucherTypes extends Controller {
 	{
 		$this->template->set('page_title', 'Edit Voucher Type');
 
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
+			redirect('setting/vouchertypes');
+			return;
+		}
+
 		/* Checking for valid data */
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
@@ -346,16 +362,77 @@ class VoucherTypes extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Voucher Type - ' . $data_voucher_type_name . '.', 'error');
-				$this->logger->write_message("error", "Error updating Voucher Type named " . $data_voucher_type_name);
+				$this->logger->write_message("error", "Error updating Voucher Type named " . $data_voucher_type_name . " [id:" . $id . "]");
 				$this->template->load('template', 'setting/vouchertypes/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Updated Voucher Type - ' . $data_voucher_type_name . '.', 'success');
-				$this->logger->write_message("success", "Updated Voucher Type named " . $data_voucher_type_name);
+				$this->logger->write_message("success", "Updated Voucher Type named " . $data_voucher_type_name . " [id:" . $id . "]");
 				redirect('setting/vouchertypes');
 				return;
 			}
+		}
+		return;
+	}
+
+	function delete($id)
+	{
+		/* Check for account lock */
+		if ($this->config->item('account_locked') == 1)
+		{
+			$this->messages->add('Account is locked.', 'error');
+			redirect('setting/vouchertypes');
+			return;
+		}
+
+		/* Checking for valid data */
+		$id = $this->input->xss_clean($id);
+		$id = (int)$id;
+		if ($id <= 0)
+		{
+			$this->messages->add('Invalid Voucher Type.', 'error');
+			redirect('setting/vouchertypes');
+			return;
+		}
+
+		/* Loading current Voucher Type */
+		$this->db->from('voucher_types')->where('id', $id);
+		$voucher_type_data_q = $this->db->get();
+		if ($voucher_type_data_q->num_rows() < 1)
+		{
+			$this->messages->add('Invalid Voucher Type.', 'error');
+			redirect('setting/vouchertypes');
+			return;
+		} else {
+			$voucher_type_data = $voucher_type_data_q->row();
+		}
+
+		/* Check if and Voucher present for the Voucher Type */
+		$this->db->from('vouchers')->where('voucher_type', $id);
+		$voucher_data_q = $this->db->get();
+		if ($voucher_data_q->num_rows() > 0)
+		{
+			$this->messages->add('Cannot delete Voucher Type. There are still ' . $voucher_data_q->num_rows() . ' Vouchers present.', 'error');
+			redirect('setting/vouchertypes');
+			return;
+		}
+
+		/* Deleting Voucher Types */
+		$this->db->trans_start();
+		if ( ! $this->db->delete('voucher_types', array('id' => $id)))
+		{
+			$this->db->trans_rollback();
+			$this->messages->add('Error deleting Voucher Type - ' . $voucher_type_data->name . '.', 'error');
+			$this->logger->write_message("error", "Error deleting Voucher Type named " . $voucher_type_data->name . " [id:" . $id . "]");
+			redirect('setting/vouchertypes');
+			return;
+		} else {
+			$this->db->trans_complete();
+			$this->messages->add('Deleted Voucher Type - ' . $voucher_type_data->name . '.', 'success');
+			$this->logger->write_message("success", "Deleted Voucher Type named " . $voucher_type_data->name . " [id:" . $id . "]");
+			redirect('setting/vouchertypes');
+			return;
 		}
 		return;
 	}
