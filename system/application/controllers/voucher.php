@@ -270,7 +270,10 @@ class Voucher extends Controller {
 		$data['voucher_tag'] = 0;
 
 		/* Form validations */
-		$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural_no_zero|uniquevoucherno[' . $voucher_type_id . ']');
+		if ($current_voucher_type['numbering'] == 2)
+			$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|required|is_natural_no_zero|uniquevoucherno[' . $voucher_type_id . ']');
+		else
+			$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural_no_zero|uniquevoucherno[' . $voucher_type_id . ']');
 		$this->form_validation->set_rules('voucher_date', 'Voucher Date', 'trim|required|is_date|is_date_within_range');
 		$this->form_validation->set_rules('voucher_narration', 'trim');
 		$this->form_validation->set_rules('voucher_tag', 'Tag', 'trim|is_natural');
@@ -429,10 +432,15 @@ class Voucher extends Controller {
 			}
 
 			/* Adding main voucher */
-			if ($this->input->post('voucher_number', TRUE))
+			if ($current_voucher_type['numbering'] == 2)
+			{
 				$data_number = $this->input->post('voucher_number', TRUE);
-			else
-				$data_number = $this->Voucher_model->next_voucher_number($voucher_type_id);
+			} else {
+				if ($this->input->post('voucher_number', TRUE))
+					$data_number = $this->input->post('voucher_number', TRUE);
+				else
+					$data_number = $this->Voucher_model->next_voucher_number($voucher_type_id);
+			}
 
 			$data_date = $this->input->post('voucher_date', TRUE);
 			$data_narration = $this->input->post('voucher_narration', TRUE);
