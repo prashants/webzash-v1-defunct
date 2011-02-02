@@ -1,5 +1,5 @@
 <?php
-	echo form_open('setting/vouchertypes/edit' . $voucher_type_id);
+	echo form_open('setting/vouchertypes/edit/' . $voucher_type_id);
 
 	echo "<p>";
 	echo form_label('Label', 'voucher_type_label');
