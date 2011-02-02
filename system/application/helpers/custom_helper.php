@@ -180,7 +180,7 @@ if ( ! function_exists('full_voucher_number'))
 		{
 			return $voucher_number;
 		} else {
-			return $voucher_type_all[$voucher_type_id]['prefix'] . $voucher_number . $voucher_type_all[$voucher_type_id]['suffix'];
+			return $voucher_type_all[$voucher_type_id]['prefix'] . str_pad($voucher_number, $voucher_type_all[$voucher_type_id]['zero_padding'], '0', STR_PAD_LEFT) . $voucher_type_all[$voucher_type_id]['suffix'];
 		}
 	}
 }
