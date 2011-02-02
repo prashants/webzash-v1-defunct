@@ -1,3 +1,11 @@
+Webzash Version 1.2 2011-02-02
+------------------------------
+
+    * Added dynamic voucher types
+    * Added dynamic voucher types management interface
+    * Added support for empty voucher number
+    * Updated columns for voucher number and tag id to allow NULL values
+
 Webzash Version 1.1 2011-01-28
 ------------------------------
 
