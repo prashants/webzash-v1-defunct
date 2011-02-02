@@ -98,7 +98,7 @@ class VoucherTypes extends Controller {
 			'2' => 'Atleast one Bank or Cash A/C must be present on Debit side',
 			'3' => 'Atleast one Bank or Cash A/C must be present on Credit side',
 			'4' => 'Only Bank or Cash A/C can be present on both Debit and Credit side',
-			'5' => 'None of Debit and Credit side can be Bank or Cash A/C',
+			'5' => 'Only NON Bank or Cash A/C can be present on both Debit and Credit side',
 		);
 
 		$data['voucher_type_base_type_active'] = '1';
@@ -286,7 +286,7 @@ class VoucherTypes extends Controller {
 			'2' => 'Atleast one Bank or Cash A/C must be present on Debit side',
 			'3' => 'Atleast one Bank or Cash A/C must be present on Credit side',
 			'4' => 'Only Bank or Cash A/C can be present on both Debit and Credit side',
-			'5' => 'None of Debit and Credit side can be Bank or Cash A/C',
+			'5' => 'Only NON Bank or Cash A/C can be present on both Debit and Credit side',
 		);
 
 		$data['voucher_type_base_type_active'] = $voucher_type_data->base_type;
