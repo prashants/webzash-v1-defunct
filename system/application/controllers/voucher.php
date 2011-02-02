@@ -27,6 +27,12 @@ class Voucher extends Controller {
 		if ($voucher_type == 'tag')
 		{
 			$tag_id = (int)$this->uri->segment(4);
+			if ($tag_id < 1)
+			{
+				$this->messages->add('Invalid Tag.', 'error');
+				redirect('voucher/show/all');
+				return;
+			}
 			$data['tag_id'] = $tag_id;
 			$tag_name = $this->Tag_model->tag_name($tag_id);
 			$this->template->set('page_title', 'Vouchers Tagged "' . $tag_name . '"');
@@ -270,8 +276,10 @@ class Voucher extends Controller {
 		$data['voucher_tag'] = 0;
 
 		/* Form validations */
-		if ($current_voucher_type['numbering'] == 2)
+		if ($current_voucher_type['numbering'] == '2')
 			$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|required|is_natural_no_zero|uniquevoucherno[' . $voucher_type_id . ']');
+		else if ($current_voucher_type['numbering'] == '3')
+			$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural_no_zero|uniquevoucherno[' . $voucher_type_id . ']');
 		else
 			$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural_no_zero|uniquevoucherno[' . $voucher_type_id . ']');
 		$this->form_validation->set_rules('voucher_date', 'Voucher Date', 'trim|required|is_date|is_date_within_range');
@@ -432,9 +440,13 @@ class Voucher extends Controller {
 			}
 
 			/* Adding main voucher */
-			if ($current_voucher_type['numbering'] == 2)
+			if ($current_voucher_type['numbering'] == '2')
 			{
 				$data_number = $this->input->post('voucher_number', TRUE);
+			} else if ($current_voucher_type['numbering'] == '3') {
+				$data_number = $this->input->post('voucher_number', TRUE);
+				if ( ! $data_number)
+					$data_number = NULL;
 			} else {
 				if ($this->input->post('voucher_number', TRUE))
 					$data_number = $this->input->post('voucher_number', TRUE);
@@ -445,6 +457,8 @@ class Voucher extends Controller {
 			$data_date = $this->input->post('voucher_date', TRUE);
 			$data_narration = $this->input->post('voucher_narration', TRUE);
 			$data_tag = $this->input->post('voucher_tag', TRUE);
+			if ($data_tag < 1)
+				$data_tag = NULL;
 			$data_type = $voucher_type_id;
 			$data_date = date_php_to_mysql($data_date); // Converting date to MySQL
 			$voucher_id = NULL;
@@ -648,7 +662,10 @@ class Voucher extends Controller {
 		}
 
 		/* Form validations */
-		$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|required|is_natural_no_zero|uniquevouchernowithid[' . $voucher_type_id . '.' . $voucher_id . ']');
+		if ($current_voucher_type['numbering'] == '3')
+			$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural_no_zero|uniquevouchernowithid[' . $voucher_type_id . '.' . $voucher_id . ']');
+		else
+			$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|required|is_natural_no_zero|uniquevouchernowithid[' . $voucher_type_id . '.' . $voucher_id . ']');
 		$this->form_validation->set_rules('voucher_date', 'Voucher Date', 'trim|required|is_date|is_date_within_range');
 		$this->form_validation->set_rules('voucher_narration', 'trim');
 		$this->form_validation->set_rules('voucher_tag', 'Tag', 'trim|is_natural');
@@ -791,10 +808,19 @@ class Voucher extends Controller {
 			}
 
 			/* Updating main voucher */
-			$data_number = $this->input->post('voucher_number', TRUE);
+			if ($current_voucher_type['numbering'] == '3') {
+				$data_number = $this->input->post('voucher_number', TRUE);
+				if ( ! $data_number)
+					$data_number = NULL;
+			} else {
+				$data_number = $this->input->post('voucher_number', TRUE);
+			}
+
 			$data_date = $this->input->post('voucher_date', TRUE);
 			$data_narration = $this->input->post('voucher_narration', TRUE);
 			$data_tag = $this->input->post('voucher_tag', TRUE);
+			if ($data_tag < 1)
+				$data_tag = NULL;
 			$data_type = $voucher_type_id;
 			$data_date = date_php_to_mysql($data_date); // Converting date to MySQL
 			$data_has_reconciliation = $this->input->post('has_reconciliation', TRUE);

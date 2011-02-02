@@ -33,9 +33,9 @@ CREATE TABLE IF NOT EXISTS voucher_types (
 
 CREATE TABLE IF NOT EXISTS vouchers (
   id int(11) NOT NULL AUTO_INCREMENT,
-  tag_id int(11) NOT NULL DEFAULT '0',
+  tag_id int(11) DEFAULT NULL,
   voucher_type int(5) NOT NULL,
-  number int(11) NOT NULL,
+  number int(11) DEFAULT NULL,
   date datetime NOT NULL,
   dr_total decimal(15,2) NOT NULL DEFAULT '0.00',
   cr_total decimal(15,2) NOT NULL DEFAULT '0.00',

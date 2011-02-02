@@ -293,7 +293,7 @@ class Tag extends Controller {
 		/* Deleting Tag */
 		$this->db->trans_start();
 		$update_data = array(
-			'tag_id' => 0,
+			'tag_id' => NULL,
 		);
 		if ( !  $this->db->where('tag_id', $id)->update('vouchers', $update_data))
 		{

@@ -28,15 +28,9 @@
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Numbering', 'voucher_type_numbering');
+	echo form_label('Voucher Numbering', 'voucher_type_numbering');
 	echo "<br />";
 	echo form_dropdown('voucher_type_numbering', $voucher_type_numberings, $voucher_type_numbering_active);
-	echo "</p>";
-
-	echo "<p>";
-	echo form_label('Restrictions', 'bank_cash_ledger_restriction');
-	echo "<br />";
-	echo form_dropdown('bank_cash_ledger_restriction', $bank_cash_ledger_restrictions, $bank_cash_ledger_restriction_active);
 	echo "</p>";
 
 	echo "<p>";
@@ -55,6 +49,12 @@
 	echo form_label('Zero Padding', 'voucher_type_zero_padding');
 	echo "<br />";
 	echo form_input($voucher_type_zero_padding);
+	echo "</p>";
+
+	echo "<p>";
+	echo form_label('Restrictions', 'bank_cash_ledger_restriction');
+	echo "<br />";
+	echo form_dropdown('bank_cash_ledger_restriction', $bank_cash_ledger_restrictions, $bank_cash_ledger_restriction_active);
 	echo "</p>";
 
 	echo "<p>";

@@ -175,13 +175,17 @@ if ( ! function_exists('full_voucher_number'))
 	{
 		$CI =& get_instance();
 		$voucher_type_all = $CI->config->item('account_voucher_types');
-
+		$return_html = "";
 		if ( ! $voucher_type_all[$voucher_type_id])
 		{
-			return $voucher_number;
+			$return_html = $voucher_number;
 		} else {
-			return $voucher_type_all[$voucher_type_id]['prefix'] . str_pad($voucher_number, $voucher_type_all[$voucher_type_id]['zero_padding'], '0', STR_PAD_LEFT) . $voucher_type_all[$voucher_type_id]['suffix'];
+			$return_html = $voucher_type_all[$voucher_type_id]['prefix'] . str_pad($voucher_number, $voucher_type_all[$voucher_type_id]['zero_padding'], '0', STR_PAD_LEFT) . $voucher_type_all[$voucher_type_id]['suffix'];
 		}
+		if ($return_html)
+			return $return_html;
+		else
+			return " ";
 	}
 }
 

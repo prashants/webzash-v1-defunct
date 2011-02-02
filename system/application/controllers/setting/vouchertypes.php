@@ -92,7 +92,7 @@ class VoucherTypes extends Controller {
 		);
 
 		$data['voucher_type_base_types'] = array('1' => 'Normal Vocuher', '2' => 'Stock Voucher');
-		$data['voucher_type_numberings'] = array('1' => 'Auto', '2' => 'Manual');
+		$data['voucher_type_numberings'] = array('1' => 'Auto', '2' => 'Manual (required)', '3' => 'Manual (optional)');
 		$data['bank_cash_ledger_restrictions'] = array(
 			'1' => 'Unrestricted',
 			'2' => 'Atleast one Bank or Cash A/C must be present on Debit side',
@@ -150,7 +150,7 @@ class VoucherTypes extends Controller {
 			if (($data_voucher_type_base_type < 1) or ($data_voucher_type_base_type > 2))
 				$data_voucher_type_base_type = 1;
 
-			if (($data_voucher_type_numbering < 1) or ($data_voucher_type_numbering > 2))
+			if (($data_voucher_type_numbering < 1) or ($data_voucher_type_numbering > 3))
 				$data_voucher_type_numbering = 1;
 
 			if (($data_bank_cash_ledger_restriction < 1) or ($data_bank_cash_ledger_restriction > 5))
@@ -280,7 +280,7 @@ class VoucherTypes extends Controller {
 		);
 
 		$data['voucher_type_base_types'] = array('1' => 'Normal Vocuher', '2' => 'Stock Voucher');
-		$data['voucher_type_numberings'] = array('1' => 'Auto', '2' => 'Manual');
+		$data['voucher_type_numberings'] = array('1' => 'Auto', '2' => 'Manual (required)', '3' => 'Manual (optional)');
 		$data['bank_cash_ledger_restrictions'] = array(
 			'1' => 'Unrestricted',
 			'2' => 'Atleast one Bank or Cash A/C must be present on Debit side',
@@ -340,7 +340,7 @@ class VoucherTypes extends Controller {
 			if (($data_voucher_type_base_type < 1) or ($data_voucher_type_base_type > 2))
 				$data_voucher_type_base_type = 1;
 
-			if (($data_voucher_type_numbering < 1) or ($data_voucher_type_numbering > 2))
+			if (($data_voucher_type_numbering < 1) or ($data_voucher_type_numbering > 3))
 				$data_voucher_type_numbering = 1;
 
 			if (($data_bank_cash_ledger_restriction < 1) or ($data_bank_cash_ledger_restriction > 5))

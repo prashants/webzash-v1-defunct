@@ -21,6 +21,8 @@ ALTER TABLE settings DROP journal_voucher_prefix;
 ALTER TABLE settings DROP voucher_number_padding;
 
 ALTER TABLE vouchers CHANGE type voucher_type INT(5) NOT NULL;
+ALTER TABLE vouchers CHANGE number number INT(11) NULL;
+ALTER TABLE vouchers CHANGE tag_id tag_id INT(11) NULL;
 
 //--------------------------------- VERSION 2 ----------------------------------
 
