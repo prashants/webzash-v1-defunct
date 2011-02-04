@@ -113,6 +113,9 @@ $(document).ready(function() {
 				<?php echo anchor('account', 'Accounts', array('title' => 'Chart of accounts')); ?>
 			</li>
 			<li>
+				<?php echo anchor('inventory', 'Inventory', array('title' => 'Inventory')); ?>
+			</li>
+			<li>
 				<?php
 					/* Showing Voucher Type sub-menu */
 					$voucher_type_all = $this->config->item('account_voucher_types');

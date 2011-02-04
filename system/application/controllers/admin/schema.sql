@@ -101,3 +101,12 @@ CREATE TABLE IF NOT EXISTS settings (
   print_page_format varchar(1) NOT NULL,
   database_version int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+
+CREATE TABLE IF NOT EXISTS stock_units (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  symbol varchar(15) NOT NULL,
+  name varchar(100) NOT NULL,
+  decimal_places int(2) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+

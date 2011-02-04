@@ -19,6 +19,9 @@
  * 'create group'
  * 'edit group'
  * 'delete group'
+ * 'create stock unit'
+ * 'edit stock unit'
+ * 'delete stock unit'
  * 'create tag'
  * 'edit tag'
  * 'delete tag'
@@ -51,6 +54,9 @@ if ( ! function_exists('check_access'))
 			'create group',
 			'edit group',
 			'delete group',
+			'create stock unit',
+			'edit stock unit',
+			'delete stock unit',
 			'create tag',
 			'edit tag',
 			'delete tag',
@@ -75,6 +81,9 @@ if ( ! function_exists('check_access'))
 			'create group',
 			'edit group',
 			'delete group',
+			'create stock unit',
+			'edit stock unit',
+			'delete stock unit',
 			'create tag',
 			'edit tag',
 			'delete tag',
