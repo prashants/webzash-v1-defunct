@@ -22,4 +22,16 @@ class Stock_Group_model extends Model {
 		}
 		return $options;
 	}
+
+	function get_stock_item_groups()
+	{
+		$options = array();
+		$this->db->from('stock_groups')->where('id >', 0)->order_by('name', 'asc');
+		$stock_item_parent_q = $this->db->get();
+		foreach ($stock_item_parent_q->result() as $row)
+		{
+			$options[$row->id] = $row->name;
+		}
+		return $options;
+	}
 }

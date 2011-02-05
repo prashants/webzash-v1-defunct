@@ -100,6 +100,24 @@ class MY_Form_validation extends CI_Form_validation {
 		}
 	}
 
+	function quantity($str)
+	{
+		$CI =& get_instance();
+		if (preg_match('/^[\-]/', $str))
+		{
+			$CI->form_validation->set_message('quantity', '%s cannot be negative.');
+			return FALSE;
+		}
+
+		if (preg_match('/^[0-9]*\.?[0-9]{0,4}$/', $str))
+		{
+			return TRUE;
+		} else {
+			$CI->form_validation->set_message('quantity', '%s must be a valid quantity. Maximum 4 decimal places are allowed.');
+			return FALSE;
+		}
+	}
+
 	function is_date($str)
 	{
 		$CI =& get_instance();

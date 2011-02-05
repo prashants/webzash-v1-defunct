@@ -8,6 +8,25 @@ CREATE TABLE IF NOT EXISTS stock_units (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
+CREATE TABLE IF NOT EXISTS stock_groups (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  parent_id varchar(11) NOT NULL,
+  name varchar(100) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS stock_items (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  stock_group_id int(11) NOT NULL,
+  stock_unit_id int(11) NOT NULL,
+  name varchar(100) NOT NULL,
+  costing_method int(2) NOT NULL,
+  op_balance_quantity float NOT NULL,
+  op_balance_rate_per_unit decimal(15,2) NOT NULL,
+  op_balance_total_value decimal(15,2) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
 //--------------------------------- VERSION 3 ----------------------------------
 
 CREATE TABLE IF NOT EXISTS voucher_types (

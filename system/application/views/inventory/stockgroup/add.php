@@ -16,7 +16,7 @@
 	echo "<p>";
 	echo form_submit('submit', 'Create');
 	echo " ";
-	echo anchor('inventory/account', 'Back', 'Back to Inventory');
+	echo anchor('inventory/account', 'Back', array('title' => 'Back to Inventory'));
 	echo "</p>";
 
 	echo form_close();

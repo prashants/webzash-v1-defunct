@@ -247,6 +247,15 @@ class StockUnit extends Controller {
 			return;
 		}
 
+		/* Checking if linked to any stock item */
+		$this->db->from('stock_items')->where('stock_unit_id', $id);
+		if ($this->db->get()->num_rows() > 0)
+		{
+			$this->messages->add('Cannot delete Stock Unit. Stock Unit is still in use.', 'error');
+			redirect('inventory/account');
+			return;
+		}
+
 		/* Get the stock unit details */
 		$this->db->from('stock_units')->where('id', $id);
 		$stock_unit_q = $this->db->get();
