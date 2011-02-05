@@ -1,14 +1,5 @@
 <?php
-	echo "<table>";
-	echo "<tr valign=\"top\">";
-	echo "<td>";
-	echo "<table border=0 cellpadding=5 class=\"simple-table account-table\">";
-	echo "<thead><tr><th>Account Name</th><th>Type</th><th>O/P Balance</th><th>C/L Balance</th><th></th></tr></thead>";
-	echo "</table>";
-	echo "</td>";
-	echo "</tr>";
-	echo "</table>";
-
+	/**************************** Stock Units *****************************/
 	echo "<table border=0 cellpadding=5 class=\"simple-table float-right\">";
 	echo "<thead><tr><th>Stock Unit</th><th>Symbol</th><th></th></tr></thead>";
 	foreach ($stock_units->result() as $row)
@@ -24,3 +15,14 @@
 	}
 	echo "</table>";
 
+	/******************************* Stock Tree ***************************/
+	echo "<table>";
+	echo "<tr valign=\"top\">";
+	echo "<td>";
+	echo "<table border=0 cellpadding=5 class=\"simple-table account-table\">";
+	echo "<thead><tr><th>Name</th><th>Type</th><th>O/P Balance</th><th>C/L Balance</th><th></th></tr></thead>";
+	Stockstree::print_tree($stocks_tree);
+	echo "</table>";
+	echo "</td>";
+	echo "</tr>";
+	echo "</table>";

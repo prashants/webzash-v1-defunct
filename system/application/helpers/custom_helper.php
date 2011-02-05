@@ -36,7 +36,7 @@ if ( ! function_exists('convert_amount_dc'))
 {
 	function convert_amount_dc($amount)
 	{
-		if ($amount == "D")
+		if ($amount == "0")
 			return "0";
 		else if ($amount < 0)
 			return "Cr " . convert_cur(-$amount);
