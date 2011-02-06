@@ -32,6 +32,11 @@
 	echo "</p>";
 
 	echo "<p>";
+	echo form_checkbox('affects_inventory', 1, $affects_inventory) . " Affects Inventory ";
+	echo form_dropdown('affects_inventory_option', $affects_inventory_options, $affects_inventory_option_active);
+	echo "</p>";
+
+	echo "<p>";
 	echo "<span id=\"tooltip-target-3\">";
 	echo form_checkbox('reconciliation', 1, $reconciliation) . " Reconciliation";
 	echo "</span>";

@@ -1,5 +1,10 @@
 //--------------------------------- VERSION 4 ----------------------------------
 
+UPDATE ledgers SET type = '1' WHERE type = 'B';
+UPDATE ledgers SET type = '0' WHERE type = 'N';
+
+ALTER TABLE ledgers CHANGE type type INT(2) NOT NULL DEFAULT '0';
+
 CREATE TABLE IF NOT EXISTS stock_units (
   id int(11) NOT NULL AUTO_INCREMENT,
   symbol varchar(15) NOT NULL,

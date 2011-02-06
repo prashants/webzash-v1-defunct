@@ -57,6 +57,16 @@ class Ledger extends Controller {
 		$data['ledger_type_cashbank'] = FALSE;
 		$data['reconciliation'] = FALSE;
 
+		/**** Inventory ***/
+		$data['affects_inventory'] = 0;
+		$data['affects_inventory_options'] = array(
+			'2' => 'Purchases Ledger A/C',
+			'3' => 'Sales Ledger A/C',
+			'4' => 'Debtor (Customer)',
+			'5' => 'Creditor (Supplier)',
+		);
+		$data['affects_inventory_option_active'] = '2';
+
 		/* Form validations */
 		$this->form_validation->set_rules('ledger_name', 'Ledger name', 'trim|required|min_length[2]|max_length[100]|unique[ledgers.name]');
 		$this->form_validation->set_rules('ledger_group_id', 'Parent group', 'trim|required|is_natural_no_zero');
@@ -72,6 +82,10 @@ class Ledger extends Controller {
 			$data['op_balance_dc'] = $this->input->post('op_balance_dc', TRUE);
 			$data['ledger_type_cashbank'] = $this->input->post('ledger_type_cashbank', TRUE);
 			$data['reconciliation'] = $this->input->post('reconciliation', TRUE);
+
+			/**** Inventory ***/
+			$data['affects_inventory'] = $this->input->post('affects_inventory', TRUE);
+			$data['affects_inventory_option_active'] = $this->input->post('affects_inventory_option', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -86,8 +100,13 @@ class Ledger extends Controller {
 			$data_group_id = $this->input->post('ledger_group_id', TRUE);
 			$data_op_balance = $this->input->post('op_balance', TRUE);
 			$data_op_balance_dc = $this->input->post('op_balance_dc', TRUE);
+			$data_ledger_type = 0;
 			$data_ledger_type_cashbank_value = $this->input->post('ledger_type_cashbank', TRUE);
 			$data_reconciliation = $this->input->post('reconciliation', TRUE);
+
+			/**** Inventory ***/
+			$data_affects_inventory = $this->input->post('affects_inventory', TRUE);
+			$data_affects_inventory_option_active = $this->input->post('affects_inventory_option', TRUE);
 
 			if ($data_group_id < 5)
 			{
@@ -107,9 +126,9 @@ class Ledger extends Controller {
 
 			if ($data_ledger_type_cashbank_value == "1")
 			{
-				$data_ledger_type_cashbank = "B";
+				$data_ledger_type = 1;
 			} else {
-				$data_ledger_type_cashbank = "N";
+				$data_ledger_type = 0;
 			}
 
 			if ($data_reconciliation == "1")
@@ -119,13 +138,25 @@ class Ledger extends Controller {
 				$data_reconciliation = 0;
 			}
 
+			/**** Inventory ***/
+			if ($data_affects_inventory == "1")
+			{
+				if (($data_affects_inventory_option_active < 2) or ($data_affects_inventory_option_active > 5))
+				{
+					$this->messages->add('Invalid inventory option selected.', 'error');
+					$this->template->load('template', 'ledger/add', $data);
+					return;
+				}
+				$data_ledger_type = $data_affects_inventory_option_active;
+			}
+
 			$this->db->trans_start();
 			$insert_data = array(
 				'name' => $data_name,
 				'group_id' => $data_group_id,
 				'op_balance' => $data_op_balance,
 				'op_balance_dc' => $data_op_balance_dc,
-				'type' => $data_ledger_type_cashbank,
+				'type' => $data_ledger_type,
 				'reconciliation' => $data_reconciliation,
 			);
 			if ( ! $this->db->insert('ledgers', $insert_data))
@@ -206,11 +237,33 @@ class Ledger extends Controller {
 		$data['ledger_group_active'] = $ledger_data->group_id;
 		$data['op_balance_dc'] = $ledger_data->op_balance_dc;
 		$data['ledger_id'] = $id;
-		if ($ledger_data->type == "B")
-			$data['ledger_type_cashbank'] = TRUE;
-		else
-			$data['ledger_type_cashbank'] = FALSE;
 		$data['reconciliation'] = $ledger_data->reconciliation;
+
+		/**** Inventory ***/
+		$data['affects_inventory_options'] = array(
+			'2' => 'Purchases Ledger A/C',
+			'3' => 'Sales Ledger A/C',
+			'4' => 'Debtor (Customer)',
+			'5' => 'Creditor (Supplier)',
+		);
+		if ($ledger_data->type <= 0)
+		{
+			$data['ledger_type_cashbank'] = 0;
+			$data['affects_inventory'] = 0;
+			$data['affects_inventory_option_active'] = 2;
+		} else if ($ledger_data->type == 1) {
+			$data['ledger_type_cashbank'] = 1;
+			$data['affects_inventory'] = 0;
+			$data['affects_inventory_option_active'] = 2;
+		} else if (($ledger_data->type > 1) and ($ledger_data->type < 6)) {
+			$data['ledger_type_cashbank'] = 0;
+			$data['affects_inventory'] = 1;
+			$data['affects_inventory_option_active'] = $ledger_data->type;
+		} else {
+			$data['ledger_type_cashbank'] = 0;
+			$data['affects_inventory'] = 0;
+			$data['affects_inventory_option_active'] = 2;
+		}
 
 		/* Form validations */
 		$this->form_validation->set_rules('ledger_name', 'Ledger name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[ledgers.name.' . $id . ']');
@@ -227,6 +280,10 @@ class Ledger extends Controller {
 			$data['op_balance_dc'] = $this->input->post('op_balance_dc', TRUE);
 			$data['ledger_type_cashbank'] = $this->input->post('ledger_type_cashbank', TRUE);
 			$data['reconciliation'] = $this->input->post('reconciliation', TRUE);
+
+			/**** Inventory ***/
+			$data['affects_inventory'] = $this->input->post('affects_inventory', TRUE);
+			$data['affects_inventory_option_active'] = $this->input->post('affects_inventory_option', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -241,9 +298,14 @@ class Ledger extends Controller {
 			$data_group_id = $this->input->post('ledger_group_id', TRUE);
 			$data_op_balance = $this->input->post('op_balance', TRUE);
 			$data_op_balance_dc = $this->input->post('op_balance_dc', TRUE);
-			$data_id = $id;
+			$data_ledger_type = 0;
 			$data_ledger_type_cashbank_value = $this->input->post('ledger_type_cashbank', TRUE);
 			$data_reconciliation = $this->input->post('reconciliation', TRUE);
+			$data_id = $id;
+
+			/**** Inventory ***/
+			$data_affects_inventory = $this->input->post('affects_inventory', TRUE);
+			$data_affects_inventory_option_active = $this->input->post('affects_inventory_option', TRUE);
 
 			if ($data_group_id < 5)
 			{
@@ -284,9 +346,9 @@ class Ledger extends Controller {
 
 			if ($data_ledger_type_cashbank_value == "1")
 			{
-				$data_ledger_type_cashbank = "B";
+				$data_ledger_type = 1;
 			} else {
-				$data_ledger_type_cashbank = "N";
+				$data_ledger_type = 0;
 			}
 
 			if ($data_reconciliation == "1")
@@ -296,13 +358,25 @@ class Ledger extends Controller {
 				$data_reconciliation = 0;
 			}
 
+			/**** Inventory ***/
+			if ($data_affects_inventory == "1")
+			{
+				if (($data_affects_inventory_option_active < 2) or ($data_affects_inventory_option_active > 5))
+				{
+					$this->messages->add('Invalid inventory option selected.', 'error');
+					$this->template->load('template', 'ledger/edit', $data);
+					return;
+				}
+				$data_ledger_type = $data_affects_inventory_option_active;
+			}
+
 			$this->db->trans_start();
 			$update_data = array(
 				'name' => $data_name,
 				'group_id' => $data_group_id,
 				'op_balance' => $data_op_balance,
 				'op_balance_dc' => $data_op_balance_dc,
-				'type' => $data_ledger_type_cashbank,
+				'type' => $data_ledger_type,
 				'reconciliation' => $data_reconciliation,
 			);
 			if ( ! $this->db->where('id', $data_id)->update('ledgers', $update_data))
