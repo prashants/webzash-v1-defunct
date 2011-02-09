@@ -59,6 +59,32 @@ class Ledger_model extends Model {
 		return $options;
 	}
 
+	function get_all_ledgers_purchase()
+	{
+		$options = array();
+		$options[0] = "(Please Select)";
+		$this->db->from('ledgers')->where('type', 2)->order_by('name', 'asc');
+		$ledger_q = $this->db->get();
+		foreach ($ledger_q->result() as $row)
+		{
+			$options[$row->id] = $row->name;
+		}
+		return $options;
+	}
+
+	function get_all_ledgers_creditor()
+	{
+		$options = array();
+		$options[0] = "(Please Select)";
+		$this->db->from('ledgers')->where('type', 5)->order_by('name', 'asc');
+		$ledger_q = $this->db->get();
+		foreach ($ledger_q->result() as $row)
+		{
+			$options[$row->id] = $row->name;
+		}
+		return $options;
+	}
+
 	function get_name($ledger_id)
 	{
 		$this->db->from('ledgers')->where('id', $ledger_id)->limit(1);

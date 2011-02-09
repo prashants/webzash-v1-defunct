@@ -13,6 +13,13 @@
  * 'print voucher'
  * 'email voucher'
  * 'download voucher'
+ * 'view stock voucher'
+ * 'create stock voucher'
+ * 'edit stock voucher'
+ * 'delete stock voucher'
+ * 'print stock voucher'
+ * 'email stock voucher'
+ * 'download stock voucher'
  * 'create ledger'
  * 'edit ledger'
  * 'delete ledger'
@@ -25,6 +32,9 @@
  * 'create stock group'
  * 'edit stock group'
  * 'delete stock group'
+ * 'create stock item',
+ * 'edit stock item',
+ * 'delete stock item',
  * 'create tag'
  * 'edit tag'
  * 'delete tag'
@@ -51,6 +61,13 @@ if ( ! function_exists('check_access'))
 			'print voucher',
 			'email voucher',
 			'download voucher',
+			'view stock voucher',
+			'create stock voucher',
+			'edit stock voucher',
+			'delete stock voucher',
+			'print stock voucher',
+			'email stock voucher',
+			'download stock voucher',
 			'create ledger',
 			'edit ledger',
 			'delete ledger',
@@ -63,6 +80,9 @@ if ( ! function_exists('check_access'))
 			'create stock group',
 			'edit stock group',
 			'delete stock group',
+			'create stock item',
+			'edit stock item',
+			'delete stock item',
 			'create tag',
 			'edit tag',
 			'delete tag',
@@ -81,6 +101,13 @@ if ( ! function_exists('check_access'))
 			'print voucher',
 			'email voucher',
 			'download voucher',
+			'view stock voucher',
+			'create stock voucher',
+			'edit stock voucher',
+			'delete stock voucher',
+			'print stock voucher',
+			'email stock voucher',
+			'download stock voucher',
 			'create ledger',
 			'edit ledger',
 			'delete ledger',
@@ -93,6 +120,9 @@ if ( ! function_exists('check_access'))
 			'create stock group',
 			'edit stock group',
 			'delete stock group',
+			'create stock item',
+			'edit stock item',
+			'delete stock item',
 			'create tag',
 			'edit tag',
 			'delete tag',
@@ -108,8 +138,17 @@ if ( ! function_exists('check_access'))
 			'print voucher',
 			'email voucher',
 			'download voucher',
+			'view stock voucher',
+			'create stock voucher',
+			'edit stock voucher',
+			'delete stock voucher',
+			'print stock voucher',
+			'email stock voucher',
+			'download stock voucher',
 			'create ledger',
 			'edit ledger',
+			'create stock item',
+			'edit stock item',
 		);
 		$permissions['guest'] = array(
 			'view voucher',

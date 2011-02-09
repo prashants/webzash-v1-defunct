@@ -1,8 +1,8 @@
 <?php
 
-class Voucher extends Controller {
+class StockVoucher extends Controller {
 
-	function Voucher()
+	function StockVoucher()
 	{
 		parent::Controller();
 		$this->load->model('Voucher_model');
@@ -15,172 +15,6 @@ class Voucher extends Controller {
 	{
 		redirect('voucher/show/all');
 		return;
-	}
-
-	function show($voucher_type)
-	{
-		$this->load->model('Tag_model');
-
-		$data['tag_id'] = 0;
-		$voucher_type_id = 0;
-
-		if ($voucher_type == 'tag')
-		{
-			$tag_id = (int)$this->uri->segment(4);
-			if ($tag_id < 1)
-			{
-				$this->messages->add('Invalid Tag.', 'error');
-				redirect('voucher/show/all');
-				return;
-			}
-			$data['tag_id'] = $tag_id;
-			$tag_name = $this->Tag_model->tag_name($tag_id);
-			$this->template->set('page_title', 'Vouchers Tagged "' . $tag_name . '"');
-		} else if ($voucher_type == 'all') {
-			$voucher_type_id = 0;
-			$this->template->set('page_title', 'All Vouchers');
-		} else {
-			$voucher_type_id = voucher_type_name_to_id($voucher_type);
-			if ( ! $voucher_type_id)
-			{
-				$this->messages->add('Invalid Voucher type specified. Showing all Vouchers.', 'error');
-				redirect('voucher/show/all');
-				return;
-			} else {
-				$current_voucher_type = voucher_type_info($voucher_type_id);
-				$this->template->set('page_title', $current_voucher_type['name'] . ' Vouchers');
-				if ($current_voucher_type['base_type'] == '1')
-					$this->template->set('nav_links', array('voucher/add/' . $current_voucher_type['label'] => 'New ' . $current_voucher_type['name'] . ' Voucher'));
-				else
-					$this->template->set('nav_links', array('inventory/stockvoucher/add/' . $current_voucher_type['label'] => 'New ' . $current_voucher_type['name'] . ' Voucher'));
-			}
-		}
-
-		$voucher_q = NULL;
-
-		/* Pagination setup */
-		$this->load->library('pagination');
-
-		if ($voucher_type == "tag")
-			$page_count = (int)$this->uri->segment(5);
-		else
-			$page_count = (int)$this->uri->segment(4);
-
-		$page_count = $this->input->xss_clean($page_count);
-		if ( ! $page_count)
-			$page_count = "0";
-
-		/* Pagination configuration */
-		if ($voucher_type == 'tag')
-		{
-			$config['base_url'] = site_url('voucher/show/tag' . $tag_id);
-			$config['uri_segment'] = 5;
-		} else if ($voucher_type == 'all') {
-			$config['base_url'] = site_url('voucher/show/all');
-			$config['uri_segment'] = 4;
-		} else {
-			$config['base_url'] = site_url('voucher/show/' . $current_voucher_type['label']);
-			$config['uri_segment'] = 4;
-		}
-		$pagination_counter = $this->config->item('row_count');
-		$config['num_links'] = 10;
-		$config['per_page'] = $pagination_counter;
-		$config['full_tag_open'] = '<ul id="pagination-flickr">';
-		$config['full_close_open'] = '</ul>';
-		$config['num_tag_open'] = '<li>';
-		$config['num_tag_close'] = '</li>';
-		$config['cur_tag_open'] = '<li class="active">';
-		$config['cur_tag_close'] = '</li>';
-		$config['next_link'] = 'Next &#187;';
-		$config['next_tag_open'] = '<li class="next">';
-		$config['next_tag_close'] = '</li>';
-		$config['prev_link'] = '&#171; Previous';
-		$config['prev_tag_open'] = '<li class="previous">';
-		$config['prev_tag_close'] = '</li>';
-		$config['first_link'] = 'First';
-		$config['first_tag_open'] = '<li class="first">';
-		$config['first_tag_close'] = '</li>';
-		$config['last_link'] = 'Last';
-		$config['last_tag_open'] = '<li class="last">';
-		$config['last_tag_close'] = '</li>';
-
-		if ($voucher_type == "tag") {
-			$this->db->from('vouchers')->where('tag_id', $tag_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
-			$voucher_q = $this->db->get();
-			$config['total_rows'] = $this->db->from('vouchers')->where('tag_id', $tag_id)->get()->num_rows();
-		} else if ($voucher_type_id > 0) {
-			$this->db->from('vouchers')->where('voucher_type', $voucher_type_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
-			$voucher_q = $this->db->get();
-			$config['total_rows'] = $this->db->from('vouchers')->where('voucher_type', $voucher_type_id)->get()->num_rows();
-		} else {
-			$this->db->from('vouchers')->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
-			$voucher_q = $this->db->get();
-			$config['total_rows'] = $this->db->count_all('vouchers');
-		}
-
-		/* Pagination initializing */
-		$this->pagination->initialize($config);
-
-		/* Show voucher add actions */
-		if ($this->session->userdata('voucher_added_show_action'))
-		{
-			$voucher_added_id_temp = $this->session->userdata('voucher_added_id');
-			$voucher_added_type_id_temp = $this->session->userdata('voucher_added_type_id');
-			$voucher_added_type_label_temp = $this->session->userdata('voucher_added_type_label');
-			$voucher_added_type_name_temp = $this->session->userdata('voucher_added_type_name');
-			$voucher_added_number_temp = $this->session->userdata('voucher_added_number');
-			$voucher_added_message = 'Added ' . $voucher_added_type_name_temp . ' Voucher number ' . full_voucher_number($voucher_added_type_id_temp, $voucher_added_number_temp) . ".";
-			$voucher_added_message .= " You can [ ";
-			$voucher_added_message .= anchor('voucher/view/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'View', array('class' => 'anchor-link-a')) . " | ";
-			$voucher_added_message .= anchor('voucher/edit/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'Edit', array('class' => 'anchor-link-a')) . " | ";
-			$voucher_added_message .= anchor_popup('voucher/printpreview/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp , 'Print', array('class' => 'anchor-link-a', 'width' => '600', 'height' => '600')) . " | ";
-			$voucher_added_message .= anchor_popup('voucher/email/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'Email', array('class' => 'anchor-link-a', 'width' => '500', 'height' => '300')) . " | ";
-			$voucher_added_message .= anchor('voucher/download/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'Download', array('class' => 'anchor-link-a'));
-			$voucher_added_message .= " ] it.";
-			$this->messages->add($voucher_added_message, 'success');
-			$this->session->unset_userdata('voucher_added_show_action');
-			$this->session->unset_userdata('voucher_added_id');
-			$this->session->unset_userdata('voucher_added_type_id');
-			$this->session->unset_userdata('voucher_added_type_label');
-			$this->session->unset_userdata('voucher_added_type_name');
-			$this->session->unset_userdata('voucher_added_number');
-		}
-
-		/* Show voucher edit actions */
-		if ($this->session->userdata('voucher_updated_show_action'))
-		{
-			$voucher_updated_id_temp = $this->session->userdata('voucher_updated_id');
-			$voucher_updated_type_id_temp = $this->session->userdata('voucher_updated_type_id');
-			$voucher_updated_type_label_temp = $this->session->userdata('voucher_updated_type_label');
-			$voucher_updated_type_name_temp = $this->session->userdata('voucher_updated_type_name');
-			$voucher_updated_number_temp = $this->session->userdata('voucher_updated_number');
-			$voucher_updated_message = 'Updated ' . $voucher_updated_type_name_temp . ' Voucher number ' . full_voucher_number($voucher_updated_type_id_temp, $voucher_updated_number_temp) . ".";
-			$voucher_updated_message .= " You can [ ";
-			$voucher_updated_message .= anchor('voucher/view/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'View', array('class' => 'anchor-link-a')) . " | ";
-			$voucher_updated_message .= anchor('voucher/edit/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Edit', array('class' => 'anchor-link-a')) . " | ";
-			$voucher_updated_message .= anchor_popup('voucher/printpreview/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp , 'Print', array('class' => 'anchor-link-a', 'width' => '600', 'height' => '600')) . " | ";
-			$voucher_updated_message .= anchor_popup('voucher/email/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Email', array('class' => 'anchor-link-a', 'width' => '500', 'height' => '300')) . " | ";
-			$voucher_updated_message .= anchor('voucher/download/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Download', array('class' => 'anchor-link-a'));
-			$voucher_updated_message .= " ] it.";
-			$this->messages->add($voucher_updated_message, 'success');
-
-			if ($this->session->userdata('voucher_updated_has_reconciliation'))
-				$this->messages->add('Previous reconciliations for this voucher are no longer valid. You need to redo the reconciliations for this voucher.', 'success');
-
-			$this->session->unset_userdata('voucher_updated_show_action');
-			$this->session->unset_userdata('voucher_updated_id');
-			$this->session->unset_userdata('voucher_updated_type_id');
-			$this->session->unset_userdata('voucher_updated_type_label');
-			$this->session->unset_userdata('voucher_updated_type_name');
-			$this->session->unset_userdata('voucher_updated_number');
-			$this->session->unset_userdata('voucher_updated_has_reconciliation');
-		}
-
-		$data['voucher_data'] = $voucher_q;
-
-		$this->template->load('template', 'voucher/index', $data);
-		return;
-
 	}
 
 	function view($voucher_type, $voucher_id = 0)
@@ -223,7 +57,7 @@ class Voucher extends Controller {
 	function add($voucher_type)
 	{
 		/* Check access */
-		if ( ! check_access('create voucher'))
+		if ( ! check_access('create stock voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('voucher/show/' . $voucher_type);
@@ -234,7 +68,7 @@ class Voucher extends Controller {
 		if ($this->config->item('account_locked') == 1)
 		{
 			$this->messages->add('Account is locked.', 'error');
-			redirect('voucher/show/' . $voucher_type);
+			redirect('inventory/stockvoucher/show/' . $voucher_type);
 			return;
 		}
 
@@ -312,24 +146,26 @@ class Voucher extends Controller {
 			$data['dr_amount'] = $this->input->post('dr_amount', TRUE);
 			$data['cr_amount'] = $this->input->post('cr_amount', TRUE);
 		} else {
+			for ($count = 0; $count <= 1; $count++)
+			{
+				$data['ledger_dc'][$count] = "D";
+				$data['ledger_id'][$count] = 0;
+				$data['rate'][$count] = "";
+				$data['amount'][$count] = "";
+			}
 			for ($count = 0; $count <= 3; $count++)
 			{
-				if ($count == 0 && $voucher_type == "payment")
-					$data['ledger_dc'][$count] = "C";
-				else if ($count == 1 && $voucher_type != "payment")
-					$data['ledger_dc'][$count] = "C";
-				else
-					$data['ledger_dc'][$count] = "D";
-				$data['ledger_id'][$count] = 0;
-				$data['dr_amount'][$count] = "";
-				$data['cr_amount'][$count] = "";
+				$data['stock_item_id'][$count] = '0';
+				$data['stock_item_quantity'][$count] = '';
+				$data['stock_item_rate_per_unit'][$count] = '';
+				$data['stock_item_amount'][$count] = '';
 			}
 		}
 
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('template', 'voucher/add', $data);
+			$this->template->load('template', 'inventory/stockvoucher/add', $data);
 			return;
 		}
 		else
@@ -354,7 +190,7 @@ class Voucher extends Controller {
 				if ($valid_ledger_q->num_rows() < 1)
 				{
 					$this->messages->add('Invalid Ledger A/C.', 'error');
-					$this->template->load('template', 'voucher/add', $data);
+					$this->template->load('template', 'inventory/stockvoucher/add', $data);
 					return;
 				} else {
 					/* Check for valid ledger type */
@@ -380,7 +216,7 @@ class Voucher extends Controller {
 						if ($valid_ledger->type != 1)
 						{
 							$this->messages->add('Invalid Ledger A/C. ' . $current_voucher_type['name'] . ' Vouchers can have only Bank and Cash Ledgers A/C\'s.', 'error');
-							$this->template->load('template', 'voucher/add', $data);
+							$this->template->load('template', 'inventory/stockvoucher/add', $data);
 							return;
 						}
 					} else if ($current_voucher_type['bank_cash_ledger_restriction'] == '5')
@@ -388,7 +224,7 @@ class Voucher extends Controller {
 						if ($valid_ledger->type == 1)
 						{
 							$this->messages->add('Invalid Ledger A/C. ' . $current_voucher_type['name'] . ' Vouchers cannot have Bank and Cash Ledgers A/C\'s.', 'error');
-							$this->template->load('template', 'voucher/add', $data);
+							$this->template->load('template', 'inventory/stockvoucher/add', $data);
 							return;
 						}
 					}
@@ -404,11 +240,11 @@ class Voucher extends Controller {
 			if ($dr_total != $cr_total)
 			{
 				$this->messages->add('Debit and Credit Total does not match!', 'error');
-				$this->template->load('template', 'voucher/add', $data);
+				$this->template->load('template', 'inventory/stockvoucher/add', $data);
 				return;
 			} else if ($dr_total == 0 && $cr_total == 0) {
 				$this->messages->add('Cannot save empty Voucher.', 'error');
-				$this->template->load('template', 'voucher/add', $data);
+				$this->template->load('template', 'inventory/stockvoucher/add', $data);
 				return;
 			}
 			/* Check if atleast one Bank or Cash Ledger A/C is present */
@@ -417,13 +253,13 @@ class Voucher extends Controller {
 				if ( ! $bank_cash_present)
 				{
 					$this->messages->add('Need to Debit atleast one Bank or Cash A/C.', 'error');
-					$this->template->load('template', 'voucher/add', $data);
+					$this->template->load('template', 'inventory/stockvoucher/add', $data);
 					return;
 				}
 				if ( ! $non_bank_cash_present)
 				{
 					$this->messages->add('Need to Debit or Credit atleast one NON - Bank or Cash A/C.', 'error');
-					$this->template->load('template', 'voucher/add', $data);
+					$this->template->load('template', 'inventory/stockvoucher/add', $data);
 					return;
 				}
 			} else if ($current_voucher_type['bank_cash_ledger_restriction'] == '3')
@@ -431,13 +267,13 @@ class Voucher extends Controller {
 				if ( ! $bank_cash_present)
 				{
 					$this->messages->add('Need to Credit atleast one Bank or Cash A/C.', 'error');
-					$this->template->load('template', 'voucher/add', $data);
+					$this->template->load('template', 'inventory/stockvoucher/add', $data);
 					return;
 				}
 				if ( ! $non_bank_cash_present)
 				{
 					$this->messages->add('Need to Debit or Credit atleast one NON - Bank or Cash A/C.', 'error');
-					$this->template->load('template', 'voucher/add', $data);
+					$this->template->load('template', 'inventory/stockvoucher/add', $data);
 					return;
 				}
 			}
@@ -479,7 +315,7 @@ class Voucher extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Voucher.', 'error');
 				$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting voucher");
-				$this->template->load('template', 'voucher/add', $data);
+				$this->template->load('template', 'inventory/stockvoucher/add', $data);
 				return;
 			} else {
 				$voucher_id = $this->db->insert_id();
@@ -519,7 +355,7 @@ class Voucher extends Controller {
 					$this->db->trans_rollback();
 					$this->messages->add('Error adding Ledger A/C - ' . $data_ledger_id . ' to Voucher.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting voucher ledger item " . "[id:" . $data_ledger_id . "]");
-					$this->template->load('template', 'voucher/add', $data);
+					$this->template->load('template', 'inventory/stockvoucher/add', $data);
 					return;
 				}
 			}
@@ -534,7 +370,7 @@ class Voucher extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Voucher total.', 'error');
 				$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating debit and credit total");
-				$this->template->load('template', 'voucher/add', $data);
+				$this->template->load('template', 'inventory/stockvoucher/add', $data);
 				return;
 			}
 
@@ -551,7 +387,7 @@ class Voucher extends Controller {
 			/* Showing success message in show() method since message is too long for storing it in session */
 			$this->logger->write_message("success", "Added " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $current_voucher_type['label']);
-			$this->template->load('template', 'voucher/add', $data);
+			$this->template->load('template', 'inventory/stockvoucher/add', $data);
 			return;
 		}
 		return;
@@ -563,7 +399,7 @@ class Voucher extends Controller {
 		if ( ! check_access('edit voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
-			redirect('voucher/show/' . $voucher_type);
+			redirect('inventory/stockvoucher/show/' . $voucher_type);
 			return;
 		}
 
@@ -853,7 +689,7 @@ class Voucher extends Controller {
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			}
-			
+
 			/* Adding ledger accounts */
 			$data_all_ledger_dc = $this->input->post('ledger_dc', TRUE);
 			$data_all_ledger_id = $this->input->post('ledger_id', TRUE);
@@ -937,7 +773,7 @@ class Voucher extends Controller {
 		if ( ! check_access('delete voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
-			redirect('voucher/show/' . $voucher_type);
+			redirect('inventory/stockvoucher/show/' . $voucher_type);
 			return;
 		}
 
@@ -1002,7 +838,7 @@ class Voucher extends Controller {
 		if ( ! check_access('download voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
-			redirect('voucher/show/' . $voucher_type);
+			redirect('inventory/stockvoucher/show/' . $voucher_type);
 			return;
 		}
 
@@ -1068,7 +904,7 @@ class Voucher extends Controller {
 		if ( ! check_access('print voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
-			redirect('voucher/show/' . $voucher_type);
+			redirect('inventory/stockvoucher/show/' . $voucher_type);
 			return;
 		}
 
@@ -1132,7 +968,7 @@ class Voucher extends Controller {
 		if ( ! check_access('email voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
-			redirect('voucher/show/' . $voucher_type);
+			redirect('inventory/stockvoucher/show/' . $voucher_type);
 			return;
 		}
 
@@ -1192,7 +1028,7 @@ class Voucher extends Controller {
 			$voucher_data['voucher_dr_total'] =  $cur_voucher->dr_total;
 			$voucher_data['voucher_cr_total'] =  $cur_voucher->cr_total;
 			$voucher_data['voucher_narration'] = $cur_voucher->narration;
-	
+
 			/* Getting Ledger details */
 			$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->order_by('dc', 'desc');
 			$ledger_q = $this->db->get();
@@ -1251,55 +1087,46 @@ class Voucher extends Controller {
 		return;
 	}
 
-	function addrow($add_type = 'all')
+	function addstockrow()
 	{
 		$i = time() + rand  (0, time()) + rand  (0, time()) + rand  (0, time());
-		$dr_amount = array(
-			'name' => 'dr_amount[' . $i . ']',
-			'id' => 'dr_amount[' . $i . ']',
+		$stock_item_quantity = array(
+			'name' => 'stock_item_quantity[' . $i . ']',
+			'id' => 'stock_item_quantity[' . $i . ']',
 			'maxlength' => '15',
-			'size' => '15',
+			'size' => '9',
 			'value' => '',
-			'class' => 'dr-item',
-			'disabled' => 'disabled',
+			'class' => 'quantity-item',
 		);
-		$cr_amount = array(
-			'name' => 'cr_amount[' . $i . ']',
-			'id' => 'cr_amount[' . $i . ']',
+		$stock_item_rate_per_unit = array(
+			'name' => 'stock_item_rate_per_unit[' . $i . ']',
+			'id' => 'stock_item_rate_per_unit[' . $i . ']',
+			'maxlength' => '15',
+			'size' => '9',
+			'value' => '',
+			'class' => 'rate-item',
+		);
+		$stock_item_amount = array(
+			'name' => 'stock_item_amount[' . $i . ']',
+			'id' => 'stock_item_amount[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '15',
 			'value' => '',
-			'class' => 'cr-item',
-			'disabled' => 'disabled',
+			'class' => 'rate-item',
 		);
 
 		echo '<tr class="new-row">';
+		echo "<td>" . form_input_stock_item('stock_item_id[' . $i . ']', 0) . "</td>";
+		echo "<td>" . form_input($stock_item_quantity) . "</td>";
+		echo "<td>" . form_input($stock_item_rate_per_unit) . "</td>";
+		echo "<td>" . form_input($stock_item_amount) . "</td>";
 		echo '<td>';
-		echo form_dropdown_dc('ledger_dc[' . $i . ']');
-		echo '</td>';
-
-		echo '<td>';
-		if ($add_type == 'bankcash')
-			echo form_input_ledger('ledger_id[' . $i . ']', 0, '', $type = 'bankcash');
-		else if ($add_type == 'nobankcash')
-			echo form_input_ledger('ledger_id[' . $i . ']', 0, '', $type = 'nobankcash');
-		else
-			echo form_input_ledger('ledger_id[' . $i . ']');
-		echo '</td>';
-
-		echo '<td>';
-		echo form_input($dr_amount);
+		echo img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Stock Item', 'class' => 'addstockrow'));
 		echo '</td>';
 		echo '<td>';
-		echo form_input($cr_amount);
+		echo img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Stock Item', 'class' => 'deletestockrow'));
 		echo '</td>';
-		echo '<td>';
-		echo img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addrow'));
-		echo '</td>';
-		echo '<td>';
-		echo img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow'));
-		echo '</td>';
-		echo '<td class="ledger-balance"><div></div>';
+		echo '<td class="stock-item-balance"><div></div>';
 		echo '</td>';
 		echo '</tr>';
 		return;

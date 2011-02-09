@@ -71,6 +71,33 @@ tr.total-area {
 }
 
 /******************************************************************************/
+/************************* STOCK VOUCHER TABLE ********************************/
+/******************************************************************************/
+
+.stock-voucher-table {
+	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size:14px;
+	border-collapse:collapse;
+	text-align:left;
+}
+
+.stock-voucher-table th {
+	font-weight:normal;
+	color:#000000;
+	padding:5px 8px;
+	background-color:#EEEEEE;
+}
+
+.stock-voucher-table td {
+	color:#000000;
+	padding:8px 8px 8px 8px;
+}
+
+.stock-voucher-table tr.new-row {
+	background-color:#FFFFE0;
+}
+
+/******************************************************************************/
 /****************************** CUSTOM TABLES *********************************/
 /******************************************************************************/
 

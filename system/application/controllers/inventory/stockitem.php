@@ -386,6 +386,15 @@ class StockItem extends Controller {
 		}
 		return;
 	}
+
+	function balance($stock_ledger_id = 0)
+	{
+		if ($stock_ledger_id > 0)
+			echo $this->Stock_Item_model->get_stock_item_balance($stock_ledger_id);
+		else
+			echo "";
+		return;
+	}
 }
 
 /* End of file stockitem.php */

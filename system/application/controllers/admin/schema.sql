@@ -124,8 +124,17 @@ CREATE TABLE IF NOT EXISTS stock_items (
   name varchar(100) NOT NULL,
   costing_method int(2) NOT NULL,
   op_balance_quantity float NOT NULL,
-  op_balance_rate_per_unit decimal(15,2) NOT NULL,
-  op_balance_total_value decimal(15,2) NOT NULL,
+  op_balance_rate_per_unit decimal(15,2) NOT NULL DEFAULT '0.00',
+  op_balance_total_value decimal(15,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
+CREATE TABLE IF NOT EXISTS stock_voucher_items (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  stock_item_id int(11) NOT NULL,
+  quantity float NOT NULL,
+  rate_per_unit decimal(15,2) NOT NULL DEFAULT '0.00',
+  discount varchar(15) NOT NULL,
+  total decimal(15,2) NOT NULL DEFAULT '0.00',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;

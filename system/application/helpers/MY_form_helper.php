@@ -66,6 +66,10 @@ if ( ! function_exists('form_input_ledger'))
 			$options = $CI->Ledger_model->get_all_ledgers_nobankcash();
 		else if ($type == 'reconciliation')
 			$options = $CI->Ledger_model->get_all_ledgers_reconciliation();
+		else if ($type == 'purchase')
+			$options = $CI->Ledger_model->get_all_ledgers_purchase();
+		else if ($type == 'creditor')
+			$options = $CI->Ledger_model->get_all_ledgers_creditor();
 		else
 			$options = $CI->Ledger_model->get_all_ledgers();
 
@@ -82,6 +86,42 @@ if ( ! function_exists('form_input_ledger'))
 		if ($extra != '') $extra = ' '.$extra;
 
 		$form = '<select name="'.$name.'"'.$extra.' class="ledger-dropdown">';
+
+		foreach ($options as $key => $val)
+		{
+			$key = (string) $key;
+			$sel = ($key == $selected) ? ' selected="selected"' : '';
+			$form .= '<option value="'.$key.'"'.$sel.'>'.(string) $val."</option>\n";
+		}
+
+		$form .= '</select>';
+
+		return $form;
+	}
+}
+
+if ( ! function_exists('form_input_stock_item'))
+{
+	function form_input_stock_item($name, $selected = NULL, $extra = '')
+	{
+		$CI =& get_instance();
+		$CI->load->model('Stock_Item_model');
+
+		$options = $CI->Stock_Item_model->get_all_item();
+
+		// If no selected state was submitted we will attempt to set it automatically
+		if ( ! ($selected))
+		{
+			// If the form name appears in the $_POST array we have a winner!
+			if (isset($_POST[$name]))
+			{
+				$selected = $_POST[$name];
+			}
+		}
+
+		if ($extra != '') $extra = ' '.$extra;
+
+		$form = '<select name="'.$name.'"'.$extra.' class="stock-item-dropdown">';
 
 		foreach ($options as $key => $val)
 		{

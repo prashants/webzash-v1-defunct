@@ -29,4 +29,9 @@ class Stock_Item_model extends Model {
 		else
 			return "(Error)";
 	}
+
+	function get_stock_item_balance($stock_item_id)
+	{
+		return '100';
+	}
 }
