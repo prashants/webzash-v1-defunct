@@ -23,11 +23,12 @@ CREATE TABLE IF NOT EXISTS voucher_types (
   name varchar(100) NOT NULL,
   description varchar(255) NOT NULL,
   base_type int(2) NOT NULL,
+  bank_cash_ledger_restriction int(2) NOT NULL DEFAULT '1',
+  stock_voucher_type int(2) NOT NULL DEFAULT '1',
   numbering int(2) NOT NULL,
   prefix varchar(10) NOT NULL,
   suffix varchar(10) NOT NULL,
   zero_padding int(2) NOT NULL,
-  bank_cash_ledger_restriction int(2) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

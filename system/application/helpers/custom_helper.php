@@ -117,11 +117,12 @@ if ( ! function_exists('voucher_type_info'))
 				'label' => $voucher_type_all[$voucher_type_id]['label'],
 				'name' => $voucher_type_all[$voucher_type_id]['name'],
 				'base_type' => $voucher_type_all[$voucher_type_id]['base_type'],
+				'bank_cash_ledger_restriction' => $voucher_type_all[$voucher_type_id]['bank_cash_ledger_restriction'],
+				'stock_voucher_type' => $voucher_type_all[$voucher_type_id]['stock_voucher_type'],
 				'numbering' => $voucher_type_all[$voucher_type_id]['numbering'],
 				'prefix' => $voucher_type_all[$voucher_type_id]['prefix'],
 				'suffix' => $voucher_type_all[$voucher_type_id]['suffix'],
 				'zero_padding' => $voucher_type_all[$voucher_type_id]['zero_padding'],
-				'bank_cash_ledger_restriction' => $voucher_type_all[$voucher_type_id]['bank_cash_ledger_restriction'],
 			);
 		} else {
 			return array(
@@ -129,11 +130,12 @@ if ( ! function_exists('voucher_type_info'))
 				'label' => '',
 				'name' => '(Unkonwn)',
 				'base_type' => 1,
+				'bank_cash_ledger_restriction' => 1,
+				'stock_voucher_type' => 1,
 				'numbering' => 1,
 				'prefix' => '',
 				'suffix' => '',
 				'zero_padding' => 0,
-				'bank_cash_ledger_restriction' => 5,
 			);
 		}
 	}

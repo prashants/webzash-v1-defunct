@@ -5,6 +5,10 @@ UPDATE ledgers SET type = '0' WHERE type = 'N';
 
 ALTER TABLE ledgers CHANGE type type INT(2) NOT NULL DEFAULT '0';
 
+ALTER TABLE voucher_types ADD stock_voucher_type INT(2) NOT NULL DEFAULT '1';
+
+ALTER TABLE voucher_types CHANGE bank_cash_ledger_restriction bank_cash_ledger_restriction INT(2) NOT NULL DEFAULT '1';
+
 CREATE TABLE IF NOT EXISTS stock_units (
   id int(11) NOT NULL AUTO_INCREMENT,
   symbol varchar(15) NOT NULL,
