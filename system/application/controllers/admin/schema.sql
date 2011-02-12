@@ -132,6 +132,7 @@ CREATE TABLE IF NOT EXISTS stock_items (
 
 CREATE TABLE IF NOT EXISTS stock_voucher_items (
   id int(11) NOT NULL AUTO_INCREMENT,
+  voucher_id int(11) NOT NULL,
   stock_item_id int(11) NOT NULL,
   quantity float NOT NULL,
   rate_per_unit decimal(15,2) NOT NULL DEFAULT '0.00',

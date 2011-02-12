@@ -1,7 +1,3 @@
-<?php
-	/* Add row ledger type */
-	$add_type = "all";
-?>
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -47,17 +43,17 @@ $(document).ready(function() {
 		}
 	});
 
-	$('table td .quantity-item').live('change', function() {
+	$('table td .quantity-stock-item').live('change', function() {
 		var rowid = $(this);
 		calculateRowTotal(rowid.parent().prev());
 	});
 
-	$('table td .rate-item').live('change', function() {
+	$('table td .rate-stock-item').live('change', function() {
 		var rowid = $(this);
 		calculateRowTotal(rowid.parent().prev().prev());
 	});
 
-	$('table td .discount-item').live('change', function() {
+	$('table td .discount-stock-item').live('change', function() {
 		var rowid = $(this);
 		calculateRowTotal(rowid.parent().prev().prev().prev());
 	});
@@ -158,10 +154,11 @@ $(document).ready(function() {
 		var add_image_url = $(cur_obj).attr('src');
 		$(cur_obj).attr('src', <?php echo '\'' . asset_url() . 'images/icons/ajax.gif' . '\''; ?>);
 		$.ajax({
-			url: <?php echo '\'' . site_url('voucher/addrow/' . $add_type) . '\''; ?>,
+			url: <?php echo '\'' . site_url('inventory/stockvoucher/addrow') . '\''; ?>,
 			success: function(data) {
 				$(cur_obj).parent().parent().after(data);
 				$(cur_obj).attr('src', add_image_url);
+				$('.ledger-dropdown').trigger('change');
 			}
 		});
 	});
@@ -251,36 +248,36 @@ $(document).ready(function() {
 			'id' => 'stock_item_quantity[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
-			'value' => '',
-			'class' => 'quantity-item',
+			'value' => isset($stock_item_quantity[$i]) ? $stock_item_quantity[$i] : '',
+			'class' => 'quantity-stock-item',
 		);
 		$stock_item_rate_per_unit = array(
 			'name' => 'stock_item_rate_per_unit[' . $i . ']',
 			'id' => 'stock_item_rate_per_unit[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
-			'value' => '',
-			'class' => 'rate-item',
+			'value' => isset($stock_item_rate_per_unit[$i]) ? $stock_item_rate_per_unit[$i] : '',
+			'class' => 'rate-stock-item',
 		);
 		$stock_item_discount = array(
 			'name' => 'stock_item_discount[' . $i . ']',
 			'id' => 'stock_item_discount[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
-			'value' => '',
-			'class' => 'discount-item',
+			'value' => isset($stock_item_discount[$i]) ? $stock_item_discount[$i] : '',
+			'class' => 'discount-stock-item',
 		);
 		$stock_item_amount = array(
 			'name' => 'stock_item_amount[' . $i . ']',
 			'id' => 'stock_item_amount[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '15',
-			'value' => '',
-			'class' => 'rate-item',
+			'value' => isset($stock_item_amount[$i]) ? $stock_item_amount[$i] : '',
+			'class' => 'rate-stock-item',
 		);
 		echo "<tr>";
 
-		echo "<td>" . form_input_stock_item('stock_item_id[' . $i . ']', 0) . "</td>";
+		echo "<td>" . form_input_stock_item('stock_item_id[' . $i . ']', isset($stock_item_id[$i]) ? $stock_item_id[$i] : 0) . "</td>";
 		echo "<td>" . form_input($stock_item_quantity) . "</td>";
 		echo "<td>" . form_input($stock_item_rate_per_unit) . "</td>";
 		echo "<td>" . form_input($stock_item_discount) . "</td>";
@@ -308,23 +305,21 @@ $(document).ready(function() {
 			'id' => 'rate_item[' . $i . ']',
 			'maxlength' => '5',
 			'size' => '5',
-			'value' => isset($dr_amount[$i]) ? $dr_amount[$i] : "",
-			'class' => 'dr-item',
+			'value' => isset($rate_item[$i]) ? $rate_item[$i] : '',
+			'class' => 'rate-item',
 		);
 		$amount_item = array(
 			'name' => 'amount_item[' . $i . ']',
 			'id' => 'amount_item[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '15',
-			'value' => isset($cr_amount[$i]) ? $cr_amount[$i] : "",
-			'class' => 'cr-item',
+			'value' => isset($amount_item[$i]) ? $amount_item[$i] : '',
+			'class' => 'amount-item',
 		);
 		echo "<tr>";
 
 		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', isset($ledger_dc[$i]) ? $ledger_dc[$i] : "D") . "</td>";
-
 		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0) . "</td>";
-
 		echo "<td>" . form_input($rate_item) . "</td>";
 		echo "<td>" . form_input($amount_item) . "</td>";
 

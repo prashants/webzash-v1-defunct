@@ -211,6 +211,8 @@ class StockVoucher extends Controller {
 			$data_all_rate_item = $this->input->post('rate_item', TRUE);
 			$data_all_amount_item = $this->input->post('amount_item', TRUE);
 
+			$data_total_amount = 0;
+
 			/* Checking for Valid Stock Ledger A/C - account */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_account)->where('type', 2);
@@ -228,9 +230,9 @@ class StockVoucher extends Controller {
 			}
 			/* Checking for Valid Stock Ledger A/C - entity */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
-				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 4);
+				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 4)->or_where('type', 1);
 			else
-				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 5);
+				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 5)->or_where('type', 1);
 			$valid_main_account_q = $this->db->get();
 			if ($valid_main_account_q->num_rows() < 1)
 			{
@@ -309,6 +311,7 @@ class StockVoucher extends Controller {
 			$data_total_amount = 0;
 			$voucher_id = NULL;
 
+			/* Adding Voucher */
 			$this->db->trans_start();
 			$insert_data = array(
 				'number' => $data_number,
@@ -344,20 +347,22 @@ class StockVoucher extends Controller {
 				$this->db->trans_rollback();
 				if ($current_voucher_type['stock_voucher_type'] == '1')
 				{
-					$this->messages->add('Error adding Purchase Ledger A/C - ' . $data_main_account . ' to Voucher.', 'error');
+					$this->messages->add('Error adding Purchase Ledger A/C to Voucher.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting purchase ledger " . "[id:" . $data_main_account . "]");
 				} else {
-					$this->messages->add('Error adding Sale Ledger A/C - ' . $data_main_account . ' to Voucher.', 'error');
+					$this->messages->add('Error adding Sale Ledger A/C to Voucher.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting sale ledger " . "[id:" . $data_main_account . "]");
 				}
 				$this->template->load('template', 'inventory/stockvoucher/add', $data);
 				return;
+			} else {
+				$main_voucher_id = $this->db->insert_id();
 			}
 
 			/* Adding main - entity */
 			$insert_data = array(
 				'voucher_id' => $voucher_id,
-				'ledger_id' => $data_entity_account,
+				'ledger_id' => $data_main_entity,
 				'amount' => $data_total_amount,
 				'dc' => '',
 			);
@@ -370,39 +375,77 @@ class StockVoucher extends Controller {
 				$this->db->trans_rollback();
 				if ($current_voucher_type['stock_voucher_type'] == '1')
 				{
-					$this->messages->add('Error adding Creditor (Supplier) - ' . $data_entity_account . ' to Voucher.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting creditor ledger " . "[id:" . $data_entity_account . "]");
+					$this->messages->add('Error adding Creditor (Supplier) to Voucher.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting creditor ledger " . "[id:" . $data_main_entity . "]");
 				} else {
-					$this->messages->add('Error adding Debtor (Customer) - ' . $data_entity_account . ' to Voucher.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting debtor ledger " . "[id:" . $data_entity_account . "]");
+					$this->messages->add('Error adding Debtor (Customer) - to Voucher.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting debtor ledger " . "[id:" . $data_main_entity . "]");
 				}
 				$this->template->load('template', 'inventory/stockvoucher/add', $data);
 				return;
+			} else {
+				$entity_voucher_id = $this->db->insert_id();
+			}
+
+			/* Adding stock items */
+			$data_all_stock_item_id = $this->input->post('stock_item_id', TRUE);
+			$data_all_stock_item_quantity = $this->input->post('stock_item_quantity', TRUE);
+			$data_all_stock_item_rate_per_unit = $this->input->post('stock_item_rate_per_unit', TRUE);
+			$data_all_stock_item_discount = $this->input->post('stock_item_discount', TRUE);
+			$data_all_stock_item_amount = $this->input->post('stock_item_amount', TRUE);
+
+			foreach ($data_all_stock_item_id as $id => $stock_data)
+			{
+				$data_stock_item_id = $data_all_stock_item_id[$id];
+
+				if ($data_stock_item_id < 1)
+					continue;
+
+				$data_stock_item_quantity = $data_all_stock_item_quantity[$id];
+				$data_stock_item_rate_per_unit = $data_all_stock_item_rate_per_unit[$id];
+				$data_stock_item_discount = $data_all_stock_item_discount[$id];
+				$data_stock_item_amount = $data_all_stock_item_amount[$id];
+
+				$data_total_amount += $data_stock_item_amount;
+
+				$insert_stock_data = array(
+					'voucher_id' => $voucher_id,
+					'stock_item_id' => $data_stock_item_id,
+					'quantity' => $data_stock_item_quantity,
+					'rate_per_unit' => $data_stock_item_rate_per_unit,
+					'discount' => $data_stock_item_discount,
+					'total' => $data_stock_item_amount,
+				);
+				if ( ! $this->db->insert('stock_voucher_items', $insert_stock_data))
+				{
+					$this->db->trans_rollback();
+					$this->messages->add('Error adding Stock Item - ' . $data_ledger_id . ' to Voucher.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting stock item " . "[id:" . $data_ledger_id . "]");
+					$this->template->load('template', 'inventory/stockvoucher/add', $data);
+					return;
+				}
 			}
 
 			/* Adding ledger accounts */
 			$data_all_ledger_dc = $this->input->post('ledger_dc', TRUE);
 			$data_all_ledger_id = $this->input->post('ledger_id', TRUE);
-			$data_all_dr_amount = $this->input->post('dr_amount', TRUE);
-			$data_all_cr_amount = $this->input->post('cr_amount', TRUE);
+			$data_all_rate_item = $this->input->post('rate_item', TRUE);
+			$data_all_amount_item = $this->input->post('amount_item', TRUE);
 
-			$dr_total = 0;
-			$cr_total = 0;
 			foreach ($data_all_ledger_dc as $id => $ledger_data)
 			{
 				$data_ledger_dc = $data_all_ledger_dc[$id];
 				$data_ledger_id = $data_all_ledger_id[$id];
+
 				if ($data_ledger_id < 1)
 					continue;
-				$data_amount = 0;
-				if ($data_all_ledger_dc[$id] == "D")
-				{
-					$data_amount = $data_all_dr_amount[$id];
-					$dr_total += $data_all_dr_amount[$id];
-				} else {
-					$data_amount = $data_all_cr_amount[$id];
-					$cr_total += $data_all_cr_amount[$id];
-				}
+
+				$data_amount = $data_all_amount_item[$id];
+				if ($data_ledger_dc == "D")
+					$data_total_amount += $data_amount;
+				else
+					$data_total_amount -= $data_amount;
+
 				$insert_ledger_data = array(
 					'voucher_id' => $voucher_id,
 					'ledger_id' => $data_ledger_id,
@@ -419,16 +462,54 @@ class StockVoucher extends Controller {
 				}
 			}
 
-			/* Updating Debit and Credit Total in vouchers table */
+			/* Updating Debit and Credit Total - vouchers */
 			$update_data = array(
-				'dr_total' => $dr_total,
-				'cr_total' => $cr_total,
+				'dr_total' => $data_total_amount,
+				'cr_total' => $data_total_amount,
 			);
 			if ( ! $this->db->where('id', $voucher_id)->update('vouchers', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Voucher total.', 'error');
 				$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating debit and credit total");
+				$this->template->load('template', 'inventory/stockvoucher/add', $data);
+				return;
+			}
+
+			/* Updating Debit and Credit Total - main account */
+			$update_data = array(
+				'amount' => $data_total_amount,
+			);
+			if ( ! $this->db->where('id', $main_voucher_id)->update('voucher_items', $update_data))
+			{
+				$this->db->trans_rollback();
+				if ($current_voucher_type['stock_voucher_type'] == '1')
+				{
+					$this->messages->add('Error updating Purchase Ledger A/C total.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating purchase ledger total");
+				} else {
+					$this->messages->add('Error updating Sale Ledger A/C total.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating sale ledger total");
+				}
+				$this->template->load('template', 'inventory/stockvoucher/add', $data);
+				return;
+			}
+
+			/* Updating Debit and Credit Total - entity account */
+			$update_data = array(
+				'amount' => $data_total_amount,
+			);
+			if ( ! $this->db->where('id', $entity_voucher_id)->update('voucher_items', $update_data))
+			{
+				$this->db->trans_rollback();
+				if ($current_voucher_type['stock_voucher_type'] == '1')
+				{
+					$this->messages->add('Error updating Creditor (Supplier) total.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating creditor (supplier) total");
+				} else {
+					$this->messages->add('Error updating Debtor (Customer) total.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating debtor (customer) total");
+				}
 				$this->template->load('template', 'inventory/stockvoucher/add', $data);
 				return;
 			}
@@ -829,7 +910,7 @@ class StockVoucher extends Controller {
 	function delete($voucher_type, $voucher_id = 0)
 	{
 		/* Check access */
-		if ( ! check_access('delete voucher'))
+		if ( ! check_access('delete stock voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/stockvoucher/show/' . $voucher_type);
@@ -864,6 +945,14 @@ class StockVoucher extends Controller {
 		}
 
 		$this->db->trans_start();
+		if ( ! $this->db->delete('stock_voucher_items', array('voucher_id' => $voucher_id)))
+		{
+			$this->db->trans_rollback();
+			$this->messages->add('Error deleting Stock Items.', 'error');
+			$this->logger->write_message("error", "Error deleting stock item entries for " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
+			redirect('voucher/view/' . $current_voucher_type['label'] . '/' . $voucher_id);
+			return;
+		}
 		if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id)))
 		{
 			$this->db->trans_rollback();
@@ -1143,6 +1232,37 @@ class StockVoucher extends Controller {
 			$this->load->view('voucher/email', $data);
 			return;
 		}
+		return;
+	}
+
+	function addrow()
+	{
+		$i = time() + rand  (0, time()) + rand  (0, time()) + rand  (0, time());
+		$rate_item = array(
+			'name' => 'rate_item[' . $i . ']',
+			'id' => 'rate_item[' . $i . ']',
+			'maxlength' => '5',
+			'size' => '5',
+			'value' => isset($dr_amount[$i]) ? $dr_amount[$i] : "",
+			'class' => 'dr-item',
+		);
+		$amount_item = array(
+			'name' => 'amount_item[' . $i . ']',
+			'id' => 'amount_item[' . $i . ']',
+			'maxlength' => '15',
+			'size' => '15',
+			'value' => isset($cr_amount[$i]) ? $cr_amount[$i] : "",
+			'class' => 'cr-item',
+		);
+		echo "<tr>";
+		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', 'D') . "</td>";
+		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', '0') . "</td>";
+		echo "<td>" . form_input($rate_item) . "</td>";
+		echo "<td>" . form_input($amount_item) . "</td>";
+		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addrow')) . "</td>";
+		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow')) . "</td>";
+		echo "<td class=\"ledger-balance\"><div></div></td>";
+		echo "</tr>";
 		return;
 	}
 
