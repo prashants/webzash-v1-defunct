@@ -522,6 +522,7 @@ class StockVoucher extends Controller {
 			$this->session->set_userdata('voucher_added_type_id', $voucher_type_id);
 			$this->session->set_userdata('voucher_added_type_label', $current_voucher_type['label']);
 			$this->session->set_userdata('voucher_added_type_name', $current_voucher_type['name']);
+			$this->session->set_userdata('voucher_added_type_base_type', $current_voucher_type['base_type']);
 			$this->session->set_userdata('voucher_added_number', $data_number);
 
 			/* Showing success message in show() method since message is too long for storing it in session */
