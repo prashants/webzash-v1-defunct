@@ -62,8 +62,8 @@ class Ledger extends Controller {
 		$data['affects_inventory_options'] = array(
 			'2' => 'Purchases Ledger A/C',
 			'3' => 'Sales Ledger A/C',
-			'4' => 'Debtor (Customer)',
-			'5' => 'Creditor (Supplier)',
+			'4' => 'Creditor (Supplier)',
+			'5' => 'Debtor (Customer)',
 		);
 		$data['affects_inventory_option_active'] = '2';
 
@@ -243,8 +243,8 @@ class Ledger extends Controller {
 		$data['affects_inventory_options'] = array(
 			'2' => 'Purchases Ledger A/C',
 			'3' => 'Sales Ledger A/C',
-			'4' => 'Debtor (Customer)',
-			'5' => 'Creditor (Supplier)',
+			'4' => 'Creditor (Supplier)',
+			'5' => 'Debtor (Customer)',
 		);
 		if ($ledger_data->type <= 0)
 		{

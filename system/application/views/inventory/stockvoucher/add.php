@@ -13,13 +13,16 @@ $(document).ready(function() {
 			$(this).parent().next().children().attr('value', "");
 			$(this).parent().next().next().children().attr('value', "");
 			$(this).parent().next().next().next().children().attr('value', "");
+			$(this).parent().next().next().next().next().children().attr('value', "");
 			$(this).parent().next().children().attr('disabled', 'disabled');
 			$(this).parent().next().next().children().attr('disabled', 'disabled');
 			$(this).parent().next().next().next().children().attr('disabled', 'disabled');
+			$(this).parent().next().next().next().next().children().attr('disabled', 'disabled');
 		} else {
 			$(this).parent().next().children().attr('disabled', '');
 			$(this).parent().next().next().children().attr('disabled', '');
 			$(this).parent().next().next().next().children().attr('disabled', '');
+			$(this).parent().next().next().next().next().children().attr('disabled', '');
 			$(this).parent().prev().children().trigger('change');
 		}
 		var stockid = $(this).val();
@@ -32,15 +35,15 @@ $(document).ready(function() {
 					if (isNaN(stock_bal))
 						stock_bal = 0;
 					if (stock_bal == 0)
-						rowid.parent().next().next().next().next().next().children().text("0");
+						rowid.parent().next().next().next().next().next().next().children().text("0");
 					else if (stock_bal < 0)
-						rowid.parent().next().next().next().next().next().next().children().text(data);
+						rowid.parent().next().next().next().next().next().next().next().children().text(data);
 					else
-						rowid.parent().next().next().next().next().next().next().children().text(data);
+						rowid.parent().next().next().next().next().next().next().next().children().text(data);
 				}
 			});
 		} else {
-			rowid.parent().next().next().next().next().next().next().children().text("");
+			rowid.parent().next().next().next().next().next().next().next().children().text("");
 		}
 	});
 
@@ -49,18 +52,31 @@ $(document).ready(function() {
 		calculateRowTotal(rowid.parent().prev());
 	});
 
+	$('table td .rate-item').live('change', function() {
+		var rowid = $(this);
+		calculateRowTotal(rowid.parent().prev().prev());
+	});
+
+	$('table td .discount-item').live('change', function() {
+		var rowid = $(this);
+		calculateRowTotal(rowid.parent().prev().prev().prev());
+	});
+
 	var calculateRowTotal = function(itemrow) {
 		var item_quantity = itemrow.next().children().val();
 		var item_rate_per_unit = itemrow.next().next().children().val();
-		var item_amount = itemrow.next().next().next().children().val();
+		var item_discount = itemrow.next().next().next().children().val();
 
 		item_quantity = parseFloat(item_quantity);
 		item_rate_per_unit = parseFloat(item_rate_per_unit);
-		if ( (!isNaN(item_quantity)) && (!isNaN(item_rate_per_unit)) )
+		item_discount = parseFloat(item_discount);
+		if (isNaN(item_discount))
+			item_discount = 0;
+		if ((!isNaN(item_quantity)) && (!isNaN(item_rate_per_unit)))
 		{
-			item_amount = item_quantity * item_rate_per_unit;
-			itemrow.next().next().next().children().val(item_amount);
-			itemrow.next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
+			var item_amount = (item_quantity * item_rate_per_unit) - item_discount;
+			itemrow.next().next().next().next().children().val(item_amount);
+			itemrow.next().next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
 		}
 	}
 
@@ -159,7 +175,7 @@ $(document).ready(function() {
 </script>
 
 <?php
-	echo form_open('voucher/add/' . $current_voucher_type['label']);
+	echo form_open('inventory/stockvoucher/add/' . $current_voucher_type['label']);
 	echo "<p>";
 	echo "<span id=\"tooltip-target-1\">";
 	echo form_label('Voucher Number', 'voucher_number');
@@ -176,32 +192,57 @@ $(document).ready(function() {
 	echo "<span id=\"tooltip-content-2\">Date format is " . $this->config->item('account_date_format') . ".</span>";
 	echo "</p>";
 
-	echo "<p>";
-	echo "<table border=0 cellpadding=2>";
-	echo "<tr>";
-	echo "<td align=\"right\">";
-	echo form_label('Purchase Ledger A/C', 'purchase_ledger_id');
-	echo "</td>";
-	echo "<td>";
-	echo form_input_ledger('purchase_ledger_id', '', '', $type = 'purchase');
-	echo "</td>";
-	echo "</tr>";
+	if ($current_voucher_type['stock_voucher_type'] == '1')
+	{
+		echo "<p>";
+		echo "<table border=0 cellpadding=2>";
+		echo "<tr>";
+		echo "<td align=\"right\">";
+		echo form_label('Purchase Ledger A/C', 'main_account');
+		echo "</td>";
+		echo "<td>";
+		echo form_input_ledger('main_account', $main_account_active, '', $type = 'purchase');
+		echo "</td>";
+		echo "</tr>";
 
-	echo "<tr>";
-	echo "<td align=\"right\">";
-	echo form_label('Creditor (Supplier)', 'creditor_ledger_id');
-	echo "</td>";
-	echo "<td>";
-	echo form_input_ledger('creditor_ledger_id', '', '', $type = 'creditor');
-	echo "</td>";
-	echo "</tr>";
-	echo "</table>";
-	echo "</p>";
+		echo "<tr>";
+		echo "<td align=\"right\">";
+		echo form_label('Creditor (Supplier)', 'main_entity');
+		echo "</td>";
+		echo "<td>";
+		echo form_input_ledger('main_entity', $main_entity_active, '', $type = 'creditor');
+		echo "</td>";
+		echo "</tr>";
+		echo "</table>";
+		echo "</p>";
+	} else {
+		echo "<p>";
+		echo "<table border=0 cellpadding=2>";
+		echo "<tr>";
+		echo "<td align=\"right\">";
+		echo form_label('Sales Ledger A/C', 'main_account');
+		echo "</td>";
+		echo "<td>";
+		echo form_input_ledger('main_account', $main_account_active, '', $type = 'sale');
+		echo "</td>";
+		echo "</tr>";
+
+		echo "<tr>";
+		echo "<td align=\"right\">";
+		echo form_label('Debtor (Customer)', 'main_entity');
+		echo "</td>";
+		echo "<td>";
+		echo form_input_ledger('main_entity', $main_entity_active, '', $type = 'debtor');
+		echo "</td>";
+		echo "</tr>";
+		echo "</table>";
+		echo "</p>";
+	}
 
 	echo "<p></p>";
 
 	echo "<table class=\"voucher-table\">";
-	echo "<thead><tr><th>Stock Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
+	echo "<thead><tr><th>Stock Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Discount</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
 
 	foreach ($stock_item_id as $i => $row)
 	{
@@ -221,6 +262,14 @@ $(document).ready(function() {
 			'value' => '',
 			'class' => 'rate-item',
 		);
+		$stock_item_discount = array(
+			'name' => 'stock_item_discount[' . $i . ']',
+			'id' => 'stock_item_discount[' . $i . ']',
+			'maxlength' => '15',
+			'size' => '9',
+			'value' => '',
+			'class' => 'discount-item',
+		);
 		$stock_item_amount = array(
 			'name' => 'stock_item_amount[' . $i . ']',
 			'id' => 'stock_item_amount[' . $i . ']',
@@ -234,6 +283,7 @@ $(document).ready(function() {
 		echo "<td>" . form_input_stock_item('stock_item_id[' . $i . ']', 0) . "</td>";
 		echo "<td>" . form_input($stock_item_quantity) . "</td>";
 		echo "<td>" . form_input($stock_item_rate_per_unit) . "</td>";
+		echo "<td>" . form_input($stock_item_discount) . "</td>";
 		echo "<td>" . form_input($stock_item_amount) . "</td>";
 
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addstockrow')) . "</td>";
@@ -249,15 +299,15 @@ $(document).ready(function() {
 	echo "<br />";
 
 	echo "<table class=\"voucher-table\">";
-	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Rate</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
+	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Rate %</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
 
 	foreach ($ledger_dc as $i => $ledger)
 	{
 		$rate_item = array(
 			'name' => 'rate_item[' . $i . ']',
 			'id' => 'rate_item[' . $i . ']',
-			'maxlength' => '15',
-			'size' => '15',
+			'maxlength' => '5',
+			'size' => '5',
 			'value' => isset($dr_amount[$i]) ? $dr_amount[$i] : "",
 			'class' => 'dr-item',
 		);

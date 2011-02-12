@@ -7,6 +7,7 @@ class Ledger_model extends Model {
 		parent::Model();
 	}
 
+	/**************************** GET LEDGERS METHODS *********************/
 	function get_all_ledgers()
 	{
 		$options = array();
@@ -76,7 +77,33 @@ class Ledger_model extends Model {
 	{
 		$options = array();
 		$options[0] = "(Please Select)";
-		$this->db->from('ledgers')->where('type', 5)->order_by('name', 'asc');
+		$this->db->from('ledgers')->where('type', 4)->or_where('type', 1)->order_by('name', 'asc');
+		$ledger_q = $this->db->get();
+		foreach ($ledger_q->result() as $row)
+		{
+			$options[$row->id] = $row->name;
+		}
+		return $options;
+	}
+
+	function get_all_ledgers_sale()
+	{
+		$options = array();
+		$options[0] = "(Please Select)";
+		$this->db->from('ledgers')->where('type', 3)->order_by('name', 'asc');
+		$ledger_q = $this->db->get();
+		foreach ($ledger_q->result() as $row)
+		{
+			$options[$row->id] = $row->name;
+		}
+		return $options;
+	}
+
+	function get_all_ledgers_debtor()
+	{
+		$options = array();
+		$options[0] = "(Please Select)";
+		$this->db->from('ledgers')->where('type', 5)->or_where('type', 1)->order_by('name', 'asc');
 		$ledger_q = $this->db->get();
 		foreach ($ledger_q->result() as $row)
 		{

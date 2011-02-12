@@ -70,6 +70,10 @@ if ( ! function_exists('form_input_ledger'))
 			$options = $CI->Ledger_model->get_all_ledgers_purchase();
 		else if ($type == 'creditor')
 			$options = $CI->Ledger_model->get_all_ledgers_creditor();
+		else if ($type == 'sale')
+			$options = $CI->Ledger_model->get_all_ledgers_sale();
+		else if ($type == 'debtor')
+			$options = $CI->Ledger_model->get_all_ledgers_debtor();
 		else
 			$options = $CI->Ledger_model->get_all_ledgers();
 
