@@ -16,6 +16,8 @@ class Startup
 		$CI->db->trans_strict(FALSE);
 		$CI->load->library('general');
 
+		$CI->messages->add('This is a development version of webzash not meant for production use. You can get the stable version from ' . anchor('http://webzash.org/download', 'http://webzash.org/download'), 'error');
+
 		/* Skip checking if accessing admin section*/
 		if ($CI->uri->segment(1) == "admin")
 			return;
