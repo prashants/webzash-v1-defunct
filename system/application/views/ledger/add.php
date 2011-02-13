@@ -1,3 +1,30 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	/* initialize */
+	if ($('#affects_inventory').attr("checked") == true)
+		$('#ledger_type_cashbank').attr("checked", false);
+	else
+		$('#affects_inventory_option').hide();
+	if ($('#ledger_type_cashbank').attr("checked") == true)
+		$('#affects_inventory').attr("checked", false);
+
+	$('#ledger_type_cashbank').click(function() {
+		if (this.checked == true) {
+			$('#affects_inventory').attr("checked", false);
+			$('#affects_inventory_option').fadeOut();
+		}
+	});
+	$('#affects_inventory').click(function() {
+		if (this.checked == true) {
+			$('#ledger_type_cashbank').attr("checked", false);
+			$('#affects_inventory_option').fadeIn();
+		} else {
+			$('#affects_inventory_option').fadeOut();
+		}
+	});
+});
+</script>
+
 <?php
 	echo form_open('ledger/add');
 
@@ -26,14 +53,14 @@
 
 	echo "<p>";
 	echo "<span id=\"tooltip-target-2\">";
-	echo form_checkbox('ledger_type_cashbank', 1, $ledger_type_cashbank) . " Bank or Cash Account";
+	echo form_checkbox('ledger_type_cashbank', 1, $ledger_type_cashbank, 'id="ledger_type_cashbank"') . " Bank or Cash Account";
 	echo "</span>";
 	echo "<span id=\"tooltip-content-2\">Select if Ledger A/C is a Bank A/C or a Cash A/C.</span>";
 	echo "</p>";
 
 	echo "<p>";
-	echo form_checkbox('affects_inventory', 1, $affects_inventory) . " Affects Inventory ";
-	echo form_dropdown('affects_inventory_option', $affects_inventory_options, $affects_inventory_option_active);
+	echo form_checkbox('affects_inventory', 1, $affects_inventory, 'id="affects_inventory"') . " Affects Inventory ";
+	echo form_dropdown('affects_inventory_option', $affects_inventory_options, $affects_inventory_option_active, 'id="affects_inventory_option"');
 	echo "</p>";
 
 	echo "<p>";
