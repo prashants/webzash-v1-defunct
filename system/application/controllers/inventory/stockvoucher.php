@@ -7,6 +7,7 @@ class StockVoucher extends Controller {
 		parent::Controller();
 		$this->load->model('Voucher_model');
 		$this->load->model('Ledger_model');
+		$this->load->model('Stock_Item_model');
 		$this->load->model('Tag_model');
 		return;
 	}
@@ -30,6 +31,13 @@ class StockVoucher extends Controller {
 			$current_voucher_type = voucher_type_info($voucher_type_id);
 		}
 
+		if ($current_voucher_type['base_type'] == '1')
+		{
+			$this->messages->add('Invalid Voucher type.', 'error');
+			redirect('voucher/show/all');
+			return;
+		}
+
 		$this->template->set('page_title', 'View ' . $current_voucher_type['name'] . ' Voucher');
 
 		/* Load current voucher details */
@@ -39,18 +47,43 @@ class StockVoucher extends Controller {
 			redirect('voucher/show/' . $current_voucher_type['label']);
 			return;
 		}
-		/* Load current voucher details */
-		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
+
+		/* Load current voucher details - account, entity, ledgers */
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 1)->order_by('id', 'asc');
+		$cur_voucher_main_account = $this->db->get();
+		if ($cur_voucher_main_account->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated Purchase or Sale Ledger A/C.', 'error');
+		}
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 2)->order_by('id', 'asc');
+		$cur_voucher_main_entity = $this->db->get();
+		if ($cur_voucher_main_entity->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated Debtor or Creditor Ledger A/C.', 'error');
+		}
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 3)->order_by('id', 'asc');
 		$cur_voucher_ledgers = $this->db->get();
 		if ($cur_voucher_ledgers->num_rows() < 1)
 		{
 			$this->messages->add('Voucher has no associated Ledger A/C\'s.', 'error');
 		}
+
+		/* Load current stock items details */
+		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
+		$cur_voucher_stock_items = $this->db->get();
+		if ($cur_voucher_stock_items->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated stock items.', 'error');
+		}
+
 		$data['cur_voucher'] = $cur_voucher;
+		$data['cur_voucher_main_account'] = $cur_voucher_main_account;
+		$data['cur_voucher_main_entity'] = $cur_voucher_main_entity;
 		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
+		$data['cur_voucher_stock_items'] = $cur_voucher_stock_items;
 		$data['voucher_type_id'] = $voucher_type_id;
 		$data['current_voucher_type'] = $current_voucher_type;
-		$this->template->load('template', 'voucher/view', $data);
+		$this->template->load('template', 'inventory/stockvoucher/view', $data);
 		return;
 	}
 
@@ -337,6 +370,8 @@ class StockVoucher extends Controller {
 				'ledger_id' => $data_main_account,
 				'amount' => $data_total_amount,
 				'dc' => '',
+				'reconciliation_date' => NULL,
+				'stock_type' => 1,
 			);
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$insert_data['dc'] = 'D';
@@ -365,6 +400,8 @@ class StockVoucher extends Controller {
 				'ledger_id' => $data_main_entity,
 				'amount' => $data_total_amount,
 				'dc' => '',
+				'reconciliation_date' => NULL,
+				'stock_type' => 2,
 			);
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$insert_data['dc'] = 'C';
@@ -451,6 +488,8 @@ class StockVoucher extends Controller {
 					'ledger_id' => $data_ledger_id,
 					'amount' => $data_amount,
 					'dc' => $data_ledger_dc,
+					'reconciliation_date' => NULL,
+					'stock_type' => 3,
 				);
 				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{
@@ -981,10 +1020,9 @@ class StockVoucher extends Controller {
 	{
 		$this->load->helper('download');
 		$this->load->model('Setting_model');
-		$this->load->model('Ledger_model');
 
 		/* Check access */
-		if ( ! check_access('download voucher'))
+		if ( ! check_access('download stock voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/stockvoucher/show/' . $voucher_type);
@@ -1002,6 +1040,13 @@ class StockVoucher extends Controller {
 			$current_voucher_type = voucher_type_info($voucher_type_id);
 		}
 
+		if ($current_voucher_type['base_type'] == '1')
+		{
+			$this->messages->add('Invalid Voucher type.', 'error');
+			redirect('voucher/show/all');
+			return;
+		}
+
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
 		{
@@ -1010,36 +1055,45 @@ class StockVoucher extends Controller {
 			return;
 		}
 
+		/* Load current voucher details - account, entity, ledgers */
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 1)->order_by('id', 'asc');
+		$cur_voucher_main_account = $this->db->get();
+		if ($cur_voucher_main_account->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated Purchase or Sale Ledger A/C.', 'error');
+		}
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 2)->order_by('id', 'asc');
+		$cur_voucher_main_entity = $this->db->get();
+		if ($cur_voucher_main_entity->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated Debtor or Creditor Ledger A/C.', 'error');
+		}
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 3)->order_by('id', 'asc');
+		$cur_voucher_ledgers = $this->db->get();
+		if ($cur_voucher_ledgers->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated Ledger A/C\'s.', 'error');
+		}
+
+		/* Load current stock items details */
+		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
+		$cur_voucher_stock_items = $this->db->get();
+		if ($cur_voucher_stock_items->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated stock items.', 'error');
+		}
+
+		$data['cur_voucher'] = $cur_voucher;
+		$data['cur_voucher_main_account'] = $cur_voucher_main_account;
+		$data['cur_voucher_main_entity'] = $cur_voucher_main_entity;
+		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
+		$data['cur_voucher_stock_items'] = $cur_voucher_stock_items;
 		$data['voucher_type_id'] = $voucher_type_id;
 		$data['current_voucher_type'] = $current_voucher_type;
-		$data['voucher_number'] =  $cur_voucher->number;
-		$data['voucher_date'] = date_mysql_to_php_display($cur_voucher->date);
-		$data['voucher_dr_total'] =  $cur_voucher->dr_total;
-		$data['voucher_cr_total'] =  $cur_voucher->cr_total;
-		$data['voucher_narration'] = $cur_voucher->narration;
-
-		/* Getting Ledger details */
-		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->order_by('dc', 'desc');
-		$ledger_q = $this->db->get();
-		$counter = 0;
-		$data['ledger_data'] = array();
-		if ($ledger_q->num_rows() > 0)
-		{
-			foreach ($ledger_q->result() as $row)
-			{
-				$data['ledger_data'][$counter] = array(
-					'id' => $row->ledger_id,
-					'name' => $this->Ledger_model->get_name($row->ledger_id),
-					'dc' => $row->dc,
-					'amount' => $row->amount,
-				);
-				$counter++;
-			}
-		}
 
 		/* Download Voucher */
 		$file_name = $current_voucher_type['name'] . '_voucher_' . $cur_voucher->number . ".html";
-		$download_data = $this->load->view('voucher/downloadpreview', $data, TRUE);
+		$download_data = $this->load->view('inventory/stockvoucher/downloadpreview', $data, TRUE);
 		force_download($file_name, $download_data);
 		return;
 	}
@@ -1047,10 +1101,9 @@ class StockVoucher extends Controller {
 	function printpreview($voucher_type, $voucher_id = 0)
 	{
 		$this->load->model('Setting_model');
-		$this->load->model('Ledger_model');
 
 		/* Check access */
-		if ( ! check_access('print voucher'))
+		if ( ! check_access('print stock voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/stockvoucher/show/' . $voucher_type);
@@ -1068,6 +1121,13 @@ class StockVoucher extends Controller {
 			$current_voucher_type = voucher_type_info($voucher_type_id);
 		}
 
+		if ($current_voucher_type['base_type'] == '1')
+		{
+			$this->messages->add('Invalid Voucher type.', 'error');
+			redirect('voucher/show/all');
+			return;
+		}
+
 		/* Load current voucher details */
 		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
 		{
@@ -1076,45 +1136,53 @@ class StockVoucher extends Controller {
 			return;
 		}
 
-		$data['voucher_type_id'] = $voucher_type_id;
-		$data['current_voucher_type'] = $current_voucher_type;
-		$data['voucher_number'] =  $cur_voucher->number;
-		$data['voucher_date'] = date_mysql_to_php_display($cur_voucher->date);
-		$data['voucher_dr_total'] =  $cur_voucher->dr_total;
-		$data['voucher_cr_total'] =  $cur_voucher->cr_total;
-		$data['voucher_narration'] = $cur_voucher->narration;
-
-		/* Getting Ledger details */
-		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->order_by('dc', 'desc');
-		$ledger_q = $this->db->get();
-		$counter = 0;
-		$data['ledger_data'] = array();
-		if ($ledger_q->num_rows() > 0)
+		/* Load current voucher details - account, entity, ledgers */
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 1)->order_by('id', 'asc');
+		$cur_voucher_main_account = $this->db->get();
+		if ($cur_voucher_main_account->num_rows() < 1)
 		{
-			foreach ($ledger_q->result() as $row)
-			{
-				$data['ledger_data'][$counter] = array(
-					'id' => $row->ledger_id,
-					'name' => $this->Ledger_model->get_name($row->ledger_id),
-					'dc' => $row->dc,
-					'amount' => $row->amount,
-				);
-				$counter++;
-			}
+			$this->messages->add('Voucher has no associated Purchase or Sale Ledger A/C.', 'error');
+		}
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 2)->order_by('id', 'asc');
+		$cur_voucher_main_entity = $this->db->get();
+		if ($cur_voucher_main_entity->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated Debtor or Creditor Ledger A/C.', 'error');
+		}
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 3)->order_by('id', 'asc');
+		$cur_voucher_ledgers = $this->db->get();
+		if ($cur_voucher_ledgers->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated Ledger A/C\'s.', 'error');
 		}
 
-		$this->load->view('voucher/printpreview', $data);
+		/* Load current stock items details */
+		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
+		$cur_voucher_stock_items = $this->db->get();
+		if ($cur_voucher_stock_items->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated stock items.', 'error');
+		}
+
+		$data['cur_voucher'] = $cur_voucher;
+		$data['cur_voucher_main_account'] = $cur_voucher_main_account;
+		$data['cur_voucher_main_entity'] = $cur_voucher_main_entity;
+		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
+		$data['cur_voucher_stock_items'] = $cur_voucher_stock_items;
+		$data['voucher_type_id'] = $voucher_type_id;
+		$data['current_voucher_type'] = $current_voucher_type;
+
+		$this->load->view('inventory/stockvoucher/printpreview', $data);
 		return;
 	}
 
 	function email($voucher_type, $voucher_id = 0)
 	{
 		$this->load->model('Setting_model');
-		$this->load->model('Ledger_model');
 		$this->load->library('email');
 
 		/* Check access */
-		if ( ! check_access('email voucher'))
+		if ( ! check_access('email stock voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/stockvoucher/show/' . $voucher_type);
@@ -1142,6 +1210,34 @@ class StockVoucher extends Controller {
 			return;
 		}
 
+		/* Load current voucher details - account, entity, ledgers */
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 1)->order_by('id', 'asc');
+		$cur_voucher_main_account = $this->db->get();
+		if ($cur_voucher_main_account->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated Purchase or Sale Ledger A/C.', 'error');
+		}
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 2)->order_by('id', 'asc');
+		$cur_voucher_main_entity = $this->db->get();
+		if ($cur_voucher_main_entity->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated Debtor or Creditor Ledger A/C.', 'error');
+		}
+		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 3)->order_by('id', 'asc');
+		$cur_voucher_ledgers = $this->db->get();
+		if ($cur_voucher_ledgers->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated Ledger A/C\'s.', 'error');
+		}
+
+		/* Load current stock items details */
+		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
+		$cur_voucher_stock_items = $this->db->get();
+		if ($cur_voucher_stock_items->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated stock items.', 'error');
+		}
+
 		$data['voucher_type_id'] = $voucher_type_id;
 		$data['current_voucher_type'] = $current_voucher_type;
 		$data['voucher_id'] = $voucher_id;
@@ -1165,40 +1261,19 @@ class StockVoucher extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data['error'] = validation_errors();
-			$this->load->view('voucher/email', $data);
+			$this->load->view('inventory/stockvoucher/email', $data);
 			return;
 		}
 		else
 		{
-			$voucher_data['voucher_type_id'] = $voucher_type_id;
-			$voucher_data['current_voucher_type'] = $current_voucher_type;
-			$voucher_data['voucher_number'] =  $cur_voucher->number;
-			$voucher_data['voucher_date'] = date_mysql_to_php_display($cur_voucher->date);
-			$voucher_data['voucher_dr_total'] =  $cur_voucher->dr_total;
-			$voucher_data['voucher_cr_total'] =  $cur_voucher->cr_total;
-			$voucher_data['voucher_narration'] = $cur_voucher->narration;
-
-			/* Getting Ledger details */
-			$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->order_by('dc', 'desc');
-			$ledger_q = $this->db->get();
-			$counter = 0;
-			$voucher_data['ledger_data'] = array();
-			if ($ledger_q->num_rows() > 0)
-			{
-				foreach ($ledger_q->result() as $row)
-				{
-					$voucher_data['ledger_data'][$counter] = array(
-						'id' => $row->ledger_id,
-						'name' => $this->Ledger_model->get_name($row->ledger_id),
-						'dc' => $row->dc,
-						'amount' => $row->amount,
-					);
-					$counter++;
-				}
-			}
+			$data['cur_voucher'] = $cur_voucher;
+			$data['cur_voucher_main_account'] = $cur_voucher_main_account;
+			$data['cur_voucher_main_entity'] = $cur_voucher_main_entity;
+			$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
+			$data['cur_voucher_stock_items'] = $cur_voucher_stock_items;
 
 			/* Preparing message */
-			$message = $this->load->view('voucher/emailpreview', $voucher_data, TRUE);
+			$message = $this->load->view('inventory/stockvoucher/emailpreview', $data, TRUE);
 
 			/* Getting email configuration */
 			$config['smtp_timeout'] = '30';
@@ -1230,7 +1305,7 @@ class StockVoucher extends Controller {
 				$data['error'] = "Error sending email. Check you email settings.";
 				$this->logger->write_message("error", "Error emailing " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 			}
-			$this->load->view('voucher/email', $data);
+			$this->load->view('inventory/stockvoucher/email', $data);
 			return;
 		}
 		return;

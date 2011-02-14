@@ -128,7 +128,7 @@ class Ledger_model extends Model {
 		$current_voucher_type = voucher_type_info($voucher_type_id);
 		$ledger_type = 'C';
 
-		if ($current_voucher_type['bank_cash_ledger_restriction'] == 3)
+		if ($current_voucher_type['bank_cash_ledger_restriction'] == '3')
 			$ledger_type = 'D';
 
 		$this->db->select('ledgers.name as name');
@@ -141,9 +141,15 @@ class Ledger_model extends Model {
 			$ledger_multiple = ($ledger_q->num_rows() > 1) ? TRUE : FALSE;
 			$html = '';
 			if ($ledger_multiple)
-				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+				if ($current_voucher_type['base_type'] == '1')
+					$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+				else
+					$html .= anchor('inventory/stockvoucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
 			else
-				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+				if ($current_voucher_type['base_type'] == '1')
+					$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+				else
+					$html .= anchor('inventory/stockvoucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
 			return $html;
 		}
 		return;

@@ -30,9 +30,9 @@ if ($cur_voucher->dr_total != $cur_voucher->cr_total)
 {
 	$difference = $cur_voucher->dr_total - $cur_voucher->cr_total;
 	if ($difference < 0)
-		echo "<tr class=\"voucher-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\"></td><td id=\"cr-diff\">" . $cur_voucher->cr_total . "</td></tr>";
+		echo "<tr class=\"voucher-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\"></td><td id=\"cr-diff\">" . convert_amount_dc($difference) . "</td></tr>";
 	else
-		echo "<tr class=\"voucher-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\">" .  $cur_voucher->dr_total .  "</td><td id=\"cr-diff\"></td></tr>";
+		echo "<tr class=\"voucher-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\">" . convert_amount_dc($difference) . "</td><td id=\"cr-diff\"></td></tr>";
 }
 ?>
 </table>

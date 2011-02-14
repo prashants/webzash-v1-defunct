@@ -9,6 +9,8 @@ ALTER TABLE voucher_types ADD stock_voucher_type INT(2) NOT NULL DEFAULT '1';
 
 ALTER TABLE voucher_types CHANGE bank_cash_ledger_restriction bank_cash_ledger_restriction INT(2) NOT NULL DEFAULT '1';
 
+ALTER TABLE voucher_items ADD stock_type INT(1) NOT NULL;
+
 CREATE TABLE IF NOT EXISTS stock_units (
   id int(11) NOT NULL AUTO_INCREMENT,
   symbol varchar(15) NOT NULL,

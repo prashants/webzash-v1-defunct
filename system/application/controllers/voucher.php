@@ -207,6 +207,13 @@ class Voucher extends Controller {
 			$current_voucher_type = voucher_type_info($voucher_type_id);
 		}
 
+		if ($current_voucher_type['base_type'] == '2')
+		{
+			$this->messages->add('Invalid Voucher type.', 'error');
+			redirect('voucher/show/all');
+			return;
+		}
+
 		$this->template->set('page_title', 'View ' . $current_voucher_type['name'] . ' Voucher');
 
 		/* Load current voucher details */
