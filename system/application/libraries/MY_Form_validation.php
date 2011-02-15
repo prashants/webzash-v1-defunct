@@ -118,6 +118,24 @@ class MY_Form_validation extends CI_Form_validation {
 		}
 	}
 
+	function discount($str)
+	{
+		$CI =& get_instance();
+		if (preg_match('/^[\-]/', $str))
+		{
+			$CI->form_validation->set_message('discount', '%s cannot be negative.');
+			return FALSE;
+		}
+
+		if (preg_match('/^[0-9]*\.?[0-9]{0,2}%?$/', $str))
+		{
+			return TRUE;
+		} else {
+			$CI->form_validation->set_message('discount', '%s must be a valid percent or amount. Maximum 2 decimal places is allowed.');
+			return FALSE;
+		}
+	}
+
 	function is_date($str)
 	{
 		$CI =& get_instance();

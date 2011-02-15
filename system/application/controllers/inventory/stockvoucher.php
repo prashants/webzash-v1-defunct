@@ -173,7 +173,7 @@ class StockVoucher extends Controller {
 			{
 				$this->form_validation->set_rules('stock_item_quantity[' . $id . ']', 'Stock Item Quantity', 'trim|quantity');
 				$this->form_validation->set_rules('stock_item_rate_per_unit[' . $id . ']', 'Stock Item Rate Per Unit', 'trim|currency');
-				$this->form_validation->set_rules('stock_item_discount[' . $id . ']', 'Stock Item Discount', 'trim|rate');
+				$this->form_validation->set_rules('stock_item_discount[' . $id . ']', 'Stock Item Discount', 'trim|discount');
 				$this->form_validation->set_rules('stock_item_amount[' . $id . ']', 'Stock Item Amount', 'trim|currency');
 			}
 			foreach ($this->input->post('ledger_dc', TRUE) as $id => $ledger_data)

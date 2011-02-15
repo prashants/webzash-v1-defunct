@@ -243,7 +243,7 @@ $(document).ready(function() {
 
 	foreach ($stock_item_id as $i => $row)
 	{
-		$stock_item_quantity = array(
+		$stock_item_quantity_item = array(
 			'name' => 'stock_item_quantity[' . $i . ']',
 			'id' => 'stock_item_quantity[' . $i . ']',
 			'maxlength' => '15',
@@ -251,7 +251,7 @@ $(document).ready(function() {
 			'value' => isset($stock_item_quantity[$i]) ? $stock_item_quantity[$i] : '',
 			'class' => 'quantity-stock-item',
 		);
-		$stock_item_rate_per_unit = array(
+		$stock_item_rate_per_unit_item = array(
 			'name' => 'stock_item_rate_per_unit[' . $i . ']',
 			'id' => 'stock_item_rate_per_unit[' . $i . ']',
 			'maxlength' => '15',
@@ -259,7 +259,7 @@ $(document).ready(function() {
 			'value' => isset($stock_item_rate_per_unit[$i]) ? $stock_item_rate_per_unit[$i] : '',
 			'class' => 'rate-stock-item',
 		);
-		$stock_item_discount = array(
+		$stock_item_discount_item = array(
 			'name' => 'stock_item_discount[' . $i . ']',
 			'id' => 'stock_item_discount[' . $i . ']',
 			'maxlength' => '15',
@@ -267,7 +267,7 @@ $(document).ready(function() {
 			'value' => isset($stock_item_discount[$i]) ? $stock_item_discount[$i] : '',
 			'class' => 'discount-stock-item',
 		);
-		$stock_item_amount = array(
+		$stock_item_amount_item = array(
 			'name' => 'stock_item_amount[' . $i . ']',
 			'id' => 'stock_item_amount[' . $i . ']',
 			'maxlength' => '15',
@@ -278,10 +278,10 @@ $(document).ready(function() {
 		echo "<tr>";
 
 		echo "<td>" . form_input_stock_item('stock_item_id[' . $i . ']', isset($stock_item_id[$i]) ? $stock_item_id[$i] : 0) . "</td>";
-		echo "<td>" . form_input($stock_item_quantity) . "</td>";
-		echo "<td>" . form_input($stock_item_rate_per_unit) . "</td>";
-		echo "<td>" . form_input($stock_item_discount) . "</td>";
-		echo "<td>" . form_input($stock_item_amount) . "</td>";
+		echo "<td>" . form_input($stock_item_quantity_item) . "</td>";
+		echo "<td>" . form_input($stock_item_rate_per_unit_item) . "</td>";
+		echo "<td>" . form_input($stock_item_discount_item) . "</td>";
+		echo "<td>" . form_input($stock_item_amount_item) . "</td>";
 
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addstockrow')) . "</td>";
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deletestockrow')) . "</td>";
@@ -300,7 +300,7 @@ $(document).ready(function() {
 
 	foreach ($ledger_dc as $i => $ledger)
 	{
-		$rate_item = array(
+		$rate_item_item = array(
 			'name' => 'rate_item[' . $i . ']',
 			'id' => 'rate_item[' . $i . ']',
 			'maxlength' => '5',
@@ -308,7 +308,7 @@ $(document).ready(function() {
 			'value' => isset($rate_item[$i]) ? $rate_item[$i] : '',
 			'class' => 'rate-item',
 		);
-		$amount_item = array(
+		$amount_item_item = array(
 			'name' => 'amount_item[' . $i . ']',
 			'id' => 'amount_item[' . $i . ']',
 			'maxlength' => '15',
@@ -320,8 +320,8 @@ $(document).ready(function() {
 
 		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', isset($ledger_dc[$i]) ? $ledger_dc[$i] : "D") . "</td>";
 		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0) . "</td>";
-		echo "<td>" . form_input($rate_item) . "</td>";
-		echo "<td>" . form_input($amount_item) . "</td>";
+		echo "<td>" . form_input($rate_item_item) . "</td>";
+		echo "<td>" . form_input($amount_item_item) . "</td>";
 
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addrow')) . "</td>";
 		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow')) . "</td>";
