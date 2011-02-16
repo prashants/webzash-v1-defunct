@@ -62,7 +62,15 @@ $(document).ready(function() {
 		var item_quantity = itemrow.next().children().val();
 		var item_rate_per_unit = itemrow.next().next().children().val();
 		var item_discount = itemrow.next().next().next().children().val();
+		var is_percent = false;
 
+		/* check whether discount is in percent or absolute value */
+		if (item_discount != "") {
+			if (item_discount.match(/%$/))
+			{
+				is_percent = true;
+			}
+		}
 		item_quantity = parseFloat(item_quantity);
 		item_rate_per_unit = parseFloat(item_rate_per_unit);
 		item_discount = parseFloat(item_discount);
@@ -70,10 +78,36 @@ $(document).ready(function() {
 			item_discount = 0;
 		if ((!isNaN(item_quantity)) && (!isNaN(item_rate_per_unit)))
 		{
-			var item_amount = (item_quantity * item_rate_per_unit) - item_discount;
+			/* calculating total amount for each stock item */
+			var item_amount;
+			if (is_percent) {
+				if (item_discount <= 100)
+					item_amount = ((item_quantity * item_rate_per_unit) * (100 - item_discount)) / 100;
+			} else {
+				item_amount = (item_quantity * item_rate_per_unit) - item_discount;
+			}
+			/* displaying total amount for each stock item */
 			itemrow.next().next().next().next().children().val(item_amount);
 			itemrow.next().next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
 		}
+	}
+
+	$('table td .amount-stock-item').live('change', function() {
+		calculateStockTotal();
+	});
+
+	/* calculating stock total */
+	var calculateStockTotal = function() {
+		var stock_total = 0;
+		$('table td .amount-stock-item').each(function(index) {
+			if ($(this).val() != "")
+			{
+				var item_amount = parseFloat($(this).val());
+				if ( ! isNaN(item_amount))
+					stock_total += item_amount;
+			}
+		});
+		return stock_total;
 	}
 
 	/* Add stock item row */
@@ -273,7 +307,7 @@ $(document).ready(function() {
 			'maxlength' => '15',
 			'size' => '15',
 			'value' => isset($stock_item_amount[$i]) ? $stock_item_amount[$i] : '',
-			'class' => 'rate-stock-item',
+			'class' => 'amount-stock-item',
 		);
 		echo "<tr>";
 
