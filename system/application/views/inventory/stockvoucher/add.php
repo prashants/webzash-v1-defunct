@@ -90,6 +90,7 @@ $(document).ready(function() {
 			itemrow.next().next().next().next().children().val(item_amount);
 			itemrow.next().next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
 		}
+		$('.recalculate').trigger('click');
 	}
 
 	$('table td .amount-stock-item').live('change', function() {
@@ -201,6 +202,10 @@ $(document).ready(function() {
 	$('table td .recalculate').live('click', function() {
 		var voucherTotal = calculateLedgerTotal() + calculateStockTotal();
 		$("table tr #vr-total").text(voucherTotal);
+		if (voucherTotal >= 0)
+			$("table tr #vr-total").css("background-color", "#FFFF99");
+		else
+			$("table tr #vr-total").css("background-color", "#FFE9E8");
 	});
 
 	/* Delete ledger row */

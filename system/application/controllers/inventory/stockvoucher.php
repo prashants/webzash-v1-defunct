@@ -501,6 +501,15 @@ class StockVoucher extends Controller {
 				}
 			}
 
+			if ($data_total_amount < 0)
+			{
+				$this->db->trans_rollback();
+				$this->messages->add('Voucher total cannot be negative.', 'error');
+				$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since voucher total is negative.");
+				$this->template->load('template', 'inventory/stockvoucher/add', $data);
+				return;
+			}
+
 			/* Updating Debit and Credit Total - vouchers */
 			$update_data = array(
 				'dr_total' => $data_total_amount,
