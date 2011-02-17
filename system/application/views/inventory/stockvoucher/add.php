@@ -93,7 +93,7 @@ $(document).ready(function() {
 	}
 
 	$('table td .amount-stock-item').live('change', function() {
-		calculateStockTotal();
+		$('.recalculate').trigger('click');
 	});
 
 	/* calculating stock total */
@@ -133,6 +133,7 @@ $(document).ready(function() {
 	/******************************* LEDGER *******************************/
 	/* Dr - Cr dropdown changed */
 	$('.dc-dropdown').live('change', function() {
+		$('.recalculate').trigger('click');
 	});
 
 	/* Ledger dropdown changed */
@@ -172,9 +173,34 @@ $(document).ready(function() {
 		}
 	});
 
+	$('table td .amount-item').live('change', function() {
+		$('.recalculate').trigger('click');
+	});
+
+	/* calculating ledger total */
+	var calculateLedgerTotal = function() {
+		var ledger_total = 0;
+		$('table td .amount-item').each(function(index) {
+			if ($(this).val() != "")
+			{
+				var item_amount = parseFloat($(this).val());
+				if ( ! isNaN(item_amount))
+				{
+					if ($(this).parent().prev().prev().prev().children().val() == 'D') {
+						ledger_total += item_amount;
+					} else if ($(this).parent().prev().prev().prev().children().val() == 'C') {
+						ledger_total -= item_amount;
+					}
+				}
+			}
+		});
+		return ledger_total;
+	}
+
 	/* Recalculate Total */
 	$('table td .recalculate').live('click', function() {
-
+		var voucherTotal = calculateLedgerTotal() + calculateStockTotal();
+		$("table tr #vr-total").text(voucherTotal);
 	});
 
 	/* Delete ledger row */
@@ -273,7 +299,7 @@ $(document).ready(function() {
 	echo "<p></p>";
 
 	echo "<table class=\"voucher-table\">";
-	echo "<thead><tr><th>Stock Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Discount</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
+	echo "<thead><tr><th>Stock Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Discount %</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
 
 	foreach ($stock_item_id as $i => $row)
 	{
@@ -366,7 +392,7 @@ $(document).ready(function() {
 	}
 
 	echo "<tr><td colspan=\"7\"></td></tr>";
-	echo "<tr id=\"voucher-total\"><td colspan=3><strong>Total</strong></td><td id=\"cr-total\">0</td><td>" . img(array('src' => asset_url() . "images/icons/gear.png", 'border' => '0', 'alt' => 'Recalculate Total', 'class' => 'recalculate', 'title' => 'Recalculate Total')) . "</td><td></td><td></td></tr>";
+	echo "<tr id=\"voucher-total\"><td colspan=3><strong>Total</strong></td><td id=\"vr-total\">0</td><td>" . img(array('src' => asset_url() . "images/icons/gear.png", 'border' => '0', 'alt' => 'Recalculate Total', 'class' => 'recalculate', 'title' => 'Recalculate Total')) . "</td><td></td><td></td></tr>";
 
 	echo "</table>";
 
