@@ -41,6 +41,7 @@ Voucher Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_vouc
 <table border=0 cellpadding=5 class="simple-table voucher-view-table">
 <thead><tr><th>Stock Item</th><th>Quantity</th><th>Rate</th><th>Discount</th><th>Total</th></tr></thead>
 <?php
+$stock_total = 0;
 foreach ($cur_voucher_stock_items->result() as $row)
 {
 	echo "<tr>";
@@ -50,8 +51,10 @@ foreach ($cur_voucher_stock_items->result() as $row)
 	echo "<td>" . $row->discount . "</td>";
 	echo "<td>" . $row->total . "</td>";
 	echo "</tr>";
+	$stock_total += $row->total;
 }
 ?>
+<tr class="voucher-total"><td colspan=4><strong>Total</strong></td><td id="stock-total"><?php echo convert_cur($stock_total); ?></td></tr>
 </table>
 
 <br />
