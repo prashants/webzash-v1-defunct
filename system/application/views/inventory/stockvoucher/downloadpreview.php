@@ -130,7 +130,7 @@
 
 	<table class="print-voucher-table">
 		<thead>
-			<tr class="tr-title"><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr>
+			<tr class="tr-title"><th>Ledger A/C</th>><th>Rate</th><th>Dr Amount</th><th>Cr Amount</th></tr>
 		</thead>
 		<tbody>
 		<?php
@@ -144,6 +144,7 @@
 				} else {
 					echo "<td class=\"ledger-name item\">Cr " . $this->Ledger_model->get_name($row->ledger_id) . "</td>";
 				}
+				echo "<td class=\"item\">" . $row->stock_rate . "</td>";
 				if ($row->dc == "D")
 				{
 					echo "<td class=\"ledger-dr item\">" . $currency . " " . $row->amount . "</td>";
@@ -154,7 +155,7 @@
 				}
 				echo "</tr>";
 			}
-			echo "<tr class=\"tr-total\"><td class=\"total-name\">Total</td><td class=\"total-dr\">" . $currency . " " .  $cur_voucher->dr_total . "</td><td class=\"total-cr\">" . $currency . " " . $cur_voucher->cr_total . "</td></tr>";
+			echo "<tr class=\"tr-total\"><td class=\"total-name\" colspan=\"2\">Total</td><td class=\"total-dr\">" . $currency . " " .  $cur_voucher->dr_total . "</td><td class=\"total-cr\">" . $currency . " " . $cur_voucher->cr_total . "</td></tr>";
 		?>
 		</tbody>
 	</table>

@@ -90,10 +90,12 @@ $(document).ready(function() {
 			itemrow.next().next().next().next().children().val(item_amount);
 			itemrow.next().next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
 		}
+		updateLedgerRowTotal();
 		$('.recalculate').trigger('click');
 	}
 
 	$('table td .amount-stock-item').live('change', function() {
+		updateLedgerRowTotal();
 		$('.recalculate').trigger('click');
 	});
 
@@ -149,8 +151,6 @@ $(document).ready(function() {
 			$(this).parent().next().next().children().attr('disabled', '');
 			$(this).parent().prev().children().trigger('change');
 		}
-		$(this).parent().next().children().trigger('change');
-		$(this).parent().next().next().children().trigger('change');
 
 		var ledgerid = $(this).val();
 		var rowid = $(this);
@@ -173,6 +173,50 @@ $(document).ready(function() {
 			rowid.parent().next().next().next().next().next().children().text("");
 		}
 	});
+
+	$('table td .rate-item').live('change', function() {
+		var rowid = $(this);
+		calculateLedgerRowTotal(rowid.parent().prev().prev());
+	});
+
+	/* calculating ledger item amount */
+	var calculateLedgerRowTotal = function(itemrow) {
+		var item_rate = itemrow.next().next().children().val();
+		var is_percent = false;
+		var stock_total = calculateStockTotal();
+
+		/* check whether rate is in percent */
+		if (item_rate != "") {
+			if (item_rate.match(/%$/))
+			{
+				is_percent = true;
+			}
+		}
+
+		item_rate = parseFloat(item_rate);
+
+		if (!isNaN(item_rate))
+		{
+			var item_amount;
+			if (is_percent) {
+				if (item_rate <= 100) {
+					item_amount = (((stock_total) * (100 + item_rate)) / 100) - (stock_total);
+				}
+				/* displaying total amount for each stock item */
+				itemrow.next().next().next().children().val(item_amount);
+				itemrow.next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
+			}
+		}
+		$('.recalculate').trigger('click');
+	}
+
+	/* updating ledger total */
+	var updateLedgerRowTotal = function() {
+		$('table td .rate-item').each(function(index) {
+			var rowid = $(this);
+			calculateLedgerRowTotal(rowid.parent().prev().prev());
+		});
+	}
 
 	$('table td .amount-item').live('change', function() {
 		$('.recalculate').trigger('click');

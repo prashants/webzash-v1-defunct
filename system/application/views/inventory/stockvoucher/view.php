@@ -60,13 +60,14 @@ foreach ($cur_voucher_stock_items->result() as $row)
 <br />
 
 <table border=0 cellpadding=5 class="simple-table voucher-view-table">
-<thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>
+<thead><tr><th>Type</th><th>Ledger A/C</th><th>Rate</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>
 <?php
 foreach ($cur_voucher_ledgers->result() as $row)
 {
 	echo "<tr>";
 	echo "<td>" . convert_dc($row->dc) . "</td>";
 	echo "<td>" . $this->Ledger_model->get_name($row->ledger_id) . "</td>";
+	echo "<td>" . $row->stock_rate . "</td>";
 	if ($row->dc == "D")
 	{
 		echo "<td>Dr " . $row->amount . "</td>";
@@ -78,7 +79,7 @@ foreach ($cur_voucher_ledgers->result() as $row)
 	echo "</tr>";
 }
 ?>
-<tr class="voucher-total"><td colspan=2><strong>Total</strong></td><td id=dr-total>Dr <?php echo $cur_voucher->dr_total; ?></td><td id=cr-total">Cr <?php echo $cur_voucher->cr_total; ?></td></tr>
+<tr class="voucher-total"><td colspan=3><strong>Total</strong></td><td id=dr-total>Dr <?php echo $cur_voucher->dr_total; ?></td><td id=cr-total">Cr <?php echo $cur_voucher->cr_total; ?></td></tr>
 <?php
 if ($cur_voucher->dr_total != $cur_voucher->cr_total)
 {

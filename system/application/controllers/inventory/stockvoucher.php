@@ -205,13 +205,6 @@ class StockVoucher extends Controller {
 			$data['rate_item'] = $this->input->post('rate_item', TRUE);
 			$data['amount_item'] = $this->input->post('amount_item', TRUE);
 		} else {
-			for ($count = 0; $count <= 1; $count++)
-			{
-				$data['ledger_dc'][$count] = "D";
-				$data['ledger_id'][$count] = 0;
-				$data['rate_item'][$count] = "";
-				$data['amount_item'][$count] = "";
-			}
 			for ($count = 0; $count <= 3; $count++)
 			{
 				$data['stock_item_id'][$count] = '0';
@@ -219,6 +212,13 @@ class StockVoucher extends Controller {
 				$data['stock_item_rate_per_unit'][$count] = '';
 				$data['stock_item_discount'][$count] = '';
 				$data['stock_item_amount'][$count] = '';
+			}
+			for ($count = 0; $count <= 1; $count++)
+			{
+				$data['ledger_dc'][$count] = "D";
+				$data['ledger_id'][$count] = 0;
+				$data['rate_item'][$count] = "";
+				$data['amount_item'][$count] = "";
 			}
 		}
 
@@ -332,7 +332,6 @@ class StockVoucher extends Controller {
 			$data_total_amount = $data_total_stock_amount + $data_total_ledger_amount;
 			if ($data_total_amount < 0)
 			{
-				$this->db->trans_rollback();
 				$this->messages->add($current_voucher_type['name'] . ' Voucher total cannot be negative.', 'error');
 				$this->template->load('template', 'inventory/stockvoucher/add', $data);
 				return;
@@ -390,6 +389,7 @@ class StockVoucher extends Controller {
 				'dc' => '',
 				'reconciliation_date' => NULL,
 				'stock_type' => 1,
+				'stock_rate' => '',
 			);
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$insert_data['dc'] = 'D';
@@ -420,6 +420,7 @@ class StockVoucher extends Controller {
 				'dc' => '',
 				'reconciliation_date' => NULL,
 				'stock_type' => 2,
+				'stock_rate' => '',
 			);
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$insert_data['dc'] = 'C';
@@ -489,10 +490,12 @@ class StockVoucher extends Controller {
 			{
 				$data_ledger_dc = $data_all_ledger_dc[$id];
 				$data_ledger_id = $data_all_ledger_id[$id];
-				$data_amount = $data_all_amount_item[$id];
 
 				if ($data_ledger_id < 1)
 					continue;
+
+				$data_rate = $data_all_rate_item[$id];
+				$data_amount = $data_all_amount_item[$id];
 
 				$insert_ledger_data = array(
 					'voucher_id' => $voucher_id,
@@ -501,6 +504,7 @@ class StockVoucher extends Controller {
 					'dc' => $data_ledger_dc,
 					'reconciliation_date' => NULL,
 					'stock_type' => 3,
+					'stock_rate' => $data_rate,
 				);
 				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{

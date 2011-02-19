@@ -71,7 +71,7 @@
 
 	<table border=1 cellpadding=6>
 		<thead>
-			<tr><th align="left">Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr>
+			<tr><th align="left">Ledger A/C</th><th>Rate</th><th>Dr Amount</th><th>Cr Amount</th></tr>
 		</thead>
 		<tbody>
 		<?php
@@ -85,6 +85,7 @@
 				} else {
 					echo "<td>Cr " . $this->Ledger_model->get_name($row->ledger_id) . "</td>";
 				}
+				echo "<td>" . $row->stock_rate . "</td>";
 				if ($row->dc == "D")
 				{
 					echo "<td>" . $currency . " " . $row->amount . "</td>";
@@ -95,7 +96,7 @@
 				}
 				echo "</tr>";
 			}
-			echo "<tr><td>Total</td><td>" . $currency . " " .  $cur_voucher->dr_total . "</td><td>" . $currency . " " . $cur_voucher->cr_total . "</td></tr>";
+			echo "<tr><td colspan=\"2\">Total</td><td>" . $currency . " " .  $cur_voucher->dr_total . "</td><td>" . $currency . " " . $cur_voucher->cr_total . "</td></tr>";
 		?>
 		</tbody>
 	</table>
