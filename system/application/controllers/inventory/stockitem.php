@@ -417,6 +417,15 @@ class StockItem extends Controller {
 			echo "";
 		return;
 	}
+
+	function sellprice($stock_ledger_id = 0)
+	{
+		if ($stock_ledger_id > 0)
+			echo $this->Stock_Item_model->get_selling_price($stock_ledger_id);
+		else
+			echo "";
+		return;
+	}
 }
 
 /* End of file stockitem.php */

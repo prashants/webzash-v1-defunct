@@ -38,6 +38,19 @@ $(document).ready(function() {
 						rowid.parent().next().next().next().next().next().next().next().children().text(data);
 				}
 			});
+
+			$.ajax({
+				url: <?php echo '\'' . site_url('inventory/stockitem/sellprice') . '/\''; ?> + stockid,
+				success: function(data) {
+					var sell_price = parseFloat(data);
+					if (isNaN(sell_price))
+						sell_price = 0;
+					if (sell_price <= 0)
+						rowid.parent().next().next().children().val("");
+					else
+						rowid.parent().next().next().children().val(sell_price);
+				}
+			});
 		} else {
 			rowid.parent().next().next().next().next().next().next().next().children().text("");
 		}

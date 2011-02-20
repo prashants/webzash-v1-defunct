@@ -34,4 +34,14 @@ class Stock_Item_model extends Model {
 	{
 		return '100';
 	}
+
+	function get_selling_price($stock_item_id)
+	{
+		$this->db->from('stock_items')->where('id', $stock_item_id)->limit(1);
+		$stock_item_q = $this->db->get();
+		if ($stock_item = $stock_item_q->row())
+			return $stock_item->default_sell_price;
+		else
+			return "";
+	}
 }
