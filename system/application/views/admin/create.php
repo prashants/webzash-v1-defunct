@@ -44,7 +44,9 @@
 	echo "<br />";
 	echo form_input_date($fy_start);
 	echo "<br />";
-	echo "<span class=\"form-help-text\">Warning : Financial Year Start cannot be changed later.<br />Format as per 'Date Foramt' selected abobe.</span>";
+	echo "<span class=\"form-warning-text\">Warning: This option cannot be changed later.</span>";
+	echo "<br />";
+	echo "<span class=\"form-help-text\">Note: Format as per 'Date Foramt' selected abobe.</span>";
 	echo "</p>";
 
 	echo "<p>";
@@ -52,7 +54,9 @@
 	echo "<br />";
 	echo form_input_date($fy_end);
 	echo "<br />";
-	echo "<span class=\"form-help-text\">Warning : Financial Year End cannot be changed later.<br />Format as per 'Date Foramt' selected abobe.</span>";
+	echo "<span class=\"form-warning-text\">Warning: This option cannot be changed later.</span>";
+	echo "<br />";
+	echo "<span class=\"form-help-text\">Note: Format as per 'Date Foramt' selected abobe.</span>";
 	echo "</p>";
 
 	echo "<p>";

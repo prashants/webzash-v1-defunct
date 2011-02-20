@@ -56,6 +56,12 @@ a.anchor-link-b {
 	font-weight:italic;
 }
 
+.form-warning-text {
+	font-size:12px;
+	font-weight:italic;
+	color:#FF0000;
+}
+
 /******************************** PAGINATION **********************************/
 #pagination-container {
 	margin-top:20px;

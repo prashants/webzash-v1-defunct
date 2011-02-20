@@ -44,6 +44,8 @@ $(document).ready(function() {
 	echo form_label('Base Type', 'voucher_type_base_type');
 	echo "<br />";
 	echo form_dropdown('voucher_type_base_type', $voucher_type_base_types, $voucher_type_base_type_active, 'id="voucher_type_base_type"');
+	echo "<br />";
+	echo "<span class=\"form-warning-text\">Warning: This option cannot be changed later.</span>";
 	echo "</p>";
 
 	echo "<p id=\"bank_cash_ledger_restriction\">";
@@ -56,6 +58,8 @@ $(document).ready(function() {
 	echo form_label('Stock Voucher Type', 'stock_voucher_type');
 	echo "<br />";
 	echo form_dropdown('stock_voucher_type', $stock_voucher_types, $stock_voucher_type_active);
+	echo "<br />";
+	echo "<span class=\"form-warning-text\">Warning: This option cannot be changed later.</span>";
 	echo "</p>";
 
 	echo "<p>";

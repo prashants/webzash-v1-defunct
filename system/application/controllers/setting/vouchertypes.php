@@ -291,7 +291,21 @@ class VoucherTypes extends Controller {
 			'value' => $voucher_type_data->zero_padding,
 		);
 
-		$data['voucher_type_base_types'] = array('1' => 'Normal Vocuher', '2' => 'Stock Voucher');
+		switch ($voucher_type_data->base_type)
+		{
+			case 1: $data['base_type'] = 'Normal Vocuher'; $data['is_normal_voucher'] = TRUE; break;
+			case 2: $data['base_type'] = 'Stock Voucher'; $data['is_normal_voucher'] = FALSE; break;
+			default: $data['base_type'] = '(Invalid)'; $data['is_normal_voucher'] = TRUE; break;
+		}
+
+		switch ($voucher_type_data->stock_voucher_type)
+		{
+			case 1: $data['stock_voucher_type'] = 'Purchase'; break;
+			case 2: $data['stock_voucher_type'] = 'Sale'; break;
+			case 3: $data['stock_voucher_type'] = 'Stock Transfer'; break;
+			default: $data['stock_voucher_type'] = '(Invalid)'; break;
+		}
+
 		$data['voucher_type_numberings'] = array('1' => 'Auto', '2' => 'Manual (required)', '3' => 'Manual (optional)');
 		$data['bank_cash_ledger_restrictions'] = array(
 			'1' => 'Unrestricted',
@@ -300,16 +314,9 @@ class VoucherTypes extends Controller {
 			'4' => 'Only Bank or Cash A/C can be present on both Debit and Credit side',
 			'5' => 'Only NON Bank or Cash A/C can be present on both Debit and Credit side',
 		);
-		$data['stock_voucher_types'] = array(
-			'1' => 'Purchase',
-			'2' => 'Sale',
-			'3' => 'Stock Transfer',
-		);
 
-		$data['voucher_type_base_type_active'] = $voucher_type_data->base_type;
 		$data['voucher_type_numbering_active'] = $voucher_type_data->numbering;
 		$data['bank_cash_ledger_restriction_active'] = $voucher_type_data->bank_cash_ledger_restriction;
-		$data['stock_voucher_type_active'] = $voucher_type_data->stock_voucher_type;
 		$data['voucher_type_id'] = $id;
 
 		/* Repopulating form */
@@ -322,10 +329,8 @@ class VoucherTypes extends Controller {
 			$data['voucher_type_suffix']['value'] = $this->input->post('voucher_type_suffix', TRUE);
 			$data['voucher_type_zero_padding']['value'] = $this->input->post('voucher_type_zero_padding', TRUE);
 
-			$data['voucher_type_base_type_active'] = $this->input->post('voucher_type_base_type', TRUE);
 			$data['voucher_type_numbering_active'] = $this->input->post('voucher_type_numbering', TRUE);
 			$data['bank_cash_ledger_restriction_active'] = $this->input->post('bank_cash_ledger_restriction', TRUE);
-			$data['stock_voucher_type_active'] = $this->input->post('stock_voucher_type', TRUE);
 		}
 
 		/* Form validations */
@@ -352,13 +357,8 @@ class VoucherTypes extends Controller {
 			$data_voucher_type_prefix = $this->input->post('voucher_type_prefix', TRUE);
 			$data_voucher_type_suffix = $this->input->post('voucher_type_suffix', TRUE);
 			$data_voucher_type_zero_padding = $this->input->post('voucher_type_zero_padding', TRUE);
-			$data_voucher_type_base_type = $this->input->post('voucher_type_base_type', TRUE);
 			$data_voucher_type_numbering = $this->input->post('voucher_type_numbering', TRUE);
 			$data_bank_cash_ledger_restriction = $this->input->post('bank_cash_ledger_restriction', TRUE);
-			$data_stock_voucher_type = $this->input->post('stock_voucher_type', TRUE);
-
-			if (($data_voucher_type_base_type < 1) or ($data_voucher_type_base_type > 2))
-				$data_voucher_type_base_type = 1;
 
 			if (($data_voucher_type_numbering < 1) or ($data_voucher_type_numbering > 3))
 				$data_voucher_type_numbering = 1;
@@ -366,21 +366,16 @@ class VoucherTypes extends Controller {
 			if (($data_bank_cash_ledger_restriction < 1) or ($data_bank_cash_ledger_restriction > 5))
 				$data_bank_cash_ledger_restriction = 1;
 
-			if (($data_stock_voucher_type < 1) or ($data_stock_voucher_type > 3))
-				$data_stock_voucher_type = 1;
-
 			$this->db->trans_start();
 			$update_data = array(
 				'label' => $data_voucher_type_label,
 				'name' => $data_voucher_type_name,
 				'description' => $data_voucher_type_description,
-				'base_type' => $data_voucher_type_base_type,
 				'numbering' => $data_voucher_type_numbering,
 				'prefix' => $data_voucher_type_prefix,
 				'suffix' => $data_voucher_type_suffix,
 				'zero_padding' => $data_voucher_type_zero_padding,
 				'bank_cash_ledger_restriction' => $data_bank_cash_ledger_restriction,
-				'stock_voucher_type' => $data_stock_voucher_type,
 			);
 			if ( ! $this->db->where('id', $data_voucher_type_id)->update('voucher_types', $update_data))
 			{
