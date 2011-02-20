@@ -1,5 +1,42 @@
 <?php
 
+/**
+ * DATABASE CONSTANTS USED IN THE APPLICATION
+ *
+ * table: ledgers
+ * column : type
+ *    0 = General
+ *    1 = Bank or Cash A/C
+ *    2 = Purchase A/C
+ *    3 = Sale A/C
+ *    4 = Creditor
+ *    5 = Debtor
+ *
+ * table: voucher_types
+ * column : base_type
+ *    1 = Normal Voucher
+ *    2 = Stock Voucher
+ * column : stock_voucher_type
+ *    1 = Purchase
+ *    2 = Sale
+ *    3 = Stock Transfer
+ *
+ * table: voucher_items
+ * column : stock_type
+ *    0 = Not Applicable
+ *    1 = Account Ledger
+ *    2 = Entity Ledger
+ *    3 = Others Ledger
+ *
+ * table: stock_items
+ * column : costing_method
+ *
+ * table: stock_voucher_items
+ * column : type
+ *    1 = Incoming
+ *    2 = Outgoing
+ *
+ */
 class Welcome extends Controller {
 
 	function Welcome()
