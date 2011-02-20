@@ -50,6 +50,12 @@
 	echo "</p>";
 
 	echo "<p>";
+	echo form_label('Default selling price', 'stock_item_default_sell_price');
+	echo "<br />";
+	echo form_input($stock_item_default_sell_price);
+	echo "</p>";
+
+	echo "<p>";
 	echo form_submit('submit', 'Create');
 	echo " ";
 	echo anchor('inventory/account', 'Back', array('title' => 'Back to Inventory'));

@@ -129,6 +129,7 @@ CREATE TABLE IF NOT EXISTS stock_items (
   op_balance_quantity float NOT NULL,
   op_balance_rate_per_unit decimal(15,2) NOT NULL DEFAULT '0.00',
   op_balance_total_value decimal(15,2) NOT NULL DEFAULT '0.00',
+  default_sell_price decimal(15,2) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 

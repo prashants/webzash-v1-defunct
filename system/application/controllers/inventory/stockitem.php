@@ -66,6 +66,13 @@ class StockItem extends Controller {
 			'size' => '40',
 			'value' => '',
 		);
+		$data['stock_item_default_sell_price'] = array(
+			'name' => 'stock_item_default_sell_price',
+			'id' => 'stock_item_default_sell_price',
+			'maxlength' => '100',
+			'size' => '40',
+			'value' => '',
+		);
 		$data['stock_item_costing_methods'] = array(
 			'1' => 'Last In First Out (LIFO)',
 			'2' => 'First In First Out (FIFO)',
@@ -84,6 +91,7 @@ class StockItem extends Controller {
 		$this->form_validation->set_rules('stock_item_op_quantity', 'Opening Balance Quantity', 'trim|quantity');
 		$this->form_validation->set_rules('stock_item_op_rate_per_unit', 'Opening Balance Rate per unit', 'trim|currency');
 		$this->form_validation->set_rules('stock_item_op_total', 'Opening Balance Total value', 'trim|currency');
+		$this->form_validation->set_rules('stock_item_default_sell_price', 'Default Selling Price', 'trim|currency');
 
 		/* Re-populating form */
 		if ($_POST)
@@ -95,6 +103,7 @@ class StockItem extends Controller {
 			$data['stock_item_op_quantity']['value'] = $this->input->post('stock_item_op_quantity', TRUE);
 			$data['stock_item_op_rate_per_unit']['value'] = $this->input->post('stock_item_op_rate_per_unit', TRUE);
 			$data['stock_item_op_total']['value'] = $this->input->post('stock_item_op_total', TRUE);
+			$data['stock_item_default_sell_price']['value'] = $this->input->post('stock_item_default_sell_price', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -112,6 +121,7 @@ class StockItem extends Controller {
 			$data_stock_item_op_quantity = $this->input->post('stock_item_op_quantity', TRUE);
 			$data_stock_item_op_rate_per_unit = $this->input->post('stock_item_op_rate_per_unit', TRUE);
 			$data_stock_item_op_total = $this->input->post('stock_item_op_total', TRUE);
+			$data_stock_item_default_sell_price = $this->input->post('stock_item_default_sell_price', TRUE);
 
 			/* Check if stock group present */
 			$this->db->select('id')->from('stock_groups')->where('id', $data_stock_item_group_id);
@@ -143,6 +153,7 @@ class StockItem extends Controller {
 				'op_balance_quantity' => $data_stock_item_op_quantity,
 				'op_balance_rate_per_unit' => $data_stock_item_op_rate_per_unit,
 				'op_balance_total_value' => $data_stock_item_op_total,
+				'default_sell_price' => $data_stock_item_default_sell_price,
 			);
 			if ( ! $this->db->insert('stock_items', $insert_data))
 			{
@@ -231,6 +242,13 @@ class StockItem extends Controller {
 			'size' => '40',
 			'value' => $stock_item_data->op_balance_total_value,
 		);
+		$data['stock_item_default_sell_price'] = array(
+			'name' => 'stock_item_default_sell_price',
+			'id' => 'stock_item_default_sell_price',
+			'maxlength' => '100',
+			'size' => '40',
+			'value' => $stock_item_data->default_sell_price,
+		);
 		$data['stock_item_costing_methods'] = array(
 			'1' => 'Last In First Out (LIFO)',
 			'2' => 'First In First Out (FIFO)',
@@ -250,6 +268,7 @@ class StockItem extends Controller {
 		$this->form_validation->set_rules('stock_item_op_quantity', 'Opening Balance Quantity', 'trim|quantity');
 		$this->form_validation->set_rules('stock_item_op_rate_per_unit', 'Opening Balance Rate per unit', 'trim|currency');
 		$this->form_validation->set_rules('stock_item_op_total', 'Opening Balance Total value', 'trim|currency');
+		$this->form_validation->set_rules('stock_item_default_sell_price', 'Default Selling Price', 'trim|currency');
 
 		/* Re-populating form */
 		if ($_POST)
@@ -261,6 +280,7 @@ class StockItem extends Controller {
 			$data['stock_item_op_quantity']['value'] = $this->input->post('stock_item_op_quantity', TRUE);
 			$data['stock_item_op_rate_per_unit']['value'] = $this->input->post('stock_item_op_rate_per_unit', TRUE);
 			$data['stock_item_op_total']['value'] = $this->input->post('stock_item_op_total', TRUE);
+			$data['stock_item_default_sell_price']['value'] = $this->input->post('stock_item_default_sell_price', TRUE);
 		}
 
 		if ($this->form_validation->run() == FALSE)
@@ -278,6 +298,7 @@ class StockItem extends Controller {
 			$data_stock_item_op_quantity = $this->input->post('stock_item_op_quantity', TRUE);
 			$data_stock_item_op_rate_per_unit = $this->input->post('stock_item_op_rate_per_unit', TRUE);
 			$data_stock_item_op_total = $this->input->post('stock_item_op_total', TRUE);
+			$data_stock_item_default_sell_price = $this->input->post('stock_item_default_sell_price', TRUE);
 			$data_id = $id;
 
 			/* Check if stock group present */
@@ -310,6 +331,7 @@ class StockItem extends Controller {
 				'op_balance_quantity' => $data_stock_item_op_quantity,
 				'op_balance_rate_per_unit' => $data_stock_item_op_rate_per_unit,
 				'op_balance_total_value' => $data_stock_item_op_total,
+				'default_sell_price' => $data_stock_item_default_sell_price,
 			);
 			if ( ! $this->db->where('id', $data_id)->update('stock_items', $update_data))
 			{
