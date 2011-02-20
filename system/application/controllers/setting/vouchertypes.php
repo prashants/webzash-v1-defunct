@@ -101,8 +101,9 @@ class VoucherTypes extends Controller {
 			'5' => 'Only NON Bank or Cash A/C can be present on both Debit and Credit side',
 		);
 		$data['stock_voucher_types'] = array(
-			'1' => 'Purchases',
-			'2' => 'Sales',
+			'1' => 'Purchase',
+			'2' => 'Sale',
+			'3' => 'Stock Transfer',
 		);
 
 		$data['voucher_type_base_type_active'] = '1';
@@ -163,7 +164,7 @@ class VoucherTypes extends Controller {
 			if (($data_bank_cash_ledger_restriction < 1) or ($data_bank_cash_ledger_restriction > 5))
 				$data_bank_cash_ledger_restriction = 1;
 
-			if (($data_stock_voucher_type < 1) or ($data_stock_voucher_type > 2))
+			if (($data_stock_voucher_type < 1) or ($data_stock_voucher_type > 3))
 				$data_stock_voucher_type = 1;
 
 			/* Calculating Voucher Type Id */
@@ -300,8 +301,9 @@ class VoucherTypes extends Controller {
 			'5' => 'Only NON Bank or Cash A/C can be present on both Debit and Credit side',
 		);
 		$data['stock_voucher_types'] = array(
-			'1' => 'Purchases',
-			'2' => 'Sales',
+			'1' => 'Purchase',
+			'2' => 'Sale',
+			'3' => 'Stock Transfer',
 		);
 
 		$data['voucher_type_base_type_active'] = $voucher_type_data->base_type;
@@ -364,7 +366,7 @@ class VoucherTypes extends Controller {
 			if (($data_bank_cash_ledger_restriction < 1) or ($data_bank_cash_ledger_restriction > 5))
 				$data_bank_cash_ledger_restriction = 1;
 
-			if (($data_stock_voucher_type < 1) or ($data_stock_voucher_type > 2))
+			if (($data_stock_voucher_type < 1) or ($data_stock_voucher_type > 3))
 				$data_stock_voucher_type = 1;
 
 			$this->db->trans_start();
