@@ -1,3 +1,36 @@
+<script type="text/javascript">
+$(document).ready(function() {
+
+	/********************** STOCK ITEM TOTAL ******************************/
+	$('#stock_item_op_quantity').live('change', function() {
+		updateTotalValue();
+	});
+
+	$('#stock_item_op_rate_per_unit').live('change', function() {
+		updateTotalValue();
+	});
+
+	var updateTotalValue = function() {
+		var quantity = $('#stock_item_op_quantity').val();
+		var rate_per_unit = $('#stock_item_op_rate_per_unit').val();
+
+		quantity = parseFloat(quantity);
+		rate_per_unit = parseFloat(rate_per_unit);
+
+		if ((!isNaN(quantity)) && (!isNaN(rate_per_unit)))
+		{
+			/* calculating total amount */
+			var total_value;
+			total_value = quantity * rate_per_unit;
+
+			/* displaying total amount for each stock item */
+			$('#stock_item_op_total').val(total_value);
+			$('#stock_item_op_total').fadeTo('slow', 0.1).fadeTo('slow', 1);
+		}
+	}
+});
+</script>
+
 <?php
 	echo form_open('inventory/stockitem/add');
 
