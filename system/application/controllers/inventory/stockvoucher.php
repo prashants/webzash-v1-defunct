@@ -246,6 +246,12 @@ class StockVoucher extends Controller {
 
 			$data_total_amount = 0;
 
+			/* Setting Stock Item type */
+			if ($current_voucher_type['stock_voucher_type'] == '1')
+				$data_stock_item_type = 1;
+			else
+				$data_stock_item_type = 2;
+
 			/* Checking for Valid Stock Ledger A/C - account */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_account)->where('type', 2);
@@ -469,6 +475,7 @@ class StockVoucher extends Controller {
 					'rate_per_unit' => $data_stock_item_rate_per_unit,
 					'discount' => $data_stock_item_discount,
 					'total' => $data_stock_item_amount,
+					'type' => $data_stock_item_type,
 				);
 				if ( ! $this->db->insert('stock_voucher_items', $insert_stock_data))
 				{
