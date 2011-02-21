@@ -27,15 +27,8 @@ $(document).ready(function() {
 			$.ajax({
 				url: <?php echo '\'' . site_url('inventory/stockitem/balance') . '/\''; ?> + stockid,
 				success: function(data) {
-					var stock_bal = parseFloat(data);
-					if (isNaN(stock_bal))
-						stock_bal = 0;
-					if (stock_bal == 0)
-						rowid.parent().next().next().next().next().next().next().children().text("0");
-					else if (stock_bal < 0)
-						rowid.parent().next().next().next().next().next().next().next().children().text(data);
-					else
-						rowid.parent().next().next().next().next().next().next().next().children().text(data);
+					rowid.parent().next().next().next().next().next().next().next().children().text(data);
+					rowid.parent().next().next().next().next().next().next().next().children().text(data);
 				}
 			});
 
