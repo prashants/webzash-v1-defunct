@@ -333,8 +333,14 @@ class StockVoucher extends Controller {
 			}
 
 			/* Total amount calculations */
-			$data_main_account_total = $data_total_stock_amount;
-			$data_main_entity_total = $data_total_stock_amount + $data_total_ledger_amount;
+			if ($current_voucher_type['stock_voucher_type'] == '1')
+			{
+				$data_main_account_total = $data_total_stock_amount;
+				$data_main_entity_total = $data_total_stock_amount + $data_total_ledger_amount;
+			} else {
+				$data_main_account_total = $data_total_stock_amount + $data_total_ledger_amount;
+				$data_main_entity_total = $data_total_stock_amount;
+			}
 			$data_total_amount = $data_total_stock_amount + $data_total_ledger_amount;
 			if ($data_total_amount < 0)
 			{
