@@ -1,8 +1,8 @@
 <?php
 
-class StockVoucher extends Controller {
+class StockTransfer extends Controller {
 
-	function StockVoucher()
+	function StockTransfer()
 	{
 		parent::Controller();
 		$this->load->model('Voucher_model');
@@ -115,6 +115,12 @@ class StockVoucher extends Controller {
 		} else {
 			$current_voucher_type = voucher_type_info($voucher_type_id);
 		}
+		if ($current_voucher_type['stock_voucher_type'] != '3')
+		{
+			$this->messages->add('Invalid Voucher type.', 'error');
+			redirect('voucher/show/all');
+			return;
+		}
 
 		$this->template->set('page_title', 'New ' . $current_voucher_type['name'] . ' Voucher');
 
@@ -140,8 +146,6 @@ class StockVoucher extends Controller {
 			'rows' => '4',
 			'value' => '',
 		);
-		$data['main_account_active'] = 0;
-		$data['main_entity_active'] = 0;
 		$data['voucher_type_id'] = $voucher_type_id;
 		$data['current_voucher_type'] = $current_voucher_type;
 		$data['voucher_tags'] = $this->Tag_model->get_all_tags();
@@ -155,13 +159,9 @@ class StockVoucher extends Controller {
 		else
 			$this->form_validation->set_rules('voucher_number', 'Voucher Number', 'trim|is_natural_no_zero|uniquevoucherno[' . $voucher_type_id . ']');
 		$this->form_validation->set_rules('voucher_date', 'Voucher Date', 'trim|required|is_date|is_date_within_range');
-		if ($current_voucher_type['stock_voucher_type'] == '1')
+		if ($current_voucher_type['stock_voucher_type'] == '3')
 		{
-			$this->form_validation->set_rules('main_account', 'Purchase Ledger A/C', 'trim|required');
-			$this->form_validation->set_rules('main_entity', 'Creditors (Supplier)', 'trim|required');
-		} else {
-			$this->form_validation->set_rules('main_account', 'Sale Ledger A/C', 'trim|required');
-			$this->form_validation->set_rules('main_entity', 'Debtor (Customer)', 'trim|required');
+			
 		}
 		$this->form_validation->set_rules('voucher_narration', 'trim');
 		$this->form_validation->set_rules('voucher_tag', 'Tag', 'trim|is_natural');
@@ -1546,4 +1546,4 @@ class StockVoucher extends Controller {
 }
 
 /* End of file voucher.php */
-/* Location: ./system/application/controllers/inventory/stockvoucher.php */
+/* Location: ./system/application/controllers/inventory/stocktransfer.php */
