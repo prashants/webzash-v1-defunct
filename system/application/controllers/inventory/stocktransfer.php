@@ -363,38 +363,72 @@ class StockTransfer extends Controller {
 			}
 
 			/* Adding source stock items */
-			$data_all_stock_item_id = $this->input->post('stock_item_id', TRUE);
-			$data_all_stock_item_quantity = $this->input->post('stock_item_quantity', TRUE);
-			$data_all_stock_item_rate_per_unit = $this->input->post('stock_item_rate_per_unit', TRUE);
-			$data_all_stock_item_discount = $this->input->post('stock_item_discount', TRUE);
-			$data_all_stock_item_amount = $this->input->post('stock_item_amount', TRUE);
+			$data_all_source_stock_item_id = $this->input->post('source_stock_item_id', TRUE);
+			$data_all_source_stock_item_quantity = $this->input->post('source_stock_item_quantity', TRUE);
+			$data_all_source_stock_item_rate_per_unit = $this->input->post('source_stock_item_rate_per_unit', TRUE);
+			$data_all_source_stock_item_amount = $this->input->post('source_stock_item_amount', TRUE);
 
-			foreach ($data_all_stock_item_id as $id => $stock_data)
+			foreach ($data_all_source_stock_item_id as $id => $stock_data)
 			{
-				$data_stock_item_id = $data_all_stock_item_id[$id];
+				$data_source_stock_item_id = $data_all_source_stock_item_id[$id];
 
-				if ($data_stock_item_id < 1)
+				if ($data_source_stock_item_id < 1)
 					continue;
 
-				$data_stock_item_quantity = $data_all_stock_item_quantity[$id];
-				$data_stock_item_rate_per_unit = $data_all_stock_item_rate_per_unit[$id];
-				$data_stock_item_discount = $data_all_stock_item_discount[$id];
-				$data_stock_item_amount = $data_all_stock_item_amount[$id];
+				$data_source_stock_item_quantity = $data_all_source_stock_item_quantity[$id];
+				$data_source_stock_item_rate_per_unit = $data_all_source_stock_item_rate_per_unit[$id];
+				$data_source_stock_item_amount = $data_all_source_stock_item_amount[$id];
 
 				$insert_stock_data = array(
 					'voucher_id' => $voucher_id,
-					'stock_item_id' => $data_stock_item_id,
-					'quantity' => $data_stock_item_quantity,
-					'rate_per_unit' => $data_stock_item_rate_per_unit,
-					'discount' => $data_stock_item_discount,
-					'total' => $data_stock_item_amount,
-					'type' => $data_stock_item_type,
+					'stock_item_id' => $data_source_stock_item_id,
+					'quantity' => $data_source_stock_item_quantity,
+					'rate_per_unit' => $data_source_stock_item_rate_per_unit,
+					'discount' => '',
+					'total' => $data_source_stock_item_amount,
+					'type' => '2',
 				);
 				if ( ! $this->db->insert('stock_voucher_items', $insert_stock_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Stock Item - ' . $data_ledger_id . ' to Voucher.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting stock item " . "[id:" . $data_ledger_id . "]");
+					$this->messages->add('Error adding Stock Item - ' . $data_source_stock_item_id . ' to Voucher.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting stock item " . "[id:" . $data_source_stock_item_id . "]");
+					$this->template->load('template', 'inventory/stocktransfer/add', $data);
+					return;
+				}
+			}
+
+			/* Adding destination stock items */
+			$data_all_dest_stock_item_id = $this->input->post('dest_stock_item_id', TRUE);
+			$data_all_dest_stock_item_quantity = $this->input->post('dest_stock_item_quantity', TRUE);
+			$data_all_dest_stock_item_rate_per_unit = $this->input->post('dest_stock_item_rate_per_unit', TRUE);
+			$data_all_dest_stock_item_amount = $this->input->post('dest_stock_item_amount', TRUE);
+
+			foreach ($data_all_dest_stock_item_id as $id => $stock_data)
+			{
+				$data_dest_stock_item_id = $data_all_dest_stock_item_id[$id];
+
+				if ($data_dest_stock_item_id < 1)
+					continue;
+
+				$data_dest_stock_item_quantity = $data_all_dest_stock_item_quantity[$id];
+				$data_dest_stock_item_rate_per_unit = $data_all_dest_stock_item_rate_per_unit[$id];
+				$data_dest_stock_item_amount = $data_all_dest_stock_item_amount[$id];
+
+				$insert_stock_data = array(
+					'voucher_id' => $voucher_id,
+					'stock_item_id' => $data_dest_stock_item_id,
+					'quantity' => $data_dest_stock_item_quantity,
+					'rate_per_unit' => $data_dest_stock_item_rate_per_unit,
+					'discount' => '',
+					'total' => $data_dest_stock_item_amount,
+					'type' => '1',
+				);
+				if ( ! $this->db->insert('stock_voucher_items', $insert_stock_data))
+				{
+					$this->db->trans_rollback();
+					$this->messages->add('Error adding Stock Item - ' . $data_dest_stock_item_id . ' to Voucher.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting stock item " . "[id:" . $data_dest_stock_item_id . "]");
 					$this->template->load('template', 'inventory/stocktransfer/add', $data);
 					return;
 				}
@@ -414,7 +448,6 @@ class StockTransfer extends Controller {
 			/* Showing success message in show() method since message is too long for storing it in session */
 			$this->logger->write_message("success", "Added " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $current_voucher_type['label']);
-			$this->template->load('template', 'inventory/stocktransfer/add', $data);
 			return;
 		}
 		return;
