@@ -1348,63 +1348,24 @@ class StockTransfer extends Controller {
 		return;
 	}
 
-	function addrow()
-	{
-		$i = time() + rand  (0, time()) + rand  (0, time()) + rand  (0, time());
-		$rate_item = array(
-			'name' => 'rate_item[' . $i . ']',
-			'id' => 'rate_item[' . $i . ']',
-			'maxlength' => '5',
-			'size' => '5',
-			'value' => isset($dr_amount[$i]) ? $dr_amount[$i] : "",
-			'class' => 'dr-item',
-		);
-		$amount_item = array(
-			'name' => 'amount_item[' . $i . ']',
-			'id' => 'amount_item[' . $i . ']',
-			'maxlength' => '15',
-			'size' => '15',
-			'value' => isset($cr_amount[$i]) ? $cr_amount[$i] : "",
-			'class' => 'cr-item',
-		);
-		echo "<tr>";
-		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', 'D') . "</td>";
-		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', '0') . "</td>";
-		echo "<td>" . form_input($rate_item) . "</td>";
-		echo "<td>" . form_input($amount_item) . "</td>";
-		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addrow')) . "</td>";
-		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleterow')) . "</td>";
-		echo "<td class=\"ledger-balance\"><div></div></td>";
-		echo "</tr>";
-		return;
-	}
-
-	function addstockrow()
+	function addstockrow($type)
 	{
 		$i = time() + rand  (0, time()) + rand  (0, time()) + rand  (0, time());
 		$stock_item_quantity = array(
-			'name' => 'stock_item_quantity[' . $i . ']',
-			'id' => 'stock_item_quantity[' . $i . ']',
+			'name' => $type . '_stock_item_quantity[' . $i . ']',
+			'id' => $type . '_stock_item_quantity[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
 			'value' => '',
-			'class' => 'quantity-item',
+			'class' => $type . '-quantity-stock-item',
 		);
 		$stock_item_rate_per_unit = array(
-			'name' => 'stock_item_rate_per_unit[' . $i . ']',
-			'id' => 'stock_item_rate_per_unit[' . $i . ']',
+			'name' => $type . '_stock_item_rate_per_unit[' . $i . ']',
+			'id' => $type . '_stock_item_rate_per_unit[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
 			'value' => '',
-			'class' => 'rate-item',
-		);
-		$stock_item_discount = array(
-			'name' => 'stock_item_discount[' . $i . ']',
-			'id' => 'stock_item_discount[' . $i . ']',
-			'maxlength' => '15',
-			'size' => '9',
-			'value' => '',
-			'class' => 'discount-item',
+			'class' => $type . '-rate-stock-item',
 		);
 		$stock_item_amount = array(
 			'name' => 'stock_item_amount[' . $i . ']',
@@ -1412,14 +1373,13 @@ class StockTransfer extends Controller {
 			'maxlength' => '15',
 			'size' => '15',
 			'value' => '',
-			'class' => 'rate-item',
+			'class' => $type . '-amount-stock-item',
 		);
 
 		echo '<tr class="new-row">';
 		echo "<td>" . form_input_stock_item('stock_item_id[' . $i . ']', 0) . "</td>";
 		echo "<td>" . form_input($stock_item_quantity) . "</td>";
 		echo "<td>" . form_input($stock_item_rate_per_unit) . "</td>";
-		echo "<td>" . form_input($stock_item_discount) . "</td>";
 		echo "<td>" . form_input($stock_item_amount) . "</td>";
 		echo '<td>';
 		echo img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Stock Item', 'class' => 'addstockrow'));
@@ -1434,5 +1394,5 @@ class StockTransfer extends Controller {
 	}
 }
 
-/* End of file voucher.php */
+/* End of file stocktransfer.php */
 /* Location: ./system/application/controllers/inventory/stocktransfer.php */

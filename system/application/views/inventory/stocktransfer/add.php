@@ -2,18 +2,16 @@
 
 $(document).ready(function() {
 
-	/***************************** STOCK ITEM *****************************/
+	/************************ SOURCE STOCK ITEM ***************************/
 	/* Stock Item dropdown changed */
 	$('.stock-item-dropdown').live('change', function() {
 		if ($(this).val() == "0") {
 			$(this).parent().next().children().attr('value', "");
 			$(this).parent().next().next().children().attr('value', "");
 			$(this).parent().next().next().next().children().attr('value', "");
-			$(this).parent().next().next().next().next().children().attr('value', "");
 			$(this).parent().next().children().attr('disabled', 'disabled');
 			$(this).parent().next().next().children().attr('disabled', 'disabled');
 			$(this).parent().next().next().next().children().attr('disabled', 'disabled');
-			$(this).parent().next().next().next().next().children().attr('disabled', 'disabled');
 		} else {
 			$(this).parent().next().children().attr('disabled', '');
 			$(this).parent().next().next().children().attr('disabled', '');
@@ -27,8 +25,8 @@ $(document).ready(function() {
 			$.ajax({
 				url: <?php echo '\'' . site_url('inventory/stockitem/balance') . '/\''; ?> + stockid,
 				success: function(data) {
-					rowid.parent().next().next().next().next().next().next().next().children().text(data);
-					rowid.parent().next().next().next().next().next().next().next().children().text(data);
+					rowid.parent().next().next().next().next().next().next().children().text(data);
+					rowid.parent().next().next().next().next().next().next().children().text(data);
 				}
 			});
 
@@ -45,70 +43,48 @@ $(document).ready(function() {
 				}
 			});
 		} else {
-			rowid.parent().next().next().next().next().next().next().next().children().text("");
+			rowid.parent().next().next().next().next().next().next().children().text("");
 		}
 	});
 
-	$('table td .quantity-stock-item').live('change', function() {
+	$('table td .source-quantity-stock-item').live('change', function() {
 		var rowid = $(this);
 		calculateRowTotal(rowid.parent().prev());
 	});
 
-	$('table td .rate-stock-item').live('change', function() {
+	$('table td .source-rate-stock-item').live('change', function() {
 		var rowid = $(this);
 		calculateRowTotal(rowid.parent().prev().prev());
-	});
-
-	$('table td .discount-stock-item').live('change', function() {
-		var rowid = $(this);
-		calculateRowTotal(rowid.parent().prev().prev().prev());
 	});
 
 	var calculateRowTotal = function(itemrow) {
 		var item_quantity = itemrow.next().children().val();
 		var item_rate_per_unit = itemrow.next().next().children().val();
-		var item_discount = itemrow.next().next().next().children().val();
-		var is_percent = false;
 
-		/* check whether discount is in percent or absolute value */
-		if (item_discount != "") {
-			if (item_discount.match(/%$/))
-			{
-				is_percent = true;
-			}
-		}
 		item_quantity = parseFloat(item_quantity);
 		item_rate_per_unit = parseFloat(item_rate_per_unit);
-		item_discount = parseFloat(item_discount);
-		if (isNaN(item_discount))
-			item_discount = 0;
+
 		if ((!isNaN(item_quantity)) && (!isNaN(item_rate_per_unit)))
 		{
 			/* calculating total amount for each stock item */
 			var item_amount;
-			if (is_percent) {
-				if (item_discount <= 100)
-					item_amount = ((item_quantity * item_rate_per_unit) * (100 - item_discount)) / 100;
-			} else {
-				item_amount = (item_quantity * item_rate_per_unit) - item_discount;
-			}
+			item_amount = (item_quantity * item_rate_per_unit);
+
 			/* displaying total amount for each stock item */
-			itemrow.next().next().next().next().children().val(item_amount);
-			itemrow.next().next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
+			itemrow.next().next().next().children().val(item_amount);
+			itemrow.next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
 		}
-		updateLedgerRowTotal();
 		$('.recalculate').trigger('click');
 	}
 
-	$('table td .amount-stock-item').live('change', function() {
-		updateLedgerRowTotal();
+	$('table td .source-amount-stock-item').live('change', function() {
 		$('.recalculate').trigger('click');
 	});
 
 	/* calculating stock total */
 	var calculateStockTotal = function() {
 		var stock_total = 0;
-		$('table td .amount-stock-item').each(function(index) {
+		$('table td .source-amount-stock-item').each(function(index) {
 			if ($(this).val() != "")
 			{
 				var item_amount = parseFloat($(this).val());
@@ -125,7 +101,122 @@ $(document).ready(function() {
 		var add_image_url = $(cur_obj).attr('src');
 		$(cur_obj).attr('src', <?php echo '\'' . asset_url() . 'images/icons/ajax.gif' . '\''; ?>);
 		$.ajax({
-			url: <?php echo '\'' . site_url('inventory/stockvoucher/addstockrow') . '\''; ?>,
+			url: <?php echo '\'' . site_url('inventory/stocktransfer/addstockrow/source') . '\''; ?>,
+			success: function(data) {
+				$(cur_obj).parent().parent().after(data);
+				$(cur_obj).attr('src', add_image_url);
+				$('.stock-item-dropdown').trigger('change');
+			}
+		});
+	});
+
+	/* Delete stock item row */
+	$('table td .deletestockrow').live('click', function() {
+		$(this).parent().parent().remove();
+	});
+
+	$('.stock-item-dropdown').trigger('change');
+
+	/************************** DEST STOCK ITEM ***************************/
+	/* Stock Item dropdown changed */
+	$('.stock-item-dropdown').live('change', function() {
+		if ($(this).val() == "0") {
+			$(this).parent().next().children().attr('value', "");
+			$(this).parent().next().next().children().attr('value', "");
+			$(this).parent().next().next().next().children().attr('value', "");
+			$(this).parent().next().children().attr('disabled', 'disabled');
+			$(this).parent().next().next().children().attr('disabled', 'disabled');
+			$(this).parent().next().next().next().children().attr('disabled', 'disabled');
+		} else {
+			$(this).parent().next().children().attr('disabled', '');
+			$(this).parent().next().next().children().attr('disabled', '');
+			$(this).parent().next().next().next().children().attr('disabled', '');
+			$(this).parent().next().next().next().next().children().attr('disabled', '');
+			$(this).parent().prev().children().trigger('change');
+		}
+		var stockid = $(this).val();
+		var rowid = $(this);
+		if (stockid > 0) {
+			$.ajax({
+				url: <?php echo '\'' . site_url('inventory/stockitem/balance') . '/\''; ?> + stockid,
+				success: function(data) {
+					rowid.parent().next().next().next().next().next().next().children().text(data);
+					rowid.parent().next().next().next().next().next().next().children().text(data);
+				}
+			});
+
+			$.ajax({
+				url: <?php echo '\'' . site_url('inventory/stockitem/sellprice') . '/\''; ?> + stockid,
+				success: function(data) {
+					var sell_price = parseFloat(data);
+					if (isNaN(sell_price))
+						sell_price = 0;
+					if (sell_price <= 0)
+						rowid.parent().next().next().children().val("");
+					else
+						rowid.parent().next().next().children().val(sell_price);
+				}
+			});
+		} else {
+			rowid.parent().next().next().next().next().next().next().children().text("");
+		}
+	});
+
+	$('table td .dest-quantity-stock-item').live('change', function() {
+		var rowid = $(this);
+		calculateRowTotal(rowid.parent().prev());
+	});
+
+	$('table td .dest-rate-stock-item').live('change', function() {
+		var rowid = $(this);
+		calculateRowTotal(rowid.parent().prev().prev());
+	});
+
+	var calculateRowTotal = function(itemrow) {
+		var item_quantity = itemrow.next().children().val();
+		var item_rate_per_unit = itemrow.next().next().children().val();
+
+		item_quantity = parseFloat(item_quantity);
+		item_rate_per_unit = parseFloat(item_rate_per_unit);
+
+		if ((!isNaN(item_quantity)) && (!isNaN(item_rate_per_unit)))
+		{
+			/* calculating total amount for each stock item */
+			var item_amount;
+			item_amount = (item_quantity * item_rate_per_unit);
+
+			/* displaying total amount for each stock item */
+			itemrow.next().next().next().children().val(item_amount);
+			itemrow.next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
+		}
+		$('.recalculate').trigger('click');
+	}
+
+	$('table td .dest-amount-stock-item').live('change', function() {
+		$('.recalculate').trigger('click');
+	});
+
+	/* calculating stock total */
+	var calculateStockTotal = function() {
+		var stock_total = 0;
+		$('table td .dest-amount-stock-item').each(function(index) {
+			if ($(this).val() != "")
+			{
+				var item_amount = parseFloat($(this).val());
+				if ( ! isNaN(item_amount))
+					stock_total += item_amount;
+			}
+		});
+		return stock_total;
+	}
+
+	/* Add stock item row */
+	$('table td .addstockrow').live('click', function() {
+		var cur_obj = this;
+		var add_image_url = $(cur_obj).attr('src');
+		$(cur_obj).attr('src', <?php echo '\'' . asset_url() . 'images/icons/ajax.gif' . '\''; ?>);
+		$.ajax({
+			url: <?php echo '\'' . site_url('inventory/stocktransfer/addstockrow/dest') . '\''; ?>,
 			success: function(data) {
 				$(cur_obj).parent().parent().after(data);
 				$(cur_obj).attr('src', add_image_url);
