@@ -235,8 +235,6 @@ class StockTransfer extends Controller {
 			$data_all_dest_stock_item_rate_per_unit = $this->input->post('dest_stock_item_rate_per_unit', TRUE);
 			$data_all_dest_stock_item_amount = $this->input->post('dest_stock_item_amount', TRUE);
 
-			$data_total_amount = 0;
-
 			/* Setting Stock Item type */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$data_stock_item_type = 1;
@@ -296,12 +294,6 @@ class StockTransfer extends Controller {
 			}
 
 			/* Total amount calculations */
-			if ($data_total_source_stock_amount != $data_total_dest_stock_amount)
-			{
-				$this->messages->add('Source total does not match with Destination total.', 'error');
-				$this->template->load('template', 'inventory/stocktransfer/add', $data);
-				return;
-			}
 			if ($data_total_source_stock_amount < 0)
 			{
 				$this->messages->add('Source total cannot be negative.', 'error');
@@ -314,7 +306,6 @@ class StockTransfer extends Controller {
 				$this->template->load('template', 'inventory/stocktransfer/add', $data);
 				return;
 			}
-			$data_total_amount = $data_total_source_stock_amount;
 
 			/* Adding main voucher */
 			if ($current_voucher_type['numbering'] == '2')
@@ -348,8 +339,8 @@ class StockTransfer extends Controller {
 				'narration' => $data_narration,
 				'voucher_type' => $data_type,
 				'tag_id' => $data_tag,
-				'dr_total' => $data_total_amount,
-				'cr_total' => $data_total_amount,
+				'dr_total' => $data_total_source_stock_amount,
+				'cr_total' => $data_total_dest_stock_amount,
 			);
 			if ( ! $this->db->insert('vouchers', $insert_data))
 			{
@@ -1027,14 +1018,6 @@ class StockTransfer extends Controller {
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Stock Items.', 'error');
 			$this->logger->write_message("error", "Error deleting stock item entries for " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
-			redirect('voucher/view/' . $current_voucher_type['label'] . '/' . $voucher_id);
-			return;
-		}
-		if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id)))
-		{
-			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Voucher - Ledger A/C\'s.', 'error');
-			$this->logger->write_message("error", "Error deleting ledger entries for " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 			redirect('voucher/view/' . $current_voucher_type['label'] . '/' . $voucher_id);
 			return;
 		}

@@ -74,15 +74,15 @@ $(document).ready(function() {
 			itemrow.next().next().next().children().val(item_amount);
 			itemrow.next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
 		}
-		$('.recalculate').trigger('click');
+		$('.source-recalculate').trigger('click');
 	}
 
 	$('table td .source-amount-stock-item').live('change', function() {
-		$('.recalculate').trigger('click');
+		$('.source-recalculate').trigger('click');
 	});
 
 	/* calculating stock total */
-	var calculateStockTotal = function() {
+	var calculateSourceStockTotal = function() {
 		var stock_total = 0;
 		$('table td .source-amount-stock-item').each(function(index) {
 			if ($(this).val() != "")
@@ -116,6 +116,16 @@ $(document).ready(function() {
 	});
 
 	$('.stock-item-dropdown').trigger('change');
+
+	/* Recalculate Source Total */
+	$('table td .source-recalculate').live('click', function() {
+		var sourceTotal = calculateSourceStockTotal();
+		$("table tr #source-total").text(sourceTotal);
+		if (sourceTotal >= 0)
+			$("table tr #source-total").css("background-color", "#FFFF99");
+		else
+			$("table tr #source-total").css("background-color", "#FFE9E8");
+	});
 
 	/************************** DEST STOCK ITEM ***************************/
 	/* Stock Item dropdown changed */
@@ -189,15 +199,15 @@ $(document).ready(function() {
 			itemrow.next().next().next().children().val(item_amount);
 			itemrow.next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
 		}
-		$('.recalculate').trigger('click');
+		$('.dest-recalculate').trigger('click');
 	}
 
 	$('table td .dest-amount-stock-item').live('change', function() {
-		$('.recalculate').trigger('click');
+		$('.dest-recalculate').trigger('click');
 	});
 
 	/* calculating stock total */
-	var calculateStockTotal = function() {
+	var calculateDestStockTotal = function() {
 		var stock_total = 0;
 		$('table td .dest-amount-stock-item').each(function(index) {
 			if ($(this).val() != "")
@@ -230,13 +240,25 @@ $(document).ready(function() {
 		$(this).parent().parent().remove();
 	});
 
+	/* Recalculate Dest Total */
+	$('table td .dest-recalculate').live('click', function() {
+		var destTotal = calculateDestStockTotal();
+		$("table tr #dest-total").text(destTotal);
+		if (destTotal >= 0)
+			$("table tr #dest-total").css("background-color", "#FFFF99");
+		else
+			$("table tr #dest-total").css("background-color", "#FFE9E8");
+	});
+
 	$('.stock-item-dropdown').trigger('change');
+	$('table td .dest-recalculate').trigger('click');
+	$('table td .source-recalculate').trigger('click');
 });
 
 </script>
 
 <?php
-	echo form_open('inventory/stockvoucher/add/' . $current_voucher_type['label']);
+	echo form_open('inventory/stocktransfer/add/' . $current_voucher_type['label']);
 	echo "<p>";
 	echo "<span id=\"tooltip-target-1\">";
 	echo form_label('Voucher Number', 'voucher_number');
@@ -297,6 +319,7 @@ $(document).ready(function() {
 
 		echo "</tr>";
 	}
+	echo "<tr id=\"source-total\"><td colspan=3><strong>Total</strong></td><td id=\"source-total\">0</td><td>" . img(array('src' => asset_url() . "images/icons/gear.png", 'border' => '0', 'alt' => 'Recalculate Total', 'class' => 'source-recalculate', 'title' => 'Recalculate Total')) . "</td><td></td><td></td></tr>";
 	echo "</table>";
 
 	echo "<h3>Destination</h3>";
@@ -343,6 +366,7 @@ $(document).ready(function() {
 
 		echo "</tr>";
 	}
+	echo "<tr id=\"dest-total\"><td colspan=3><strong>Total</strong></td><td id=\"dest-total\">0</td><td>" . img(array('src' => asset_url() . "images/icons/gear.png", 'border' => '0', 'alt' => 'Recalculate Total', 'class' => 'dest-recalculate', 'title' => 'Recalculate Total')) . "</td><td></td><td></td></tr>";
 	echo "</table>";
 
 	echo "<br />";
