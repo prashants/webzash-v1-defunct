@@ -1468,7 +1468,7 @@ class StockVoucher extends Controller {
 			'maxlength' => '5',
 			'size' => '5',
 			'value' => isset($dr_amount[$i]) ? $dr_amount[$i] : "",
-			'class' => 'dr-item',
+			'class' => 'rate-item',
 		);
 		$amount_item = array(
 			'name' => 'amount_item[' . $i . ']',
@@ -1476,9 +1476,9 @@ class StockVoucher extends Controller {
 			'maxlength' => '15',
 			'size' => '15',
 			'value' => isset($cr_amount[$i]) ? $cr_amount[$i] : "",
-			'class' => 'cr-item',
+			'class' => 'amount-item',
 		);
-		echo "<tr>";
+		echo '<tr class="new-row">';
 		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', 'D') . "</td>";
 		echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', '0') . "</td>";
 		echo "<td>" . form_input($rate_item) . "</td>";
@@ -1499,7 +1499,7 @@ class StockVoucher extends Controller {
 			'maxlength' => '15',
 			'size' => '9',
 			'value' => '',
-			'class' => 'quantity-item',
+			'class' => 'quantity-stock-item',
 		);
 		$stock_item_rate_per_unit = array(
 			'name' => 'stock_item_rate_per_unit[' . $i . ']',
@@ -1507,7 +1507,7 @@ class StockVoucher extends Controller {
 			'maxlength' => '15',
 			'size' => '9',
 			'value' => '',
-			'class' => 'rate-item',
+			'class' => 'rate-stock-item',
 		);
 		$stock_item_discount = array(
 			'name' => 'stock_item_discount[' . $i . ']',
@@ -1515,7 +1515,7 @@ class StockVoucher extends Controller {
 			'maxlength' => '15',
 			'size' => '9',
 			'value' => '',
-			'class' => 'discount-item',
+			'class' => 'discount-stock-item',
 		);
 		$stock_item_amount = array(
 			'name' => 'stock_item_amount[' . $i . ']',
@@ -1523,7 +1523,7 @@ class StockVoucher extends Controller {
 			'maxlength' => '15',
 			'size' => '15',
 			'value' => '',
-			'class' => 'rate-item',
+			'class' => 'amount-stock-item',
 		);
 
 		echo '<tr class="new-row">';
@@ -1545,5 +1545,5 @@ class StockVoucher extends Controller {
 	}
 }
 
-/* End of file voucher.php */
+/* End of file stockvoucher.php */
 /* Location: ./system/application/controllers/inventory/stockvoucher.php */
