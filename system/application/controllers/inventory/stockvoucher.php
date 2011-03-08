@@ -486,8 +486,8 @@ class StockVoucher extends Controller {
 				if ( ! $this->db->insert('stock_voucher_items', $insert_stock_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Stock Item - ' . $data_ledger_id . ' to Voucher.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting stock item " . "[id:" . $data_ledger_id . "]");
+					$this->messages->add('Error adding Stock Item - ' . $data_stock_item_id . ' to Voucher.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting stock item " . "[id:" . $data_stock_item_id . "]");
 					$this->template->load('template', 'inventory/stockvoucher/add', $data);
 					return;
 				}
@@ -1014,8 +1014,8 @@ class StockVoucher extends Controller {
 				if ( ! $this->db->insert('stock_voucher_items', $insert_stock_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Stock Item - ' . $data_ledger_id . ' to Voucher.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting stock item " . "[id:" . $data_ledger_id . "]");
+					$this->messages->add('Error adding Stock Item - ' . $data_stock_item_id . ' to Voucher.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting stock item " . "[id:" . $data_stock_item_id . "]");
 					$this->template->load('template', 'inventory/stockvoucher/edit', $data);
 					return;
 				}
