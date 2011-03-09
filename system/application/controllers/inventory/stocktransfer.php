@@ -48,42 +48,26 @@ class StockTransfer extends Controller {
 			return;
 		}
 
-		/* Load current voucher details - account, entity, ledgers */
-		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 1)->order_by('id', 'asc');
-		$cur_voucher_main_account = $this->db->get();
-		if ($cur_voucher_main_account->num_rows() < 1)
-		{
-			$this->messages->add('Voucher has no associated Purchase or Sale Ledger A/C.', 'error');
-		}
-		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 2)->order_by('id', 'asc');
-		$cur_voucher_main_entity = $this->db->get();
-		if ($cur_voucher_main_entity->num_rows() < 1)
-		{
-			$this->messages->add('Voucher has no associated Debtor or Creditor Ledger A/C.', 'error');
-		}
-		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 3)->order_by('id', 'asc');
-		$cur_voucher_ledgers = $this->db->get();
-		if ($cur_voucher_ledgers->num_rows() < 1)
-		{
-			$this->messages->add('Voucher has no associated Ledger A/C\'s.', 'error');
-		}
-
 		/* Load current stock items details */
-		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
-		$cur_voucher_stock_items = $this->db->get();
-		if ($cur_voucher_stock_items->num_rows() < 1)
+		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->where('type', 1)->order_by('id', 'asc');
+		$cur_voucher_source_stock_items = $this->db->get();
+		if ($cur_voucher_source_stock_items->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated stock items.', 'error');
+			$this->messages->add('Voucher has no associated source stock items.', 'error');
+		}
+		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->where('type', 2)->order_by('id', 'asc');
+		$cur_voucher_dest_stock_items = $this->db->get();
+		if ($cur_voucher_dest_stock_items->num_rows() < 1)
+		{
+			$this->messages->add('Voucher has no associated destination stock items.', 'error');
 		}
 
 		$data['cur_voucher'] = $cur_voucher;
-		$data['cur_voucher_main_account'] = $cur_voucher_main_account;
-		$data['cur_voucher_main_entity'] = $cur_voucher_main_entity;
-		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
-		$data['cur_voucher_stock_items'] = $cur_voucher_stock_items;
+		$data['cur_voucher_source_stock_items'] = $cur_voucher_source_stock_items;
+		$data['cur_voucher_dest_stock_items'] = $cur_voucher_dest_stock_items;
 		$data['voucher_type_id'] = $voucher_type_id;
 		$data['current_voucher_type'] = $current_voucher_type;
-		$this->template->load('template', 'inventory/stockvoucher/view', $data);
+		$this->template->load('template', 'inventory/stocktransfer/view', $data);
 		return;
 	}
 
