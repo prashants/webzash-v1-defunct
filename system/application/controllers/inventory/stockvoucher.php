@@ -918,7 +918,8 @@ class StockVoucher extends Controller {
 				return;
 			}
 
-			if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id))->where('stock_type', 3))
+			$this->db->where('stock_type', 3);
+			if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting previous Ledger A/C\'s from Voucher.', 'error');
