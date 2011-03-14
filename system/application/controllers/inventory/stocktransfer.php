@@ -49,13 +49,13 @@ class StockTransfer extends Controller {
 		}
 
 		/* Load current stock items details */
-		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->where('type', 1)->order_by('id', 'asc');
+		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->where('type', 2)->order_by('id', 'asc');
 		$cur_voucher_source_stock_items = $this->db->get();
 		if ($cur_voucher_source_stock_items->num_rows() < 1)
 		{
 			$this->messages->add('Voucher has no associated source stock items.', 'error');
 		}
-		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->where('type', 2)->order_by('id', 'asc');
+		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->where('type', 1)->order_by('id', 'asc');
 		$cur_voucher_dest_stock_items = $this->db->get();
 		if ($cur_voucher_dest_stock_items->num_rows() < 1)
 		{
