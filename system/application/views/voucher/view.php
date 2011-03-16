@@ -4,7 +4,7 @@ Voucher Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_vouc
 </p>
 
 <table border=0 cellpadding=5 class="simple-table voucher-view-table">
-<thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>
+<thead><tr><th>Type</th><th>Ledger Account</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>
 <?php
 $odd_even = "odd";
 foreach ($cur_voucher_ledgers->result() as $row)

@@ -3,7 +3,7 @@
 	$temp_cr_total = 0;
 
 	echo "<table border=0 cellpadding=5 class=\"simple-table trial-balance-table\">";
-	echo "<thead><tr><th>Ledger A/C</th><th>O/P Balance</th><th>C/L Balance</th><th>Dr Total</th><th>Cr Total</th></tr></thead>";
+	echo "<thead><tr><th>Ledger Account</th><th>O/P Balance</th><th>C/L Balance</th><th>Dr Total</th><th>Cr Total</th></tr></thead>";
 	$this->load->model('Ledger_model');
 	$all_ledgers = $this->Ledger_model->get_all_ledgers();
 	$odd_even = "odd";

@@ -4,15 +4,7 @@
 
 <table border=0 cellpadding=5 class="simple-table">
 	<thead>
-		<tr>
-			<th>Date</th>
-			<th>No</th>
-			<th>Ledger A/C</th>
-			<th>Type</th>
-			<th>DR Amount</th>
-			<th>CR Amount</th>
-			<th></th>
-		</tr>
+		<tr><th>Date</th><th>No.</th><th>Ledger Account</th><th>Type</th><th>DR Amount</th><th>CR Amount</th><th></th></tr>
 	</thead>
 	<tbody>
 	<?php

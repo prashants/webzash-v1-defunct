@@ -8,9 +8,9 @@ Voucher Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_vouc
 		<td align=\"right\">
 			<?php
 				if ($current_voucher_type['stock_voucher_type'] == '1')
-					echo "Purchase Ledger A/C :";
+					echo "Purchase Ledger :";
 				else
-					echo "Sale Ledger A/C :";
+					echo "Sale Ledger :";
 			?>
 		</td>
 		<td>
@@ -60,7 +60,7 @@ foreach ($cur_voucher_stock_items->result() as $row)
 <br />
 
 <table border=0 cellpadding=5 class="simple-table voucher-view-table">
-<thead><tr><th>Type</th><th>Ledger A/C</th><th>Rate</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>
+<thead><tr><th>Type</th><th>Ledger Account</th><th>Rate</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>
 <?php
 foreach ($cur_voucher_ledgers->result() as $row)
 {

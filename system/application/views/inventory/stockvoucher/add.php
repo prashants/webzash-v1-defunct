@@ -310,7 +310,7 @@ $(document).ready(function() {
 		echo "<table border=0 cellpadding=2>";
 		echo "<tr>";
 		echo "<td align=\"right\">";
-		echo form_label('Purchase Ledger A/C', 'main_account');
+		echo form_label('Purchase Ledger', 'main_account');
 		echo "</td>";
 		echo "<td>";
 		echo form_input_ledger('main_account', $main_account_active, '', $type = 'purchase');
@@ -332,7 +332,7 @@ $(document).ready(function() {
 		echo "<table border=0 cellpadding=2>";
 		echo "<tr>";
 		echo "<td align=\"right\">";
-		echo form_label('Sales Ledger A/C', 'main_account');
+		echo form_label('Sales Ledger', 'main_account');
 		echo "</td>";
 		echo "<td>";
 		echo form_input_ledger('main_account', $main_account_active, '', $type = 'sale');
@@ -411,7 +411,7 @@ $(document).ready(function() {
 	echo "<br />";
 
 	echo "<table class=\"voucher-table\">";
-	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Rate %</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
+	echo "<thead><tr><th>Type</th><th>Ledger Account</th><th>Rate %</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
 
 	foreach ($ledger_dc as $i => $ledger)
 	{

@@ -54,7 +54,7 @@ $(document).ready(function() {
 	echo "<span id=\"tooltip-target-2\">";
 	echo form_checkbox('ledger_type_cashbank', 1, $ledger_type_cashbank, 'id="ledger_type_cashbank"') . " Bank or Cash Account";
 	echo "</span>";
-	echo "<span id=\"tooltip-content-2\">Select if Ledger A/C is a Bank A/C or a Cash A/C.</span>";
+	echo "<span id=\"tooltip-content-2\">Select if Ledger Account is of type Bank or Cash Account.</span>";
 	echo "</p>";
 
 	echo "<p>";

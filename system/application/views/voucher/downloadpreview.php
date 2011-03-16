@@ -70,7 +70,7 @@
 	<br />
 	<table id="print-voucher-table">
 		<thead>
-			<tr class="tr-title"><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr>
+			<tr class="tr-title"><th>Ledger Account</th><th>Dr Amount</th><th>Cr Amount</th></tr>
 		</thead>
 		<tbody>
 		<?php

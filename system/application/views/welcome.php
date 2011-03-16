@@ -103,7 +103,7 @@ jQuery(document).ready(function () {
 	</div>
 	<div class="clear"></div>
 	<div id="dashboard-cash-bank" class="dashboard-item">
-		<div class="dashboard-title">Bank and Cash A/C's</div>
+		<div class="dashboard-title">Bank and Cash Accounts</div>
 		<div class="dashboard-content">
 			<?php
 				if ($bank_cash_account)

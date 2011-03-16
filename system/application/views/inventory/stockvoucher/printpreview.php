@@ -20,9 +20,9 @@
 			<td align=\"right\">
 				<?php
 					if ($current_voucher_type['stock_voucher_type'] == '1')
-						echo "Purchase Ledger A/C";
+						echo "Purchase Ledger";
 					else
-						echo "Sale Ledger A/C";
+						echo "Sale Ledger";
 				?>
 			</td>
 			<td>
@@ -76,7 +76,7 @@
 
 	<table id="print-voucher-table">
 		<thead>
-			<tr class="tr-title"><th>Ledger A/C</th><th>Rate</th><th>Dr Amount</th><th>Cr Amount</th></tr>
+			<tr class="tr-title"><th>Ledger Account</th><th>Rate</th><th>Dr Amount</th><th>Cr Amount</th></tr>
 		</thead>
 		<tbody>
 		<?php
