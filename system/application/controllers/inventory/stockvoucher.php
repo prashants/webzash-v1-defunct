@@ -53,19 +53,19 @@ class StockVoucher extends Controller {
 		$cur_voucher_main_account = $this->db->get();
 		if ($cur_voucher_main_account->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Purchase or Sale Ledger A/C.', 'error');
+			$this->messages->add('Voucher has no associated Purchase or Sale Ledger account.', 'error');
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 2)->order_by('id', 'asc');
 		$cur_voucher_main_entity = $this->db->get();
 		if ($cur_voucher_main_entity->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Debtor or Creditor Ledger A/C.', 'error');
+			$this->messages->add('Voucher has no associated Debtor or Creditor Ledger account.', 'error');
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 3)->order_by('id', 'asc');
 		$cur_voucher_ledgers = $this->db->get();
 		if ($cur_voucher_ledgers->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Ledger A/C\'s.', 'error');
+			$this->messages->add('Voucher has no associated Ledger accounts.', 'error');
 		}
 
 		/* Load current stock items details */
@@ -157,10 +157,10 @@ class StockVoucher extends Controller {
 		$this->form_validation->set_rules('voucher_date', 'Voucher Date', 'trim|required|is_date|is_date_within_range');
 		if ($current_voucher_type['stock_voucher_type'] == '1')
 		{
-			$this->form_validation->set_rules('main_account', 'Purchase Ledger A/C', 'trim|required');
+			$this->form_validation->set_rules('main_account', 'Purchase Ledger', 'trim|required');
 			$this->form_validation->set_rules('main_entity', 'Creditors (Supplier)', 'trim|required');
 		} else {
-			$this->form_validation->set_rules('main_account', 'Sale Ledger A/C', 'trim|required');
+			$this->form_validation->set_rules('main_account', 'Sale Ledger', 'trim|required');
 			$this->form_validation->set_rules('main_entity', 'Debtor (Customer)', 'trim|required');
 		}
 		$this->form_validation->set_rules('voucher_narration', 'trim');
@@ -252,7 +252,7 @@ class StockVoucher extends Controller {
 			else
 				$data_stock_item_type = 2;
 
-			/* Checking for Valid Stock Ledger A/C - account */
+			/* Checking for Valid Stock Ledger account - account */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_account)->where('type', 2);
 			else
@@ -261,13 +261,13 @@ class StockVoucher extends Controller {
 			if ($valid_main_account_q->num_rows() < 1)
 			{
 				if ($current_voucher_type['stock_voucher_type'] == '1')
-					$this->messages->add('Invalid Purchase Ledger A/C.', 'error');
+					$this->messages->add('Invalid Purchase Ledger.', 'error');
 				else
-					$this->messages->add('Invalid Sale Ledger A/C.', 'error');
+					$this->messages->add('Invalid Sale Ledger.', 'error');
 				$this->template->load('template', 'inventory/stockvoucher/add', $data);
 				return;
 			}
-			/* Checking for Valid Stock Ledger A/C - entity */
+			/* Checking for Valid Stock Ledger account - entity */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 4)->or_where('type', 1);
 			else
@@ -283,7 +283,7 @@ class StockVoucher extends Controller {
 				return;
 			}
 
-			/* Checking for Valid Stock Item A/C */
+			/* Checking for Valid Stock Item account */
 			$stock_item_present = FALSE;
 			$data_total_stock_amount = 0;
 			foreach ($data_all_stock_item_id as $id => $stock_data)
@@ -310,7 +310,7 @@ class StockVoucher extends Controller {
 				return;
 			}
 
-			/* Checking for Valid Ledgers A/C */
+			/* Checking for Valid Ledgers account */
 			$data_total_ledger_amount = 0;
 			foreach ($data_all_ledger_dc as $id => $ledger_data)
 			{
@@ -322,7 +322,7 @@ class StockVoucher extends Controller {
 				$valid_ledger_q = $this->db->get();
 				if ($valid_ledger_q->num_rows() < 1)
 				{
-					$this->messages->add('Invalid Ledger A/C.', 'error');
+					$this->messages->add('Invalid Ledger account.', 'error');
 					$this->template->load('template', 'inventory/stockvoucher/add', $data);
 					return;
 				}
@@ -412,10 +412,10 @@ class StockVoucher extends Controller {
 				$this->db->trans_rollback();
 				if ($current_voucher_type['stock_voucher_type'] == '1')
 				{
-					$this->messages->add('Error adding Purchase Ledger A/C to Voucher.', 'error');
+					$this->messages->add('Error adding Purchase Ledger account to Voucher.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting purchase ledger " . "[id:" . $data_main_account . "]");
 				} else {
-					$this->messages->add('Error adding Sale Ledger A/C to Voucher.', 'error');
+					$this->messages->add('Error adding Sale Ledger account to Voucher.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting sale ledger " . "[id:" . $data_main_account . "]");
 				}
 				$this->template->load('template', 'inventory/stockvoucher/add', $data);
@@ -522,7 +522,7 @@ class StockVoucher extends Controller {
 				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Ledger A/C - ' . $data_ledger_id . ' to Voucher.', 'error');
+					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Voucher.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting voucher ledger item " . "[id:" . $data_ledger_id . "]");
 					$this->template->load('template', 'inventory/stockvoucher/add', $data);
 					return;
@@ -700,10 +700,10 @@ class StockVoucher extends Controller {
 		$this->form_validation->set_rules('voucher_date', 'Voucher Date', 'trim|required|is_date|is_date_within_range');
 		if ($current_voucher_type['stock_voucher_type'] == '1')
 		{
-			$this->form_validation->set_rules('main_account', 'Purchase Ledger A/C', 'trim|required');
+			$this->form_validation->set_rules('main_account', 'Purchase Ledger', 'trim|required');
 			$this->form_validation->set_rules('main_entity', 'Creditors (Supplier)', 'trim|required');
 		} else {
-			$this->form_validation->set_rules('main_account', 'Sale Ledger A/C', 'trim|required');
+			$this->form_validation->set_rules('main_account', 'Sale Ledger', 'trim|required');
 			$this->form_validation->set_rules('main_entity', 'Debtor (Customer)', 'trim|required');
 		}
 		$this->form_validation->set_rules('voucher_narration', 'trim');
@@ -777,7 +777,7 @@ class StockVoucher extends Controller {
 			else
 				$data_stock_item_type = 2;
 
-			/* Checking for Valid Stock Ledger A/C - account */
+			/* Checking for Valid Stock Ledger account - account */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_account)->where('type', 2);
 			else
@@ -786,13 +786,13 @@ class StockVoucher extends Controller {
 			if ($valid_main_account_q->num_rows() < 1)
 			{
 				if ($current_voucher_type['stock_voucher_type'] == '1')
-					$this->messages->add('Invalid Purchase Ledger A/C.', 'error');
+					$this->messages->add('Invalid Purchase Ledger.', 'error');
 				else
-					$this->messages->add('Invalid Sale Ledger A/C.', 'error');
+					$this->messages->add('Invalid Sale Ledger.', 'error');
 				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
 				return;
 			}
-			/* Checking for Valid Stock Ledger A/C - entity */
+			/* Checking for Valid Stock Ledger account - entity */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 4)->or_where('type', 1);
 			else
@@ -808,7 +808,7 @@ class StockVoucher extends Controller {
 				return;
 			}
 
-			/* Checking for Valid Stock Item A/C */
+			/* Checking for Valid Stock Item */
 			$stock_item_present = FALSE;
 			$data_total_stock_amount = 0;
 			foreach ($data_all_stock_item_id as $id => $stock_data)
@@ -835,7 +835,7 @@ class StockVoucher extends Controller {
 				return;
 			}
 
-			/* Checking for Valid Ledgers A/C */
+			/* Checking for Valid Ledgers */
 			$data_total_ledger_amount = 0;
 			foreach ($data_all_ledger_dc as $id => $ledger_data)
 			{
@@ -847,7 +847,7 @@ class StockVoucher extends Controller {
 				$valid_ledger_q = $this->db->get();
 				if ($valid_ledger_q->num_rows() < 1)
 				{
-					$this->messages->add('Invalid Ledger A/C.', 'error');
+					$this->messages->add('Invalid Ledger account.', 'error');
 					$this->template->load('template', 'inventory/stockvoucher/edit', $data);
 					return;
 				}
@@ -902,7 +902,7 @@ class StockVoucher extends Controller {
 			if ( ! $this->db->where('id', $voucher_id)->update('vouchers', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating Voucher A/C.', 'error');
+				$this->messages->add('Error updating Voucher.', 'error');
 				$this->logger->write_message("error", "Error updating voucher details for " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
 				return;
@@ -922,7 +922,7 @@ class StockVoucher extends Controller {
 			if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error deleting previous Ledger A/C\'s from Voucher.', 'error');
+				$this->messages->add('Error deleting previous Ledger accounts from Voucher.', 'error');
 				$this->logger->write_message("error", "Error deleting previous voucher items for " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
 				return;
@@ -946,10 +946,10 @@ class StockVoucher extends Controller {
 				$this->db->trans_rollback();
 				if ($current_voucher_type['stock_voucher_type'] == '1')
 				{
-					$this->messages->add('Error updating Purchase Ledger A/C of Voucher.', 'error');
+					$this->messages->add('Error updating Purchase Ledger account of Voucher.', 'error');
 					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating purchase ledger " . "[id:" . $data_main_account . "]");
 				} else {
-					$this->messages->add('Error updating Sale Ledger A/C of Voucher.', 'error');
+					$this->messages->add('Error updating Sale Ledger account of Voucher.', 'error');
 					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating sale ledger " . "[id:" . $data_main_account . "]");
 				}
 				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
@@ -1051,7 +1051,7 @@ class StockVoucher extends Controller {
 				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Ledger A/C - ' . $data_ledger_id . ' to Voucher.', 'error');
+					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Voucher.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting voucher ledger item " . "[id:" . $data_ledger_id . "]");
 					$this->template->load('template', 'inventory/stockvoucher/edit', $data);
 					return;
@@ -1145,7 +1145,7 @@ class StockVoucher extends Controller {
 		if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Voucher - Ledger A/C\'s.', 'error');
+			$this->messages->add('Error deleting Voucher - Ledger accounts.', 'error');
 			$this->logger->write_message("error", "Error deleting ledger entries for " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 			redirect('voucher/view/' . $current_voucher_type['label'] . '/' . $voucher_id);
 			return;
@@ -1209,19 +1209,19 @@ class StockVoucher extends Controller {
 		$cur_voucher_main_account = $this->db->get();
 		if ($cur_voucher_main_account->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Purchase or Sale Ledger A/C.', 'error');
+			$this->messages->add('Voucher has no associated Purchase or Sale Ledger.', 'error');
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 2)->order_by('id', 'asc');
 		$cur_voucher_main_entity = $this->db->get();
 		if ($cur_voucher_main_entity->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Debtor or Creditor Ledger A/C.', 'error');
+			$this->messages->add('Voucher has no associated Debtor or Creditor.', 'error');
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 3)->order_by('id', 'asc');
 		$cur_voucher_ledgers = $this->db->get();
 		if ($cur_voucher_ledgers->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Ledger A/C\'s.', 'error');
+			$this->messages->add('Voucher has no associated Ledger accounts.', 'error');
 		}
 
 		/* Load current stock items details */
@@ -1290,19 +1290,19 @@ class StockVoucher extends Controller {
 		$cur_voucher_main_account = $this->db->get();
 		if ($cur_voucher_main_account->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Purchase or Sale Ledger A/C.', 'error');
+			$this->messages->add('Voucher has no associated Purchase or Sale Ledger.', 'error');
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 2)->order_by('id', 'asc');
 		$cur_voucher_main_entity = $this->db->get();
 		if ($cur_voucher_main_entity->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Debtor or Creditor Ledger A/C.', 'error');
+			$this->messages->add('Voucher has no associated Debtor or Creditor.', 'error');
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 3)->order_by('id', 'asc');
 		$cur_voucher_ledgers = $this->db->get();
 		if ($cur_voucher_ledgers->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Ledger A/C\'s.', 'error');
+			$this->messages->add('Voucher has no associated Ledger accounts.', 'error');
 		}
 
 		/* Load current stock items details */
@@ -1364,19 +1364,19 @@ class StockVoucher extends Controller {
 		$cur_voucher_main_account = $this->db->get();
 		if ($cur_voucher_main_account->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Purchase or Sale Ledger A/C.', 'error');
+			$this->messages->add('Voucher has no associated Purchase or Sale Ledger.', 'error');
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 2)->order_by('id', 'asc');
 		$cur_voucher_main_entity = $this->db->get();
 		if ($cur_voucher_main_entity->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Debtor or Creditor Ledger A/C.', 'error');
+			$this->messages->add('Voucher has no associated Debtor or Creditor Ledger.', 'error');
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('stock_type', 3)->order_by('id', 'asc');
 		$cur_voucher_ledgers = $this->db->get();
 		if ($cur_voucher_ledgers->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Ledger A/C\'s.', 'error');
+			$this->messages->add('Voucher has no associated Ledger accounts.', 'error');
 		}
 
 		/* Load current stock items details */
