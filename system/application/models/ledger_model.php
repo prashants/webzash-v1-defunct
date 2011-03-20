@@ -263,7 +263,7 @@ class Ledger_model extends Model {
 			return 0;
 	}
 
-	/* Delete reconciliation entries for a Ledger A/C */
+	/* Delete reconciliation entries for a Ledger account */
 	function delete_reconciliation($ledger_id)
 	{
 		$update_data = array(

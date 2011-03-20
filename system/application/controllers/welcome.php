@@ -6,9 +6,9 @@
  * table: ledgers
  * column : type
  *    0 = General
- *    1 = Bank or Cash A/C
- *    2 = Purchase A/C
- *    3 = Sale A/C
+ *    1 = Bank or Cash account
+ *    2 = Purchase
+ *    3 = Sale
  *    4 = Creditor
  *    5 = Debtor
  *

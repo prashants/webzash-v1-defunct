@@ -290,7 +290,7 @@ class Cf extends Controller {
 				{
 					if ( ! $newacc->query("INSERT INTO groups (id, parent_id, name, affects_gross) VALUES (?, ?, ?, ?)", array($row->id, $row->parent_id, $row->name, $row->affects_gross)))
 					{
-						$this->messages->add('Failed to add Group A/C - ' . $row->name . '.', 'error');
+						$this->messages->add('Failed to add Group account - ' . $row->name . '.', 'error');
 						$cf_status = FALSE;
 					}
 				}
@@ -322,13 +322,13 @@ class Cf extends Controller {
 						}
 						if ( ! $newacc->query("INSERT INTO ledgers (id, group_id, name, op_balance, op_balance_dc, type) VALUES (?, ?, ?, ?, ?, ?)", array($row->id, $row->group_id, $row->name, $op_balance, $op_balance_dc, $row->type)))
 						{
-							$this->messages->add('Failed to add Ledger A/C - ' . $row->name . '.', 'error');
+							$this->messages->add('Failed to add Ledger account - ' . $row->name . '.', 'error');
 							$cf_status = FALSE;
 						}
 					} else {
 						if ( ! $newacc->query("INSERT INTO ledgers (id, group_id, name, op_balance, op_balance_dc, type) VALUES (?, ?, ?, ?, ?, ?)", array($row->id, $row->group_id, $row->name, 0, "D", $row->type)))
 						{
-							$this->messages->add('Failed to add Ledger A/C - ' . $row->name . '.', 'error');
+							$this->messages->add('Failed to add Ledger account - ' . $row->name . '.', 'error');
 							$cf_status = FALSE;
 						}
 					}

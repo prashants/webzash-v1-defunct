@@ -95,10 +95,10 @@ class VoucherTypes extends Controller {
 		$data['voucher_type_numberings'] = array('1' => 'Auto', '2' => 'Manual (required)', '3' => 'Manual (optional)');
 		$data['bank_cash_ledger_restrictions'] = array(
 			'1' => 'Unrestricted',
-			'2' => 'Atleast one Bank or Cash A/C must be present on Debit side',
-			'3' => 'Atleast one Bank or Cash A/C must be present on Credit side',
-			'4' => 'Only Bank or Cash A/C can be present on both Debit and Credit side',
-			'5' => 'Only NON Bank or Cash A/C can be present on both Debit and Credit side',
+			'2' => 'Atleast one Bank or Cash Ledger account must be present on Debit side',
+			'3' => 'Atleast one Bank or Cash Ledger account must be present on Credit side',
+			'4' => 'Only Bank or Cash Ledger account can be present on both Debit and Credit side',
+			'5' => 'Only NON Bank or Cash Ledger account can be present on both Debit and Credit side',
 		);
 		$data['stock_voucher_types'] = array(
 			'1' => 'Purchase',
@@ -309,10 +309,10 @@ class VoucherTypes extends Controller {
 		$data['voucher_type_numberings'] = array('1' => 'Auto', '2' => 'Manual (required)', '3' => 'Manual (optional)');
 		$data['bank_cash_ledger_restrictions'] = array(
 			'1' => 'Unrestricted',
-			'2' => 'Atleast one Bank or Cash A/C must be present on Debit side',
-			'3' => 'Atleast one Bank or Cash A/C must be present on Credit side',
-			'4' => 'Only Bank or Cash A/C can be present on both Debit and Credit side',
-			'5' => 'Only NON Bank or Cash A/C can be present on both Debit and Credit side',
+			'2' => 'Atleast one Bank or Cash Ledger account must be present on Debit side',
+			'3' => 'Atleast one Bank or Cash Ledger account must be present on Credit side',
+			'4' => 'Only Bank or Cash Ledger account can be present on both Debit and Credit side',
+			'5' => 'Only NON Bank or Cash Ledger account can be present on both Debit and Credit side',
 		);
 
 		$data['voucher_type_numbering_active'] = $voucher_type_data->numbering;

@@ -79,12 +79,12 @@ class Report extends Controller {
 			$this->db->from('ledgers')->where('id', $data['ledger_id'])->limit(1);
 			if ($this->db->get()->num_rows() < 1)
 			{
-				$this->messages->add('Invalid Ledger A/C.', 'error');
+				$this->messages->add('Invalid Ledger account.', 'error');
 				redirect('report/ledgerst');
 				return;
 			}
 		} else if ($data['ledger_id'] < 0) {
-			$this->messages->add('Invalid Ledger A/C.', 'error');
+			$this->messages->add('Invalid Ledger account.', 'error');
 			redirect('report/ledgerst');
 			return;
 		}
@@ -127,19 +127,19 @@ class Report extends Controller {
 			$this->db->from('ledgers')->where('id', $data['ledger_id'])->where('reconciliation', 1)->limit(1);
 			if ($this->db->get()->num_rows() < 1)
 			{
-				$this->messages->add('Invalid Ledger A/C or Reconciliation is not enabled for the Ledger A/C.', 'error');
+				$this->messages->add('Invalid Ledger account or Reconciliation is not enabled for the Ledger account.', 'error');
 				redirect('report/reconciliation/' . $reconciliation_type);
 				return;
 			}
 		} else if ($data['ledger_id'] < 0) {
-			$this->messages->add('Invalid Ledger A/C.', 'error');
+			$this->messages->add('Invalid Ledger account.', 'error');
 			redirect('report/reconciliation/' . $reconciliation_type);
 			return;
 		}
 
 		if ($_POST)
 		{
-			/* Check if Ledger A/C is changed or reconciliation is updated */
+			/* Check if Ledger account is changed or reconciliation is updated */
 			if ($_POST['submit'] == 'Submit')
 			{
 				$ledger_id = $this->input->post('ledger_id', TRUE);
@@ -614,7 +614,7 @@ class Report extends Controller {
 				if ($pandl > 0)
 				{
 					$total += $pandl;
-					Accountlist::add_row_csv(array("Profit & Loss A/C (Net Profit)", convert_cur($pandl)));
+					Accountlist::add_row_csv(array("Profit & Loss account (Net Profit)", convert_cur($pandl)));
 				}
 			}
 		
@@ -640,7 +640,7 @@ class Report extends Controller {
 				if ($pandl < 0)
 				{
 					$total += -$pandl;
-					Accountlist::add_row_csv(array("Profit & Loss A/C (Net Loss)", convert_cur(-$pandl)));
+					Accountlist::add_row_csv(array("Profit & Loss account (Net Loss)", convert_cur(-$pandl)));
 				}
 			}
 		
@@ -854,14 +854,14 @@ class Report extends Controller {
 			/* Checking for valid ledger id */
 			if ($data['ledger_id'] < 1)
 			{
-				$this->messages->add('Invalid Ledger A/C.', 'error');
+				$this->messages->add('Invalid Ledger account.', 'error');
 				redirect('report/ledgerst');
 				return;
 			}
 			$this->db->from('ledgers')->where('id', $data['ledger_id'])->limit(1);
 			if ($this->db->get()->num_rows() < 1)
 			{
-				$this->messages->add('Invalid Ledger A/C.', 'error');
+				$this->messages->add('Invalid Ledger account.', 'error');
 				redirect('report/ledgerst');
 				return;
 			}
@@ -897,12 +897,12 @@ class Report extends Controller {
 				$this->db->from('ledgers')->where('id', $data['ledger_id'])->where('reconciliation', 1)->limit(1);
 				if ($this->db->get()->num_rows() < 1)
 				{
-					$this->messages->add('Invalid Ledger A/C or Reconciliation is not enabled for the Ledger A/C.', 'error');
+					$this->messages->add('Invalid Ledger account or Reconciliation is not enabled for the Ledger account.', 'error');
 					redirect('report/reconciliation/' . $reconciliation_type);
 					return;
 				}
 			} else if ($data['ledger_id'] < 0) {
-				$this->messages->add('Invalid Ledger A/C.', 'error');
+				$this->messages->add('Invalid Ledger account.', 'error');
 				redirect('report/reconciliation/' . $reconciliation_type);
 				return;
 			}
