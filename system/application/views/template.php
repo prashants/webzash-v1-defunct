@@ -126,15 +126,15 @@ $(document).ready(function() {
 					} else if ($voucher_type_count == 1) {
 						foreach ($voucher_type_all as $id => $row)
 						{
-							echo anchor('voucher/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Vouchers'));
+							echo anchor('voucher/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Entries'));
 						}
 					} else {
-						echo anchor('voucher', 'Vouchers', array('title' => 'Vouchers'));
+						echo anchor('voucher', 'Entry', array('title' => 'Entry'));
 						echo "<ul>";
-						echo "<li>" . anchor('voucher/show/all', 'All', array('title' => 'All Vouchers')) . "</li>";
+						echo "<li>" . anchor('voucher/show/all', 'All', array('title' => 'All Entries')) . "</li>";
 						foreach ($voucher_type_all as $id => $row)
 						{
-							echo "<li>" . anchor('voucher/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Vouchers')) . "</li>";
+							echo "<li>" . anchor('voucher/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Entries')) . "</li>";
 						}
 						echo "</ul>";
 					}

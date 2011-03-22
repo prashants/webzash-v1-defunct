@@ -197,12 +197,12 @@ $(document).ready(function() {
 <?php
 	echo form_open('voucher/edit/' . $current_voucher_type['label'] . "/" . $voucher_id);
 	echo "<p>";
-	echo form_label('Voucher Number', 'voucher_number');
+	echo form_label('Entry Number', 'voucher_number');
 	echo " ";
 	echo $current_voucher_type['prefix'] . form_input($voucher_number) . $current_voucher_type['suffix'];
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo "<span id=\"tooltip-target-1\">";
-	echo form_label('Voucher Date', 'voucher_date');
+	echo form_label('Entry Date', 'voucher_date');
 	echo " ";
 	echo form_input_date_restrict($voucher_date);
 	echo "</span>";

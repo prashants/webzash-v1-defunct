@@ -1,6 +1,6 @@
-<p>Voucher Number : <span class="bold"><?php echo full_voucher_number($voucher_type_id, $cur_voucher->number); ?></span>
+<p>Entry Number : <span class="bold"><?php echo full_voucher_number($voucher_type_id, $cur_voucher->number); ?></span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Voucher Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_voucher->date); ?></span>
+Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_voucher->date); ?></span>
 </p>
 
 <table border=0 cellpadding=2>
