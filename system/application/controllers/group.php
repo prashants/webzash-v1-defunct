@@ -18,7 +18,7 @@ class Group extends Controller {
 	function add()
 	{
 		$this->load->library('validation');
-		$this->template->set('page_title', 'New Group');
+		$this->template->set('page_title', 'Add Group');
 
 		/* Check access */
 		if ( ! check_access('create group'))

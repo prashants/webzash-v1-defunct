@@ -18,7 +18,7 @@ class Ledger extends Controller {
 
 	function add()
 	{
-		$this->template->set('page_title', 'New Ledger');
+		$this->template->set('page_title', 'Add Ledger');
 
 		/* Check access */
 		if ( ! check_access('create ledger'))
