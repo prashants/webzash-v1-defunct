@@ -1,8 +1,8 @@
 <?php
 
-class StockItem extends Controller {
+class Item extends Controller {
 
-	function StockItem()
+	function Item()
 	{
 		parent::Controller();
 		$this->load->model('Stock_Unit_model');
@@ -13,13 +13,13 @@ class StockItem extends Controller {
 
 	function index()
 	{
-		redirect('inventory/stockitem/add');
+		redirect('inventory/item/add');
 		return;
 	}
 
 	function add()
 	{
-		$this->template->set('page_title', 'New Stock Item');
+		$this->template->set('page_title', 'Add Inventory Item');
 
 		/* Check access */
 		if ( ! check_access('create stock item'))
@@ -84,9 +84,9 @@ class StockItem extends Controller {
 		$data['stock_item_group_active'] = 0;
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_item_name', 'Stock item name', 'trim|required|min_length[2]|max_length[100]|unique[stock_items.name]');
-		$this->form_validation->set_rules('stock_item_group', 'Stock group', 'trim|required|is_natural');
-		$this->form_validation->set_rules('stock_item_unit', 'Stock unit', 'trim|required|is_natural');
+		$this->form_validation->set_rules('stock_item_name', 'Inventory item name', 'trim|required|min_length[2]|max_length[100]|unique[stock_items.name]');
+		$this->form_validation->set_rules('stock_item_group', 'Inventory group', 'trim|required|is_natural');
+		$this->form_validation->set_rules('stock_item_unit', 'Inventory unit', 'trim|required|is_natural');
 		$this->form_validation->set_rules('stock_item_costing_method', 'Costing method', 'trim|required|is_natural');
 		$this->form_validation->set_rules('stock_item_op_quantity', 'Opening Balance Quantity', 'trim|quantity');
 		$this->form_validation->set_rules('stock_item_op_rate_per_unit', 'Opening Balance Rate per unit', 'trim|currency');
@@ -109,7 +109,7 @@ class StockItem extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('template', 'inventory/stockitem/add', $data);
+			$this->template->load('template', 'inventory/item/add', $data);
 			return;
 		}
 		else
@@ -127,8 +127,8 @@ class StockItem extends Controller {
 			$this->db->select('id')->from('stock_groups')->where('id', $data_stock_item_group_id);
 			if ($this->db->get()->num_rows() < 1)
 			{
-				$this->messages->add('Invalid stock group.', 'error');
-				$this->template->load('template', 'inventory/stockitem/add', $data);
+				$this->messages->add('Invalid inventory group.', 'error');
+				$this->template->load('template', 'inventory/item/add', $data);
 				return;
 			}
 
@@ -136,8 +136,8 @@ class StockItem extends Controller {
 			$this->db->select('id')->from('stock_units')->where('id', $data_stock_item_unit_id);
 			if ($this->db->get()->num_rows() < 1)
 			{
-				$this->messages->add('Invalid stock unit.', 'error');
-				$this->template->load('template', 'inventory/stockitem/add', $data);
+				$this->messages->add('Invalid inventory unit.', 'error');
+				$this->template->load('template', 'inventory/item/add', $data);
 				return;
 			}
 
@@ -158,14 +158,14 @@ class StockItem extends Controller {
 			if ( ! $this->db->insert('stock_items', $insert_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding Stock Item - ' . $data_stock_item_name . '.', 'error');
-				$this->logger->write_message("error", "Error adding Stock Item named " . $data_stock_item_name);
-				$this->template->load('template', 'inventory/stockitem/add', $data);
+				$this->messages->add('Error addding Inventory Item - ' . $data_stock_item_name . '.', 'error');
+				$this->logger->write_message("error", "Error adding Inventory Item named " . $data_stock_item_name);
+				$this->template->load('template', 'inventory/item/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Added Stock Item - ' . $data_stock_item_name . '.', 'success');
-				$this->logger->write_message("success", "Added Stock Item named " . $data_stock_item_name);
+				$this->messages->add('Added Inventory Item - ' . $data_stock_item_name . '.', 'success');
+				$this->logger->write_message("success", "Added Inventory Item named " . $data_stock_item_name);
 				redirect('inventory/account');
 				return;
 			}
@@ -175,7 +175,7 @@ class StockItem extends Controller {
 
 	function edit($id)
 	{
-		$this->template->set('page_title', 'Edit Stock Item');
+		$this->template->set('page_title', 'Edit Inventory Item');
 
 		/* Check access */
 		if ( ! check_access('edit stock item'))
@@ -197,7 +197,7 @@ class StockItem extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->messages->add('Invalid Stock Item.', 'error');
+			$this->messages->add('Invalid Inventory Item.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -207,7 +207,7 @@ class StockItem extends Controller {
 		$stock_item_data_q = $this->db->get();
 		if ($stock_item_data_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Stock Item.', 'error');
+			$this->messages->add('Invalid Inventory Item.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -261,9 +261,9 @@ class StockItem extends Controller {
 		$data['stock_item_id'] = $id;
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_item_name', 'Stock item name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[stock_items.name.' . $id . ']');
-		$this->form_validation->set_rules('stock_item_group', 'Stock group', 'trim|required|is_natural');
-		$this->form_validation->set_rules('stock_item_unit', 'Stock unit', 'trim|required|is_natural');
+		$this->form_validation->set_rules('stock_item_name', 'Inventory item name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[stock_items.name.' . $id . ']');
+		$this->form_validation->set_rules('stock_item_group', 'Inventory group', 'trim|required|is_natural');
+		$this->form_validation->set_rules('stock_item_unit', 'Inventory unit', 'trim|required|is_natural');
 		$this->form_validation->set_rules('stock_item_costing_method', 'Costing method', 'trim|required|is_natural');
 		$this->form_validation->set_rules('stock_item_op_quantity', 'Opening Balance Quantity', 'trim|quantity');
 		$this->form_validation->set_rules('stock_item_op_rate_per_unit', 'Opening Balance Rate per unit', 'trim|currency');
@@ -286,7 +286,7 @@ class StockItem extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('template', 'inventory/stockitem/edit', $data);
+			$this->template->load('template', 'inventory/item/edit', $data);
 			return;
 		}
 		else
@@ -305,8 +305,8 @@ class StockItem extends Controller {
 			$this->db->select('id')->from('stock_groups')->where('id', $data_stock_item_group_id);
 			if ($this->db->get()->num_rows() < 1)
 			{
-				$this->messages->add('Invalid stock group.', 'error');
-				$this->template->load('template', 'inventory/stockitem/add', $data);
+				$this->messages->add('Invalid inventory group.', 'error');
+				$this->template->load('template', 'inventory/item/add', $data);
 				return;
 			}
 
@@ -315,7 +315,7 @@ class StockItem extends Controller {
 			if ($this->db->get()->num_rows() < 1)
 			{
 				$this->messages->add('Invalid stock unit.', 'error');
-				$this->template->load('template', 'inventory/stockitem/add', $data);
+				$this->template->load('template', 'inventory/item/add', $data);
 				return;
 			}
 
@@ -336,14 +336,14 @@ class StockItem extends Controller {
 			if ( ! $this->db->where('id', $data_id)->update('stock_items', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating Stock Item - ' . $data_stock_item_name . '.', 'error');
-				$this->logger->write_message("error", "Error updating Stock Item named " . $data_stock_item_name . " [id:" . $data_id . "]");
-				$this->template->load('template', 'inventory/stockgroup/edit', $data);
+				$this->messages->add('Error updating Inventory Item - ' . $data_stock_item_name . '.', 'error');
+				$this->logger->write_message("error", "Error updating Inventory Item named " . $data_stock_item_name . " [id:" . $data_id . "]");
+				$this->template->load('template', 'inventory/item/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Updated Stock Item - ' . $data_stock_item_name . '.', 'success');
-				$this->logger->write_message("success", "Updated Stock Item named " . $data_stock_item_name . " [id:" . $data_id . "]");
+				$this->messages->add('Updated Inventory Item - ' . $data_stock_item_name . '.', 'success');
+				$this->logger->write_message("success", "Updated Inventory Item named " . $data_stock_item_name . " [id:" . $data_id . "]");
 				redirect('inventory/account');
 				return;
 			}
@@ -373,7 +373,7 @@ class StockItem extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->messages->add('Invalid Stock Item.', 'error');
+			$this->messages->add('Invalid Inventory Item.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -383,7 +383,7 @@ class StockItem extends Controller {
 		$stock_item_q = $this->db->get();
 		if ($stock_item_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Stock Item.', 'error');
+			$this->messages->add('Invalid Inventory Item.', 'error');
 			redirect('inventory/account');
 			return;
 		} else {
@@ -395,14 +395,14 @@ class StockItem extends Controller {
 		if ( ! $this->db->delete('stock_items', array('id' => $id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Stock Item - ' . $stock_item_data->name . '.', 'error');
-			$this->logger->write_message("error", "Error deleting Stock Item named " . $stock_item_data->name . " [id:" . $id . "]");
+			$this->messages->add('Error deleting Inventory Item - ' . $stock_item_data->name . '.', 'error');
+			$this->logger->write_message("error", "Error deleting Inventory Item named " . $stock_item_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		} else {
 			$this->db->trans_complete();
-			$this->messages->add('Deleted Stock Item - ' . $stock_item_data->name . '.', 'success');
-			$this->logger->write_message("success", "Deleted Stock Item named " . $stock_item_data->name . " [id:" . $id . "]");
+			$this->messages->add('Deleted Inventory Item - ' . $stock_item_data->name . '.', 'success');
+			$this->logger->write_message("success", "Deleted Inventory Item named " . $stock_item_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		}
@@ -430,5 +430,5 @@ class StockItem extends Controller {
 	}
 }
 
-/* End of file stockitem.php */
-/* Location: ./system/application/controllers/inventory/stockitem.php */
+/* End of file item.php */
+/* Location: ./system/application/controllers/inventory/item.php */

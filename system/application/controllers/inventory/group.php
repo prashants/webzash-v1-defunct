@@ -1,8 +1,8 @@
 <?php
 
-class StockGroup extends Controller {
+class Group extends Controller {
 
-	function StockGroup()
+	function Group()
 	{
 		parent::Controller();
 		$this->load->model('Stock_Group_model');
@@ -11,13 +11,13 @@ class StockGroup extends Controller {
 
 	function index()
 	{
-		redirect('inventory/stockgroup/add');
+		redirect('inventory/group/add');
 		return;
 	}
 
 	function add()
 	{
-		$this->template->set('page_title', 'New Stock Group');
+		$this->template->set('page_title', 'Add Inventory Group');
 
 		/* Check access */
 		if ( ! check_access('create stock group'))
@@ -47,8 +47,8 @@ class StockGroup extends Controller {
 		$data['stock_group_parent_active'] = 0;
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_group_name', 'Stock group name', 'trim|required|min_length[2]|max_length[100]|unique[stock_groups.name]');
-		$this->form_validation->set_rules('stock_group_parent', 'Parent stock group', 'trim|required|is_natural');
+		$this->form_validation->set_rules('stock_group_name', 'Inventory group name', 'trim|required|min_length[2]|max_length[100]|unique[stock_groups.name]');
+		$this->form_validation->set_rules('stock_group_parent', 'Parent inventory group', 'trim|required|is_natural');
 
 		/* Re-populating form */
 		if ($_POST)
@@ -60,7 +60,7 @@ class StockGroup extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('template', 'inventory/stockgroup/add', $data);
+			$this->template->load('template', 'inventory/group/add', $data);
 			return;
 		}
 		else
@@ -74,8 +74,8 @@ class StockGroup extends Controller {
 				$this->db->select('id')->from('stock_groups')->where('id', $data_stock_group_parent_id);
 				if ($this->db->get()->num_rows() < 1)
 				{
-					$this->messages->add('Invalid parent stock group.', 'error');
-					$this->template->load('template', 'inventory/stockgroup/add', $data);
+					$this->messages->add('Invalid parent inventory group.', 'error');
+					$this->template->load('template', 'inventory/group/add', $data);
 					return;
 				}
 			}
@@ -88,14 +88,14 @@ class StockGroup extends Controller {
 			if ( ! $this->db->insert('stock_groups', $insert_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding Stock Group - ' . $data_stock_group_name . '.', 'error');
-				$this->logger->write_message("error", "Error adding Stock Group named " . $data_stock_group_name);
-				$this->template->load('template', 'inventory/stockgroup/add', $data);
+				$this->messages->add('Error addding Inventory Group - ' . $data_stock_group_name . '.', 'error');
+				$this->logger->write_message("error", "Error adding Inventory Group named " . $data_stock_group_name);
+				$this->template->load('template', 'inventory/group/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Added Stock Group - ' . $data_stock_group_name . '.', 'success');
-				$this->logger->write_message("success", "Added Stock Group named " . $data_stock_group_name);
+				$this->messages->add('Added Inventory Group - ' . $data_stock_group_name . '.', 'success');
+				$this->logger->write_message("success", "Added Inventory Group named " . $data_stock_group_name);
 				redirect('inventory/account');
 				return;
 			}
@@ -105,7 +105,7 @@ class StockGroup extends Controller {
 
 	function edit($id)
 	{
-		$this->template->set('page_title', 'Edit Stock Group');
+		$this->template->set('page_title', 'Edit Inventory Group');
 
 		/* Check access */
 		if ( ! check_access('edit stock group'))
@@ -127,7 +127,7 @@ class StockGroup extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->messages->add('Invalid Stock Group.', 'error');
+			$this->messages->add('Invalid Inventory Group.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -137,7 +137,7 @@ class StockGroup extends Controller {
 		$stock_group_data_q = $this->db->get();
 		if ($stock_group_data_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Stock Group.', 'error');
+			$this->messages->add('Invalid Inventory Group.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -156,8 +156,8 @@ class StockGroup extends Controller {
 		$data['stock_group_id'] = $id;
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_group_name', 'Stock group name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[stock_groups.name.' . $id . ']');
-		$this->form_validation->set_rules('stock_group_parent', 'Parent stock group', 'trim|required|is_natural');
+		$this->form_validation->set_rules('stock_group_name', 'Inventory group name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[stock_groups.name.' . $id . ']');
+		$this->form_validation->set_rules('stock_group_parent', 'Parent inventory group', 'trim|required|is_natural');
 
 		/* Re-populating form */
 		if ($_POST)
@@ -169,7 +169,7 @@ class StockGroup extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('template', 'inventory/stockgroup/edit', $data);
+			$this->template->load('template', 'inventory/group/edit', $data);
 			return;
 		}
 		else
@@ -184,8 +184,8 @@ class StockGroup extends Controller {
 				$this->db->select('id')->from('stock_groups')->where('id', $data_stock_group_parent_id);
 				if ($this->db->get()->num_rows() < 1)
 				{
-					$this->messages->add('Invalid parent stock group.', 'error');
-					$this->template->load('template', 'inventory/stockgroup/edit', $data);
+					$this->messages->add('Invalid parent inventory group.', 'error');
+					$this->template->load('template', 'inventory/group/edit', $data);
 					return;
 				}
 			}
@@ -195,8 +195,8 @@ class StockGroup extends Controller {
 			{
 				if ($data_stock_group_parent_id == $id)
 				{
-					$this->messages->add('Invalid Parent stock group', 'error');
-					$this->template->load('template', 'inventory/stockgroup/edit', $data);
+					$this->messages->add('Invalid Parent inventory group', 'error');
+					$this->template->load('template', 'inventory/group/edit', $data);
 					return;
 				}
 			}
@@ -209,14 +209,14 @@ class StockGroup extends Controller {
 			if ( ! $this->db->where('id', $data_id)->update('stock_groups', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating Stock Group - ' . $data_stock_group_name . '.', 'error');
-				$this->logger->write_message("error", "Error updating Stock Group named " . $data_stock_group_name . " [id:" . $data_id . "]");
-				$this->template->load('template', 'inventory/stockgroup/edit', $data);
+				$this->messages->add('Error updating Inventory Group - ' . $data_stock_group_name . '.', 'error');
+				$this->logger->write_message("error", "Error updating Inventory Group named " . $data_stock_group_name . " [id:" . $data_id . "]");
+				$this->template->load('template', 'inventory/group/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Updated Stock Group - ' . $data_stock_group_name . '.', 'success');
-				$this->logger->write_message("success", "Updated Stock Group named " . $data_stock_group_name . " [id:" . $data_id . "]");
+				$this->messages->add('Updated Inventory Group - ' . $data_stock_group_name . '.', 'success');
+				$this->logger->write_message("success", "Updated Inventory Group named " . $data_stock_group_name . " [id:" . $data_id . "]");
 				redirect('inventory/account');
 				return;
 			}
@@ -246,7 +246,7 @@ class StockGroup extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->messages->add('Invalid Stock Group.', 'error');
+			$this->messages->add('Invalid Inventory Group.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -254,14 +254,14 @@ class StockGroup extends Controller {
 		$this->db->from('stock_groups')->where('parent_id', $id);
 		if ($this->db->get()->num_rows() > 0)
 		{
-			$this->messages->add('Cannot delete non-empty Stock Group.', 'error');
+			$this->messages->add('Cannot delete non-empty Inventory Group.', 'error');
 			redirect('inventory/account');
 			return;
 		}
 		$this->db->from('stock_items')->where('group_id', $id);
 		if ($this->db->get()->num_rows() > 0)
 		{
-			$this->messages->add('Cannot delete non-empty Stock Group.', 'error');
+			$this->messages->add('Cannot delete non-empty Inventory Group.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -271,7 +271,7 @@ class StockGroup extends Controller {
 		$stock_group_q = $this->db->get();
 		if ($stock_group_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Stock Group.', 'error');
+			$this->messages->add('Invalid Inventory Group.', 'error');
 			redirect('inventory/account');
 			return;
 		} else {
@@ -283,14 +283,14 @@ class StockGroup extends Controller {
 		if ( ! $this->db->delete('stock_groups', array('id' => $id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Stock Group - ' . $stock_group_data->name . '.', 'error');
-			$this->logger->write_message("error", "Error deleting Stock Group named " . $stock_group_data->name . " [id:" . $id . "]");
+			$this->messages->add('Error deleting Inventory Group - ' . $stock_group_data->name . '.', 'error');
+			$this->logger->write_message("error", "Error deleting Inventory Group named " . $stock_group_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		} else {
 			$this->db->trans_complete();
-			$this->messages->add('Deleted Stock Group - ' . $stock_group_data->name . '.', 'success');
-			$this->logger->write_message("success", "Deleted Stock Group named " . $stock_group_data->name . " [id:" . $id . "]");
+			$this->messages->add('Deleted Inventory Group - ' . $stock_group_data->name . '.', 'success');
+			$this->logger->write_message("success", "Deleted Inventory Group named " . $stock_group_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		}
@@ -298,5 +298,5 @@ class StockGroup extends Controller {
 	}
 }
 
-/* End of file stockgroup.php */
-/* Location: ./system/application/controllers/inventory/stockgroup.php */
+/* End of file group.php */
+/* Location: ./system/application/controllers/inventory/group.php */

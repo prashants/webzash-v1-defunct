@@ -1,11 +1,11 @@
-<p>Voucher Number : <span class="bold"><?php echo full_voucher_number($voucher_type_id, $cur_voucher->number); ?></span>
+<p>Entry Number : <span class="bold"><?php echo full_voucher_number($voucher_type_id, $cur_voucher->number); ?></span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Voucher Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_voucher->date); ?></span>
+Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_voucher->date); ?></span>
 </p>
 
 <h3>Source</h3>
 <table border=0 cellpadding=5 class="simple-table voucher-view-table">
-<thead><tr><th>Stock Item</th><th>Quantity</th><th>Rate</th><th>Total</th></tr></thead>
+<thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate</th><th>Total</th></tr></thead>
 <?php
 $stock_total = 0;
 foreach ($cur_voucher_source_stock_items->result() as $row)
@@ -24,7 +24,7 @@ foreach ($cur_voucher_source_stock_items->result() as $row)
 
 <h3>Destination</h3>
 <table border=0 cellpadding=5 class="simple-table voucher-view-table">
-<thead><tr><th>Stock Item</th><th>Quantity</th><th>Rate</th><th>Total</th></tr></thead>
+<thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate</th><th>Total</th></tr></thead>
 <?php
 $stock_total = 0;
 foreach ($cur_voucher_dest_stock_items->result() as $row)
@@ -57,15 +57,15 @@ else
 ?>
 </p>
 <?php
-	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' .  $current_voucher_type['name'] . ' Vouchers'));
+	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' .  $current_voucher_type['name'] . ' Entries'));
 	echo " | ";
-	echo anchor('inventory/stocktransfer/edit/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Edit', array('title' => 'Edit ' . $current_voucher_type['name'] . ' Voucher'));
+	echo anchor('inventory/transfer/edit/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Edit', array('title' => 'Edit ' . $current_voucher_type['name'] . ' Entry'));
 	echo " | ";
-	echo anchor('inventory/stocktransfer/delete/' . $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Delete', array('class' => "confirmClick", 'title' => "Delete voucher", 'title' => 'Delete this ' . $current_voucher_type['name'] . ' Voucher'));
+	echo anchor('inventory/transfer/delete/' . $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Delete', array('class' => "confirmClick", 'title' => "Delete Entry", 'title' => 'Delete this ' . $current_voucher_type['name'] . ' Entry'));
 	echo " | ";
-	echo anchor_popup('inventory/stocktransfer/printpreview/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Print', array('title' => 'Print this ' . $current_voucher_type['name'] . ' Voucher', 'width' => '600', 'height' => '600'));
+	echo anchor_popup('inventory/transfer/printpreview/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Print', array('title' => 'Print this ' . $current_voucher_type['name'] . ' Entry', 'width' => '600', 'height' => '600'));
 	echo " | ";
-	echo anchor_popup('inventory/stocktransfer/email/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Email', array('title' => 'Email this ' . $current_voucher_type['name'] . ' Voucher', 'width' => '400', 'height' => '200'));
+	echo anchor_popup('inventory/transfer/email/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Email', array('title' => 'Email this ' . $current_voucher_type['name'] . ' Entry', 'width' => '400', 'height' => '200'));
 	echo " | ";
-	echo anchor('inventory/stocktransfer/download/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Download', array('title' => "Download voucher", 'title' => 'Download this ' . $current_voucher_type['name'] . ' Voucher'));
+	echo anchor('inventory/transfer/download/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Download', array('title' => "Download Entry", 'title' => 'Download this ' . $current_voucher_type['name'] . ' Entry'));
 

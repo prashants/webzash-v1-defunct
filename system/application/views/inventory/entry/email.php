@@ -36,7 +36,7 @@
 		echo "</div>";
 	}
 
-	echo form_open('inventory/stockvoucher/email/' . $current_voucher_type['label'] . "/" . $voucher_id);
+	echo form_open('inventory/entry/email/' . $current_voucher_type['label'] . "/" . $voucher_id);
 
 	echo "Emailing " .  $current_voucher_type['name'] . " Entry No. " . $voucher_number . "<br />";
 

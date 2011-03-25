@@ -39,7 +39,7 @@ Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_vouche
 </table>
 
 <table border=0 cellpadding=5 class="simple-table voucher-view-table">
-<thead><tr><th>Stock Item</th><th>Quantity</th><th>Rate</th><th>Discount</th><th>Total</th></tr></thead>
+<thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate</th><th>Discount</th><th>Total</th></tr></thead>
 <?php
 $stock_total = 0;
 foreach ($cur_voucher_stock_items->result() as $row)
@@ -107,13 +107,13 @@ else
 <?php
 	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' .  $current_voucher_type['name'] . ' Vouchers'));
 	echo " | ";
-	echo anchor('inventory/stockvoucher/edit/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Edit', array('title' => 'Edit ' . $current_voucher_type['name'] . ' Voucher'));
+	echo anchor('inventory/entry/edit/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Edit', array('title' => 'Edit ' . $current_voucher_type['name'] . ' Voucher'));
 	echo " | ";
-	echo anchor('inventory/stockvoucher/delete/' . $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Delete', array('class' => "confirmClick", 'title' => "Delete voucher", 'title' => 'Delete this ' . $current_voucher_type['name'] . ' Voucher'));
+	echo anchor('inventory/entry/delete/' . $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Delete', array('class' => "confirmClick", 'title' => "Delete voucher", 'title' => 'Delete this ' . $current_voucher_type['name'] . ' Voucher'));
 	echo " | ";
-	echo anchor_popup('inventory/stockvoucher/printpreview/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Print', array('title' => 'Print this ' . $current_voucher_type['name'] . ' Voucher', 'width' => '600', 'height' => '600'));
+	echo anchor_popup('inventory/entry/printpreview/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Print', array('title' => 'Print this ' . $current_voucher_type['name'] . ' Voucher', 'width' => '600', 'height' => '600'));
 	echo " | ";
-	echo anchor_popup('inventory/stockvoucher/email/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Email', array('title' => 'Email this ' . $current_voucher_type['name'] . ' Voucher', 'width' => '400', 'height' => '200'));
+	echo anchor_popup('inventory/entry/email/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Email', array('title' => 'Email this ' . $current_voucher_type['name'] . ' Voucher', 'width' => '400', 'height' => '200'));
 	echo " | ";
-	echo anchor('inventory/stockvoucher/download/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Download', array('title' => "Download voucher", 'title' => 'Download this ' . $current_voucher_type['name'] . ' Voucher'));
+	echo anchor('inventory/entry/download/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Download', array('title' => "Download voucher", 'title' => 'Download this ' . $current_voucher_type['name'] . ' Voucher'));
 

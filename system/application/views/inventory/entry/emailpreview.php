@@ -49,7 +49,7 @@
 
 	<table border=1 cellpadding=6>
 		<thead>
-			<tr><th align="left">Stock Item</th><th>Quantity</th><th>Rate</th><th>Discount</th><th>Total</th></tr>
+			<tr><th align="left">Inventory Item</th><th>Quantity</th><th>Rate</th><th>Discount</th><th>Total</th></tr>
 		</thead>
 		<tbody>
 			<?php

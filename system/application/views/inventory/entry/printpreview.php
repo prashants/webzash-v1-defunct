@@ -54,7 +54,7 @@
 
 	<table id="print-voucher-table">
 		<thead>
-			<tr class="tr-title"><th>Stock Item</th><th>Quantity</th><th>Rate</th><th>Discount</th><th>Total</th></tr>
+			<tr class="tr-title"><th>Inventory Item</th><th>Quantity</th><th>Rate</th><th>Discount</th><th>Total</th></tr>
 		</thead>
 		<tbody>
 		<?php

@@ -4,7 +4,7 @@ $(document).ready(function() {
 
 	var firstTime = true;
 
-	/************************ SOURCE STOCK ITEM ***************************/
+	/********************** SOURCE INVENTORY ITEM *************************/
 	/* Stock Item dropdown changed */
 	$('.stock-item-dropdown').live('change', function() {
 		if ($(this).val() == "0") {
@@ -70,11 +70,11 @@ $(document).ready(function() {
 
 		if ((!isNaN(item_quantity)) && (!isNaN(item_rate_per_unit)))
 		{
-			/* calculating total amount for each stock item */
+			/* calculating total amount for each inventory item */
 			var item_amount;
 			item_amount = (item_quantity * item_rate_per_unit);
 
-			/* displaying total amount for each stock item */
+			/* displaying total amount for each inventory item */
 			itemrow.next().next().next().children().val(item_amount);
 			itemrow.next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
 		}
@@ -85,7 +85,7 @@ $(document).ready(function() {
 		$('.source-recalculate').trigger('click');
 	});
 
-	/* calculating stock total */
+	/* calculating inventory total */
 	var calculateSourceStockTotal = function() {
 		var stock_total = 0;
 		$('table td .source-amount-stock-item').each(function(index) {
@@ -99,13 +99,13 @@ $(document).ready(function() {
 		return stock_total;
 	}
 
-	/* Add stock item row */
+	/* Add inventory item row */
 	$('table td .addstockrow').live('click', function() {
 		var cur_obj = this;
 		var add_image_url = $(cur_obj).attr('src');
 		$(cur_obj).attr('src', <?php echo '\'' . asset_url() . 'images/icons/ajax.gif' . '\''; ?>);
 		$.ajax({
-			url: <?php echo '\'' . site_url('inventory/stocktransfer/addstockrow/source') . '\''; ?>,
+			url: <?php echo '\'' . site_url('inventory/transfer/addstockrow/source') . '\''; ?>,
 			success: function(data) {
 				$(cur_obj).parent().parent().after(data);
 				$(cur_obj).attr('src', add_image_url);
@@ -114,7 +114,7 @@ $(document).ready(function() {
 		});
 	});
 
-	/* Delete stock item row */
+	/* Delete inventory item row */
 	$('table td .deletestockrow').live('click', function() {
 		$(this).parent().parent().remove();
 	});
@@ -131,8 +131,8 @@ $(document).ready(function() {
 			$("table tr #source-total").css("background-color", "#FFE9E8");
 	});
 
-	/************************** DEST STOCK ITEM ***************************/
-	/* Stock Item dropdown changed */
+	/************************ DEST INVENTORY ITEM *************************/
+	/* Inventory Item dropdown changed */
 	$('.stock-item-dropdown').live('change', function() {
 		if ($(this).val() == "0") {
 			$(this).parent().next().children().attr('value', "");
@@ -152,7 +152,7 @@ $(document).ready(function() {
 		var rowid = $(this);
 		if (stockid > 0) {
 			$.ajax({
-				url: <?php echo '\'' . site_url('inventory/stockitem/balance') . '/\''; ?> + stockid,
+				url: <?php echo '\'' . site_url('inventory/item/balance') . '/\''; ?> + stockid,
 				success: function(data) {
 					rowid.parent().next().next().next().next().next().next().children().text(data);
 					rowid.parent().next().next().next().next().next().next().children().text(data);
@@ -161,7 +161,7 @@ $(document).ready(function() {
 
 			if (!firstTime) {
 				$.ajax({
-					url: <?php echo '\'' . site_url('inventory/stockitem/sellprice') . '/\''; ?> + stockid,
+					url: <?php echo '\'' . site_url('inventory/item/sellprice') . '/\''; ?> + stockid,
 					success: function(data) {
 						var sell_price = parseFloat(data);
 						if (isNaN(sell_price))
@@ -197,11 +197,11 @@ $(document).ready(function() {
 
 		if ((!isNaN(item_quantity)) && (!isNaN(item_rate_per_unit)))
 		{
-			/* calculating total amount for each stock item */
+			/* calculating total amount for each inventory item */
 			var item_amount;
 			item_amount = (item_quantity * item_rate_per_unit);
 
-			/* displaying total amount for each stock item */
+			/* displaying total amount for each inventory item */
 			itemrow.next().next().next().children().val(item_amount);
 			itemrow.next().next().next().fadeTo('slow', 0.1).fadeTo('slow', 1);
 		}
@@ -212,7 +212,7 @@ $(document).ready(function() {
 		$('.dest-recalculate').trigger('click');
 	});
 
-	/* calculating stock total */
+	/* calculating inventory total */
 	var calculateDestStockTotal = function() {
 		var stock_total = 0;
 		$('table td .dest-amount-stock-item').each(function(index) {
@@ -226,13 +226,13 @@ $(document).ready(function() {
 		return stock_total;
 	}
 
-	/* Add stock item row */
+	/* Add inventory item row */
 	$('table td .addstockrow').live('click', function() {
 		var cur_obj = this;
 		var add_image_url = $(cur_obj).attr('src');
 		$(cur_obj).attr('src', <?php echo '\'' . asset_url() . 'images/icons/ajax.gif' . '\''; ?>);
 		$.ajax({
-			url: <?php echo '\'' . site_url('inventory/stocktransfer/addstockrow/dest') . '\''; ?>,
+			url: <?php echo '\'' . site_url('inventory/transfer/addstockrow/dest') . '\''; ?>,
 			success: function(data) {
 				$(cur_obj).parent().parent().after(data);
 				$(cur_obj).attr('src', add_image_url);
@@ -241,7 +241,7 @@ $(document).ready(function() {
 		});
 	});
 
-	/* Delete stock item row */
+	/* Delete inventory item row */
 	$('table td .deletestockrow').live('click', function() {
 		$(this).parent().parent().remove();
 	});
@@ -265,17 +265,17 @@ $(document).ready(function() {
 </script>
 
 <?php
-	echo form_open('inventory/stocktransfer/edit/' . $current_voucher_type['label'] . '/' . $voucher_id);
+	echo form_open('inventory/transfer/edit/' . $current_voucher_type['label'] . '/' . $voucher_id);
 	echo "<p>";
 	echo "<span id=\"tooltip-target-1\">";
-	echo form_label('Voucher Number', 'voucher_number');
+	echo form_label('Entry Number', 'voucher_number');
 	echo " ";
 	echo $current_voucher_type['prefix'] . form_input($voucher_number) . $current_voucher_type['suffix'];
 	echo "</span>";
-	echo "<span id=\"tooltip-content-1\">Leave Voucher Number empty for auto numbering</span>";
+	echo "<span id=\"tooltip-content-1\">Leave Entry Number empty for auto numbering</span>";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo "<span id=\"tooltip-target-2\">";
-	echo form_label('Voucher Date', 'voucher_date');
+	echo form_label('Entry Date', 'voucher_date');
 	echo " ";
 	echo form_input_date_restrict($voucher_date);
 	echo "</span>";
@@ -284,7 +284,7 @@ $(document).ready(function() {
 
 	echo "<h3>Source</h3>";
 	echo "<table class=\"voucher-table\">";
-	echo "<thead><tr><th>Stock Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
+	echo "<thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
 
 	foreach ($source_stock_item_id as $i => $row)
 	{
@@ -331,7 +331,7 @@ $(document).ready(function() {
 
 	echo "<h3>Destination</h3>";
 	echo "<table class=\"voucher-table\">";
-	echo "<thead><tr><th>Stock Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
+	echo "<thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
 
 	foreach ($dest_stock_item_id as $i => $row)
 	{
@@ -394,7 +394,7 @@ $(document).ready(function() {
 	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
-	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' . $current_voucher_type['name'] . ' Vouchers'));
+	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' . $current_voucher_type['name'] . ' Entries'));
 	echo "</p>";
 
 	echo form_close();

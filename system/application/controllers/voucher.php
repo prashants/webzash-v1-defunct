@@ -53,9 +53,9 @@ class Voucher extends Controller {
 					$this->template->set('nav_links', array('voucher/add/' . $current_voucher_type['label'] => 'Add ' . $current_voucher_type['name'] . ' Entry'));
 				else
 					if ($current_voucher_type['stock_voucher_type'] == '3')
-						$this->template->set('nav_links', array('inventory/stocktransfer/add/' . $current_voucher_type['label'] => 'Add ' . $current_voucher_type['name'] . ' Entry'));
+						$this->template->set('nav_links', array('inventory/transfer/add/' . $current_voucher_type['label'] => 'Add ' . $current_voucher_type['name'] . ' Entry'));
 					else
-						$this->template->set('nav_links', array('inventory/stockvoucher/add/' . $current_voucher_type['label'] => 'Add ' . $current_voucher_type['name'] . ' Entry'));
+						$this->template->set('nav_links', array('inventory/entry/add/' . $current_voucher_type['label'] => 'Add ' . $current_voucher_type['name'] . ' Entry'));
 			}
 		}
 

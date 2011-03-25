@@ -25,7 +25,7 @@ $(document).ready(function() {
 		var rowid = $(this);
 		if (stockid > 0) {
 			$.ajax({
-				url: <?php echo '\'' . site_url('inventory/stockitem/balance') . '/\''; ?> + stockid,
+				url: <?php echo '\'' . site_url('inventory/item/balance') . '/\''; ?> + stockid,
 				success: function(data) {
 					rowid.parent().next().next().next().next().next().next().next().children().text(data);
 					rowid.parent().next().next().next().next().next().next().next().children().text(data);
@@ -33,7 +33,7 @@ $(document).ready(function() {
 			});
 
 			$.ajax({
-				url: <?php echo '\'' . site_url('inventory/stockitem/sellprice') . '/\''; ?> + stockid,
+				url: <?php echo '\'' . site_url('inventory/item/sellprice') . '/\''; ?> + stockid,
 				success: function(data) {
 					var sell_price = parseFloat(data);
 					if (isNaN(sell_price))
@@ -125,7 +125,7 @@ $(document).ready(function() {
 		var add_image_url = $(cur_obj).attr('src');
 		$(cur_obj).attr('src', <?php echo '\'' . asset_url() . 'images/icons/ajax.gif' . '\''; ?>);
 		$.ajax({
-			url: <?php echo '\'' . site_url('inventory/stockvoucher/addstockrow') . '\''; ?>,
+			url: <?php echo '\'' . site_url('inventory/entry/addstockrow') . '\''; ?>,
 			success: function(data) {
 				$(cur_obj).parent().parent().after(data);
 				$(cur_obj).attr('src', add_image_url);
@@ -269,7 +269,7 @@ $(document).ready(function() {
 		var add_image_url = $(cur_obj).attr('src');
 		$(cur_obj).attr('src', <?php echo '\'' . asset_url() . 'images/icons/ajax.gif' . '\''; ?>);
 		$.ajax({
-			url: <?php echo '\'' . site_url('inventory/stockvoucher/addrow') . '\''; ?>,
+			url: <?php echo '\'' . site_url('inventory/entry/addrow') . '\''; ?>,
 			success: function(data) {
 				$(cur_obj).parent().parent().after(data);
 				$(cur_obj).attr('src', add_image_url);
@@ -287,7 +287,7 @@ $(document).ready(function() {
 </script>
 
 <?php
-	echo form_open('inventory/stockvoucher/add/' . $current_voucher_type['label']);
+	echo form_open('inventory/entry/add/' . $current_voucher_type['label']);
 	echo "<p>";
 	echo "<span id=\"tooltip-target-1\">";
 	echo form_label('Entry Number', 'voucher_number');
@@ -354,7 +354,7 @@ $(document).ready(function() {
 	echo "<p></p>";
 
 	echo "<table class=\"voucher-table\">";
-	echo "<thead><tr><th>Stock Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Discount %</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
+	echo "<thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Discount %</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
 
 	foreach ($stock_item_id as $i => $row)
 	{

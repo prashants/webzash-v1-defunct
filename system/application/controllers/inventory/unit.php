@@ -1,8 +1,8 @@
 <?php
 
-class StockUnit extends Controller {
+class Unit extends Controller {
 
-	function StockUnit()
+	function Unit()
 	{
 		parent::Controller();
 		return;
@@ -10,13 +10,13 @@ class StockUnit extends Controller {
 
 	function index()
 	{
-		redirect('inventory/stockunit/add');
+		redirect('inventory/unit/add');
 		return;
 	}
 
 	function add()
 	{
-		$this->template->set('page_title', 'New Stock Unit');
+		$this->template->set('page_title', 'Add Inventory Unit');
 
 		/* Check access */
 		if ( ! check_access('create stock unit'))
@@ -58,8 +58,8 @@ class StockUnit extends Controller {
 		);
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_unit_symbol', 'Stock Unit Symbol', 'trim|required|min_length[2]|max_length[15]|unique[stock_units.symbol]');
-		$this->form_validation->set_rules('stock_unit_name', 'Stock Unit Name', 'trim|required|min_length[2]|max_length[100]|unique[stock_units.name]');
+		$this->form_validation->set_rules('stock_unit_symbol', 'Inventory Unit Symbol', 'trim|required|min_length[2]|max_length[15]|unique[stock_units.symbol]');
+		$this->form_validation->set_rules('stock_unit_name', 'Inventory Unit Name', 'trim|required|min_length[2]|max_length[100]|unique[stock_units.name]');
 		$this->form_validation->set_rules('stock_unit_decimal', 'Decimal Places', 'trim|required|max_length[1]|is_natural');
 
 		/* Re-populating form */
@@ -73,7 +73,7 @@ class StockUnit extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('template', 'inventory/stockunit/add', $data);
+			$this->template->load('template', 'inventory/unit/add', $data);
 			return;
 		}
 		else
@@ -91,14 +91,14 @@ class StockUnit extends Controller {
 			if ( ! $this->db->insert('stock_units', $insert_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding Stock Unit - ' . $data_stock_unit_name . '.', 'error');
-				$this->logger->write_message("error", "Error adding Stock Unit named " . $data_stock_unit_name);
-				$this->template->load('template', 'inventory/stockunit/add', $data);
+				$this->messages->add('Error addding Inventory Unit - ' . $data_stock_unit_name . '.', 'error');
+				$this->logger->write_message("error", "Error adding Inventory Unit named " . $data_stock_unit_name);
+				$this->template->load('template', 'inventory/unit/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Added Stock Unit - ' . $data_stock_unit_name . '.', 'success');
-				$this->logger->write_message("success", "Added Stock Unit named " . $data_stock_unit_name);
+				$this->messages->add('Added Inventory Unit - ' . $data_stock_unit_name . '.', 'success');
+				$this->logger->write_message("success", "Added Inventory Unit named " . $data_stock_unit_name);
 				redirect('inventory/account');
 				return;
 			}
@@ -108,7 +108,7 @@ class StockUnit extends Controller {
 
 	function edit($id)
 	{
-		$this->template->set('page_title', 'Edit Stock Unit');
+		$this->template->set('page_title', 'Edit Inventory Unit');
 
 		/* Check access */
 		if ( ! check_access('edit stock unit'))
@@ -130,7 +130,7 @@ class StockUnit extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->messages->add('Invalid Stock Unit.', 'error');
+			$this->messages->add('Invalid Inventory Unit.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -140,7 +140,7 @@ class StockUnit extends Controller {
 		$stock_unit_data_q = $this->db->get();
 		if ($stock_unit_data_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Stock Unit.', 'error');
+			$this->messages->add('Invalid Inventory Unit.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -171,8 +171,8 @@ class StockUnit extends Controller {
 		$data['stock_unit_id'] = $id;
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_unit_symbol', 'Stock Unit Symbol', 'trim|required|min_length[2]|max_length[15]|uniquewithid[stock_units.symbol.' . $id . ']');
-		$this->form_validation->set_rules('stock_unit_name', 'Stock Unit Name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[stock_units.name.' . $id . ']');
+		$this->form_validation->set_rules('stock_unit_symbol', 'Inventory Unit Symbol', 'trim|required|min_length[2]|max_length[15]|uniquewithid[stock_units.symbol.' . $id . ']');
+		$this->form_validation->set_rules('stock_unit_name', 'Inventory Unit Name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[stock_units.name.' . $id . ']');
 		$this->form_validation->set_rules('stock_unit_decimal', 'Decimal Places', 'trim|required|max_length[1]|is_natural');
 
 		/* Re-populating form */
@@ -186,7 +186,7 @@ class StockUnit extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('template', 'inventory/stockunit/edit', $data);
+			$this->template->load('template', 'inventory/unit/edit', $data);
 			return;
 		}
 		else
@@ -205,14 +205,14 @@ class StockUnit extends Controller {
 			if ( ! $this->db->where('id', $data_id)->update('stock_units', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating Stock Unit - ' . $data_stock_unit_name . '.', 'error');
-				$this->logger->write_message("error", "Error updating Stock Unit named " . $data_stock_unit_name . " [id:" . $data_id . "]");
-				$this->template->load('template', 'inventory/stockunit/edit', $data);
+				$this->messages->add('Error updating Inventory Unit - ' . $data_stock_unit_name . '.', 'error');
+				$this->logger->write_message("error", "Error updating Inventory Unit named " . $data_stock_unit_name . " [id:" . $data_id . "]");
+				$this->template->load('template', 'inventory/unit/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
-				$this->messages->add('Updated Stock Unit - ' . $data_stock_unit_name . '.', 'success');
-				$this->logger->write_message("success", "Udpated Stock Unit named " . $data_stock_unit_name . " [id:" . $data_id . "]");
+				$this->messages->add('Updated Inventory Unit - ' . $data_stock_unit_name . '.', 'success');
+				$this->logger->write_message("success", "Udpated Inventory Unit named " . $data_stock_unit_name . " [id:" . $data_id . "]");
 				redirect('inventory/account');
 				return;
 			}
@@ -242,7 +242,7 @@ class StockUnit extends Controller {
 		$id = $this->input->xss_clean($id);
 		$id = (int)$id;
 		if ($id < 1) {
-			$this->messages->add('Invalid Stock Unit.', 'error');
+			$this->messages->add('Invalid Inventory Unit.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -251,7 +251,7 @@ class StockUnit extends Controller {
 		$this->db->from('stock_items')->where('stock_unit_id', $id);
 		if ($this->db->get()->num_rows() > 0)
 		{
-			$this->messages->add('Cannot delete Stock Unit. Stock Unit is still in use.', 'error');
+			$this->messages->add('Cannot delete Inventory Unit. Inventory Unit is still in use.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -261,7 +261,7 @@ class StockUnit extends Controller {
 		$stock_unit_q = $this->db->get();
 		if ($stock_unit_q->num_rows() < 1)
 		{
-			$this->messages->add('Invalid Stock Unit.', 'error');
+			$this->messages->add('Invalid Inventory Unit.', 'error');
 			redirect('inventory/account');
 			return;
 		} else {
@@ -273,14 +273,14 @@ class StockUnit extends Controller {
 		if ( ! $this->db->delete('stock_units', array('id' => $id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Stock Unit - ' . $stock_unit_data->name . '.', 'error');
-			$this->logger->write_message("error", "Error deleting Stock Unit named " . $stock_unit_data->name . " [id:" . $id . "]");
+			$this->messages->add('Error deleting Inventory Unit - ' . $stock_unit_data->name . '.', 'error');
+			$this->logger->write_message("error", "Error deleting Inventory Unit named " . $stock_unit_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		} else {
 			$this->db->trans_complete();
-			$this->messages->add('Deleted Stock Unit - ' . $stock_unit_data->name . '.', 'success');
-			$this->logger->write_message("success", "Deleted Stock Unit named " . $stock_unit_data->name . " [id:" . $id . "]");
+			$this->messages->add('Deleted Inventory Unit - ' . $stock_unit_data->name . '.', 'success');
+			$this->logger->write_message("success", "Deleted Inventory Unit named " . $stock_unit_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		}
@@ -288,5 +288,5 @@ class StockUnit extends Controller {
 	}
 }
 
-/* End of file stockunit.php */
-/* Location: ./system/application/controllers/inventory/stockunit.php */
+/* End of file unit.php */
+/* Location: ./system/application/controllers/inventory/unit.php */

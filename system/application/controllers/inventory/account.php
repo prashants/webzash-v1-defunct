@@ -4,7 +4,7 @@ class Account extends Controller {
 	function index()
 	{
 		$this->template->set('page_title', 'Inventory');
-		$this->template->set('nav_links', array('inventory/stockgroup/add' => 'Add Inventory Group', 'inventory/stockitem/add' => 'Add Inventory Item', 'inventory/stockunit/add' => 'Add Inventory Unit'));
+		$this->template->set('nav_links', array('inventory/group/add' => 'Add Inventory Group', 'inventory/item/add' => 'Add Inventory Item', 'inventory/unit/add' => 'Add Inventory Unit'));
 
 		/* Stock Units */
 		$this->db->from('stock_units')->order_by('name', 'desc');

@@ -1,8 +1,8 @@
 <?php
 
-class StockVoucher extends Controller {
+class Entry extends Controller {
 
-	function StockVoucher()
+	function Entry()
 	{
 		parent::Controller();
 		$this->load->model('Voucher_model');
@@ -68,12 +68,12 @@ class StockVoucher extends Controller {
 			$this->messages->add('Entry has no associated Ledger accounts.', 'error');
 		}
 
-		/* Load current stock items details */
+		/* Load current inventory items details */
 		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
 		$cur_voucher_stock_items = $this->db->get();
 		if ($cur_voucher_stock_items->num_rows() < 1)
 		{
-			$this->messages->add('Entry has no associated stock items.', 'error');
+			$this->messages->add('Entry has no associated inventory items.', 'error');
 		}
 
 		$data['cur_voucher'] = $cur_voucher;
@@ -83,7 +83,7 @@ class StockVoucher extends Controller {
 		$data['cur_voucher_stock_items'] = $cur_voucher_stock_items;
 		$data['voucher_type_id'] = $voucher_type_id;
 		$data['current_voucher_type'] = $current_voucher_type;
-		$this->template->load('template', 'inventory/stockvoucher/view', $data);
+		$this->template->load('template', 'inventory/entry/view', $data);
 		return;
 	}
 
@@ -101,7 +101,7 @@ class StockVoucher extends Controller {
 		if ($this->config->item('account_locked') == 1)
 		{
 			$this->messages->add('Account is locked.', 'error');
-			redirect('inventory/stockvoucher/show/' . $voucher_type);
+			redirect('inventory/voucher/show/' . $voucher_type);
 			return;
 		}
 
@@ -171,10 +171,10 @@ class StockVoucher extends Controller {
 		{
 			foreach ($this->input->post('stock_item_id', TRUE) as $id => $stock_data)
 			{
-				$this->form_validation->set_rules('stock_item_quantity[' . $id . ']', 'Stock Item Quantity', 'trim|quantity');
-				$this->form_validation->set_rules('stock_item_rate_per_unit[' . $id . ']', 'Stock Item Rate Per Unit', 'trim|currency');
-				$this->form_validation->set_rules('stock_item_discount[' . $id . ']', 'Stock Item Discount', 'trim|discount');
-				$this->form_validation->set_rules('stock_item_amount[' . $id . ']', 'Stock Item Amount', 'trim|currency');
+				$this->form_validation->set_rules('stock_item_quantity[' . $id . ']', 'Inventory Item Quantity', 'trim|quantity');
+				$this->form_validation->set_rules('stock_item_rate_per_unit[' . $id . ']', 'Inventory Item Rate Per Unit', 'trim|currency');
+				$this->form_validation->set_rules('stock_item_discount[' . $id . ']', 'Inventory Item Discount', 'trim|discount');
+				$this->form_validation->set_rules('stock_item_amount[' . $id . ']', 'Inventory Item Amount', 'trim|currency');
 			}
 			foreach ($this->input->post('ledger_dc', TRUE) as $id => $ledger_data)
 			{
@@ -225,7 +225,7 @@ class StockVoucher extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('template', 'inventory/stockvoucher/add', $data);
+			$this->template->load('template', 'inventory/entry/add', $data);
 			return;
 		}
 		else
@@ -246,7 +246,7 @@ class StockVoucher extends Controller {
 
 			$data_total_amount = 0;
 
-			/* Setting Stock Item type */
+			/* Setting Inventory Item type */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$data_stock_item_type = 1;
 			else
@@ -264,10 +264,10 @@ class StockVoucher extends Controller {
 					$this->messages->add('Invalid Purchase Ledger.', 'error');
 				else
 					$this->messages->add('Invalid Sale Ledger.', 'error');
-				$this->template->load('template', 'inventory/stockvoucher/add', $data);
+				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
 			}
-			/* Checking for Valid Stock Ledger account - entity */
+			/* Checking for Valid Inventory Ledger account - entity */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 4)->or_where('type', 1);
 			else
@@ -279,11 +279,11 @@ class StockVoucher extends Controller {
 					$this->messages->add('Invalid Creditor (Supplier).', 'error');
 				else
 					$this->messages->add('Invalid Debtor (Customer).', 'error');
-				$this->template->load('template', 'inventory/stockvoucher/add', $data);
+				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
 			}
 
-			/* Checking for Valid Stock Item account */
+			/* Checking for Valid Inventory Item account */
 			$stock_item_present = FALSE;
 			$data_total_stock_amount = 0;
 			foreach ($data_all_stock_item_id as $id => $stock_data)
@@ -291,13 +291,13 @@ class StockVoucher extends Controller {
 				if ($data_all_stock_item_id[$id] < 1)
 					continue;
 
-				/* Check for valid stock item id */
+				/* Check for valid inventory item id */
 				$this->db->from('stock_items')->where('id', $data_all_stock_item_id[$id]);
 				$valid_stock_item_q = $this->db->get();
 				if ($valid_stock_item_q->num_rows() < 1)
 				{
-					$this->messages->add('Invalid Stock Item.', 'error');
-					$this->template->load('template', 'inventory/stockvoucher/add', $data);
+					$this->messages->add('Invalid Inventory Item.', 'error');
+					$this->template->load('template', 'inventory/entry/add', $data);
 					return;
 				}
 				$stock_item_present = TRUE;
@@ -305,8 +305,8 @@ class StockVoucher extends Controller {
 			}
 			if ( ! $stock_item_present)
 			{
-				$this->messages->add('No Stock Item selected.', 'error');
-				$this->template->load('template', 'inventory/stockvoucher/add', $data);
+				$this->messages->add('No Inventory Item selected.', 'error');
+				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
 			}
 
@@ -323,7 +323,7 @@ class StockVoucher extends Controller {
 				if ($valid_ledger_q->num_rows() < 1)
 				{
 					$this->messages->add('Invalid Ledger account.', 'error');
-					$this->template->load('template', 'inventory/stockvoucher/add', $data);
+					$this->template->load('template', 'inventory/entry/add', $data);
 					return;
 				}
 				if ($data_all_ledger_dc[$id] == 'D')
@@ -345,7 +345,7 @@ class StockVoucher extends Controller {
 			if ($data_total_amount < 0)
 			{
 				$this->messages->add($current_voucher_type['name'] . ' Entry total cannot be negative.', 'error');
-				$this->template->load('template', 'inventory/stockvoucher/add', $data);
+				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
 			}
 
@@ -387,7 +387,7 @@ class StockVoucher extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Entry.', 'error');
 				$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting entry");
-				$this->template->load('template', 'inventory/stockvoucher/add', $data);
+				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
 			} else {
 				$voucher_id = $this->db->insert_id();
@@ -418,7 +418,7 @@ class StockVoucher extends Controller {
 					$this->messages->add('Error adding Sale Ledger account to Entry.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting sale ledger " . "[id:" . $data_main_account . "]");
 				}
-				$this->template->load('template', 'inventory/stockvoucher/add', $data);
+				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
 			} else {
 				$main_voucher_id = $this->db->insert_id();
@@ -449,13 +449,13 @@ class StockVoucher extends Controller {
 					$this->messages->add('Error adding Debtor (Customer) - to Entry.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting debtor ledger " . "[id:" . $data_main_entity . "]");
 				}
-				$this->template->load('template', 'inventory/stockvoucher/add', $data);
+				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
 			} else {
 				$entity_voucher_id = $this->db->insert_id();
 			}
 
-			/* Adding stock items */
+			/* Adding inventory items */
 			$data_all_stock_item_id = $this->input->post('stock_item_id', TRUE);
 			$data_all_stock_item_quantity = $this->input->post('stock_item_quantity', TRUE);
 			$data_all_stock_item_rate_per_unit = $this->input->post('stock_item_rate_per_unit', TRUE);
@@ -486,9 +486,9 @@ class StockVoucher extends Controller {
 				if ( ! $this->db->insert('stock_voucher_items', $insert_stock_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Stock Item - ' . $data_stock_item_id . ' to Voucher.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting stock item " . "[id:" . $data_stock_item_id . "]");
-					$this->template->load('template', 'inventory/stockvoucher/add', $data);
+					$this->messages->add('Error adding Inventory Item - ' . $data_stock_item_id . ' to Voucher.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting inventory item " . "[id:" . $data_stock_item_id . "]");
+					$this->template->load('template', 'inventory/entry/add', $data);
 					return;
 				}
 			}
@@ -524,7 +524,7 @@ class StockVoucher extends Controller {
 					$this->db->trans_rollback();
 					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Entry.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting entry ledger item " . "[id:" . $data_ledger_id . "]");
-					$this->template->load('template', 'inventory/stockvoucher/add', $data);
+					$this->template->load('template', 'inventory/entry/add', $data);
 					return;
 				}
 			}
@@ -540,7 +540,7 @@ class StockVoucher extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry total.', 'error');
 				$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating debit and credit total");
-				$this->template->load('template', 'inventory/stockvoucher/add', $data);
+				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
 			}
 
@@ -558,7 +558,7 @@ class StockVoucher extends Controller {
 			/* Showing success message in show() method since message is too long for storing it in session */
 			$this->logger->write_message("success", "Added " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 			redirect('voucher/show/' . $current_voucher_type['label']);
-			$this->template->load('template', 'inventory/stockvoucher/add', $data);
+			$this->template->load('template', 'inventory/entry/add', $data);
 			return;
 		}
 		return;
@@ -570,7 +570,7 @@ class StockVoucher extends Controller {
 		if ( ! check_access('edit stock voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
-			redirect('inventory/stockvoucher/show/' . $voucher_type);
+			redirect('inventory/entry/show/' . $voucher_type);
 			return;
 		}
 
@@ -670,7 +670,7 @@ class StockVoucher extends Controller {
 			$data['amount_item'][$counter] = "";
 			$counter++;
 
-			/* stock items */
+			/* inventory items */
 			$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id);
 			$cur_stock_item_q = $this->db->get();
 			$counter = 0;
@@ -714,10 +714,10 @@ class StockVoucher extends Controller {
 		{
 			foreach ($this->input->post('stock_item_id', TRUE) as $id => $stock_data)
 			{
-				$this->form_validation->set_rules('stock_item_quantity[' . $id . ']', 'Stock Item Quantity', 'trim|quantity');
-				$this->form_validation->set_rules('stock_item_rate_per_unit[' . $id . ']', 'Stock Item Rate Per Unit', 'trim|currency');
-				$this->form_validation->set_rules('stock_item_discount[' . $id . ']', 'Stock Item Discount', 'trim|discount');
-				$this->form_validation->set_rules('stock_item_amount[' . $id . ']', 'Stock Item Amount', 'trim|currency');
+				$this->form_validation->set_rules('stock_item_quantity[' . $id . ']', 'Inventory Item Quantity', 'trim|quantity');
+				$this->form_validation->set_rules('stock_item_rate_per_unit[' . $id . ']', 'Inventory Item Rate Per Unit', 'trim|currency');
+				$this->form_validation->set_rules('stock_item_discount[' . $id . ']', 'Inventory Item Discount', 'trim|discount');
+				$this->form_validation->set_rules('stock_item_amount[' . $id . ']', 'Inventory Item Amount', 'trim|currency');
 			}
 			foreach ($this->input->post('ledger_dc', TRUE) as $id => $ledger_data)
 			{
@@ -753,7 +753,7 @@ class StockVoucher extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+			$this->template->load('template', 'inventory/entry/edit', $data);
 		} else	{
 			$data_main_account = $this->input->post('main_account', TRUE);
 			$data_main_entity = $this->input->post('main_entity', TRUE);
@@ -771,13 +771,13 @@ class StockVoucher extends Controller {
 
 			$data_total_amount = 0;
 
-			/* Setting Stock Item type */
+			/* Setting Inventory Item type */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$data_stock_item_type = 1;
 			else
 				$data_stock_item_type = 2;
 
-			/* Checking for Valid Stock Ledger account - account */
+			/* Checking for Valid Inventory Ledger account - account */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_account)->where('type', 2);
 			else
@@ -789,10 +789,10 @@ class StockVoucher extends Controller {
 					$this->messages->add('Invalid Purchase Ledger.', 'error');
 				else
 					$this->messages->add('Invalid Sale Ledger.', 'error');
-				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
-			/* Checking for Valid Stock Ledger account - entity */
+			/* Checking for Valid Inventory Ledger account - entity */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 4)->or_where('type', 1);
 			else
@@ -804,11 +804,11 @@ class StockVoucher extends Controller {
 					$this->messages->add('Invalid Creditor (Supplier).', 'error');
 				else
 					$this->messages->add('Invalid Debtor (Customer).', 'error');
-				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
 
-			/* Checking for Valid Stock Item */
+			/* Checking for Valid Inventory Item */
 			$stock_item_present = FALSE;
 			$data_total_stock_amount = 0;
 			foreach ($data_all_stock_item_id as $id => $stock_data)
@@ -821,8 +821,8 @@ class StockVoucher extends Controller {
 				$valid_stock_item_q = $this->db->get();
 				if ($valid_stock_item_q->num_rows() < 1)
 				{
-					$this->messages->add('Invalid Stock Item.', 'error');
-					$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+					$this->messages->add('Invalid Inventory Item.', 'error');
+					$this->template->load('template', 'inventory/entry/edit', $data);
 					return;
 				}
 				$stock_item_present = TRUE;
@@ -830,8 +830,8 @@ class StockVoucher extends Controller {
 			}
 			if ( ! $stock_item_present)
 			{
-				$this->messages->add('No Stock Item selected.', 'error');
-				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+				$this->messages->add('No Inventory Item selected.', 'error');
+				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
 
@@ -848,7 +848,7 @@ class StockVoucher extends Controller {
 				if ($valid_ledger_q->num_rows() < 1)
 				{
 					$this->messages->add('Invalid Ledger account.', 'error');
-					$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+					$this->template->load('template', 'inventory/entry/edit', $data);
 					return;
 				}
 				if ($data_all_ledger_dc[$id] == 'D')
@@ -870,7 +870,7 @@ class StockVoucher extends Controller {
 			if ($data_total_amount < 0)
 			{
 				$this->messages->add($current_voucher_type['name'] . ' Entry total cannot be negative.', 'error');
-				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
 
@@ -904,7 +904,7 @@ class StockVoucher extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry.', 'error');
 				$this->logger->write_message("error", "Error updating entry details for " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
-				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
 
@@ -912,9 +912,9 @@ class StockVoucher extends Controller {
 			if ( ! $this->db->delete('stock_voucher_items', array('voucher_id' => $voucher_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error deleting previous stock items from Entry.', 'error');
-				$this->logger->write_message("error", "Error deleting previous stock items from " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
-				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+				$this->messages->add('Error deleting previous inventory items from Entry.', 'error');
+				$this->logger->write_message("error", "Error deleting previous inventory items from " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
+				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
 
@@ -924,7 +924,7 @@ class StockVoucher extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting previous Ledger accounts from Entry.', 'error');
 				$this->logger->write_message("error", "Error deleting previous entry items for " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
-				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
 
@@ -952,7 +952,7 @@ class StockVoucher extends Controller {
 					$this->messages->add('Error updating Sale Ledger account of Entry.', 'error');
 					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating sale ledger " . "[id:" . $data_main_account . "]");
 				}
-				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
 
@@ -980,7 +980,7 @@ class StockVoucher extends Controller {
 					$this->messages->add('Error updating Debtor (Customer) of Entry.', 'error');
 					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating debtor ledger " . "[id:" . $data_main_entity . "]");
 				}
-				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
 
@@ -1015,9 +1015,9 @@ class StockVoucher extends Controller {
 				if ( ! $this->db->insert('stock_voucher_items', $insert_stock_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Stock Item - ' . $data_stock_item_id . ' to Entry.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting stock item " . "[id:" . $data_stock_item_id . "]");
-					$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+					$this->messages->add('Error adding Inventory Item - ' . $data_stock_item_id . ' to Entry.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting inventory item " . "[id:" . $data_stock_item_id . "]");
+					$this->template->load('template', 'inventory/entry/edit', $data);
 					return;
 				}
 			}
@@ -1053,7 +1053,7 @@ class StockVoucher extends Controller {
 					$this->db->trans_rollback();
 					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Entry.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting entry ledger item " . "[id:" . $data_ledger_id . "]");
-					$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+					$this->template->load('template', 'inventory/entry/edit', $data);
 					return;
 				}
 			}
@@ -1069,7 +1069,7 @@ class StockVoucher extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry total.', 'error');
 				$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating debit and credit total");
-				$this->template->load('template', 'inventory/stockvoucher/edit', $data);
+				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
 
@@ -1102,7 +1102,7 @@ class StockVoucher extends Controller {
 		if ( ! check_access('delete stock voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
-			redirect('inventory/stockvoucher/show/' . $voucher_type);
+			redirect('inventory/entry/show/' . $voucher_type);
 			return;
 		}
 
@@ -1137,8 +1137,8 @@ class StockVoucher extends Controller {
 		if ( ! $this->db->delete('stock_voucher_items', array('voucher_id' => $voucher_id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Stock Items.', 'error');
-			$this->logger->write_message("error", "Error deleting stock item entries for " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
+			$this->messages->add('Error deleting Inventory Items.', 'error');
+			$this->logger->write_message("error", "Error deleting inventory item entries for " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 			redirect('voucher/view/' . $current_voucher_type['label'] . '/' . $voucher_id);
 			return;
 		}
@@ -1174,7 +1174,7 @@ class StockVoucher extends Controller {
 		if ( ! check_access('download stock voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
-			redirect('inventory/stockvoucher/show/' . $voucher_type);
+			redirect('inventory/entry/show/' . $voucher_type);
 			return;
 		}
 
@@ -1224,12 +1224,12 @@ class StockVoucher extends Controller {
 			$this->messages->add('Entry has no associated Ledger accounts.', 'error');
 		}
 
-		/* Load current stock items details */
+		/* Load current inventory items details */
 		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
 		$cur_voucher_stock_items = $this->db->get();
 		if ($cur_voucher_stock_items->num_rows() < 1)
 		{
-			$this->messages->add('Entry has no associated stock items.', 'error');
+			$this->messages->add('Entry has no associated inventory items.', 'error');
 		}
 
 		$data['cur_voucher'] = $cur_voucher;
@@ -1242,7 +1242,7 @@ class StockVoucher extends Controller {
 
 		/* Download Voucher */
 		$file_name = $current_voucher_type['name'] . '_entry_' . $cur_voucher->number . ".html";
-		$download_data = $this->load->view('inventory/stockvoucher/downloadpreview', $data, TRUE);
+		$download_data = $this->load->view('inventory/entry/downloadpreview', $data, TRUE);
 		force_download($file_name, $download_data);
 		return;
 	}
@@ -1255,7 +1255,7 @@ class StockVoucher extends Controller {
 		if ( ! check_access('print stock voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
-			redirect('inventory/stockvoucher/show/' . $voucher_type);
+			redirect('inventory/entry/show/' . $voucher_type);
 			return;
 		}
 
@@ -1305,12 +1305,12 @@ class StockVoucher extends Controller {
 			$this->messages->add('Entry has no associated Ledger accounts.', 'error');
 		}
 
-		/* Load current stock items details */
+		/* Load current inventory items details */
 		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
 		$cur_voucher_stock_items = $this->db->get();
 		if ($cur_voucher_stock_items->num_rows() < 1)
 		{
-			$this->messages->add('Entry has no associated stock items.', 'error');
+			$this->messages->add('Entry has no associated inventory items.', 'error');
 		}
 
 		$data['cur_voucher'] = $cur_voucher;
@@ -1321,7 +1321,7 @@ class StockVoucher extends Controller {
 		$data['voucher_type_id'] = $voucher_type_id;
 		$data['current_voucher_type'] = $current_voucher_type;
 
-		$this->load->view('inventory/stockvoucher/printpreview', $data);
+		$this->load->view('inventory/entry/printpreview', $data);
 		return;
 	}
 
@@ -1334,7 +1334,7 @@ class StockVoucher extends Controller {
 		if ( ! check_access('email stock voucher'))
 		{
 			$this->messages->add('Permission denied.', 'error');
-			redirect('inventory/stockvoucher/show/' . $voucher_type);
+			redirect('inventory/entry/show/' . $voucher_type);
 			return;
 		}
 
@@ -1379,12 +1379,12 @@ class StockVoucher extends Controller {
 			$this->messages->add('Entry has no associated Ledger accounts.', 'error');
 		}
 
-		/* Load current stock items details */
+		/* Load current inventory items details */
 		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
 		$cur_voucher_stock_items = $this->db->get();
 		if ($cur_voucher_stock_items->num_rows() < 1)
 		{
-			$this->messages->add('Entry has no associated stock items.', 'error');
+			$this->messages->add('Entry has no associated inventory items.', 'error');
 		}
 
 		$data['voucher_type_id'] = $voucher_type_id;
@@ -1410,7 +1410,7 @@ class StockVoucher extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data['error'] = validation_errors();
-			$this->load->view('inventory/stockvoucher/email', $data);
+			$this->load->view('inventory/entry/email', $data);
 			return;
 		}
 		else
@@ -1422,7 +1422,7 @@ class StockVoucher extends Controller {
 			$data['cur_voucher_stock_items'] = $cur_voucher_stock_items;
 
 			/* Preparing message */
-			$message = $this->load->view('inventory/stockvoucher/emailpreview', $data, TRUE);
+			$message = $this->load->view('inventory/entry/emailpreview', $data, TRUE);
 
 			/* Getting email configuration */
 			$config['smtp_timeout'] = '30';
@@ -1454,7 +1454,7 @@ class StockVoucher extends Controller {
 				$data['error'] = "Error sending email. Check you email settings.";
 				$this->logger->write_message("error", "Error emailing " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 			}
-			$this->load->view('inventory/stockvoucher/email', $data);
+			$this->load->view('inventory/entry/email', $data);
 			return;
 		}
 		return;
@@ -1534,10 +1534,10 @@ class StockVoucher extends Controller {
 		echo "<td>" . form_input($stock_item_discount) . "</td>";
 		echo "<td>" . form_input($stock_item_amount) . "</td>";
 		echo '<td>';
-		echo img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Stock Item', 'class' => 'addstockrow'));
+		echo img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Inventory Item', 'class' => 'addstockrow'));
 		echo '</td>';
 		echo '<td>';
-		echo img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Stock Item', 'class' => 'deletestockrow'));
+		echo img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Inventory Item', 'class' => 'deletestockrow'));
 		echo '</td>';
 		echo '<td class="stock-item-balance"><div></div>';
 		echo '</td>';
@@ -1546,5 +1546,5 @@ class StockVoucher extends Controller {
 	}
 }
 
-/* End of file stockvoucher.php */
-/* Location: ./system/application/controllers/inventory/stockvoucher.php */
+/* End of file entry.php */
+/* Location: ./system/application/controllers/inventory/entry.php */

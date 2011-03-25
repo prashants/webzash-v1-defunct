@@ -15,7 +15,17 @@
 			echo "<tr>";
 
 			echo "<td>" . date_mysql_to_php_display($row->date) . "</td>";
-			echo "<td>" . anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a')) . "</td>";
+			if ($current_voucher_type['base_type'] == '1')
+			{
+				echo "<td>" . anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a')) . "</td>";
+			} else {
+				if ($current_voucher_type['stock_voucher_type'] == '3')
+				{
+					echo "<td>" . anchor('inventory/transfer/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
+				} else {
+					echo "<td>" . anchor('inventory/entry/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
+				}
+			}
 
 			echo "<td>";
 			echo $this->Tag_model->show_voucher_tag($row->tag_id);
@@ -36,17 +46,17 @@
 			} else {
 				if ($current_voucher_type['stock_voucher_type'] == '3')
 				{
-					echo "<td>" . anchor('inventory/stocktransfer/edit/' . $current_voucher_type['label'] . "/" . $row->id , "Edit", array('title' => 'Edit ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'red-link')) . " ";
-					echo " &nbsp;" . anchor('inventory/stocktransfer/delete/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . $current_voucher_type['name'] . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Delete  ' . $current_voucher_type['name'] . ' Voucher')) . " ";
-					echo " &nbsp;" . anchor_popup('inventory/stocktransfer/printpreview/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . $current_voucher_type['name'] . ' Voucher')), array('title' => 'Print ' . $current_voucher_type['name']. ' Voucher', 'width' => '600', 'height' => '600')) . " ";
-					echo " &nbsp;" . anchor_popup('inventory/stocktransfer/email/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . $current_voucher_type['name'] . ' Voucher')), array('title' => 'Email ' . $current_voucher_type['name'] . ' Voucher', 'width' => '500', 'height' => '300')) . " ";
-					echo " &nbsp;" . anchor('inventory/stocktransfer/download/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/save.png", 'border' => '0', 'alt' => 'Download ' . $current_voucher_type['name'] . ' Voucher', 'title' => "Download voucher")), array('title' => 'Download  ' . $current_voucher_type['name'] . ' Voucher')) . "</td>";
+					echo "<td>" . anchor('inventory/transfer/edit/' . $current_voucher_type['label'] . "/" . $row->id , "Edit", array('title' => 'Edit ' . $current_voucher_type['name'] . ' Entry', 'class' => 'red-link')) . " ";
+					echo " &nbsp;" . anchor('inventory/transfer/delete/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . $current_voucher_type['name'] . ' Entry', 'class' => "confirmClick", 'title' => "Delete Entry")), array('title' => 'Delete  ' . $current_voucher_type['name'] . ' Entry')) . " ";
+					echo " &nbsp;" . anchor_popup('inventory/transfer/printpreview/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . $current_voucher_type['name'] . ' Entry')), array('title' => 'Print ' . $current_voucher_type['name']. ' Entry', 'width' => '600', 'height' => '600')) . " ";
+					echo " &nbsp;" . anchor_popup('inventory/transfer/email/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . $current_voucher_type['name'] . ' Entry')), array('title' => 'Email ' . $current_voucher_type['name'] . ' Entry', 'width' => '500', 'height' => '300')) . " ";
+					echo " &nbsp;" . anchor('inventory/transfer/download/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/save.png", 'border' => '0', 'alt' => 'Download ' . $current_voucher_type['name'] . ' Entry', 'title' => "Download Entry")), array('title' => 'Download  ' . $current_voucher_type['name'] . ' Entry')) . "</td>";
 				} else {
-					echo "<td>" . anchor('inventory/stockvoucher/edit/' . $current_voucher_type['label'] . "/" . $row->id , "Edit", array('title' => 'Edit ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'red-link')) . " ";
-					echo " &nbsp;" . anchor('inventory/stockvoucher/delete/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . $current_voucher_type['name'] . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Delete  ' . $current_voucher_type['name'] . ' Voucher')) . " ";
-					echo " &nbsp;" . anchor_popup('inventory/stockvoucher/printpreview/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . $current_voucher_type['name'] . ' Voucher')), array('title' => 'Print ' . $current_voucher_type['name']. ' Voucher', 'width' => '600', 'height' => '600')) . " ";
-					echo " &nbsp;" . anchor_popup('inventory/stockvoucher/email/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . $current_voucher_type['name'] . ' Voucher')), array('title' => 'Email ' . $current_voucher_type['name'] . ' Voucher', 'width' => '500', 'height' => '300')) . " ";
-					echo " &nbsp;" . anchor('inventory/stockvoucher/download/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/save.png", 'border' => '0', 'alt' => 'Download ' . $current_voucher_type['name'] . ' Voucher', 'title' => "Download voucher")), array('title' => 'Download  ' . $current_voucher_type['name'] . ' Voucher')) . "</td>";
+					echo "<td>" . anchor('inventory/entry/edit/' . $current_voucher_type['label'] . "/" . $row->id , "Edit", array('title' => 'Edit ' . $current_voucher_type['name'] . ' Entry', 'class' => 'red-link')) . " ";
+					echo " &nbsp;" . anchor('inventory/entry/delete/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . $current_voucher_type['name'] . ' Entry', 'class' => "confirmClick", 'title' => "Delete Entry")), array('title' => 'Delete  ' . $current_voucher_type['name'] . ' Entry')) . " ";
+					echo " &nbsp;" . anchor_popup('inventory/entry/printpreview/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . $current_voucher_type['name'] . ' Entry')), array('title' => 'Print ' . $current_voucher_type['name']. ' Entry', 'width' => '600', 'height' => '600')) . " ";
+					echo " &nbsp;" . anchor_popup('inventory/entry/email/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . $current_voucher_type['name'] . ' Entry')), array('title' => 'Email ' . $current_voucher_type['name'] . ' Entry', 'width' => '500', 'height' => '300')) . " ";
+					echo " &nbsp;" . anchor('inventory/entry/download/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/save.png", 'border' => '0', 'alt' => 'Download ' . $current_voucher_type['name'] . ' Entry', 'title' => "Download Entry")), array('title' => 'Download  ' . $current_voucher_type['name'] . ' Entry')) . "</td>";
 				}
 			}
 
