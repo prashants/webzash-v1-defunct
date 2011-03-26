@@ -1,8 +1,8 @@
 <?php
 
-class Stock_Unit_model extends Model {
+class Inventory_Unit_model extends Model {
 
-	function Stock_Unit_model()
+	function Inventory_Unit_model()
 	{
 		parent::Model();
 	}

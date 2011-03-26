@@ -1,8 +1,8 @@
 <?php
 
-class Stock_Group_model extends Model {
+class Inventory_Group_model extends Model {
 
-	function Stock_Group_model()
+	function Inventory_Group_model()
 	{
 		parent::Model();
 	}

@@ -7,7 +7,7 @@ class Entry extends Controller {
 		parent::Controller();
 		$this->load->model('Voucher_model');
 		$this->load->model('Ledger_model');
-		$this->load->model('Stock_Item_model');
+		$this->load->model('Inventory_Item_model');
 		$this->load->model('Tag_model');
 		return;
 	}

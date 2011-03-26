@@ -45,7 +45,7 @@ $stock_total = 0;
 foreach ($cur_voucher_stock_items->result() as $row)
 {
 	echo "<tr>";
-	echo "<td>" . $this->Stock_Item_model->get_name($row->stock_item_id) . "</td>";
+	echo "<td>" . $this->Inventory_Item_model->get_name($row->stock_item_id) . "</td>";
 	echo "<td>" . $row->quantity . "</td>";
 	echo "<td>" . $row->rate_per_unit . "</td>";
 	echo "<td>" . $row->discount . "</td>";

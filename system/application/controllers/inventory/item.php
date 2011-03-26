@@ -5,9 +5,9 @@ class Item extends Controller {
 	function Item()
 	{
 		parent::Controller();
-		$this->load->model('Stock_Unit_model');
-		$this->load->model('Stock_Group_model');
-		$this->load->model('Stock_Item_model');
+		$this->load->model('Inventory_Unit_model');
+		$this->load->model('Inventory_Group_model');
+		$this->load->model('Inventory_Item_model');
 		return;
 	}
 
@@ -78,9 +78,9 @@ class Item extends Controller {
 			'2' => 'First In First Out (FIFO)',
 		);
 		$data['stock_item_costing_method_active'] = 1;
-		$data['stock_item_units'] = $this->Stock_Unit_model->get_all_units();
+		$data['stock_item_units'] = $this->Inventory_Unit_model->get_all_units();
 		$data['stock_item_unit_active'] = 0;
-		$data['stock_item_groups'] = $this->Stock_Group_model->get_stock_item_groups();
+		$data['stock_item_groups'] = $this->Inventory_Group_model->get_stock_item_groups();
 		$data['stock_item_group_active'] = 0;
 
 		/* Form validations */
@@ -254,9 +254,9 @@ class Item extends Controller {
 			'2' => 'First In First Out (FIFO)',
 		);
 		$data['stock_item_costing_method_active'] = $stock_item_data->costing_method;
-		$data['stock_item_units'] = $this->Stock_Unit_model->get_all_units();
+		$data['stock_item_units'] = $this->Inventory_Unit_model->get_all_units();
 		$data['stock_item_unit_active'] = $stock_item_data->stock_unit_id;
-		$data['stock_item_groups'] = $this->Stock_Group_model->get_stock_item_groups();
+		$data['stock_item_groups'] = $this->Inventory_Group_model->get_stock_item_groups();
 		$data['stock_item_group_active'] = $stock_item_data->stock_group_id;
 		$data['stock_item_id'] = $id;
 
@@ -413,7 +413,7 @@ class Item extends Controller {
 	{
 		if ($stock_ledger_id > 0)
 		{
-			echo $this->Stock_Item_model->get_closing_quantity($stock_ledger_id);
+			echo $this->Inventory_Item_model->get_closing_quantity($stock_ledger_id);
 		} else {
 			echo "";
 		}
@@ -423,7 +423,7 @@ class Item extends Controller {
 	function sellprice($stock_ledger_id = 0)
 	{
 		if ($stock_ledger_id > 0)
-			echo $this->Stock_Item_model->get_selling_price($stock_ledger_id);
+			echo $this->Inventory_Item_model->get_selling_price($stock_ledger_id);
 		else
 			echo "";
 		return;

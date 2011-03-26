@@ -109,9 +109,9 @@ if ( ! function_exists('form_input_stock_item'))
 	function form_input_stock_item($name, $selected = NULL, $extra = '')
 	{
 		$CI =& get_instance();
-		$CI->load->model('Stock_Item_model');
+		$CI->load->model('Inventory_Item_model');
 
-		$options = $CI->Stock_Item_model->get_all_item();
+		$options = $CI->Inventory_Item_model->get_all_item();
 
 		// If no selected state was submitted we will attempt to set it automatically
 		if ( ! ($selected))

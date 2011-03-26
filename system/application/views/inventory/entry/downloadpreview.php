@@ -115,7 +115,7 @@
 			foreach ($cur_voucher_stock_items->result() as $row)
 			{
 				echo "<tr class=\"tr-stock-item\">";
-				echo "<td class=\"item\">" . $this->Stock_Item_model->get_name($row->stock_item_id) . "</td>";
+				echo "<td class=\"item\">" . $this->Inventory_Item_model->get_name($row->stock_item_id) . "</td>";
 				echo "<td class=\"item\">" . $row->quantity . "</td>";
 				echo "<td class=\"item\">" . $row->rate_per_unit . "</td>";
 				echo "<td class=\"item\">" . $row->discount . "</td>";
