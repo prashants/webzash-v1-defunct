@@ -7,7 +7,7 @@ class Inventory_Group_model extends Model {
 		parent::Model();
 	}
 
-	function get_all_stock_groups($id = NULL)
+	function get_all_groups($id = NULL)
 	{
 		$options = array();
 		$options[0] = '(None)';
@@ -23,7 +23,7 @@ class Inventory_Group_model extends Model {
 		return $options;
 	}
 
-	function get_stock_item_groups()
+	function get_item_groups()
 	{
 		$options = array();
 		$this->db->from('stock_groups')->where('id >', 0)->order_by('name', 'asc');

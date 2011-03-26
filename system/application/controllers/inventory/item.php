@@ -80,7 +80,7 @@ class Item extends Controller {
 		$data['stock_item_costing_method_active'] = 1;
 		$data['stock_item_units'] = $this->Inventory_Unit_model->get_all_units();
 		$data['stock_item_unit_active'] = 0;
-		$data['stock_item_groups'] = $this->Inventory_Group_model->get_stock_item_groups();
+		$data['stock_item_groups'] = $this->Inventory_Group_model->get_item_groups();
 		$data['stock_item_group_active'] = 0;
 
 		/* Form validations */
@@ -256,7 +256,7 @@ class Item extends Controller {
 		$data['stock_item_costing_method_active'] = $stock_item_data->costing_method;
 		$data['stock_item_units'] = $this->Inventory_Unit_model->get_all_units();
 		$data['stock_item_unit_active'] = $stock_item_data->stock_unit_id;
-		$data['stock_item_groups'] = $this->Inventory_Group_model->get_stock_item_groups();
+		$data['stock_item_groups'] = $this->Inventory_Group_model->get_item_groups();
 		$data['stock_item_group_active'] = $stock_item_data->stock_group_id;
 		$data['stock_item_id'] = $id;
 

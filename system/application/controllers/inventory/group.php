@@ -43,7 +43,7 @@ class Group extends Controller {
 			'size' => '40',
 			'value' => '',
 		);
-		$data['stock_group_parents'] = $this->Inventory_Group_model->get_all_stock_groups();
+		$data['stock_group_parents'] = $this->Inventory_Group_model->get_all_groups();
 		$data['stock_group_parent_active'] = 0;
 
 		/* Form validations */
@@ -151,7 +151,7 @@ class Group extends Controller {
 			'size' => '40',
 			'value' => $stock_group_data->name,
 		);
-		$data['stock_group_parents'] = $this->Inventory_Group_model->get_all_stock_groups($stock_group_data->id);
+		$data['stock_group_parents'] = $this->Inventory_Group_model->get_all_groups($stock_group_data->id);
 		$data['stock_group_parent_active'] = $stock_group_data->parent_id;
 		$data['stock_group_id'] = $id;
 
