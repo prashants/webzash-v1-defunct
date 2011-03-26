@@ -91,7 +91,7 @@ class Stockstree
 			{
 				echo "<tr class=\"tr-group\">";
 				echo "<td>" . self::print_spaces(self::$counter) . $row['name'] . "</td>";
-				echo "<td>Stock Group</td>";
+				echo "<td>Group</td>";
 				echo "<td>-</td>";
 				echo "<td>-</td>";
 				echo "<td class=\"td-actions\">" . anchor('inventory/stockgroup/edit/' . $row['id'] , "Edit", array('title' => 'Edit Stock Group', 'class' => 'red-link'));
@@ -105,7 +105,7 @@ class Stockstree
 				{
 					echo "<tr>";
 					echo "<td>" . self::print_spaces(self::$counter) . $row_item['name'] . "</td>";
-					echo "<td>Stock Item</td>";
+					echo "<td>Item</td>";
 					echo "<td>" . convert_amount_dc($row_item['op_balance_total_value']) . "</td>";
 					echo "<td></td>";
 					echo "<td class=\"td-actions\">" . anchor('inventory/stockitem/edit/' . $row_item['id'] , "Edit", array('title' => 'Edit Stock Item', 'class' => 'red-link'));
