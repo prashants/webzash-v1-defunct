@@ -1,10 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Stockstree
+class Inventorytree
 {
 	public static $counter = 0;
 
-	function Stockstree()
+	function Inventorytree()
 	{
 		return;
 	}

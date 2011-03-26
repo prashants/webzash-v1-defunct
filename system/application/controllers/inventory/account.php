@@ -11,9 +11,9 @@ class Account extends Controller {
 		$data['stock_units'] = $this->db->get();
 
 		/* Stocks Tree */
-		$this->load->library('stockstree');
-		$stocks_tree_o = new Stockstree();
-		$data['stocks_tree'] = $stocks_tree_o->init(0);
+		$this->load->library('inventorytree');
+		$inventory_tree = new Inventorytree();
+		$data['inventory_tree'] = $inventory_tree->init(0);
 
 		$this->template->load('template', 'inventory/account/index', $data);
 		return;
