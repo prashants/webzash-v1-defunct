@@ -1,5 +1,5 @@
 <?php
-	echo form_open('inventory/stockgroup/edit/' . $stock_group_id);
+	echo form_open('inventory/group/edit/' . $stock_group_id);
 
 	echo "<p>";
 	echo form_label('Stock group name', 'stock_group_name');

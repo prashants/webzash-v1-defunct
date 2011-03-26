@@ -32,7 +32,7 @@ $(document).ready(function() {
 </script>
 
 <?php
-	echo form_open('inventory/stockitem/edit/' . $stock_item_id);
+	echo form_open('inventory/item/edit/' . $stock_item_id);
 
 	echo "<p>";
 	echo form_label('Stock item name', 'stock_item_name');

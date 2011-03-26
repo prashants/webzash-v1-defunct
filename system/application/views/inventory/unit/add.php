@@ -1,5 +1,5 @@
 <?php
-	echo form_open('inventory/stockunit/add');
+	echo form_open('inventory/unit/add');
 
 	echo "<p>";
 	echo form_label('Stock unit symbol', 'stock_unit_symbol');

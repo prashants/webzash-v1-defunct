@@ -25,7 +25,7 @@ $(document).ready(function() {
 		var rowid = $(this);
 		if (stockid > 0) {
 			$.ajax({
-				url: <?php echo '\'' . site_url('inventory/stockitem/balance') . '/\''; ?> + stockid,
+				url: <?php echo '\'' . site_url('inventory/item/balance') . '/\''; ?> + stockid,
 				success: function(data) {
 					rowid.parent().next().next().next().next().next().next().children().text(data);
 					rowid.parent().next().next().next().next().next().next().children().text(data);
@@ -34,7 +34,7 @@ $(document).ready(function() {
 
 			if (!firstTime) {
 				$.ajax({
-					url: <?php echo '\'' . site_url('inventory/stockitem/sellprice') . '/\''; ?> + stockid,
+					url: <?php echo '\'' . site_url('inventory/item/sellprice') . '/\''; ?> + stockid,
 					success: function(data) {
 						var sell_price = parseFloat(data);
 						if (isNaN(sell_price))

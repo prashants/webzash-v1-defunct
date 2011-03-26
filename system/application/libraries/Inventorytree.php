@@ -94,8 +94,8 @@ class Inventorytree
 				echo "<td>Group</td>";
 				echo "<td>-</td>";
 				echo "<td>-</td>";
-				echo "<td class=\"td-actions\">" . anchor('inventory/stockgroup/edit/' . $row['id'] , "Edit", array('title' => 'Edit Stock Group', 'class' => 'red-link'));
-				echo " &nbsp;" . anchor('inventory/stockgroup/delete/' . $row['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Stock Group')), array('class' => "confirmClick", 'title' => "Delete Stock Group")) . "</td>";
+				echo "<td class=\"td-actions\">" . anchor('inventory/group/edit/' . $row['id'] , "Edit", array('title' => 'Edit Stock Group', 'class' => 'red-link'));
+				echo " &nbsp;" . anchor('inventory/group/delete/' . $row['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Stock Group')), array('class' => "confirmClick", 'title' => "Delete Stock Group")) . "</td>";
 				echo "</tr>";
 			}
 			if ($row['sub_stock_items'])
@@ -108,8 +108,8 @@ class Inventorytree
 					echo "<td>Item</td>";
 					echo "<td>" . convert_amount_dc($row_item['op_balance_total_value']) . "</td>";
 					echo "<td></td>";
-					echo "<td class=\"td-actions\">" . anchor('inventory/stockitem/edit/' . $row_item['id'] , "Edit", array('title' => 'Edit Stock Item', 'class' => 'red-link'));
-					echo " &nbsp;" . anchor('inventory/stockitem/delete/' . $row_item['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Stock Item')), array('class' => "confirmClick", 'title' => "Delete Stock Item")) . "</td>";
+					echo "<td class=\"td-actions\">" . anchor('inventory/item/edit/' . $row_item['id'] , "Edit", array('title' => 'Edit Stock Item', 'class' => 'red-link'));
+					echo " &nbsp;" . anchor('inventory/item/delete/' . $row_item['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Stock Item')), array('class' => "confirmClick", 'title' => "Delete Stock Item")) . "</td>";
 					echo "</tr>";
 				}
 				self::$counter--;
