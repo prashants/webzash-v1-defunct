@@ -12,9 +12,9 @@ class Inventory_Group_model extends Model {
 		$options = array();
 		$options[0] = '(None)';
 		if ($id == NULL)
-			$this->db->from('stock_groups')->where('id >', 0)->order_by('name', 'asc');
+			$this->db->from('inventory_groups')->where('id >', 0)->order_by('name', 'asc');
 		else
-			$this->db->from('stock_groups')->where('id >', 0)->where('id !=', $id)->order_by('name', 'asc');
+			$this->db->from('inventory_groups')->where('id >', 0)->where('id !=', $id)->order_by('name', 'asc');
 		$stock_group_parent_q = $this->db->get();
 		foreach ($stock_group_parent_q->result() as $row)
 		{
@@ -26,7 +26,7 @@ class Inventory_Group_model extends Model {
 	function get_item_groups()
 	{
 		$options = array();
-		$this->db->from('stock_groups')->where('id >', 0)->order_by('name', 'asc');
+		$this->db->from('inventory_groups')->where('id >', 0)->order_by('name', 'asc');
 		$stock_item_parent_q = $this->db->get();
 		foreach ($stock_item_parent_q->result() as $row)
 		{

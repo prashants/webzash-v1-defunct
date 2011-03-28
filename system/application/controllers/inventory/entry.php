@@ -90,7 +90,7 @@ class Entry extends Controller {
 	function add($voucher_type)
 	{
 		/* Check access */
-		if ( ! check_access('create stock voucher'))
+		if ( ! check_access('create inventory entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('voucher/show/' . $voucher_type);
@@ -116,7 +116,7 @@ class Entry extends Controller {
 			$current_voucher_type = voucher_type_info($voucher_type_id);
 		}
 
-		$this->template->set('page_title', 'New ' . $current_voucher_type['name'] . ' Entry');
+		$this->template->set('page_title', 'Add ' . $current_voucher_type['name'] . ' Entry');
 
 		/* Form fields */
 		$data['voucher_number'] = array(
@@ -292,7 +292,7 @@ class Entry extends Controller {
 					continue;
 
 				/* Check for valid inventory item id */
-				$this->db->from('stock_items')->where('id', $data_all_stock_item_id[$id]);
+				$this->db->from('inventory_items')->where('id', $data_all_stock_item_id[$id]);
 				$valid_stock_item_q = $this->db->get();
 				if ($valid_stock_item_q->num_rows() < 1)
 				{
@@ -567,7 +567,7 @@ class Entry extends Controller {
 	function edit($voucher_type, $voucher_id = 0)
 	{
 		/* Check access */
-		if ( ! check_access('edit stock voucher'))
+		if ( ! check_access('edit inventory entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/entry/show/' . $voucher_type);
@@ -817,7 +817,7 @@ class Entry extends Controller {
 					continue;
 
 				/* Check for valid stock item id */
-				$this->db->from('stock_items')->where('id', $data_all_stock_item_id[$id]);
+				$this->db->from('inventory_items')->where('id', $data_all_stock_item_id[$id]);
 				$valid_stock_item_q = $this->db->get();
 				if ($valid_stock_item_q->num_rows() < 1)
 				{
@@ -1099,7 +1099,7 @@ class Entry extends Controller {
 	function delete($voucher_type, $voucher_id = 0)
 	{
 		/* Check access */
-		if ( ! check_access('delete stock voucher'))
+		if ( ! check_access('delete inventory entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/entry/show/' . $voucher_type);
@@ -1171,7 +1171,7 @@ class Entry extends Controller {
 		$this->load->model('Setting_model');
 
 		/* Check access */
-		if ( ! check_access('download stock voucher'))
+		if ( ! check_access('download inventory entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/entry/show/' . $voucher_type);
@@ -1252,7 +1252,7 @@ class Entry extends Controller {
 		$this->load->model('Setting_model');
 
 		/* Check access */
-		if ( ! check_access('print stock voucher'))
+		if ( ! check_access('print inventory entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/entry/show/' . $voucher_type);
@@ -1331,7 +1331,7 @@ class Entry extends Controller {
 		$this->load->library('email');
 
 		/* Check access */
-		if ( ! check_access('email stock voucher'))
+		if ( ! check_access('email inventory entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/entry/show/' . $voucher_type);

@@ -11,7 +11,7 @@ class Inventory_Item_model extends Model {
 	{
 		$options = array();
 		$options[0] = "(Please Select)";
-		$this->db->from('stock_items')->order_by('name', 'asc');
+		$this->db->from('inventory_items')->order_by('name', 'asc');
 		$ledger_q = $this->db->get();
 		foreach ($ledger_q->result() as $row)
 		{
@@ -22,7 +22,7 @@ class Inventory_Item_model extends Model {
 
 	function get_name($stock_item_id)
 	{
-		$this->db->from('stock_items')->where('id', $stock_item_id)->limit(1);
+		$this->db->from('inventory_items')->where('id', $stock_item_id)->limit(1);
 		$stock_item_q = $this->db->get();
 		if ($stock_item = $stock_item_q->row())
 			return $stock_item->name;
@@ -32,7 +32,7 @@ class Inventory_Item_model extends Model {
 
 	function get_closing_quantity($stock_item_id)
 	{
-		$this->db->from('stock_items')->where('id', $stock_item_id)->limit(1);
+		$this->db->from('inventory_items')->where('id', $stock_item_id)->limit(1);
 		$stock_item_q = $this->db->get();
 		if ( ! $stock_item = $stock_item_q->row())
 			return 0;
@@ -59,7 +59,7 @@ class Inventory_Item_model extends Model {
 	/* TODO */
 	function get_balance($stock_item_id)
 	{
-		$this->db->from('stock_items')->where('id', $stock_item_id)->limit(1);
+		$this->db->from('inventory_items')->where('id', $stock_item_id)->limit(1);
 		$stock_item_q = $this->db->get();
 		if ( ! $stock_item = $stock_item_q->row())
 			return array(0, 0);
@@ -106,7 +106,7 @@ class Inventory_Item_model extends Model {
 
 	function get_selling_price($stock_item_id)
 	{
-		$this->db->from('stock_items')->where('id', $stock_item_id)->limit(1);
+		$this->db->from('inventory_items')->where('id', $stock_item_id)->limit(1);
 		$stock_item_q = $this->db->get();
 		if ($stock_item = $stock_item_q->row())
 			return $stock_item->default_sell_price;

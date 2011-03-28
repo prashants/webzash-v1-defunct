@@ -13,28 +13,28 @@
  * 'print voucher'
  * 'email voucher'
  * 'download voucher'
- * 'view stock voucher'
- * 'create stock voucher'
- * 'edit stock voucher'
- * 'delete stock voucher'
- * 'print stock voucher'
- * 'email stock voucher'
- * 'download stock voucher'
+ * 'view inventory entry'
+ * 'create inventory entry'
+ * 'edit inventory entry'
+ * 'delete inventory entry'
+ * 'print inventory entry'
+ * 'email inventory entry'
+ * 'download inventory entry'
  * 'create ledger'
  * 'edit ledger'
  * 'delete ledger'
  * 'create group'
  * 'edit group'
  * 'delete group'
- * 'create stock unit'
- * 'edit stock unit'
- * 'delete stock unit'
- * 'create stock group'
- * 'edit stock group'
- * 'delete stock group'
- * 'create stock item',
- * 'edit stock item',
- * 'delete stock item',
+ * 'create inventory unit'
+ * 'edit inventory unit'
+ * 'delete inventory unit'
+ * 'create inventory group'
+ * 'edit inventory group'
+ * 'delete inventory group'
+ * 'create inventory item',
+ * 'edit inventory item',
+ * 'delete inventory item',
  * 'create tag'
  * 'edit tag'
  * 'delete tag'
@@ -61,28 +61,28 @@ if ( ! function_exists('check_access'))
 			'print voucher',
 			'email voucher',
 			'download voucher',
-			'view stock voucher',
-			'create stock voucher',
-			'edit stock voucher',
-			'delete stock voucher',
-			'print stock voucher',
-			'email stock voucher',
-			'download stock voucher',
+			'view inventory entry',
+			'create inventory entry',
+			'edit inventory entry',
+			'delete inventory entry',
+			'print inventory entry',
+			'email inventory entry',
+			'download inventory entry',
 			'create ledger',
 			'edit ledger',
 			'delete ledger',
 			'create group',
 			'edit group',
 			'delete group',
-			'create stock unit',
-			'edit stock unit',
-			'delete stock unit',
-			'create stock group',
-			'edit stock group',
-			'delete stock group',
-			'create stock item',
-			'edit stock item',
-			'delete stock item',
+			'create inventory unit',
+			'edit inventory unit',
+			'delete inventory unit',
+			'create inventory group',
+			'edit inventory group',
+			'delete inventory group',
+			'create inventory item',
+			'edit inventory item',
+			'delete inventory item',
 			'create tag',
 			'edit tag',
 			'delete tag',
@@ -101,28 +101,28 @@ if ( ! function_exists('check_access'))
 			'print voucher',
 			'email voucher',
 			'download voucher',
-			'view stock voucher',
-			'create stock voucher',
-			'edit stock voucher',
-			'delete stock voucher',
-			'print stock voucher',
-			'email stock voucher',
-			'download stock voucher',
+			'view inventory entry',
+			'create inventory entry',
+			'edit inventory entry',
+			'delete inventory entry',
+			'print inventory entry',
+			'email inventory entry',
+			'download inventory entry',
 			'create ledger',
 			'edit ledger',
 			'delete ledger',
 			'create group',
 			'edit group',
 			'delete group',
-			'create stock unit',
-			'edit stock unit',
-			'delete stock unit',
-			'create stock group',
-			'edit stock group',
-			'delete stock group',
-			'create stock item',
-			'edit stock item',
-			'delete stock item',
+			'create inventory unit',
+			'edit inventory unit',
+			'delete inventory unit',
+			'create inventory group',
+			'edit inventory group',
+			'delete inventory group',
+			'create inventory item',
+			'edit inventory item',
+			'delete inventory item',
 			'create tag',
 			'edit tag',
 			'delete tag',
@@ -138,17 +138,17 @@ if ( ! function_exists('check_access'))
 			'print voucher',
 			'email voucher',
 			'download voucher',
-			'view stock voucher',
-			'create stock voucher',
-			'edit stock voucher',
-			'delete stock voucher',
-			'print stock voucher',
-			'email stock voucher',
-			'download stock voucher',
+			'view inventory entry',
+			'create inventory entry',
+			'edit inventory entry',
+			'delete inventory entry',
+			'print inventory entry',
+			'email inventory entry',
+			'download inventory entry',
 			'create ledger',
 			'edit ledger',
-			'create stock item',
-			'edit stock item',
+			'create inventory item',
+			'edit inventory item',
 		);
 		$permissions['guest'] = array(
 			'view voucher',

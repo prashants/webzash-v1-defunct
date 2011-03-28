@@ -19,7 +19,7 @@ class Unit extends Controller {
 		$this->template->set('page_title', 'Add Inventory Unit');
 
 		/* Check access */
-		if ( ! check_access('create stock unit'))
+		if ( ! check_access('create inventory unit'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');
@@ -58,8 +58,8 @@ class Unit extends Controller {
 		);
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_unit_symbol', 'Inventory Unit Symbol', 'trim|required|min_length[2]|max_length[15]|unique[stock_units.symbol]');
-		$this->form_validation->set_rules('stock_unit_name', 'Inventory Unit Name', 'trim|required|min_length[2]|max_length[100]|unique[stock_units.name]');
+		$this->form_validation->set_rules('stock_unit_symbol', 'Inventory Unit Symbol', 'trim|required|min_length[2]|max_length[15]|unique[inventory_units.symbol]');
+		$this->form_validation->set_rules('stock_unit_name', 'Inventory Unit Name', 'trim|required|min_length[2]|max_length[100]|unique[inventory_units.name]');
 		$this->form_validation->set_rules('stock_unit_decimal', 'Decimal Places', 'trim|required|max_length[1]|is_natural');
 
 		/* Re-populating form */
@@ -88,7 +88,7 @@ class Unit extends Controller {
 				'name' => $data_stock_unit_name,
 				'decimal_places' => $data_stock_unit_decimal,
 			);
-			if ( ! $this->db->insert('stock_units', $insert_data))
+			if ( ! $this->db->insert('inventory_units', $insert_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Inventory Unit - ' . $data_stock_unit_name . '.', 'error');
@@ -111,7 +111,7 @@ class Unit extends Controller {
 		$this->template->set('page_title', 'Edit Inventory Unit');
 
 		/* Check access */
-		if ( ! check_access('edit stock unit'))
+		if ( ! check_access('edit inventory unit'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');
@@ -136,7 +136,7 @@ class Unit extends Controller {
 		}
 
 		/* Loading current stock unit */
-		$this->db->from('stock_units')->where('id', $id);
+		$this->db->from('inventory_units')->where('id', $id);
 		$stock_unit_data_q = $this->db->get();
 		if ($stock_unit_data_q->num_rows() < 1)
 		{
@@ -171,8 +171,8 @@ class Unit extends Controller {
 		$data['stock_unit_id'] = $id;
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_unit_symbol', 'Inventory Unit Symbol', 'trim|required|min_length[2]|max_length[15]|uniquewithid[stock_units.symbol.' . $id . ']');
-		$this->form_validation->set_rules('stock_unit_name', 'Inventory Unit Name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[stock_units.name.' . $id . ']');
+		$this->form_validation->set_rules('stock_unit_symbol', 'Inventory Unit Symbol', 'trim|required|min_length[2]|max_length[15]|uniquewithid[inventory_units.symbol.' . $id . ']');
+		$this->form_validation->set_rules('stock_unit_name', 'Inventory Unit Name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[inventory_units.name.' . $id . ']');
 		$this->form_validation->set_rules('stock_unit_decimal', 'Decimal Places', 'trim|required|max_length[1]|is_natural');
 
 		/* Re-populating form */
@@ -202,7 +202,7 @@ class Unit extends Controller {
 				'name' => $data_stock_unit_name,
 				'decimal_places' => $data_stock_unit_decimal,
 			);
-			if ( ! $this->db->where('id', $data_id)->update('stock_units', $update_data))
+			if ( ! $this->db->where('id', $data_id)->update('inventory_units', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Inventory Unit - ' . $data_stock_unit_name . '.', 'error');
@@ -223,7 +223,7 @@ class Unit extends Controller {
 	function delete($id)
 	{
 		/* Check access */
-		if ( ! check_access('delete stock unit'))
+		if ( ! check_access('delete inventory unit'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');
@@ -248,7 +248,7 @@ class Unit extends Controller {
 		}
 
 		/* Checking if linked to any stock item */
-		$this->db->from('stock_items')->where('stock_unit_id', $id);
+		$this->db->from('inventory_items')->where('inventory_unit_id', $id);
 		if ($this->db->get()->num_rows() > 0)
 		{
 			$this->messages->add('Cannot delete Inventory Unit. Inventory Unit is still in use.', 'error');
@@ -257,7 +257,7 @@ class Unit extends Controller {
 		}
 
 		/* Get the stock unit details */
-		$this->db->from('stock_units')->where('id', $id);
+		$this->db->from('inventory_units')->where('id', $id);
 		$stock_unit_q = $this->db->get();
 		if ($stock_unit_q->num_rows() < 1)
 		{
@@ -270,7 +270,7 @@ class Unit extends Controller {
 
 		/* Deleting group */
 		$this->db->trans_start();
-		if ( ! $this->db->delete('stock_units', array('id' => $id)))
+		if ( ! $this->db->delete('inventory_units', array('id' => $id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Inventory Unit - ' . $stock_unit_data->name . '.', 'error');

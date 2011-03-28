@@ -22,7 +22,7 @@ class Item extends Controller {
 		$this->template->set('page_title', 'Add Inventory Item');
 
 		/* Check access */
-		if ( ! check_access('create stock item'))
+		if ( ! check_access('create inventory item'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');
@@ -84,7 +84,7 @@ class Item extends Controller {
 		$data['stock_item_group_active'] = 0;
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_item_name', 'Inventory item name', 'trim|required|min_length[2]|max_length[100]|unique[stock_items.name]');
+		$this->form_validation->set_rules('stock_item_name', 'Inventory item name', 'trim|required|min_length[2]|max_length[100]|unique[inventory_items.name]');
 		$this->form_validation->set_rules('stock_item_group', 'Inventory group', 'trim|required|is_natural');
 		$this->form_validation->set_rules('stock_item_unit', 'Inventory unit', 'trim|required|is_natural');
 		$this->form_validation->set_rules('stock_item_costing_method', 'Costing method', 'trim|required|is_natural');
@@ -124,7 +124,7 @@ class Item extends Controller {
 			$data_stock_item_default_sell_price = $this->input->post('stock_item_default_sell_price', TRUE);
 
 			/* Check if stock group present */
-			$this->db->select('id')->from('stock_groups')->where('id', $data_stock_item_group_id);
+			$this->db->select('id')->from('inventory_groups')->where('id', $data_stock_item_group_id);
 			if ($this->db->get()->num_rows() < 1)
 			{
 				$this->messages->add('Invalid inventory group.', 'error');
@@ -133,7 +133,7 @@ class Item extends Controller {
 			}
 
 			/* Check if stock unit present */
-			$this->db->select('id')->from('stock_units')->where('id', $data_stock_item_unit_id);
+			$this->db->select('id')->from('inventory_units')->where('id', $data_stock_item_unit_id);
 			if ($this->db->get()->num_rows() < 1)
 			{
 				$this->messages->add('Invalid inventory unit.', 'error');
@@ -147,15 +147,15 @@ class Item extends Controller {
 			$this->db->trans_start();
 			$insert_data = array(
 				'name' => $data_stock_item_name,
-				'stock_group_id' => $data_stock_item_group_id,
-				'stock_unit_id' => $data_stock_item_unit_id,
+				'inventory_group_id' => $data_stock_item_group_id,
+				'inventory_unit_id' => $data_stock_item_unit_id,
 				'costing_method' => $data_stock_item_costing_method,
 				'op_balance_quantity' => $data_stock_item_op_quantity,
 				'op_balance_rate_per_unit' => $data_stock_item_op_rate_per_unit,
 				'op_balance_total_value' => $data_stock_item_op_total,
 				'default_sell_price' => $data_stock_item_default_sell_price,
 			);
-			if ( ! $this->db->insert('stock_items', $insert_data))
+			if ( ! $this->db->insert('inventory_items', $insert_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Inventory Item - ' . $data_stock_item_name . '.', 'error');
@@ -178,7 +178,7 @@ class Item extends Controller {
 		$this->template->set('page_title', 'Edit Inventory Item');
 
 		/* Check access */
-		if ( ! check_access('edit stock item'))
+		if ( ! check_access('edit inventory item'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');
@@ -203,7 +203,7 @@ class Item extends Controller {
 		}
 
 		/* Loading current stock item */
-		$this->db->from('stock_items')->where('id', $id);
+		$this->db->from('inventory_items')->where('id', $id);
 		$stock_item_data_q = $this->db->get();
 		if ($stock_item_data_q->num_rows() < 1)
 		{
@@ -255,13 +255,13 @@ class Item extends Controller {
 		);
 		$data['stock_item_costing_method_active'] = $stock_item_data->costing_method;
 		$data['stock_item_units'] = $this->Inventory_Unit_model->get_all_units();
-		$data['stock_item_unit_active'] = $stock_item_data->stock_unit_id;
+		$data['stock_item_unit_active'] = $stock_item_data->inventory_unit_id;
 		$data['stock_item_groups'] = $this->Inventory_Group_model->get_item_groups();
-		$data['stock_item_group_active'] = $stock_item_data->stock_group_id;
+		$data['stock_item_group_active'] = $stock_item_data->inventory_group_id;
 		$data['stock_item_id'] = $id;
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_item_name', 'Inventory item name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[stock_items.name.' . $id . ']');
+		$this->form_validation->set_rules('stock_item_name', 'Inventory item name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[inventory_items.name.' . $id . ']');
 		$this->form_validation->set_rules('stock_item_group', 'Inventory group', 'trim|required|is_natural');
 		$this->form_validation->set_rules('stock_item_unit', 'Inventory unit', 'trim|required|is_natural');
 		$this->form_validation->set_rules('stock_item_costing_method', 'Costing method', 'trim|required|is_natural');
@@ -302,7 +302,7 @@ class Item extends Controller {
 			$data_id = $id;
 
 			/* Check if stock group present */
-			$this->db->select('id')->from('stock_groups')->where('id', $data_stock_item_group_id);
+			$this->db->select('id')->from('inventory_groups')->where('id', $data_stock_item_group_id);
 			if ($this->db->get()->num_rows() < 1)
 			{
 				$this->messages->add('Invalid inventory group.', 'error');
@@ -311,7 +311,7 @@ class Item extends Controller {
 			}
 
 			/* Check if stock unit present */
-			$this->db->select('id')->from('stock_units')->where('id', $data_stock_item_unit_id);
+			$this->db->select('id')->from('inventory_units')->where('id', $data_stock_item_unit_id);
 			if ($this->db->get()->num_rows() < 1)
 			{
 				$this->messages->add('Invalid stock unit.', 'error');
@@ -325,15 +325,15 @@ class Item extends Controller {
 			$this->db->trans_start();
 			$update_data = array(
 				'name' => $data_stock_item_name,
-				'stock_group_id' => $data_stock_item_group_id,
-				'stock_unit_id' => $data_stock_item_unit_id,
+				'inventory_group_id' => $data_stock_item_group_id,
+				'inventory_unit_id' => $data_stock_item_unit_id,
 				'costing_method' => $data_stock_item_costing_method,
 				'op_balance_quantity' => $data_stock_item_op_quantity,
 				'op_balance_rate_per_unit' => $data_stock_item_op_rate_per_unit,
 				'op_balance_total_value' => $data_stock_item_op_total,
 				'default_sell_price' => $data_stock_item_default_sell_price,
 			);
-			if ( ! $this->db->where('id', $data_id)->update('stock_items', $update_data))
+			if ( ! $this->db->where('id', $data_id)->update('inventory_items', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Inventory Item - ' . $data_stock_item_name . '.', 'error');
@@ -354,7 +354,7 @@ class Item extends Controller {
 	function delete($id)
 	{
 		/* Check access */
-		if ( ! check_access('delete stock item'))
+		if ( ! check_access('delete inventory item'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');
@@ -379,7 +379,7 @@ class Item extends Controller {
 		}
 
 		/* Get the stock item details */
-		$this->db->from('stock_items')->where('id', $id);
+		$this->db->from('inventory_items')->where('id', $id);
 		$stock_item_q = $this->db->get();
 		if ($stock_item_q->num_rows() < 1)
 		{
@@ -392,7 +392,7 @@ class Item extends Controller {
 
 		/* Deleting item */
 		$this->db->trans_start();
-		if ( ! $this->db->delete('stock_items', array('id' => $id)))
+		if ( ! $this->db->delete('inventory_items', array('id' => $id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Inventory Item - ' . $stock_item_data->name . '.', 'error');

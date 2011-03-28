@@ -20,7 +20,7 @@ class Group extends Controller {
 		$this->template->set('page_title', 'Add Inventory Group');
 
 		/* Check access */
-		if ( ! check_access('create stock group'))
+		if ( ! check_access('create inventory group'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');
@@ -47,7 +47,7 @@ class Group extends Controller {
 		$data['stock_group_parent_active'] = 0;
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_group_name', 'Inventory group name', 'trim|required|min_length[2]|max_length[100]|unique[stock_groups.name]');
+		$this->form_validation->set_rules('stock_group_name', 'Inventory group name', 'trim|required|min_length[2]|max_length[100]|unique[inventory_groups.name]');
 		$this->form_validation->set_rules('stock_group_parent', 'Parent inventory group', 'trim|required|is_natural');
 
 		/* Re-populating form */
@@ -71,7 +71,7 @@ class Group extends Controller {
 			/* Check if parent group id present */
 			if ($data_stock_group_parent_id > 0)
 			{
-				$this->db->select('id')->from('stock_groups')->where('id', $data_stock_group_parent_id);
+				$this->db->select('id')->from('inventory_groups')->where('id', $data_stock_group_parent_id);
 				if ($this->db->get()->num_rows() < 1)
 				{
 					$this->messages->add('Invalid parent inventory group.', 'error');
@@ -85,7 +85,7 @@ class Group extends Controller {
 				'name' => $data_stock_group_name,
 				'parent_id' => $data_stock_group_parent_id,
 			);
-			if ( ! $this->db->insert('stock_groups', $insert_data))
+			if ( ! $this->db->insert('inventory_groups', $insert_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Inventory Group - ' . $data_stock_group_name . '.', 'error');
@@ -108,7 +108,7 @@ class Group extends Controller {
 		$this->template->set('page_title', 'Edit Inventory Group');
 
 		/* Check access */
-		if ( ! check_access('edit stock group'))
+		if ( ! check_access('edit inventory group'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');
@@ -133,7 +133,7 @@ class Group extends Controller {
 		}
 
 		/* Loading current group */
-		$this->db->from('stock_groups')->where('id', $id);
+		$this->db->from('inventory_groups')->where('id', $id);
 		$stock_group_data_q = $this->db->get();
 		if ($stock_group_data_q->num_rows() < 1)
 		{
@@ -156,7 +156,7 @@ class Group extends Controller {
 		$data['stock_group_id'] = $id;
 
 		/* Form validations */
-		$this->form_validation->set_rules('stock_group_name', 'Inventory group name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[stock_groups.name.' . $id . ']');
+		$this->form_validation->set_rules('stock_group_name', 'Inventory group name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[inventory_groups.name.' . $id . ']');
 		$this->form_validation->set_rules('stock_group_parent', 'Parent inventory group', 'trim|required|is_natural');
 
 		/* Re-populating form */
@@ -181,7 +181,7 @@ class Group extends Controller {
 			/* Check if parent group id present */
 			if ($data_stock_group_parent_id > 0)
 			{
-				$this->db->select('id')->from('stock_groups')->where('id', $data_stock_group_parent_id);
+				$this->db->select('id')->from('inventory_groups')->where('id', $data_stock_group_parent_id);
 				if ($this->db->get()->num_rows() < 1)
 				{
 					$this->messages->add('Invalid parent inventory group.', 'error');
@@ -206,7 +206,7 @@ class Group extends Controller {
 				'name' => $data_stock_group_name,
 				'parent_id' => $data_stock_group_parent_id,
 			);
-			if ( ! $this->db->where('id', $data_id)->update('stock_groups', $update_data))
+			if ( ! $this->db->where('id', $data_id)->update('inventory_groups', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Inventory Group - ' . $data_stock_group_name . '.', 'error');
@@ -227,7 +227,7 @@ class Group extends Controller {
 	function delete($id)
 	{
 		/* Check access */
-		if ( ! check_access('delete stock group'))
+		if ( ! check_access('delete inventory group'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');
@@ -251,14 +251,14 @@ class Group extends Controller {
 			return;
 		}
 
-		$this->db->from('stock_groups')->where('parent_id', $id);
+		$this->db->from('inventory_groups')->where('parent_id', $id);
 		if ($this->db->get()->num_rows() > 0)
 		{
 			$this->messages->add('Cannot delete non-empty Inventory Group.', 'error');
 			redirect('inventory/account');
 			return;
 		}
-		$this->db->from('stock_items')->where('group_id', $id);
+		$this->db->from('inventory_items')->where('group_id', $id);
 		if ($this->db->get()->num_rows() > 0)
 		{
 			$this->messages->add('Cannot delete non-empty Inventory Group.', 'error');
@@ -267,7 +267,7 @@ class Group extends Controller {
 		}
 
 		/* Get the group details */
-		$this->db->from('stock_groups')->where('id', $id);
+		$this->db->from('inventory_groups')->where('id', $id);
 		$stock_group_q = $this->db->get();
 		if ($stock_group_q->num_rows() < 1)
 		{
@@ -280,7 +280,7 @@ class Group extends Controller {
 
 		/* Deleting group */
 		$this->db->trans_start();
-		if ( ! $this->db->delete('stock_groups', array('id' => $id)))
+		if ( ! $this->db->delete('inventory_groups', array('id' => $id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Inventory Group - ' . $stock_group_data->name . '.', 'error');

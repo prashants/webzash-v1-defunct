@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS settings (
   database_version int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
-CREATE TABLE IF NOT EXISTS stock_units (
+CREATE TABLE IF NOT EXISTS inventory_units (
   id int(11) NOT NULL AUTO_INCREMENT,
   symbol varchar(15) NOT NULL,
   name varchar(100) NOT NULL,
@@ -113,17 +113,17 @@ CREATE TABLE IF NOT EXISTS stock_units (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS stock_groups (
+CREATE TABLE IF NOT EXISTS inventory_groups (
   id int(11) NOT NULL AUTO_INCREMENT,
   parent_id varchar(11) NOT NULL,
   name varchar(100) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS stock_items (
+CREATE TABLE IF NOT EXISTS inventory_items (
   id int(11) NOT NULL AUTO_INCREMENT,
-  stock_group_id int(11) NOT NULL,
-  stock_unit_id int(11) NOT NULL,
+  inventory_group_id int(11) NOT NULL,
+  inventory_unit_id int(11) NOT NULL,
   name varchar(100) NOT NULL,
   costing_method int(2) NOT NULL,
   op_balance_quantity float NOT NULL,

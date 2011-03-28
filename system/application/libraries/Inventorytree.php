@@ -30,7 +30,7 @@ class Inventorytree
 				'sub_stock_items' => array(),
 			);
 		} else {
-			$CI->db->from('stock_groups')->where('id', $id)->limit(1);
+			$CI->db->from('inventory_groups')->where('id', $id)->limit(1);
 			$current_stock_group_q = $CI->db->get();
 			if ($current_stock_group = $current_stock_group_q->row())
 			{
@@ -45,7 +45,7 @@ class Inventorytree
 		}
 
 		/* Adding sub groups */
-		$CI->db->from('stock_groups')->where('parent_id', $id)->order_by('name', 'asc');
+		$CI->db->from('inventory_groups')->where('parent_id', $id)->order_by('name', 'asc');
 		$stock_group_q = $CI->db->get();
 		foreach ($stock_group_q->result() as $row)
 		{
@@ -62,7 +62,7 @@ class Inventorytree
 	{
 		$CI =& get_instance();
 		$stock_items = array();
-		$CI->db->from('stock_items')->where('stock_group_id', $id)->order_by('name', 'asc');
+		$CI->db->from('inventory_items')->where('inventory_group_id', $id)->order_by('name', 'asc');
 		$stock_item_q = $CI->db->get();
 		foreach ($stock_item_q->result() as $row)
 		{

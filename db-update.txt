@@ -12,7 +12,7 @@ ALTER TABLE voucher_types CHANGE bank_cash_ledger_restriction bank_cash_ledger_r
 ALTER TABLE voucher_items ADD stock_type INT(1) NOT NULL;
 ALTER TABLE voucher_items ADD stock_rate VARCHAR(15) NOT NULL;
 
-CREATE TABLE IF NOT EXISTS stock_units (
+CREATE TABLE IF NOT EXISTS inventory_units (
   id int(11) NOT NULL AUTO_INCREMENT,
   symbol varchar(15) NOT NULL,
   name varchar(100) NOT NULL,
@@ -20,14 +20,14 @@ CREATE TABLE IF NOT EXISTS stock_units (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS stock_groups (
+CREATE TABLE IF NOT EXISTS inventory_groups (
   id int(11) NOT NULL AUTO_INCREMENT,
   parent_id varchar(11) NOT NULL,
   name varchar(100) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS stock_items (
+CREATE TABLE IF NOT EXISTS inventory_items (
   id int(11) NOT NULL AUTO_INCREMENT,
   stock_group_id int(11) NOT NULL,
   stock_unit_id int(11) NOT NULL,
