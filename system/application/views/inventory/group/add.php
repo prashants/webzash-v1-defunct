@@ -2,15 +2,15 @@
 	echo form_open('inventory/group/add');
 
 	echo "<p>";
-	echo form_label('Stock group name', 'stock_group_name');
+	echo form_label('Inventory group name', 'inventory_group_name');
 	echo "<br />";
-	echo form_input($stock_group_name);
+	echo form_input($inventory_group_name);
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Parent stock group', 'stock_group_parent');
+	echo form_label('Parent inventory group', 'inventory_group_parent');
 	echo "<br />";
-	echo form_dropdown('stock_group_parent', $stock_group_parents, $stock_group_parent_active);
+	echo form_dropdown('inventory_group_parent', $inventory_group_parents, $inventory_group_parent_active);
 	echo "</p>";
 
 	echo "<p>";

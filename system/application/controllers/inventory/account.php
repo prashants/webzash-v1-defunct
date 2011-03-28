@@ -6,11 +6,11 @@ class Account extends Controller {
 		$this->template->set('page_title', 'Inventory');
 		$this->template->set('nav_links', array('inventory/group/add' => 'Add Inventory Group', 'inventory/item/add' => 'Add Inventory Item', 'inventory/unit/add' => 'Add Inventory Unit'));
 
-		/* Stock Units */
+		/* Inventory Units */
 		$this->db->from('inventory_units')->order_by('name', 'desc');
-		$data['stock_units'] = $this->db->get();
+		$data['inventory_units'] = $this->db->get();
 
-		/* Stocks Tree */
+		/* Inventory Tree */
 		$this->load->library('inventorytree');
 		$inventory_tree = new Inventorytree();
 		$data['inventory_tree'] = $inventory_tree->init(0);

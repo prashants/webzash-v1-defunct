@@ -1,18 +1,18 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
-	/********************** STOCK ITEM TOTAL ******************************/
-	$('#stock_item_op_quantity').live('change', function() {
+	/******************** INVENTORY ITEM TOTAL ****************************/
+	$('#inventory_item_op_quantity').live('change', function() {
 		updateTotalValue();
 	});
 
-	$('#stock_item_op_rate_per_unit').live('change', function() {
+	$('#inventory_item_op_rate_per_unit').live('change', function() {
 		updateTotalValue();
 	});
 
 	var updateTotalValue = function() {
-		var quantity = $('#stock_item_op_quantity').val();
-		var rate_per_unit = $('#stock_item_op_rate_per_unit').val();
+		var quantity = $('#inventory_item_op_quantity').val();
+		var rate_per_unit = $('#inventory_item_op_rate_per_unit').val();
 
 		quantity = parseFloat(quantity);
 		rate_per_unit = parseFloat(rate_per_unit);
@@ -23,69 +23,69 @@ $(document).ready(function() {
 			var total_value;
 			total_value = quantity * rate_per_unit;
 
-			/* displaying total amount for each stock item */
-			$('#stock_item_op_total').val(total_value);
-			$('#stock_item_op_total').fadeTo('slow', 0.1).fadeTo('slow', 1);
+			/* displaying total amount for each inventory item */
+			$('#inventory_item_op_total').val(total_value);
+			$('#inventory_item_op_total').fadeTo('slow', 0.1).fadeTo('slow', 1);
 		}
 	}
 });
 </script>
 
 <?php
-	echo form_open('inventory/item/edit/' . $stock_item_id);
+	echo form_open('inventory/item/edit/' . $inventory_item_id);
 
 	echo "<p>";
-	echo form_label('Stock item name', 'stock_item_name');
+	echo form_label('Inventory item name', 'inventory_item_name');
 	echo "<br />";
-	echo form_input($stock_item_name);
+	echo form_input($inventory_item_name);
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Stock group', 'stock_item_group');
+	echo form_label('Inventory group', 'inventory_item_group');
 	echo "<br />";
-	echo form_dropdown('stock_item_group', $stock_item_groups, $stock_item_group_active);
+	echo form_dropdown('inventory_item_group', $inventory_item_groups, $inventory_item_group_active);
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Stock unit', 'stock_item_unit');
+	echo form_label('Inventory unit', 'inventory_item_unit');
 	echo "<br />";
-	echo form_dropdown('stock_item_unit', $stock_item_units, $stock_item_unit_active);
+	echo form_dropdown('inventory_item_unit', $inventory_item_units, $inventory_item_unit_active);
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Costing method', 'stock_item_costing_method');
+	echo form_label('Costing method', 'inventory_item_costing_method');
 	echo "<br />";
-	echo form_dropdown('stock_item_costing_method', $stock_item_costing_methods, $stock_item_costing_method_active);
+	echo form_dropdown('inventory_item_costing_method', $inventory_item_costing_methods, $inventory_item_costing_method_active);
 	echo "</p>";
 
 	echo "<p>";
 	echo form_fieldset('Opening Balance', array('class' => "fieldset-auto-width"));
 
 	echo "<p>";
-	echo form_label('Quantity', 'stock_item_op_quantity');
+	echo form_label('Quantity', 'inventory_item_op_quantity');
 	echo "<br />";
-	echo form_input($stock_item_op_quantity);
+	echo form_input($inventory_item_op_quantity);
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Rate per unit', 'stock_item_op_rate_per_unit');
+	echo form_label('Rate per unit', 'inventory_item_op_rate_per_unit');
 	echo "<br />";
-	echo form_input($stock_item_op_rate_per_unit);
+	echo form_input($inventory_item_op_rate_per_unit);
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Total value', 'stock_item_op_total');
+	echo form_label('Total value', 'inventory_item_op_total');
 	echo "<br />";
-	echo form_input($stock_item_op_total);
+	echo form_input($inventory_item_op_total);
 	echo "</p>";
 
 	echo form_fieldset_close();
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Default selling price', 'stock_item_default_sell_price');
+	echo form_label('Default selling price', 'inventory_item_default_sell_price');
 	echo "<br />";
-	echo form_input($stock_item_default_sell_price);
+	echo form_input($inventory_item_default_sell_price);
 	echo "</p>";
 
 	echo "<p>";

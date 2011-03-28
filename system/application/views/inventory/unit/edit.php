@@ -1,23 +1,23 @@
 <?php
-	echo form_open('inventory/unit/edit/' . $stock_unit_id);
+	echo form_open('inventory/unit/edit/' . $inventory_unit_id);
 
 	echo "<p>";
-	echo form_label('Stock unit symbol', 'stock_unit_symbol');
+	echo form_label('Inventory unit symbol', 'inventory_unit_symbol');
 	echo "<br />";
-	echo form_input($stock_unit_symbol);
+	echo form_input($inventory_unit_symbol);
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Stock unit name', 'stock_unit_name');
+	echo form_label('Inventory unit name', 'inventory_unit_name');
 	echo "<br />";
-	echo form_input($stock_unit_name);
+	echo form_input($inventory_unit_name);
 	echo "</p>";
 
 	echo "<p class=\"affects-gross\">";
 	echo "<span id=\"tooltip-target-1\">";
-	echo form_label('Decimal Places', 'stock_unit_decimal');
+	echo form_label('Decimal Places', 'inventory_unit_decimal');
 	echo "<br />";
-	echo form_input($stock_unit_decimal);
+	echo form_input($inventory_unit_decimal);
 	echo "</span>";
 	echo "<span id=\"tooltip-content-1\">Maximum number of decimal places supported is 4.</span>";
 	echo "</p>";

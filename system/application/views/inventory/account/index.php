@@ -1,8 +1,8 @@
 <?php
 	/**************************** Inventory Units *****************************/
 	echo "<table border=0 cellpadding=5 class=\"simple-table float-right\">";
-	echo "<thead><tr><th>Stock Unit</th><th>Symbol</th><th></th></tr></thead>";
-	foreach ($stock_units->result() as $row)
+	echo "<thead><tr><th>Inventory Unit</th><th>Symbol</th><th></th></tr></thead>";
+	foreach ($inventory_units->result() as $row)
 	{
 		echo "<tr>";
 		echo "<td>" . $row->name . "</td>";
