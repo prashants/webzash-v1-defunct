@@ -5,8 +5,8 @@ $(document).ready(function() {
 	var firstTime = true;
 
 	/********************** SOURCE INVENTORY ITEM *************************/
-	/* Stock Item dropdown changed */
-	$('.stock-item-dropdown').live('change', function() {
+	/* Inventory Item dropdown changed */
+	$('.inventory-item-dropdown').live('change', function() {
 		if ($(this).val() == "0") {
 			$(this).parent().next().children().attr('value', "");
 			$(this).parent().next().next().children().attr('value', "");
@@ -21,11 +21,11 @@ $(document).ready(function() {
 			$(this).parent().next().next().next().next().children().attr('disabled', '');
 			$(this).parent().prev().children().trigger('change');
 		}
-		var stockid = $(this).val();
+		var inventoryid = $(this).val();
 		var rowid = $(this);
-		if (stockid > 0) {
+		if (inventoryid > 0) {
 			$.ajax({
-				url: <?php echo '\'' . site_url('inventory/item/balance') . '/\''; ?> + stockid,
+				url: <?php echo '\'' . site_url('inventory/item/balance') . '/\''; ?> + inventoryid,
 				success: function(data) {
 					rowid.parent().next().next().next().next().next().next().children().text(data);
 					rowid.parent().next().next().next().next().next().next().children().text(data);
@@ -34,7 +34,7 @@ $(document).ready(function() {
 
 			if (!firstTime) {
 				$.ajax({
-					url: <?php echo '\'' . site_url('inventory/item/sellprice') . '/\''; ?> + stockid,
+					url: <?php echo '\'' . site_url('inventory/item/sellprice') . '/\''; ?> + inventoryid,
 					success: function(data) {
 						var sell_price = parseFloat(data);
 						if (isNaN(sell_price))
@@ -51,12 +51,12 @@ $(document).ready(function() {
 		}
 	});
 
-	$('table td .source-quantity-stock-item').live('change', function() {
+	$('table td .source-quantity-inventory-item').live('change', function() {
 		var rowid = $(this);
 		calculateRowTotal(rowid.parent().prev());
 	});
 
-	$('table td .source-rate-stock-item').live('change', function() {
+	$('table td .source-rate-inventory-item').live('change', function() {
 		var rowid = $(this);
 		calculateRowTotal(rowid.parent().prev().prev());
 	});
@@ -81,49 +81,49 @@ $(document).ready(function() {
 		$('.source-recalculate').trigger('click');
 	}
 
-	$('table td .source-amount-stock-item').live('change', function() {
+	$('table td .source-amount-inventory-item').live('change', function() {
 		$('.source-recalculate').trigger('click');
 	});
 
 	/* calculating inventory total */
-	var calculateSourceStockTotal = function() {
-		var stock_total = 0;
-		$('table td .source-amount-stock-item').each(function(index) {
+	var calculateSourceInventoryTotal = function() {
+		var inventory_total = 0;
+		$('table td .source-amount-inventory-item').each(function(index) {
 			if ($(this).val() != "")
 			{
 				var item_amount = parseFloat($(this).val());
 				if ( ! isNaN(item_amount))
-					stock_total += item_amount;
+					inventory_total += item_amount;
 			}
 		});
-		return stock_total;
+		return inventory_total;
 	}
 
 	/* Add inventory item row */
-	$('table td .addstockrow').live('click', function() {
+	$('table td .addinventoryrow').live('click', function() {
 		var cur_obj = this;
 		var add_image_url = $(cur_obj).attr('src');
 		$(cur_obj).attr('src', <?php echo '\'' . asset_url() . 'images/icons/ajax.gif' . '\''; ?>);
 		$.ajax({
-			url: <?php echo '\'' . site_url('inventory/transfer/addstockrow/source') . '\''; ?>,
+			url: <?php echo '\'' . site_url('inventory/transfer/addinventoryrow/source') . '\''; ?>,
 			success: function(data) {
 				$(cur_obj).parent().parent().after(data);
 				$(cur_obj).attr('src', add_image_url);
-				$('.stock-item-dropdown').trigger('change');
+				$('.inventory-item-dropdown').trigger('change');
 			}
 		});
 	});
 
 	/* Delete inventory item row */
-	$('table td .deletestockrow').live('click', function() {
+	$('table td .deleteinventoryrow').live('click', function() {
 		$(this).parent().parent().remove();
 	});
 
-	$('.stock-item-dropdown').trigger('change');
+	$('.inventory-item-dropdown').trigger('change');
 
 	/* Recalculate Source Total */
 	$('table td .source-recalculate').live('click', function() {
-		var sourceTotal = calculateSourceStockTotal();
+		var sourceTotal = calculateSourceInventoryTotal();
 		$("table tr #source-total").text(sourceTotal);
 		if (sourceTotal >= 0)
 			$("table tr #source-total").css("background-color", "#FFFF99");
@@ -133,7 +133,7 @@ $(document).ready(function() {
 
 	/************************ DEST INVENTORY ITEM *************************/
 	/* Inventory Item dropdown changed */
-	$('.stock-item-dropdown').live('change', function() {
+	$('.inventory-item-dropdown').live('change', function() {
 		if ($(this).val() == "0") {
 			$(this).parent().next().children().attr('value', "");
 			$(this).parent().next().next().children().attr('value', "");
@@ -148,11 +148,11 @@ $(document).ready(function() {
 			$(this).parent().next().next().next().next().children().attr('disabled', '');
 			$(this).parent().prev().children().trigger('change');
 		}
-		var stockid = $(this).val();
+		var inventoryid = $(this).val();
 		var rowid = $(this);
-		if (stockid > 0) {
+		if (inventoryid > 0) {
 			$.ajax({
-				url: <?php echo '\'' . site_url('inventory/item/balance') . '/\''; ?> + stockid,
+				url: <?php echo '\'' . site_url('inventory/item/balance') . '/\''; ?> + inventoryid,
 				success: function(data) {
 					rowid.parent().next().next().next().next().next().next().children().text(data);
 					rowid.parent().next().next().next().next().next().next().children().text(data);
@@ -161,7 +161,7 @@ $(document).ready(function() {
 
 			if (!firstTime) {
 				$.ajax({
-					url: <?php echo '\'' . site_url('inventory/item/sellprice') . '/\''; ?> + stockid,
+					url: <?php echo '\'' . site_url('inventory/item/sellprice') . '/\''; ?> + inventoryid,
 					success: function(data) {
 						var sell_price = parseFloat(data);
 						if (isNaN(sell_price))
@@ -178,12 +178,12 @@ $(document).ready(function() {
 		}
 	});
 
-	$('table td .dest-quantity-stock-item').live('change', function() {
+	$('table td .dest-quantity-inventory-item').live('change', function() {
 		var rowid = $(this);
 		calculateRowTotal(rowid.parent().prev());
 	});
 
-	$('table td .dest-rate-stock-item').live('change', function() {
+	$('table td .dest-rate-inventory-item').live('change', function() {
 		var rowid = $(this);
 		calculateRowTotal(rowid.parent().prev().prev());
 	});
@@ -208,47 +208,47 @@ $(document).ready(function() {
 		$('.dest-recalculate').trigger('click');
 	}
 
-	$('table td .dest-amount-stock-item').live('change', function() {
+	$('table td .dest-amount-inventory-item').live('change', function() {
 		$('.dest-recalculate').trigger('click');
 	});
 
 	/* calculating inventory total */
-	var calculateDestStockTotal = function() {
-		var stock_total = 0;
-		$('table td .dest-amount-stock-item').each(function(index) {
+	var calculateDestInventoryTotal = function() {
+		var inventory_total = 0;
+		$('table td .dest-amount-inventory-item').each(function(index) {
 			if ($(this).val() != "")
 			{
 				var item_amount = parseFloat($(this).val());
 				if ( ! isNaN(item_amount))
-					stock_total += item_amount;
+					inventory_total += item_amount;
 			}
 		});
-		return stock_total;
+		return inventory_total;
 	}
 
 	/* Add inventory item row */
-	$('table td .addstockrow').live('click', function() {
+	$('table td .addinventoryrow').live('click', function() {
 		var cur_obj = this;
 		var add_image_url = $(cur_obj).attr('src');
 		$(cur_obj).attr('src', <?php echo '\'' . asset_url() . 'images/icons/ajax.gif' . '\''; ?>);
 		$.ajax({
-			url: <?php echo '\'' . site_url('inventory/transfer/addstockrow/dest') . '\''; ?>,
+			url: <?php echo '\'' . site_url('inventory/transfer/addinventoryrow/dest') . '\''; ?>,
 			success: function(data) {
 				$(cur_obj).parent().parent().after(data);
 				$(cur_obj).attr('src', add_image_url);
-				$('.stock-item-dropdown').trigger('change');
+				$('.inventory-item-dropdown').trigger('change');
 			}
 		});
 	});
 
 	/* Delete inventory item row */
-	$('table td .deletestockrow').live('click', function() {
+	$('table td .deleteinventoryrow').live('click', function() {
 		$(this).parent().parent().remove();
 	});
 
 	/* Recalculate Dest Total */
 	$('table td .dest-recalculate').live('click', function() {
-		var destTotal = calculateDestStockTotal();
+		var destTotal = calculateDestInventoryTotal();
 		$("table tr #dest-total").text(destTotal);
 		if (destTotal >= 0)
 			$("table tr #dest-total").css("background-color", "#FFFF99");
@@ -256,7 +256,7 @@ $(document).ready(function() {
 			$("table tr #dest-total").css("background-color", "#FFE9E8");
 	});
 
-	$('.stock-item-dropdown').trigger('change');
+	$('.inventory-item-dropdown').trigger('change');
 	$('table td .dest-recalculate').trigger('click');
 	$('table td .source-recalculate').trigger('click');
 	firstTime = false;
@@ -286,43 +286,43 @@ $(document).ready(function() {
 	echo "<table class=\"voucher-table\">";
 	echo "<thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
 
-	foreach ($source_stock_item_id as $i => $row)
+	foreach ($source_inventory_item_id as $i => $row)
 	{
-		$source_stock_item_quantity_item = array(
-			'name' => 'source_stock_item_quantity[' . $i . ']',
-			'id' => 'source_stock_item_quantity[' . $i . ']',
+		$source_inventory_item_quantity_item = array(
+			'name' => 'source_inventory_item_quantity[' . $i . ']',
+			'id' => 'source_inventory_item_quantity[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
-			'value' => isset($source_stock_item_quantity[$i]) ? $source_stock_item_quantity[$i] : '',
-			'class' => 'source-quantity-stock-item',
+			'value' => isset($source_inventory_item_quantity[$i]) ? $source_inventory_item_quantity[$i] : '',
+			'class' => 'source-quantity-inventory-item',
 		);
-		$source_stock_item_rate_per_unit_item = array(
-			'name' => 'source_stock_item_rate_per_unit[' . $i . ']',
-			'id' => 'source_stock_item_rate_per_unit[' . $i . ']',
+		$source_inventory_item_rate_per_unit_item = array(
+			'name' => 'source_inventory_item_rate_per_unit[' . $i . ']',
+			'id' => 'source_inventory_item_rate_per_unit[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
-			'value' => isset($source_stock_item_rate_per_unit[$i]) ? $source_stock_item_rate_per_unit[$i] : '',
-			'class' => 'source-rate-stock-item',
+			'value' => isset($source_inventory_item_rate_per_unit[$i]) ? $source_inventory_item_rate_per_unit[$i] : '',
+			'class' => 'source-rate-inventory-item',
 		);
-		$source_stock_item_amount_item = array(
-			'name' => 'source_stock_item_amount[' . $i . ']',
-			'id' => 'source_stock_item_amount[' . $i . ']',
+		$source_inventory_item_amount_item = array(
+			'name' => 'source_inventory_item_amount[' . $i . ']',
+			'id' => 'source_inventory_item_amount[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '15',
-			'value' => isset($source_stock_item_amount[$i]) ? $source_stock_item_amount[$i] : '',
-			'class' => 'source-amount-stock-item',
+			'value' => isset($source_inventory_item_amount[$i]) ? $source_inventory_item_amount[$i] : '',
+			'class' => 'source-amount-inventory-item',
 		);
 		echo "<tr>";
 
-		echo "<td>" . form_input_stock_item('source_stock_item_id[' . $i . ']', isset($source_stock_item_id[$i]) ? $source_stock_item_id[$i] : 0) . "</td>";
-		echo "<td>" . form_input($source_stock_item_quantity_item) . "</td>";
-		echo "<td>" . form_input($source_stock_item_rate_per_unit_item) . "</td>";
-		echo "<td>" . form_input($source_stock_item_amount_item) . "</td>";
+		echo "<td>" . form_input_inventory_item('source_inventory_item_id[' . $i . ']', isset($source_inventory_item_id[$i]) ? $source_inventory_item_id[$i] : 0) . "</td>";
+		echo "<td>" . form_input($source_inventory_item_quantity_item) . "</td>";
+		echo "<td>" . form_input($source_inventory_item_rate_per_unit_item) . "</td>";
+		echo "<td>" . form_input($source_inventory_item_amount_item) . "</td>";
 
-		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addstockrow')) . "</td>";
-		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deletestockrow')) . "</td>";
+		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addinventoryrow')) . "</td>";
+		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleteinventoryrow')) . "</td>";
 
-		echo "<td class=\"source-stock-item-balance\"><div></div></td>";
+		echo "<td class=\"source-inventory-item-balance\"><div></div></td>";
 
 		echo "</tr>";
 	}
@@ -333,43 +333,43 @@ $(document).ready(function() {
 	echo "<table class=\"voucher-table\">";
 	echo "<thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
 
-	foreach ($dest_stock_item_id as $i => $row)
+	foreach ($dest_inventory_item_id as $i => $row)
 	{
-		$dest_stock_item_quantity_item = array(
-			'name' => 'dest_stock_item_quantity[' . $i . ']',
-			'id' => 'dest_stock_item_quantity[' . $i . ']',
+		$dest_inventory_item_quantity_item = array(
+			'name' => 'dest_inventory_item_quantity[' . $i . ']',
+			'id' => 'dest_inventory_item_quantity[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
-			'value' => isset($dest_stock_item_quantity[$i]) ? $dest_stock_item_quantity[$i] : '',
-			'class' => 'dest-quantity-stock-item',
+			'value' => isset($dest_inventory_item_quantity[$i]) ? $dest_inventory_item_quantity[$i] : '',
+			'class' => 'dest-quantity-inventory-item',
 		);
-		$dest_stock_item_rate_per_unit_item = array(
-			'name' => 'dest_stock_item_rate_per_unit[' . $i . ']',
-			'id' => 'dest_stock_item_rate_per_unit[' . $i . ']',
+		$dest_inventory_item_rate_per_unit_item = array(
+			'name' => 'dest_inventory_item_rate_per_unit[' . $i . ']',
+			'id' => 'dest_inventory_item_rate_per_unit[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
-			'value' => isset($dest_stock_item_rate_per_unit[$i]) ? $dest_stock_item_rate_per_unit[$i] : '',
-			'class' => 'dest-rate-stock-item',
+			'value' => isset($dest_inventory_item_rate_per_unit[$i]) ? $dest_inventory_item_rate_per_unit[$i] : '',
+			'class' => 'dest-rate-inventory-item',
 		);
-		$dest_stock_item_amount_item = array(
-			'name' => 'dest_stock_item_amount[' . $i . ']',
-			'id' => 'dest_stock_item_amount[' . $i . ']',
+		$dest_inventory_item_amount_item = array(
+			'name' => 'dest_inventory_item_amount[' . $i . ']',
+			'id' => 'dest_inventory_item_amount[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '15',
-			'value' => isset($dest_stock_item_amount[$i]) ? $dest_stock_item_amount[$i] : '',
-			'class' => 'dest-amount-stock-item',
+			'value' => isset($dest_inventory_item_amount[$i]) ? $dest_inventory_item_amount[$i] : '',
+			'class' => 'dest-amount-inventory-item',
 		);
 		echo "<tr>";
 
-		echo "<td>" . form_input_stock_item('dest_stock_item_id[' . $i . ']', isset($dest_stock_item_id[$i]) ? $dest_stock_item_id[$i] : 0) . "</td>";
-		echo "<td>" . form_input($dest_stock_item_quantity_item) . "</td>";
-		echo "<td>" . form_input($dest_stock_item_rate_per_unit_item) . "</td>";
-		echo "<td>" . form_input($dest_stock_item_amount_item) . "</td>";
+		echo "<td>" . form_input_inventory_item('dest_inventory_item_id[' . $i . ']', isset($dest_inventory_item_id[$i]) ? $dest_inventory_item_id[$i] : 0) . "</td>";
+		echo "<td>" . form_input($dest_inventory_item_quantity_item) . "</td>";
+		echo "<td>" . form_input($dest_inventory_item_rate_per_unit_item) . "</td>";
+		echo "<td>" . form_input($dest_inventory_item_amount_item) . "</td>";
 
-		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addstockrow')) . "</td>";
-		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deletestockrow')) . "</td>";
+		echo "<td>" . img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Ledger', 'class' => 'addinventoryrow')) . "</td>";
+		echo "<td>" . img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Ledger', 'class' => 'deleteinventoryrow')) . "</td>";
 
-		echo "<td class=\"dest-stock-item-balance\"><div></div></td>";
+		echo "<td class=\"dest-inventory-item-balance\"><div></div></td>";
 
 		echo "</tr>";
 	}

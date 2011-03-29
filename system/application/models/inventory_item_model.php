@@ -20,9 +20,9 @@ class Inventory_Item_model extends Model {
 		return $options;
 	}
 
-	function get_name($stock_item_id)
+	function get_name($inventory_item_id)
 	{
-		$this->db->from('inventory_items')->where('id', $stock_item_id)->limit(1);
+		$this->db->from('inventory_items')->where('id', $inventory_item_id)->limit(1);
 		$stock_item_q = $this->db->get();
 		if ($stock_item = $stock_item_q->row())
 			return $stock_item->name;
@@ -30,9 +30,9 @@ class Inventory_Item_model extends Model {
 			return "(Error)";
 	}
 
-	function get_closing_quantity($stock_item_id)
+	function get_closing_quantity($inventory_item_id)
 	{
-		$this->db->from('inventory_items')->where('id', $stock_item_id)->limit(1);
+		$this->db->from('inventory_items')->where('id', $inventory_item_id)->limit(1);
 		$stock_item_q = $this->db->get();
 		if ( ! $stock_item = $stock_item_q->row())
 			return 0;
@@ -41,13 +41,13 @@ class Inventory_Item_model extends Model {
 		$opening_quantity = $stock_item->op_balance_quantity;
 
 		$in_quantity = 0;
-		$this->db->select_sum('quantity', 'inquantity')->from('stock_voucher_items')->where('stock_item_id', $stock_item_id)->where('type', 1);
+		$this->db->select_sum('quantity', 'inquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
 		$in_quantity_q = $this->db->get();
 		if ($in_quantity_d = $in_quantity_q->row())
 			$in_quantity = $in_quantity_d->inquantity;
 
 		$out_quantity = 0;
-		$this->db->select_sum('quantity', 'outquantity')->from('stock_voucher_items')->where('stock_item_id', $stock_item_id)->where('type', 2);
+		$this->db->select_sum('quantity', 'outquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 2);
 		$out_quantity_q = $this->db->get();
 		if ($out_quantity_d = $out_quantity_q->row())
 			$out_quantity = $out_quantity_d->outquantity;
@@ -57,9 +57,9 @@ class Inventory_Item_model extends Model {
 	}
 
 	/* TODO */
-	function get_balance($stock_item_id)
+	function get_balance($inventory_item_id)
 	{
-		$this->db->from('inventory_items')->where('id', $stock_item_id)->limit(1);
+		$this->db->from('inventory_items')->where('id', $inventory_item_id)->limit(1);
 		$stock_item_q = $this->db->get();
 		if ( ! $stock_item = $stock_item_q->row())
 			return array(0, 0);
@@ -67,13 +67,13 @@ class Inventory_Item_model extends Model {
 		/* closing quantity */
 		$opening_quantity = $stock_item->op_balance_quantity;
 		$in_quantity = 0;
-		$this->db->select_sum('quantity', 'inquantity')->from('stock_voucher_items')->where('stock_item_id', $stock_item_id)->where('type', 1);
+		$this->db->select_sum('quantity', 'inquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
 		$in_quantity_q = $this->db->get();
 		if ($in_quantity_d = $in_quantity_q->row())
 			$in_quantity = $in_quantity_d->inquantity;
 
 		$out_quantity = 0;
-		$this->db->select_sum('quantity', 'outquantity')->from('stock_voucher_items')->where('stock_item_id', $stock_item_id)->where('type', 2);
+		$this->db->select_sum('quantity', 'outquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 2);
 		$out_quantity_q = $this->db->get();
 		if ($out_quantity_d = $out_quantity_q->row())
 			$out_quantity = $out_quantity_d->outquantity;
@@ -87,13 +87,13 @@ class Inventory_Item_model extends Model {
 		if ($stock_item->costing_method == 1)
 		{
 			$in_amount = 0;
-			$this->db->select_sum('total', 'inamount')->from('stock_voucher_items')->where('stock_item_id', $stock_item_id)->where('type', 1);
+			$this->db->select_sum('total', 'inamount')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
 			$in_amount_q = $this->db->get();
 			if ($in_amount_d = $in_amount_q->row())
 				$in_amount = $in_amount_d->inamount;
 
 			$out_amount = 0;
-			$this->db->select_sum('total', 'outamount')->from('stock_voucher_items')->where('stock_item_id', $stock_item_id)->where('type', 2);
+			$this->db->select_sum('total', 'outamount')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 2);
 			$out_amount_q = $this->db->get();
 			if ($out_amount_d = $out_amount_q->row())
 				$out_amount = $out_amount_d->outamount;
@@ -104,9 +104,9 @@ class Inventory_Item_model extends Model {
 		}
 	}
 
-	function get_selling_price($stock_item_id)
+	function get_selling_price($inventory_item_id)
 	{
-		$this->db->from('inventory_items')->where('id', $stock_item_id)->limit(1);
+		$this->db->from('inventory_items')->where('id', $inventory_item_id)->limit(1);
 		$stock_item_q = $this->db->get();
 		if ($stock_item = $stock_item_q->row())
 			return $stock_item->default_sell_price;

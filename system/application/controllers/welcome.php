@@ -31,7 +31,7 @@
  * table: stock_items
  * column : costing_method
  *
- * table: stock_voucher_items
+ * table: inventory_entry_items
  * column : type
  *    1 = Incoming
  *    2 = Outgoing

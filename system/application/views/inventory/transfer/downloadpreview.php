@@ -78,10 +78,10 @@
 		<?php
 			$currency = $this->config->item('account_currency_symbol');
 			$source_total = 0;
-			foreach ($cur_voucher_source_stock_items->result() as $row)
+			foreach ($cur_voucher_source_inventory_items->result() as $row)
 			{
-				echo "<tr class=\"tr-stock-item\">";
-				echo "<td class=\"item\">" . $this->Inventory_Item_model->get_name($row->stock_item_id) . "</td>";
+				echo "<tr class=\"tr-inventory-item\">";
+				echo "<td class=\"item\">" . $this->Inventory_Item_model->get_name($row->inventory_item_id) . "</td>";
 				echo "<td class=\"item\">" . $row->quantity . "</td>";
 				echo "<td class=\"item\">" . $row->rate_per_unit . "</td>";
 				echo "<td class=\"last-item\">" . $row->total . "</td>";
@@ -103,10 +103,10 @@
 		<tbody>
 		<?php
 			$dest_total = 0;
-			foreach ($cur_voucher_dest_stock_items->result() as $row)
+			foreach ($cur_voucher_dest_inventory_items->result() as $row)
 			{
-				echo "<tr class=\"tr-stock-item\">";
-				echo "<td class=\"item\">" . $this->Inventory_Item_model->get_name($row->stock_item_id) . "</td>";
+				echo "<tr class=\"tr-inventory-item\">";
+				echo "<td class=\"item\">" . $this->Inventory_Item_model->get_name($row->inventory_item_id) . "</td>";
 				echo "<td class=\"item\">" . $row->quantity . "</td>";
 				echo "<td class=\"item\">" . $row->rate_per_unit . "</td>";
 				echo "<td class=\"last-item\">" . $row->total . "</td>";

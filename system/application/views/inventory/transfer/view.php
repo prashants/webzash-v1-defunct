@@ -7,38 +7,38 @@ Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_vouche
 <table border=0 cellpadding=5 class="simple-table voucher-view-table">
 <thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate</th><th>Total</th></tr></thead>
 <?php
-$stock_total = 0;
-foreach ($cur_voucher_source_stock_items->result() as $row)
+$inventory_total = 0;
+foreach ($cur_voucher_source_inventory_items->result() as $row)
 {
 	echo "<tr>";
-	echo "<td>" . $this->Inventory_Item_model->get_name($row->stock_item_id) . "</td>";
+	echo "<td>" . $this->Inventory_Item_model->get_name($row->inventory_item_id) . "</td>";
 	echo "<td>" . $row->quantity . "</td>";
 	echo "<td>" . $row->rate_per_unit . "</td>";
 	echo "<td>" . $row->total . "</td>";
 	echo "</tr>";
-	$stock_total += $row->total;
+	$inventory_total += $row->total;
 }
 ?>
-<tr class="voucher-total"><td colspan=3><strong>Total</strong></td><td id="stock-total"><?php echo convert_cur($stock_total); ?></td></tr>
+<tr class="voucher-total"><td colspan=3><strong>Total</strong></td><td id="inventory-total"><?php echo convert_cur($inventory_total); ?></td></tr>
 </table>
 
 <h3>Destination</h3>
 <table border=0 cellpadding=5 class="simple-table voucher-view-table">
 <thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate</th><th>Total</th></tr></thead>
 <?php
-$stock_total = 0;
-foreach ($cur_voucher_dest_stock_items->result() as $row)
+$inventory_total = 0;
+foreach ($cur_voucher_dest_inventory_items->result() as $row)
 {
 	echo "<tr>";
-	echo "<td>" . $this->Inventory_Item_model->get_name($row->stock_item_id) . "</td>";
+	echo "<td>" . $this->Inventory_Item_model->get_name($row->inventory_item_id) . "</td>";
 	echo "<td>" . $row->quantity . "</td>";
 	echo "<td>" . $row->rate_per_unit . "</td>";
 	echo "<td>" . $row->total . "</td>";
 	echo "</tr>";
-	$stock_total += $row->total;
+	$inventory_total += $row->total;
 }
 ?>
-<tr class="voucher-total"><td colspan=3><strong>Total</strong></td><td id="stock-total"><?php echo convert_cur($stock_total); ?></td></tr>
+<tr class="voucher-total"><td colspan=3><strong>Total</strong></td><td id="inventory-total"><?php echo convert_cur($inventory_total); ?></td></tr>
 </table>
 
 <br />

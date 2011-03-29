@@ -69,7 +69,7 @@ class Entry extends Controller {
 		}
 
 		/* Load current inventory items details */
-		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
+		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
 		$cur_voucher_stock_items = $this->db->get();
 		if ($cur_voucher_stock_items->num_rows() < 1)
 		{
@@ -483,7 +483,7 @@ class Entry extends Controller {
 					'total' => $data_stock_item_amount,
 					'type' => $data_stock_item_type,
 				);
-				if ( ! $this->db->insert('stock_voucher_items', $insert_stock_data))
+				if ( ! $this->db->insert('inventory_entry_items', $insert_stock_data))
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error adding Inventory Item - ' . $data_stock_item_id . ' to Voucher.', 'error');
@@ -671,7 +671,7 @@ class Entry extends Controller {
 			$counter++;
 
 			/* inventory items */
-			$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id);
+			$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id);
 			$cur_stock_item_q = $this->db->get();
 			$counter = 0;
 			foreach ($cur_stock_item_q->result() as $row)
@@ -909,7 +909,7 @@ class Entry extends Controller {
 			}
 
 			/* TODO : Deleting all old ledger data, Bad solution */
-			if ( ! $this->db->delete('stock_voucher_items', array('voucher_id' => $voucher_id)))
+			if ( ! $this->db->delete('inventory_entry_items', array('voucher_id' => $voucher_id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting previous inventory items from Entry.', 'error');
@@ -1012,7 +1012,7 @@ class Entry extends Controller {
 					'total' => $data_stock_item_amount,
 					'type' => $data_stock_item_type,
 				);
-				if ( ! $this->db->insert('stock_voucher_items', $insert_stock_data))
+				if ( ! $this->db->insert('inventory_entry_items', $insert_stock_data))
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error adding Inventory Item - ' . $data_stock_item_id . ' to Entry.', 'error');
@@ -1134,7 +1134,7 @@ class Entry extends Controller {
 		}
 
 		$this->db->trans_start();
-		if ( ! $this->db->delete('stock_voucher_items', array('voucher_id' => $voucher_id)))
+		if ( ! $this->db->delete('inventory_entry_items', array('voucher_id' => $voucher_id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Inventory Items.', 'error');
@@ -1225,7 +1225,7 @@ class Entry extends Controller {
 		}
 
 		/* Load current inventory items details */
-		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
+		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
 		$cur_voucher_stock_items = $this->db->get();
 		if ($cur_voucher_stock_items->num_rows() < 1)
 		{
@@ -1306,7 +1306,7 @@ class Entry extends Controller {
 		}
 
 		/* Load current inventory items details */
-		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
+		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
 		$cur_voucher_stock_items = $this->db->get();
 		if ($cur_voucher_stock_items->num_rows() < 1)
 		{
@@ -1380,7 +1380,7 @@ class Entry extends Controller {
 		}
 
 		/* Load current inventory items details */
-		$this->db->from('stock_voucher_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
+		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
 		$cur_voucher_stock_items = $this->db->get();
 		if ($cur_voucher_stock_items->num_rows() < 1)
 		{

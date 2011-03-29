@@ -133,10 +133,10 @@ CREATE TABLE IF NOT EXISTS inventory_items (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS stock_voucher_items (
+CREATE TABLE IF NOT EXISTS inventory_entry_items (
   id int(11) NOT NULL AUTO_INCREMENT,
   voucher_id int(11) NOT NULL,
-  stock_item_id int(11) NOT NULL,
+  inventory_item_id int(11) NOT NULL,
   quantity float NOT NULL,
   rate_per_unit decimal(15,2) NOT NULL DEFAULT '0.00',
   discount varchar(15) NOT NULL,
