@@ -12,6 +12,8 @@ ALTER TABLE voucher_types CHANGE bank_cash_ledger_restriction bank_cash_ledger_r
 ALTER TABLE voucher_items ADD inventory_type INT(1) NOT NULL;
 ALTER TABLE voucher_items ADD inventory_rate VARCHAR(15) NOT NULL;
 
+ALTER TABLE settings CHANGE manage_stocks manage_inventory INT(1) NOT NULL; 
+
 CREATE TABLE IF NOT EXISTS inventory_units (
   id int(11) NOT NULL AUTO_INCREMENT,
   symbol varchar(15) NOT NULL,

@@ -11,8 +11,8 @@ class Inventory_Unit_model extends Model {
 	{
 		$options = array();
 		$this->db->from('inventory_units')->where('id >', 0)->order_by('symbol', 'asc');
-		$stock_unit_q = $this->db->get();
-		foreach ($stock_unit_q->result() as $row)
+		$inventory_unit_q = $this->db->get();
+		foreach ($inventory_unit_q->result() as $row)
 		{
 			$options[$row->id] = $row->symbol;
 		}

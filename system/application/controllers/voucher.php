@@ -143,11 +143,11 @@ class Voucher extends Controller {
 				$voucher_added_message .= anchor_popup('voucher/email/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'Email', array('class' => 'anchor-link-a', 'width' => '500', 'height' => '300')) . " | ";
 				$voucher_added_message .= anchor('voucher/download/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'Download', array('class' => 'anchor-link-a'));
 			} else {
-				$voucher_added_message .= anchor('inventory/stockvoucher/view/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'View', array('class' => 'anchor-link-a')) . " | ";
-				$voucher_added_message .= anchor('inventory/stockvoucher/edit/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'Edit', array('class' => 'anchor-link-a')) . " | ";
-				$voucher_added_message .= anchor_popup('inventory/stockvoucher/printpreview/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp , 'Print', array('class' => 'anchor-link-a', 'width' => '600', 'height' => '600')) . " | ";
-				$voucher_added_message .= anchor_popup('inventory/stockvoucher/email/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'Email', array('class' => 'anchor-link-a', 'width' => '500', 'height' => '300')) . " | ";
-				$voucher_added_message .= anchor('inventory/stockvoucher/download/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'Download', array('class' => 'anchor-link-a'));
+				$voucher_added_message .= anchor('inventory/entry/view/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'View', array('class' => 'anchor-link-a')) . " | ";
+				$voucher_added_message .= anchor('inventory/entry/edit/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'Edit', array('class' => 'anchor-link-a')) . " | ";
+				$voucher_added_message .= anchor_popup('inventory/entry/printpreview/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp , 'Print', array('class' => 'anchor-link-a', 'width' => '600', 'height' => '600')) . " | ";
+				$voucher_added_message .= anchor_popup('inventory/entry/email/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'Email', array('class' => 'anchor-link-a', 'width' => '500', 'height' => '300')) . " | ";
+				$voucher_added_message .= anchor('inventory/entry/download/' . $voucher_added_type_label_temp . "/" . $voucher_added_id_temp, 'Download', array('class' => 'anchor-link-a'));
 			}
 			$voucher_added_message .= " ] it.";
 			$this->messages->add($voucher_added_message, 'success');
@@ -167,14 +167,24 @@ class Voucher extends Controller {
 			$voucher_updated_type_id_temp = $this->session->userdata('voucher_updated_type_id');
 			$voucher_updated_type_label_temp = $this->session->userdata('voucher_updated_type_label');
 			$voucher_updated_type_name_temp = $this->session->userdata('voucher_updated_type_name');
+			$voucher_updated_type_base_type_temp = $this->session->userdata('voucher_updated_type_base_type');
 			$voucher_updated_number_temp = $this->session->userdata('voucher_updated_number');
 			$voucher_updated_message = 'Updated ' . $voucher_updated_type_name_temp . ' Entry number ' . full_voucher_number($voucher_updated_type_id_temp, $voucher_updated_number_temp) . ".";
 			$voucher_updated_message .= " You can [ ";
-			$voucher_updated_message .= anchor('voucher/view/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'View', array('class' => 'anchor-link-a')) . " | ";
-			$voucher_updated_message .= anchor('voucher/edit/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Edit', array('class' => 'anchor-link-a')) . " | ";
-			$voucher_updated_message .= anchor_popup('voucher/printpreview/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp , 'Print', array('class' => 'anchor-link-a', 'width' => '600', 'height' => '600')) . " | ";
-			$voucher_updated_message .= anchor_popup('voucher/email/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Email', array('class' => 'anchor-link-a', 'width' => '500', 'height' => '300')) . " | ";
-			$voucher_updated_message .= anchor('voucher/download/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Download', array('class' => 'anchor-link-a'));
+			if ($voucher_updated_type_base_type_temp == '1')
+			{
+				$voucher_updated_message .= anchor('voucher/view/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'View', array('class' => 'anchor-link-a')) . " | ";
+				$voucher_updated_message .= anchor('voucher/edit/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Edit', array('class' => 'anchor-link-a')) . " | ";
+				$voucher_updated_message .= anchor_popup('voucher/printpreview/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp , 'Print', array('class' => 'anchor-link-a', 'width' => '600', 'height' => '600')) . " | ";
+				$voucher_updated_message .= anchor_popup('voucher/email/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Email', array('class' => 'anchor-link-a', 'width' => '500', 'height' => '300')) . " | ";
+				$voucher_updated_message .= anchor('voucher/download/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Download', array('class' => 'anchor-link-a'));
+			} else {
+				$voucher_updated_message .= anchor('inventory/entry/view/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'View', array('class' => 'anchor-link-a')) . " | ";
+				$voucher_updated_message .= anchor('inventory/entry/edit/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Edit', array('class' => 'anchor-link-a')) . " | ";
+				$voucher_updated_message .= anchor_popup('inventory/entry/printpreview/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp , 'Print', array('class' => 'anchor-link-a', 'width' => '600', 'height' => '600')) . " | ";
+				$voucher_updated_message .= anchor_popup('inventory/entry/email/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Email', array('class' => 'anchor-link-a', 'width' => '500', 'height' => '300')) . " | ";
+				$voucher_updated_message .= anchor('inventory/entry/download/' . $voucher_updated_type_label_temp . "/" . $voucher_updated_id_temp, 'Download', array('class' => 'anchor-link-a'));
+			}
 			$voucher_updated_message .= " ] it.";
 			$this->messages->add($voucher_updated_message, 'success');
 
@@ -186,6 +196,7 @@ class Voucher extends Controller {
 			$this->session->unset_userdata('voucher_updated_type_id');
 			$this->session->unset_userdata('voucher_updated_type_label');
 			$this->session->unset_userdata('voucher_updated_type_name');
+			$this->session->unset_userdata('voucher_updated_type_base_type');
 			$this->session->unset_userdata('voucher_updated_number');
 			$this->session->unset_userdata('voucher_updated_has_reconciliation');
 		}

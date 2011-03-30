@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS settings (
   currency_symbol varchar(10) NOT NULL,
   date_format varchar(30) NOT NULL,
   timezone varchar(255) NOT NULL,
-  manage_stocks int(1) NOT NULL,
+  manage_inventory int(1) NOT NULL,
   account_locked int(1) NOT NULL,
   email_protocol varchar(9) NOT NULL,
   email_host varchar(255) NOT NULL,

@@ -23,9 +23,9 @@ class Inventory_Item_model extends Model {
 	function get_name($inventory_item_id)
 	{
 		$this->db->from('inventory_items')->where('id', $inventory_item_id)->limit(1);
-		$stock_item_q = $this->db->get();
-		if ($stock_item = $stock_item_q->row())
-			return $stock_item->name;
+		$inventory_item_q = $this->db->get();
+		if ($inventory_item = $inventory_item_q->row())
+			return $inventory_item->name;
 		else
 			return "(Error)";
 	}
@@ -33,12 +33,12 @@ class Inventory_Item_model extends Model {
 	function get_closing_quantity($inventory_item_id)
 	{
 		$this->db->from('inventory_items')->where('id', $inventory_item_id)->limit(1);
-		$stock_item_q = $this->db->get();
-		if ( ! $stock_item = $stock_item_q->row())
+		$inventory_item_q = $this->db->get();
+		if ( ! $inventory_item = $inventory_item_q->row())
 			return 0;
 
 		/* closing quantity */
-		$opening_quantity = $stock_item->op_balance_quantity;
+		$opening_quantity = $inventory_item->op_balance_quantity;
 
 		$in_quantity = 0;
 		$this->db->select_sum('quantity', 'inquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
@@ -60,12 +60,12 @@ class Inventory_Item_model extends Model {
 	function get_balance($inventory_item_id)
 	{
 		$this->db->from('inventory_items')->where('id', $inventory_item_id)->limit(1);
-		$stock_item_q = $this->db->get();
-		if ( ! $stock_item = $stock_item_q->row())
+		$inventory_item_q = $this->db->get();
+		if ( ! $inventory_item = $inventory_item_q->row())
 			return array(0, 0);
 
 		/* closing quantity */
-		$opening_quantity = $stock_item->op_balance_quantity;
+		$opening_quantity = $inventory_item->op_balance_quantity;
 		$in_quantity = 0;
 		$this->db->select_sum('quantity', 'inquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
 		$in_quantity_q = $this->db->get();
@@ -81,10 +81,10 @@ class Inventory_Item_model extends Model {
 		$closing_quantity = $opening_quantity + $in_quantity - $out_quantity;
 
 		/* closing profit or loss */
-		$opening_amount = $stock_item->op_balance_total_value;
+		$opening_amount = $inventory_item->op_balance_total_value;
 
 		/* standard method */
-		if ($stock_item->costing_method == 1)
+		if ($inventory_item->costing_method == 1)
 		{
 			$in_amount = 0;
 			$this->db->select_sum('total', 'inamount')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
@@ -107,9 +107,9 @@ class Inventory_Item_model extends Model {
 	function get_selling_price($inventory_item_id)
 	{
 		$this->db->from('inventory_items')->where('id', $inventory_item_id)->limit(1);
-		$stock_item_q = $this->db->get();
-		if ($stock_item = $stock_item_q->row())
-			return $stock_item->default_sell_price;
+		$inventory_item_q = $this->db->get();
+		if ($inventory_item = $inventory_item_q->row())
+			return $inventory_item->default_sell_price;
 		else
 			return "";
 	}

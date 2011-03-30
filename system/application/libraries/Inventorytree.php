@@ -12,8 +12,8 @@ class Inventorytree
 	function init($start_id = 0)
 	{
 		$CI =& get_instance();
-		$stock_tree = $this->add_sub_groups($start_id);
-		return $stock_tree;
+		$inventory_tree = $this->add_sub_groups($start_id);
+		return $inventory_tree;
 	}
 
 	function add_sub_groups($id)
@@ -22,51 +22,51 @@ class Inventorytree
 		/* Adding current group */
 		if ($id == 0)
 		{
-			$stock_group[$id] = array(
+			$inventory_group[$id] = array(
 				'id' => $id,
 				'name' => '',
 				'type' => 'R',
-				'sub_stock_groups' => array(),
-				'sub_stock_items' => array(),
+				'sub_inventory_groups' => array(),
+				'sub_inventory_items' => array(),
 			);
 		} else {
 			$CI->db->from('inventory_groups')->where('id', $id)->limit(1);
-			$current_stock_group_q = $CI->db->get();
-			if ($current_stock_group = $current_stock_group_q->row())
+			$current_inventory_group_q = $CI->db->get();
+			if ($current_inventory_group = $current_inventory_group_q->row())
 			{
-				$stock_group[$id] = array(
+				$inventory_group[$id] = array(
 					'id' => $id,
-					'name' => $current_stock_group->name,
+					'name' => $current_inventory_group->name,
 					'type' => 'G',
-					'sub_stock_groups' => array(),
-					'sub_stock_items' => array(),
+					'sub_inventory_groups' => array(),
+					'sub_inventory_items' => array(),
 				);
 			}
 		}
 
 		/* Adding sub groups */
 		$CI->db->from('inventory_groups')->where('parent_id', $id)->order_by('name', 'asc');
-		$stock_group_q = $CI->db->get();
-		foreach ($stock_group_q->result() as $row)
+		$inventory_group_q = $CI->db->get();
+		foreach ($inventory_group_q->result() as $row)
 		{
-			$stock_group[$id]['sub_stock_groups'][$row->id] = $this->add_sub_groups($row->id);
+			$inventory_group[$id]['sub_inventory_groups'][$row->id] = $this->add_sub_groups($row->id);
 		}
 
 		/* Adding sub item */
-		$stock_group[$id]['sub_stock_items'] = $this->add_sub_item($id);
+		$inventory_group[$id]['sub_inventory_items'] = $this->add_sub_item($id);
 
-		return $stock_group;
+		return $inventory_group;
 	}
 
 	function add_sub_item($id)
 	{
 		$CI =& get_instance();
-		$stock_items = array();
+		$inventory_items = array();
 		$CI->db->from('inventory_items')->where('inventory_group_id', $id)->order_by('name', 'asc');
-		$stock_item_q = $CI->db->get();
-		foreach ($stock_item_q->result() as $row)
+		$inventory_item_q = $CI->db->get();
+		foreach ($inventory_item_q->result() as $row)
 		{
-			$stock_items[$row->id] = array(
+			$inventory_items[$row->id] = array(
 				'id' => $row->id,
 				'name' => $row->name,
 				'type' => 'I',
@@ -76,16 +76,16 @@ class Inventorytree
 				'op_balance_total_value' => $row->op_balance_total_value,
 			);
 		}
-		return $stock_items;
+		return $inventory_items;
 	}
 
 	/*
-	 * Prints the entire stock tree as required in stock account list
+	 * Prints the entire inventory tree as required in inventory account list
 	 */
-	function print_tree($stock_tree)
+	function print_tree($inventory_tree)
 	{
 		self::$counter++;
-		foreach ($stock_tree as $row)
+		foreach ($inventory_tree as $row)
 		{
 			if ($row['id'] != 0)
 			{
@@ -94,29 +94,29 @@ class Inventorytree
 				echo "<td>Group</td>";
 				echo "<td>-</td>";
 				echo "<td>-</td>";
-				echo "<td class=\"td-actions\">" . anchor('inventory/group/edit/' . $row['id'] , "Edit", array('title' => 'Edit Stock Group', 'class' => 'red-link'));
-				echo " &nbsp;" . anchor('inventory/group/delete/' . $row['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Stock Group')), array('class' => "confirmClick", 'title' => "Delete Stock Group")) . "</td>";
+				echo "<td class=\"td-actions\">" . anchor('inventory/group/edit/' . $row['id'] , "Edit", array('title' => 'Edit Inventory Group', 'class' => 'red-link'));
+				echo " &nbsp;" . anchor('inventory/group/delete/' . $row['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Inventory Group')), array('class' => "confirmClick", 'title' => "Delete Inventory Group")) . "</td>";
 				echo "</tr>";
 			}
-			if ($row['sub_stock_items'])
+			if ($row['sub_inventory_items'])
 			{
 				self::$counter++;
-				foreach ($row['sub_stock_items'] as $row_item)
+				foreach ($row['sub_inventory_items'] as $row_item)
 				{
 					echo "<tr>";
 					echo "<td>" . self::print_spaces(self::$counter) . $row_item['name'] . "</td>";
 					echo "<td>Item</td>";
 					echo "<td>" . convert_amount_dc($row_item['op_balance_total_value']) . "</td>";
 					echo "<td></td>";
-					echo "<td class=\"td-actions\">" . anchor('inventory/item/edit/' . $row_item['id'] , "Edit", array('title' => 'Edit Stock Item', 'class' => 'red-link'));
-					echo " &nbsp;" . anchor('inventory/item/delete/' . $row_item['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Stock Item')), array('class' => "confirmClick", 'title' => "Delete Stock Item")) . "</td>";
+					echo "<td class=\"td-actions\">" . anchor('inventory/item/edit/' . $row_item['id'] , "Edit", array('title' => 'Edit Inventory Item', 'class' => 'red-link'));
+					echo " &nbsp;" . anchor('inventory/item/delete/' . $row_item['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Inventory Item')), array('class' => "confirmClick", 'title' => "Delete Inventory Item")) . "</td>";
 					echo "</tr>";
 				}
 				self::$counter--;
 			}
-			if ($row['sub_stock_groups'])
+			if ($row['sub_inventory_groups'])
 			{
-				foreach ($row['sub_stock_groups'] as $row_item)
+				foreach ($row['sub_inventory_groups'] as $row_item)
 				{
 					self::print_tree($row_item);
 				}

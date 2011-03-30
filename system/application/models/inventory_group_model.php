@@ -15,8 +15,8 @@ class Inventory_Group_model extends Model {
 			$this->db->from('inventory_groups')->where('id >', 0)->order_by('name', 'asc');
 		else
 			$this->db->from('inventory_groups')->where('id >', 0)->where('id !=', $id)->order_by('name', 'asc');
-		$stock_group_parent_q = $this->db->get();
-		foreach ($stock_group_parent_q->result() as $row)
+		$inventory_group_parent_q = $this->db->get();
+		foreach ($inventory_group_parent_q->result() as $row)
 		{
 			$options[$row->id] = $row->name;
 		}
@@ -27,8 +27,8 @@ class Inventory_Group_model extends Model {
 	{
 		$options = array();
 		$this->db->from('inventory_groups')->where('id >', 0)->order_by('name', 'asc');
-		$stock_item_parent_q = $this->db->get();
-		foreach ($stock_item_parent_q->result() as $row)
+		$inventory_item_parent_q = $this->db->get();
+		foreach ($inventory_item_parent_q->result() as $row)
 		{
 			$options[$row->id] = $row->name;
 		}

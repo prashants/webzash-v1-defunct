@@ -63,10 +63,6 @@ class Entry extends Controller {
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('inventory_type', 3)->order_by('id', 'asc');
 		$cur_voucher_ledgers = $this->db->get();
-		if ($cur_voucher_ledgers->num_rows() < 1)
-		{
-			$this->messages->add('Entry has no associated Ledger accounts.', 'error');
-		}
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
@@ -1219,10 +1215,6 @@ class Entry extends Controller {
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('inventory_type', 3)->order_by('id', 'asc');
 		$cur_voucher_ledgers = $this->db->get();
-		if ($cur_voucher_ledgers->num_rows() < 1)
-		{
-			$this->messages->add('Entry has no associated Ledger accounts.', 'error');
-		}
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
@@ -1300,10 +1292,6 @@ class Entry extends Controller {
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('inventory_type', 3)->order_by('id', 'asc');
 		$cur_voucher_ledgers = $this->db->get();
-		if ($cur_voucher_ledgers->num_rows() < 1)
-		{
-			$this->messages->add('Entry has no associated Ledger accounts.', 'error');
-		}
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
@@ -1374,10 +1362,6 @@ class Entry extends Controller {
 		}
 		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('inventory_type', 3)->order_by('id', 'asc');
 		$cur_voucher_ledgers = $this->db->get();
-		if ($cur_voucher_ledgers->num_rows() < 1)
-		{
-			$this->messages->add('Entry has no associated Ledger accounts.', 'error');
-		}
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
