@@ -90,7 +90,7 @@
 				} else {
 					echo "<td class=\"item\">Cr " . $this->Ledger_model->get_name($row->ledger_id) . "</td>";
 				}
-				echo "<td class=\"item\">" . $row->stock_rate . "</td>";
+				echo "<td class=\"item\">" . $row->inventory_rate . "</td>";
 				if ($row->dc == "D")
 				{
 					echo "<td class=\"item\">" . $currency . " " . $row->amount . "</td>";

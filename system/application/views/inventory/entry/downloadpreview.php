@@ -144,7 +144,7 @@
 				} else {
 					echo "<td class=\"ledger-name item\">Cr " . $this->Ledger_model->get_name($row->ledger_id) . "</td>";
 				}
-				echo "<td class=\"item\">" . $row->stock_rate . "</td>";
+				echo "<td class=\"item\">" . $row->inventory_rate . "</td>";
 				if ($row->dc == "D")
 				{
 					echo "<td class=\"ledger-dr item\">" . $currency . " " . $row->amount . "</td>";

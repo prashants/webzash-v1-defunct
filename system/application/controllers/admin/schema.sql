@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS voucher_items (
   dc char(1) NOT NULL,
   reconciliation_date datetime NULL,
   stock_type int(1) NOT NULL,
-  stock_rate varchar(15) NOT NULL,
+  inventory_rate varchar(15) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 

@@ -67,7 +67,7 @@ foreach ($cur_voucher_ledgers->result() as $row)
 	echo "<tr>";
 	echo "<td>" . convert_dc($row->dc) . "</td>";
 	echo "<td>" . $this->Ledger_model->get_name($row->ledger_id) . "</td>";
-	echo "<td>" . $row->stock_rate . "</td>";
+	echo "<td>" . $row->inventory_rate . "</td>";
 	if ($row->dc == "D")
 	{
 		echo "<td>Dr " . $row->amount . "</td>";

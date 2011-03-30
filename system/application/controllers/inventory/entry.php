@@ -401,7 +401,7 @@ class Entry extends Controller {
 				'dc' => '',
 				'reconciliation_date' => NULL,
 				'stock_type' => 1,
-				'stock_rate' => '',
+				'inventory_rate' => '',
 			);
 			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$insert_data['dc'] = 'D';
@@ -432,7 +432,7 @@ class Entry extends Controller {
 				'dc' => '',
 				'reconciliation_date' => NULL,
 				'stock_type' => 2,
-				'stock_rate' => '',
+				'inventory_rate' => '',
 			);
 			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$insert_data['dc'] = 'C';
@@ -517,7 +517,7 @@ class Entry extends Controller {
 					'dc' => $data_ledger_dc,
 					'reconciliation_date' => NULL,
 					'stock_type' => 3,
-					'stock_rate' => $data_rate,
+					'inventory_rate' => $data_rate,
 				);
 				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{
@@ -657,7 +657,7 @@ class Entry extends Controller {
 			{
 				$data['ledger_dc'][$counter] = $row->dc;
 				$data['ledger_id'][$counter] = $row->ledger_id;
-				$data['rate_item'][$counter] = $row->stock_rate;
+				$data['rate_item'][$counter] = $row->inventory_rate;
 				$data['amount_item'][$counter] = $row->amount;
 				if ($row->reconciliation_date)
 					$data['has_reconciliation'] = TRUE;
@@ -935,7 +935,7 @@ class Entry extends Controller {
 				'dc' => '',
 				'reconciliation_date' => NULL,
 				'stock_type' => 1,
-				'stock_rate' => '',
+				'inventory_rate' => '',
 			);
 			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$update_data['dc'] = 'D';
@@ -963,7 +963,7 @@ class Entry extends Controller {
 				'dc' => '',
 				'reconciliation_date' => NULL,
 				'stock_type' => 2,
-				'stock_rate' => '',
+				'inventory_rate' => '',
 			);
 			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$insert_data['dc'] = 'C';
@@ -1046,7 +1046,7 @@ class Entry extends Controller {
 					'dc' => $data_ledger_dc,
 					'reconciliation_date' => NULL,
 					'stock_type' => 3,
-					'stock_rate' => $data_rate,
+					'inventory_rate' => $data_rate,
 				);
 				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{
