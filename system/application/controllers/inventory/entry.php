@@ -70,8 +70,8 @@ class Entry extends Controller {
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
-		$cur_voucher_stock_items = $this->db->get();
-		if ($cur_voucher_stock_items->num_rows() < 1)
+		$cur_voucher_inventory_items = $this->db->get();
+		if ($cur_voucher_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated inventory items.', 'error');
 		}
@@ -80,7 +80,7 @@ class Entry extends Controller {
 		$data['cur_voucher_main_account'] = $cur_voucher_main_account;
 		$data['cur_voucher_main_entity'] = $cur_voucher_main_entity;
 		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
-		$data['cur_voucher_stock_items'] = $cur_voucher_stock_items;
+		$data['cur_voucher_inventory_items'] = $cur_voucher_inventory_items;
 		$data['voucher_type_id'] = $voucher_type_id;
 		$data['current_voucher_type'] = $current_voucher_type;
 		$this->template->load('template', 'inventory/entry/view', $data);
@@ -169,12 +169,12 @@ class Entry extends Controller {
 		/* Debit and Credit amount validation */
 		if ($_POST)
 		{
-			foreach ($this->input->post('stock_item_id', TRUE) as $id => $stock_data)
+			foreach ($this->input->post('inventory_item_id', TRUE) as $id => $inventory_data)
 			{
-				$this->form_validation->set_rules('stock_item_quantity[' . $id . ']', 'Inventory Item Quantity', 'trim|quantity');
-				$this->form_validation->set_rules('stock_item_rate_per_unit[' . $id . ']', 'Inventory Item Rate Per Unit', 'trim|currency');
-				$this->form_validation->set_rules('stock_item_discount[' . $id . ']', 'Inventory Item Discount', 'trim|discount');
-				$this->form_validation->set_rules('stock_item_amount[' . $id . ']', 'Inventory Item Amount', 'trim|currency');
+				$this->form_validation->set_rules('inventory_item_quantity[' . $id . ']', 'Inventory Item Quantity', 'trim|quantity');
+				$this->form_validation->set_rules('inventory_item_rate_per_unit[' . $id . ']', 'Inventory Item Rate Per Unit', 'trim|currency');
+				$this->form_validation->set_rules('inventory_item_discount[' . $id . ']', 'Inventory Item Discount', 'trim|discount');
+				$this->form_validation->set_rules('inventory_item_amount[' . $id . ']', 'Inventory Item Amount', 'trim|currency');
 			}
 			foreach ($this->input->post('ledger_dc', TRUE) as $id => $ledger_data)
 			{
@@ -194,11 +194,11 @@ class Entry extends Controller {
 			$data['main_account_active'] = $this->input->post('main_account', TRUE);
 			$data['main_entity_active'] = $this->input->post('main_entity', TRUE);
 
-			$data['stock_item_id'] = $this->input->post('stock_item_id', TRUE);
-			$data['stock_item_quantity'] = $this->input->post('stock_item_quantity', TRUE);
-			$data['stock_item_rate_per_unit'] = $this->input->post('stock_item_rate_per_unit', TRUE);
-			$data['stock_item_discount'] = $this->input->post('stock_item_discount', TRUE);
-			$data['stock_item_amount'] = $this->input->post('stock_item_amount', TRUE);
+			$data['inventory_item_id'] = $this->input->post('inventory_item_id', TRUE);
+			$data['inventory_item_quantity'] = $this->input->post('inventory_item_quantity', TRUE);
+			$data['inventory_item_rate_per_unit'] = $this->input->post('inventory_item_rate_per_unit', TRUE);
+			$data['inventory_item_discount'] = $this->input->post('inventory_item_discount', TRUE);
+			$data['inventory_item_amount'] = $this->input->post('inventory_item_amount', TRUE);
 
 			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
 			$data['ledger_id'] = $this->input->post('ledger_id', TRUE);
@@ -207,11 +207,11 @@ class Entry extends Controller {
 		} else {
 			for ($count = 0; $count <= 3; $count++)
 			{
-				$data['stock_item_id'][$count] = '0';
-				$data['stock_item_quantity'][$count] = '';
-				$data['stock_item_rate_per_unit'][$count] = '';
-				$data['stock_item_discount'][$count] = '';
-				$data['stock_item_amount'][$count] = '';
+				$data['inventory_item_id'][$count] = '0';
+				$data['inventory_item_quantity'][$count] = '';
+				$data['inventory_item_rate_per_unit'][$count] = '';
+				$data['inventory_item_discount'][$count] = '';
+				$data['inventory_item_amount'][$count] = '';
 			}
 			for ($count = 0; $count <= 1; $count++)
 			{
@@ -233,11 +233,11 @@ class Entry extends Controller {
 			$data_main_account = $this->input->post('main_account', TRUE);
 			$data_main_entity = $this->input->post('main_entity', TRUE);
 
-			$data_all_stock_item_id = $this->input->post('stock_item_id', TRUE);
-			$data_all_stock_item_quantity = $this->input->post('stock_item_quantity', TRUE);
-			$data_all_stock_item_rate_per_unit = $this->input->post('stock_item_rate_per_unit', TRUE);
-			$data_all_stock_item_discount = $this->input->post('stock_item_discount', TRUE);
-			$data_all_stock_item_amount = $this->input->post('stock_item_amount', TRUE);
+			$data_all_inventory_item_id = $this->input->post('inventory_item_id', TRUE);
+			$data_all_inventory_item_quantity = $this->input->post('inventory_item_quantity', TRUE);
+			$data_all_inventory_item_rate_per_unit = $this->input->post('inventory_item_rate_per_unit', TRUE);
+			$data_all_inventory_item_discount = $this->input->post('inventory_item_discount', TRUE);
+			$data_all_inventory_item_amount = $this->input->post('inventory_item_amount', TRUE);
 
 			$data_all_ledger_id = $this->input->post('ledger_id', TRUE);
 			$data_all_ledger_dc = $this->input->post('ledger_dc', TRUE);
@@ -248,11 +248,11 @@ class Entry extends Controller {
 
 			/* Setting Inventory Item type */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
-				$data_stock_item_type = 1;
+				$data_inventory_item_type = 1;
 			else
-				$data_stock_item_type = 2;
+				$data_inventory_item_type = 2;
 
-			/* Checking for Valid Stock Ledger account - account */
+			/* Checking for Valid Inventory Ledger account - account */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_account)->where('type', 2);
 			else
@@ -284,26 +284,26 @@ class Entry extends Controller {
 			}
 
 			/* Checking for Valid Inventory Item account */
-			$stock_item_present = FALSE;
-			$data_total_stock_amount = 0;
-			foreach ($data_all_stock_item_id as $id => $stock_data)
+			$inventory_item_present = FALSE;
+			$data_total_inventory_amount = 0;
+			foreach ($data_all_inventory_item_id as $id => $inventory_data)
 			{
-				if ($data_all_stock_item_id[$id] < 1)
+				if ($data_all_inventory_item_id[$id] < 1)
 					continue;
 
 				/* Check for valid inventory item id */
-				$this->db->from('inventory_items')->where('id', $data_all_stock_item_id[$id]);
-				$valid_stock_item_q = $this->db->get();
-				if ($valid_stock_item_q->num_rows() < 1)
+				$this->db->from('inventory_items')->where('id', $data_all_inventory_item_id[$id]);
+				$valid_inventory_item_q = $this->db->get();
+				if ($valid_inventory_item_q->num_rows() < 1)
 				{
 					$this->messages->add('Invalid Inventory Item.', 'error');
 					$this->template->load('template', 'inventory/entry/add', $data);
 					return;
 				}
-				$stock_item_present = TRUE;
-				$data_total_stock_amount += $data_all_stock_item_amount[$id];
+				$inventory_item_present = TRUE;
+				$data_total_inventory_amount += $data_all_inventory_item_amount[$id];
 			}
-			if ( ! $stock_item_present)
+			if ( ! $inventory_item_present)
 			{
 				$this->messages->add('No Inventory Item selected.', 'error');
 				$this->template->load('template', 'inventory/entry/add', $data);
@@ -335,13 +335,13 @@ class Entry extends Controller {
 			/* Total amount calculations */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 			{
-				$data_main_account_total = $data_total_stock_amount;
-				$data_main_entity_total = $data_total_stock_amount + $data_total_ledger_amount;
+				$data_main_account_total = $data_total_inventory_amount;
+				$data_main_entity_total = $data_total_inventory_amount + $data_total_ledger_amount;
 			} else {
-				$data_main_account_total = $data_total_stock_amount + $data_total_ledger_amount;
-				$data_main_entity_total = $data_total_stock_amount;
+				$data_main_account_total = $data_total_inventory_amount + $data_total_ledger_amount;
+				$data_main_entity_total = $data_total_inventory_amount;
 			}
-			$data_total_amount = $data_total_stock_amount + $data_total_ledger_amount;
+			$data_total_amount = $data_total_inventory_amount + $data_total_ledger_amount;
 			if ($data_total_amount < 0)
 			{
 				$this->messages->add($current_voucher_type['name'] . ' Entry total cannot be negative.', 'error');
@@ -456,38 +456,38 @@ class Entry extends Controller {
 			}
 
 			/* Adding inventory items */
-			$data_all_stock_item_id = $this->input->post('stock_item_id', TRUE);
-			$data_all_stock_item_quantity = $this->input->post('stock_item_quantity', TRUE);
-			$data_all_stock_item_rate_per_unit = $this->input->post('stock_item_rate_per_unit', TRUE);
-			$data_all_stock_item_discount = $this->input->post('stock_item_discount', TRUE);
-			$data_all_stock_item_amount = $this->input->post('stock_item_amount', TRUE);
+			$data_all_inventory_item_id = $this->input->post('inventory_item_id', TRUE);
+			$data_all_inventory_item_quantity = $this->input->post('inventory_item_quantity', TRUE);
+			$data_all_inventory_item_rate_per_unit = $this->input->post('inventory_item_rate_per_unit', TRUE);
+			$data_all_inventory_item_discount = $this->input->post('inventory_item_discount', TRUE);
+			$data_all_inventory_item_amount = $this->input->post('inventory_item_amount', TRUE);
 
-			foreach ($data_all_stock_item_id as $id => $stock_data)
+			foreach ($data_all_inventory_item_id as $id => $inventory_data)
 			{
-				$data_stock_item_id = $data_all_stock_item_id[$id];
+				$data_inventory_item_id = $data_all_inventory_item_id[$id];
 
-				if ($data_stock_item_id < 1)
+				if ($data_inventory_item_id < 1)
 					continue;
 
-				$data_stock_item_quantity = $data_all_stock_item_quantity[$id];
-				$data_stock_item_rate_per_unit = $data_all_stock_item_rate_per_unit[$id];
-				$data_stock_item_discount = $data_all_stock_item_discount[$id];
-				$data_stock_item_amount = $data_all_stock_item_amount[$id];
+				$data_inventory_item_quantity = $data_all_inventory_item_quantity[$id];
+				$data_inventory_item_rate_per_unit = $data_all_inventory_item_rate_per_unit[$id];
+				$data_inventory_item_discount = $data_all_inventory_item_discount[$id];
+				$data_inventory_item_amount = $data_all_inventory_item_amount[$id];
 
-				$insert_stock_data = array(
+				$insert_inventory_data = array(
 					'voucher_id' => $voucher_id,
-					'stock_item_id' => $data_stock_item_id,
-					'quantity' => $data_stock_item_quantity,
-					'rate_per_unit' => $data_stock_item_rate_per_unit,
-					'discount' => $data_stock_item_discount,
-					'total' => $data_stock_item_amount,
-					'type' => $data_stock_item_type,
+					'inventory_item_id' => $data_inventory_item_id,
+					'quantity' => $data_inventory_item_quantity,
+					'rate_per_unit' => $data_inventory_item_rate_per_unit,
+					'discount' => $data_inventory_item_discount,
+					'total' => $data_inventory_item_amount,
+					'type' => $data_inventory_item_type,
 				);
-				if ( ! $this->db->insert('inventory_entry_items', $insert_stock_data))
+				if ( ! $this->db->insert('inventory_entry_items', $insert_inventory_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Inventory Item - ' . $data_stock_item_id . ' to Voucher.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting inventory item " . "[id:" . $data_stock_item_id . "]");
+					$this->messages->add('Error adding Inventory Item - ' . $data_inventory_item_id . ' to Voucher.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting inventory item " . "[id:" . $data_inventory_item_id . "]");
 					$this->template->load('template', 'inventory/entry/add', $data);
 					return;
 				}
@@ -672,23 +672,23 @@ class Entry extends Controller {
 
 			/* inventory items */
 			$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id);
-			$cur_stock_item_q = $this->db->get();
+			$cur_inventory_item_q = $this->db->get();
 			$counter = 0;
-			foreach ($cur_stock_item_q->result() as $row)
+			foreach ($cur_inventory_item_q->result() as $row)
 			{
-				$data['stock_item_id'][$counter] = $row->stock_item_id;
-				$data['stock_item_quantity'][$counter] = $row->quantity;
-				$data['stock_item_rate_per_unit'][$counter] = $row->rate_per_unit;
-				$data['stock_item_discount'][$counter] = $row->discount;
-				$data['stock_item_amount'][$counter] = $row->total;
+				$data['inventory_item_id'][$counter] = $row->inventory_item_id;
+				$data['inventory_item_quantity'][$counter] = $row->quantity;
+				$data['inventory_item_rate_per_unit'][$counter] = $row->rate_per_unit;
+				$data['inventory_item_discount'][$counter] = $row->discount;
+				$data['inventory_item_amount'][$counter] = $row->total;
 				$counter++;
 			}
 			/* one extra rows */
-			$data['stock_item_id'][$counter] = '0';
-			$data['stock_item_quantity'][$counter] = "";
-			$data['stock_item_rate_per_unit'][$counter] = "";
-			$data['stock_item_discount'][$counter] = "";
-			$data['stock_item_amount'][$counter] = "";
+			$data['inventory_item_id'][$counter] = '0';
+			$data['inventory_item_quantity'][$counter] = "";
+			$data['inventory_item_rate_per_unit'][$counter] = "";
+			$data['inventory_item_discount'][$counter] = "";
+			$data['inventory_item_amount'][$counter] = "";
 			$counter++;
 		}
 
@@ -712,12 +712,12 @@ class Entry extends Controller {
 		/* Debit and Credit amount validation */
 		if ($_POST)
 		{
-			foreach ($this->input->post('stock_item_id', TRUE) as $id => $stock_data)
+			foreach ($this->input->post('inventory_item_id', TRUE) as $id => $inventory_data)
 			{
-				$this->form_validation->set_rules('stock_item_quantity[' . $id . ']', 'Inventory Item Quantity', 'trim|quantity');
-				$this->form_validation->set_rules('stock_item_rate_per_unit[' . $id . ']', 'Inventory Item Rate Per Unit', 'trim|currency');
-				$this->form_validation->set_rules('stock_item_discount[' . $id . ']', 'Inventory Item Discount', 'trim|discount');
-				$this->form_validation->set_rules('stock_item_amount[' . $id . ']', 'Inventory Item Amount', 'trim|currency');
+				$this->form_validation->set_rules('inventory_item_quantity[' . $id . ']', 'Inventory Item Quantity', 'trim|quantity');
+				$this->form_validation->set_rules('inventory_item_rate_per_unit[' . $id . ']', 'Inventory Item Rate Per Unit', 'trim|currency');
+				$this->form_validation->set_rules('inventory_item_discount[' . $id . ']', 'Inventory Item Discount', 'trim|discount');
+				$this->form_validation->set_rules('inventory_item_amount[' . $id . ']', 'Inventory Item Amount', 'trim|currency');
 			}
 			foreach ($this->input->post('ledger_dc', TRUE) as $id => $ledger_data)
 			{
@@ -738,11 +738,11 @@ class Entry extends Controller {
 			$data['main_account_active'] = $this->input->post('main_account', TRUE);
 			$data['main_entity_active'] = $this->input->post('main_entity', TRUE);
 
-			$data['stock_item_id'] = $this->input->post('stock_item_id', TRUE);
-			$data['stock_item_quantity'] = $this->input->post('stock_item_quantity', TRUE);
-			$data['stock_item_rate_per_unit'] = $this->input->post('stock_item_rate_per_unit', TRUE);
-			$data['stock_item_discount'] = $this->input->post('stock_item_discount', TRUE);
-			$data['stock_item_amount'] = $this->input->post('stock_item_amount', TRUE);
+			$data['inventory_item_id'] = $this->input->post('inventory_item_id', TRUE);
+			$data['inventory_item_quantity'] = $this->input->post('inventory_item_quantity', TRUE);
+			$data['inventory_item_rate_per_unit'] = $this->input->post('inventory_item_rate_per_unit', TRUE);
+			$data['inventory_item_discount'] = $this->input->post('inventory_item_discount', TRUE);
+			$data['inventory_item_amount'] = $this->input->post('inventory_item_amount', TRUE);
 
 			$data['ledger_dc'] = $this->input->post('ledger_dc', TRUE);
 			$data['ledger_id'] = $this->input->post('ledger_id', TRUE);
@@ -758,11 +758,11 @@ class Entry extends Controller {
 			$data_main_account = $this->input->post('main_account', TRUE);
 			$data_main_entity = $this->input->post('main_entity', TRUE);
 
-			$data_all_stock_item_id = $this->input->post('stock_item_id', TRUE);
-			$data_all_stock_item_quantity = $this->input->post('stock_item_quantity', TRUE);
-			$data_all_stock_item_rate_per_unit = $this->input->post('stock_item_rate_per_unit', TRUE);
-			$data_all_stock_item_discount = $this->input->post('stock_item_discount', TRUE);
-			$data_all_stock_item_amount = $this->input->post('stock_item_amount', TRUE);
+			$data_all_inventory_item_id = $this->input->post('inventory_item_id', TRUE);
+			$data_all_inventory_item_quantity = $this->input->post('inventory_item_quantity', TRUE);
+			$data_all_inventory_item_rate_per_unit = $this->input->post('inventory_item_rate_per_unit', TRUE);
+			$data_all_inventory_item_discount = $this->input->post('inventory_item_discount', TRUE);
+			$data_all_inventory_item_amount = $this->input->post('inventory_item_amount', TRUE);
 
 			$data_all_ledger_id = $this->input->post('ledger_id', TRUE);
 			$data_all_ledger_dc = $this->input->post('ledger_dc', TRUE);
@@ -773,9 +773,9 @@ class Entry extends Controller {
 
 			/* Setting Inventory Item type */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
-				$data_stock_item_type = 1;
+				$data_inventory_item_type = 1;
 			else
-				$data_stock_item_type = 2;
+				$data_inventory_item_type = 2;
 
 			/* Checking for Valid Inventory Ledger account - account */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
@@ -809,26 +809,26 @@ class Entry extends Controller {
 			}
 
 			/* Checking for Valid Inventory Item */
-			$stock_item_present = FALSE;
-			$data_total_stock_amount = 0;
-			foreach ($data_all_stock_item_id as $id => $stock_data)
+			$inventory_item_present = FALSE;
+			$data_total_inventory_amount = 0;
+			foreach ($data_all_inventory_item_id as $id => $inventory_data)
 			{
-				if ($data_all_stock_item_id[$id] < 1)
+				if ($data_all_inventory_item_id[$id] < 1)
 					continue;
 
-				/* Check for valid stock item id */
-				$this->db->from('inventory_items')->where('id', $data_all_stock_item_id[$id]);
-				$valid_stock_item_q = $this->db->get();
-				if ($valid_stock_item_q->num_rows() < 1)
+				/* Check for valid inventory item id */
+				$this->db->from('inventory_items')->where('id', $data_all_inventory_item_id[$id]);
+				$valid_inventory_item_q = $this->db->get();
+				if ($valid_inventory_item_q->num_rows() < 1)
 				{
 					$this->messages->add('Invalid Inventory Item.', 'error');
 					$this->template->load('template', 'inventory/entry/edit', $data);
 					return;
 				}
-				$stock_item_present = TRUE;
-				$data_total_stock_amount += $data_all_stock_item_amount[$id];
+				$inventory_item_present = TRUE;
+				$data_total_inventory_amount += $data_all_inventory_item_amount[$id];
 			}
-			if ( ! $stock_item_present)
+			if ( ! $inventory_item_present)
 			{
 				$this->messages->add('No Inventory Item selected.', 'error');
 				$this->template->load('template', 'inventory/entry/edit', $data);
@@ -860,13 +860,13 @@ class Entry extends Controller {
 			/* Total amount calculations */
 			if ($current_voucher_type['stock_voucher_type'] == '1')
 			{
-				$data_main_account_total = $data_total_stock_amount;
-				$data_main_entity_total = $data_total_stock_amount + $data_total_ledger_amount;
+				$data_main_account_total = $data_total_inventory_amount;
+				$data_main_entity_total = $data_total_inventory_amount + $data_total_ledger_amount;
 			} else {
-				$data_main_account_total = $data_total_stock_amount + $data_total_ledger_amount;
-				$data_main_entity_total = $data_total_stock_amount;
+				$data_main_account_total = $data_total_inventory_amount + $data_total_ledger_amount;
+				$data_main_entity_total = $data_total_inventory_amount;
 			}
-			$data_total_amount = $data_total_stock_amount + $data_total_ledger_amount;
+			$data_total_amount = $data_total_inventory_amount + $data_total_ledger_amount;
 			if ($data_total_amount < 0)
 			{
 				$this->messages->add($current_voucher_type['name'] . ' Entry total cannot be negative.', 'error');
@@ -984,39 +984,39 @@ class Entry extends Controller {
 				return;
 			}
 
-			/* Adding stock items */
-			$data_all_stock_item_id = $this->input->post('stock_item_id', TRUE);
-			$data_all_stock_item_quantity = $this->input->post('stock_item_quantity', TRUE);
-			$data_all_stock_item_rate_per_unit = $this->input->post('stock_item_rate_per_unit', TRUE);
-			$data_all_stock_item_discount = $this->input->post('stock_item_discount', TRUE);
-			$data_all_stock_item_amount = $this->input->post('stock_item_amount', TRUE);
+			/* Adding inventory items */
+			$data_all_inventory_item_id = $this->input->post('inventory_item_id', TRUE);
+			$data_all_inventory_item_quantity = $this->input->post('inventory_item_quantity', TRUE);
+			$data_all_inventory_item_rate_per_unit = $this->input->post('inventory_item_rate_per_unit', TRUE);
+			$data_all_inventory_item_discount = $this->input->post('inventory_item_discount', TRUE);
+			$data_all_inventory_item_amount = $this->input->post('inventory_item_amount', TRUE);
 
-			foreach ($data_all_stock_item_id as $id => $stock_data)
+			foreach ($data_all_inventory_item_id as $id => $inventory_data)
 			{
-				$data_stock_item_id = $data_all_stock_item_id[$id];
+				$data_inventory_item_id = $data_all_inventory_item_id[$id];
 
-				if ($data_stock_item_id < 1)
+				if ($data_inventory_item_id < 1)
 					continue;
 
-				$data_stock_item_quantity = $data_all_stock_item_quantity[$id];
-				$data_stock_item_rate_per_unit = $data_all_stock_item_rate_per_unit[$id];
-				$data_stock_item_discount = $data_all_stock_item_discount[$id];
-				$data_stock_item_amount = $data_all_stock_item_amount[$id];
+				$data_inventory_item_quantity = $data_all_inventory_item_quantity[$id];
+				$data_inventory_item_rate_per_unit = $data_all_inventory_item_rate_per_unit[$id];
+				$data_inventory_item_discount = $data_all_inventory_item_discount[$id];
+				$data_inventory_item_amount = $data_all_inventory_item_amount[$id];
 
-				$insert_stock_data = array(
+				$insert_inventory_data = array(
 					'voucher_id' => $voucher_id,
-					'stock_item_id' => $data_stock_item_id,
-					'quantity' => $data_stock_item_quantity,
-					'rate_per_unit' => $data_stock_item_rate_per_unit,
-					'discount' => $data_stock_item_discount,
-					'total' => $data_stock_item_amount,
-					'type' => $data_stock_item_type,
+					'inventory_item_id' => $data_inventory_item_id,
+					'quantity' => $data_inventory_item_quantity,
+					'rate_per_unit' => $data_inventory_item_rate_per_unit,
+					'discount' => $data_inventory_item_discount,
+					'total' => $data_inventory_item_amount,
+					'type' => $data_inventory_item_type,
 				);
-				if ( ! $this->db->insert('inventory_entry_items', $insert_stock_data))
+				if ( ! $this->db->insert('inventory_entry_items', $insert_inventory_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Inventory Item - ' . $data_stock_item_id . ' to Entry.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting inventory item " . "[id:" . $data_stock_item_id . "]");
+					$this->messages->add('Error adding Inventory Item - ' . $data_inventory_item_id . ' to Entry.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting inventory item " . "[id:" . $data_inventory_item_id . "]");
 					$this->template->load('template', 'inventory/entry/edit', $data);
 					return;
 				}
@@ -1226,8 +1226,8 @@ class Entry extends Controller {
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
-		$cur_voucher_stock_items = $this->db->get();
-		if ($cur_voucher_stock_items->num_rows() < 1)
+		$cur_voucher_inventory_items = $this->db->get();
+		if ($cur_voucher_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated inventory items.', 'error');
 		}
@@ -1236,7 +1236,7 @@ class Entry extends Controller {
 		$data['cur_voucher_main_account'] = $cur_voucher_main_account;
 		$data['cur_voucher_main_entity'] = $cur_voucher_main_entity;
 		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
-		$data['cur_voucher_stock_items'] = $cur_voucher_stock_items;
+		$data['cur_voucher_inventory_items'] = $cur_voucher_inventory_items;
 		$data['voucher_type_id'] = $voucher_type_id;
 		$data['current_voucher_type'] = $current_voucher_type;
 
@@ -1307,8 +1307,8 @@ class Entry extends Controller {
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
-		$cur_voucher_stock_items = $this->db->get();
-		if ($cur_voucher_stock_items->num_rows() < 1)
+		$cur_voucher_inventory_items = $this->db->get();
+		if ($cur_voucher_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated inventory items.', 'error');
 		}
@@ -1317,7 +1317,7 @@ class Entry extends Controller {
 		$data['cur_voucher_main_account'] = $cur_voucher_main_account;
 		$data['cur_voucher_main_entity'] = $cur_voucher_main_entity;
 		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
-		$data['cur_voucher_stock_items'] = $cur_voucher_stock_items;
+		$data['cur_voucher_inventory_items'] = $cur_voucher_inventory_items;
 		$data['voucher_type_id'] = $voucher_type_id;
 		$data['current_voucher_type'] = $current_voucher_type;
 
@@ -1381,8 +1381,8 @@ class Entry extends Controller {
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('voucher_id', $voucher_id)->order_by('id', 'asc');
-		$cur_voucher_stock_items = $this->db->get();
-		if ($cur_voucher_stock_items->num_rows() < 1)
+		$cur_voucher_inventory_items = $this->db->get();
+		if ($cur_voucher_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated inventory items.', 'error');
 		}
@@ -1419,7 +1419,7 @@ class Entry extends Controller {
 			$data['cur_voucher_main_account'] = $cur_voucher_main_account;
 			$data['cur_voucher_main_entity'] = $cur_voucher_main_entity;
 			$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
-			$data['cur_voucher_stock_items'] = $cur_voucher_stock_items;
+			$data['cur_voucher_inventory_items'] = $cur_voucher_inventory_items;
 
 			/* Preparing message */
 			$message = $this->load->view('inventory/entry/emailpreview', $data, TRUE);
@@ -1491,55 +1491,55 @@ class Entry extends Controller {
 		return;
 	}
 
-	function addstockrow()
+	function addinventoryrow()
 	{
 		$i = time() + rand  (0, time()) + rand  (0, time()) + rand  (0, time());
-		$stock_item_quantity = array(
-			'name' => 'stock_item_quantity[' . $i . ']',
-			'id' => 'stock_item_quantity[' . $i . ']',
+		$inventory_item_quantity = array(
+			'name' => 'inventory_item_quantity[' . $i . ']',
+			'id' => 'inventory_item_quantity[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
 			'value' => '',
-			'class' => 'quantity-stock-item',
+			'class' => 'quantity-inventory-item',
 		);
-		$stock_item_rate_per_unit = array(
-			'name' => 'stock_item_rate_per_unit[' . $i . ']',
-			'id' => 'stock_item_rate_per_unit[' . $i . ']',
+		$inventory_item_rate_per_unit = array(
+			'name' => 'inventory_item_rate_per_unit[' . $i . ']',
+			'id' => 'inventory_item_rate_per_unit[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
 			'value' => '',
-			'class' => 'rate-stock-item',
+			'class' => 'rate-inventory-item',
 		);
-		$stock_item_discount = array(
-			'name' => 'stock_item_discount[' . $i . ']',
-			'id' => 'stock_item_discount[' . $i . ']',
+		$inventory_item_discount = array(
+			'name' => 'inventory_item_discount[' . $i . ']',
+			'id' => 'inventory_item_discount[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '9',
 			'value' => '',
-			'class' => 'discount-stock-item',
+			'class' => 'discount-inventory-item',
 		);
-		$stock_item_amount = array(
-			'name' => 'stock_item_amount[' . $i . ']',
-			'id' => 'stock_item_amount[' . $i . ']',
+		$inventory_item_amount = array(
+			'name' => 'inventory_item_amount[' . $i . ']',
+			'id' => 'inventory_item_amount[' . $i . ']',
 			'maxlength' => '15',
 			'size' => '15',
 			'value' => '',
-			'class' => 'amount-stock-item',
+			'class' => 'amount-inventory-item',
 		);
 
 		echo '<tr class="new-row">';
-		echo "<td>" . form_input_stock_item('stock_item_id[' . $i . ']', 0) . "</td>";
-		echo "<td>" . form_input($stock_item_quantity) . "</td>";
-		echo "<td>" . form_input($stock_item_rate_per_unit) . "</td>";
-		echo "<td>" . form_input($stock_item_discount) . "</td>";
-		echo "<td>" . form_input($stock_item_amount) . "</td>";
+		echo "<td>" . form_input_inventory_item('inventory_item_id[' . $i . ']', 0) . "</td>";
+		echo "<td>" . form_input($inventory_item_quantity) . "</td>";
+		echo "<td>" . form_input($inventory_item_rate_per_unit) . "</td>";
+		echo "<td>" . form_input($inventory_item_discount) . "</td>";
+		echo "<td>" . form_input($inventory_item_amount) . "</td>";
 		echo '<td>';
-		echo img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Inventory Item', 'class' => 'addstockrow'));
+		echo img(array('src' => asset_url() . "images/icons/add.png", 'border' => '0', 'alt' => 'Add Inventory Item', 'class' => 'addinventoryrow'));
 		echo '</td>';
 		echo '<td>';
-		echo img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Inventory Item', 'class' => 'deletestockrow'));
+		echo img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Remove Inventory Item', 'class' => 'deleteinventoryrow'));
 		echo '</td>';
-		echo '<td class="stock-item-balance"><div></div>';
+		echo '<td class="inventory-item-balance"><div></div>';
 		echo '</td>';
 		echo '</tr>';
 		return;

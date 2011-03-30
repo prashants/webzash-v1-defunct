@@ -58,10 +58,10 @@
 		</thead>
 		<tbody>
 		<?php
-			foreach ($cur_voucher_stock_items->result() as $row)
+			foreach ($cur_voucher_inventory_items->result() as $row)
 			{
-				echo "<tr class=\"tr-stock-item\">";
-				echo "<td class=\"item\">" . $this->Inventory_Item_model->get_name($row->stock_item_id) . "</td>";
+				echo "<tr class=\"tr-inventory-item\">";
+				echo "<td class=\"item\">" . $this->Inventory_Item_model->get_name($row->inventory_item_id) . "</td>";
 				echo "<td class=\"item\">" . $row->quantity . "</td>";
 				echo "<td class=\"item\">" . $row->rate_per_unit . "</td>";
 				echo "<td class=\"item\">" . $row->discount . "</td>";

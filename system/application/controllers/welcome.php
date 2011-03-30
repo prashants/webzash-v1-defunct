@@ -28,7 +28,7 @@
  *    2 = Entity Ledger
  *    3 = Others Ledger
  *
- * table: stock_items
+ * table: inventory_items
  * column : costing_method
  *
  * table: inventory_entry_items
