@@ -7,7 +7,7 @@ Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_vouche
 	<tr>
 		<td align=\"right\">
 			<?php
-				if ($current_voucher_type['stock_voucher_type'] == '1')
+				if ($current_voucher_type['inventory_entry_type'] == '1')
 					echo "Purchase Ledger :";
 				else
 					echo "Sale Ledger :";
@@ -23,7 +23,7 @@ Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_vouche
 	<tr>
 		<td align=\"right\">
 			<?php
-				if ($current_voucher_type['stock_voucher_type'] == '1')
+				if ($current_voucher_type['inventory_entry_type'] == '1')
 					echo "Creditor (Supplier) :";
 				else
 					echo "Debtor (Customer) :";

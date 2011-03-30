@@ -104,9 +104,9 @@ if ( ! function_exists('form_input_ledger'))
 	}
 }
 
-if ( ! function_exists('form_input_stock_item'))
+if ( ! function_exists('form_input_inventory_item'))
 {
-	function form_input_stock_item($name, $selected = NULL, $extra = '')
+	function form_input_inventory_item($name, $selected = NULL, $extra = '')
 	{
 		$CI =& get_instance();
 		$CI->load->model('Inventory_Item_model');
@@ -125,7 +125,7 @@ if ( ! function_exists('form_input_stock_item'))
 
 		if ($extra != '') $extra = ' '.$extra;
 
-		$form = '<select name="'.$name.'"'.$extra.' class="stock-item-dropdown">';
+		$form = '<select name="'.$name.'"'.$extra.' class="inventory-item-dropdown">';
 
 		foreach ($options as $key => $val)
 		{

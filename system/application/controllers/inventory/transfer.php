@@ -99,7 +99,7 @@ class Transfer extends Controller {
 		} else {
 			$current_voucher_type = voucher_type_info($voucher_type_id);
 		}
-		if ($current_voucher_type['stock_voucher_type'] != '3')
+		if ($current_voucher_type['inventory_entry_type'] != '3')
 		{
 			$this->messages->add('Invalid Entry type.', 'error');
 			redirect('voucher/show/all');
@@ -143,7 +143,7 @@ class Transfer extends Controller {
 		else
 			$this->form_validation->set_rules('voucher_number', 'Entry Number', 'trim|is_natural_no_zero|uniquevoucherno[' . $voucher_type_id . ']');
 		$this->form_validation->set_rules('voucher_date', 'Entry Date', 'trim|required|is_date|is_date_within_range');
-		if ($current_voucher_type['stock_voucher_type'] == '3')
+		if ($current_voucher_type['inventory_entry_type'] == '3')
 		{
 			/* TODO */
 		}
@@ -220,7 +220,7 @@ class Transfer extends Controller {
 			$data_all_dest_inventory_item_amount = $this->input->post('dest_inventory_item_amount', TRUE);
 
 			/* Setting Inventory Item type */
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$data_inventory_item_type = 1;
 			else
 				$data_inventory_item_type = 2;
@@ -600,7 +600,7 @@ class Transfer extends Controller {
 			$data_all_dest_inventory_item_amount = $this->input->post('dest_inventory_item_amount', TRUE);
 
 			/* Setting Inventory Item type */
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$data_inventory_item_type = 1;
 			else
 				$data_inventory_item_type = 2;

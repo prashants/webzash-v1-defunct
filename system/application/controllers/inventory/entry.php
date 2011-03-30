@@ -155,7 +155,7 @@ class Entry extends Controller {
 		else
 			$this->form_validation->set_rules('voucher_number', 'Entry Number', 'trim|is_natural_no_zero|uniquevoucherno[' . $voucher_type_id . ']');
 		$this->form_validation->set_rules('voucher_date', 'Entry Date', 'trim|required|is_date|is_date_within_range');
-		if ($current_voucher_type['stock_voucher_type'] == '1')
+		if ($current_voucher_type['inventory_entry_type'] == '1')
 		{
 			$this->form_validation->set_rules('main_account', 'Purchase Ledger', 'trim|required');
 			$this->form_validation->set_rules('main_entity', 'Creditors (Supplier)', 'trim|required');
@@ -247,20 +247,20 @@ class Entry extends Controller {
 			$data_total_amount = 0;
 
 			/* Setting Inventory Item type */
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$data_inventory_item_type = 1;
 			else
 				$data_inventory_item_type = 2;
 
 			/* Checking for Valid Inventory Ledger account - account */
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_account)->where('type', 2);
 			else
 				$this->db->from('ledgers')->where('id', $data_main_account)->where('type', 3);
 			$valid_main_account_q = $this->db->get();
 			if ($valid_main_account_q->num_rows() < 1)
 			{
-				if ($current_voucher_type['stock_voucher_type'] == '1')
+				if ($current_voucher_type['inventory_entry_type'] == '1')
 					$this->messages->add('Invalid Purchase Ledger.', 'error');
 				else
 					$this->messages->add('Invalid Sale Ledger.', 'error');
@@ -268,14 +268,14 @@ class Entry extends Controller {
 				return;
 			}
 			/* Checking for Valid Inventory Ledger account - entity */
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 4)->or_where('type', 1);
 			else
 				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 5)->or_where('type', 1);
 			$valid_main_account_q = $this->db->get();
 			if ($valid_main_account_q->num_rows() < 1)
 			{
-				if ($current_voucher_type['stock_voucher_type'] == '1')
+				if ($current_voucher_type['inventory_entry_type'] == '1')
 					$this->messages->add('Invalid Creditor (Supplier).', 'error');
 				else
 					$this->messages->add('Invalid Debtor (Customer).', 'error');
@@ -333,7 +333,7 @@ class Entry extends Controller {
 			}
 
 			/* Total amount calculations */
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 			{
 				$data_main_account_total = $data_total_inventory_amount;
 				$data_main_entity_total = $data_total_inventory_amount + $data_total_ledger_amount;
@@ -403,14 +403,14 @@ class Entry extends Controller {
 				'stock_type' => 1,
 				'stock_rate' => '',
 			);
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$insert_data['dc'] = 'D';
 			else
 				$insert_data['dc'] = 'C';
 			if ( ! $this->db->insert('voucher_items', $insert_data))
 			{
 				$this->db->trans_rollback();
-				if ($current_voucher_type['stock_voucher_type'] == '1')
+				if ($current_voucher_type['inventory_entry_type'] == '1')
 				{
 					$this->messages->add('Error adding Purchase Ledger account to Entry.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting purchase ledger " . "[id:" . $data_main_account . "]");
@@ -434,14 +434,14 @@ class Entry extends Controller {
 				'stock_type' => 2,
 				'stock_rate' => '',
 			);
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$insert_data['dc'] = 'C';
 			else
 				$insert_data['dc'] = 'D';
 			if ( ! $this->db->insert('voucher_items', $insert_data))
 			{
 				$this->db->trans_rollback();
-				if ($current_voucher_type['stock_voucher_type'] == '1')
+				if ($current_voucher_type['inventory_entry_type'] == '1')
 				{
 					$this->messages->add('Error adding Creditor (Supplier) to Entry.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting creditor ledger " . "[id:" . $data_main_entity . "]");
@@ -698,7 +698,7 @@ class Entry extends Controller {
 		else
 			$this->form_validation->set_rules('voucher_number', 'Entry Number', 'trim|required|is_natural_no_zero|uniquevouchernowithid[' . $voucher_type_id . '.' . $voucher_id . ']');
 		$this->form_validation->set_rules('voucher_date', 'Entry Date', 'trim|required|is_date|is_date_within_range');
-		if ($current_voucher_type['stock_voucher_type'] == '1')
+		if ($current_voucher_type['inventory_entry_type'] == '1')
 		{
 			$this->form_validation->set_rules('main_account', 'Purchase Ledger', 'trim|required');
 			$this->form_validation->set_rules('main_entity', 'Creditors (Supplier)', 'trim|required');
@@ -772,20 +772,20 @@ class Entry extends Controller {
 			$data_total_amount = 0;
 
 			/* Setting Inventory Item type */
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$data_inventory_item_type = 1;
 			else
 				$data_inventory_item_type = 2;
 
 			/* Checking for Valid Inventory Ledger account - account */
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_account)->where('type', 2);
 			else
 				$this->db->from('ledgers')->where('id', $data_main_account)->where('type', 3);
 			$valid_main_account_q = $this->db->get();
 			if ($valid_main_account_q->num_rows() < 1)
 			{
-				if ($current_voucher_type['stock_voucher_type'] == '1')
+				if ($current_voucher_type['inventory_entry_type'] == '1')
 					$this->messages->add('Invalid Purchase Ledger.', 'error');
 				else
 					$this->messages->add('Invalid Sale Ledger.', 'error');
@@ -793,14 +793,14 @@ class Entry extends Controller {
 				return;
 			}
 			/* Checking for Valid Inventory Ledger account - entity */
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 4)->or_where('type', 1);
 			else
 				$this->db->from('ledgers')->where('id', $data_main_entity)->where('type', 5)->or_where('type', 1);
 			$valid_main_account_q = $this->db->get();
 			if ($valid_main_account_q->num_rows() < 1)
 			{
-				if ($current_voucher_type['stock_voucher_type'] == '1')
+				if ($current_voucher_type['inventory_entry_type'] == '1')
 					$this->messages->add('Invalid Creditor (Supplier).', 'error');
 				else
 					$this->messages->add('Invalid Debtor (Customer).', 'error');
@@ -858,7 +858,7 @@ class Entry extends Controller {
 			}
 
 			/* Total amount calculations */
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 			{
 				$data_main_account_total = $data_total_inventory_amount;
 				$data_main_entity_total = $data_total_inventory_amount + $data_total_ledger_amount;
@@ -937,14 +937,14 @@ class Entry extends Controller {
 				'stock_type' => 1,
 				'stock_rate' => '',
 			);
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$update_data['dc'] = 'D';
 			else
 				$update_data['dc'] = 'C';
 			if ( ! $this->db->where('voucher_id', $voucher_id)->where('stock_type', 1)->update('voucher_items', $update_data))
 			{
 				$this->db->trans_rollback();
-				if ($current_voucher_type['stock_voucher_type'] == '1')
+				if ($current_voucher_type['inventory_entry_type'] == '1')
 				{
 					$this->messages->add('Error updating Purchase Ledger account of Entry.', 'error');
 					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating purchase ledger " . "[id:" . $data_main_account . "]");
@@ -965,14 +965,14 @@ class Entry extends Controller {
 				'stock_type' => 2,
 				'stock_rate' => '',
 			);
-			if ($current_voucher_type['stock_voucher_type'] == '1')
+			if ($current_voucher_type['inventory_entry_type'] == '1')
 				$insert_data['dc'] = 'C';
 			else
 				$insert_data['dc'] = 'D';
 			if ( ! $this->db->where('voucher_id', $voucher_id)->where('stock_type', 2)->update('voucher_items', $update_data))
 			{
 				$this->db->trans_rollback();
-				if ($current_voucher_type['stock_voucher_type'] == '1')
+				if ($current_voucher_type['inventory_entry_type'] == '1')
 				{
 					$this->messages->add('Error updating Creditor (Supplier) of Entry.', 'error');
 					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating creditor ledger " . "[id:" . $data_main_entity . "]");

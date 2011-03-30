@@ -128,7 +128,7 @@ class Ledger_model extends Model {
 		$current_voucher_type = voucher_type_info($voucher_type_id);
 
 		/* If Stock Transfer */
-		if ($current_voucher_type['stock_voucher_type'] == '3')
+		if ($current_voucher_type['inventory_entry_type'] == '3')
 		{
 			$html = anchor('inventory/transfer/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "[Inventory Transfer]", array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 			return $html;

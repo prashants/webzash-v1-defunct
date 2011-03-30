@@ -190,7 +190,7 @@ class General {
 				'description' => $row->description,
 				'base_type' => $row->base_type,
 				'bank_cash_ledger_restriction' => $row->bank_cash_ledger_restriction,
-				'stock_voucher_type' => $row->stock_voucher_type,
+				'inventory_entry_type' => $row->inventory_entry_type,
 				'numbering' => $row->numbering,
 				'prefix' => $row->prefix,
 				'suffix' => $row->suffix,

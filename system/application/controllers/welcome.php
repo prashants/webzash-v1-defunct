@@ -16,7 +16,7 @@
  * column : base_type
  *    1 = Normal Voucher
  *    2 = Stock Voucher
- * column : stock_voucher_type
+ * column : inventory_entry_type
  *    1 = Purchase
  *    2 = Sale
  *    3 = Stock Transfer

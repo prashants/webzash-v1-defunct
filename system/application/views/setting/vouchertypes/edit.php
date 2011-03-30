@@ -35,10 +35,10 @@
 		echo form_dropdown('bank_cash_ledger_restriction', $bank_cash_ledger_restrictions, $bank_cash_ledger_restriction_active);
 		echo "</p>";
 	} else {
-		echo "<p id=\"stock_voucher_type\">";
-		echo form_label('Stock Voucher Type', 'stock_voucher_type');
+		echo "<p id=\"inventory_entry_type\">";
+		echo form_label('Inventory Entry Type', 'inventory_entry_type');
 		echo "<br />";
-		echo $stock_voucher_type;
+		echo $inventory_entry_type;
 		echo "</p>";
 	}
 

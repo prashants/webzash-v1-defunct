@@ -304,7 +304,7 @@ $(document).ready(function() {
 	echo "<span id=\"tooltip-content-2\">Date format is " . $this->config->item('account_date_format') . ".</span>";
 	echo "</p>";
 
-	if ($current_voucher_type['stock_voucher_type'] == '1')
+	if ($current_voucher_type['inventory_entry_type'] == '1')
 	{
 		echo "<p>";
 		echo "<table border=0 cellpadding=2>";

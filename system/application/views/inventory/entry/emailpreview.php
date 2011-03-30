@@ -14,7 +14,7 @@
 		<tr>
 			<td align=\"right\">
 				<?php
-					if ($current_voucher_type['stock_voucher_type'] == '1')
+					if ($current_voucher_type['inventory_entry_type'] == '1')
 						echo "Purchase Ledger :";
 					else
 						echo "Sale Ledger :";
@@ -30,7 +30,7 @@
 		<tr>
 			<td align=\"right\">
 				<?php
-					if ($current_voucher_type['stock_voucher_type'] == '1')
+					if ($current_voucher_type['inventory_entry_type'] == '1')
 						echo "Creditor (Supplier) :";
 					else
 						echo "Debtor (Customer) :";

@@ -3,13 +3,13 @@ $(document).ready(function() {
 	$('#voucher_type_base_type').change(function() {
 		if ($(this).val() == "1") {
 			$('#bank_cash_ledger_restriction').show();
-			$('#stock_voucher_type').hide();
+			$('#inventory_entry_type').hide();
 		} else if ($(this).val() == "2") {
 			$('#bank_cash_ledger_restriction').hide();
-			$('#stock_voucher_type').show();
+			$('#inventory_entry_type').show();
 		} else {
 			$('#bank_cash_ledger_restriction').show();
-			$('#stock_voucher_type').show();
+			$('#inventory_entry_type').show();
 		}
 	});
 	/* initialize */
@@ -54,10 +54,10 @@ $(document).ready(function() {
 	echo form_dropdown('bank_cash_ledger_restriction', $bank_cash_ledger_restrictions, $bank_cash_ledger_restriction_active);
 	echo "</p>";
 
-	echo "<p id=\"stock_voucher_type\">";
-	echo form_label('Stock Voucher Type', 'stock_voucher_type');
+	echo "<p id=\"inventory_entry_type\">";
+	echo form_label('Inventory Entry Type', 'inventory_entry_type');
 	echo "<br />";
-	echo form_dropdown('stock_voucher_type', $stock_voucher_types, $stock_voucher_type_active);
+	echo form_dropdown('inventory_entry_type', $inventory_entry_types, $inventory_entry_type_active);
 	echo "<br />";
 	echo "<span class=\"form-warning-text\">Warning: This option cannot be changed later.</span>";
 	echo "</p>";

@@ -19,7 +19,7 @@
 			{
 				echo "<td>" . anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a')) . "</td>";
 			} else {
-				if ($current_voucher_type['stock_voucher_type'] == '3')
+				if ($current_voucher_type['inventory_entry_type'] == '3')
 				{
 					echo "<td>" . anchor('inventory/transfer/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
 				} else {
@@ -44,7 +44,7 @@
 				echo " &nbsp;" . anchor_popup('voucher/email/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . $current_voucher_type['name'] . ' Voucher')), array('title' => 'Email ' . $current_voucher_type['name'] . ' Voucher', 'width' => '500', 'height' => '300')) . " ";
 				echo " &nbsp;" . anchor('voucher/download/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/save.png", 'border' => '0', 'alt' => 'Download ' . $current_voucher_type['name'] . ' Voucher', 'title' => "Download voucher")), array('title' => 'Download  ' . $current_voucher_type['name'] . ' Voucher')) . "</td>";
 			} else {
-				if ($current_voucher_type['stock_voucher_type'] == '3')
+				if ($current_voucher_type['inventory_entry_type'] == '3')
 				{
 					echo "<td>" . anchor('inventory/transfer/edit/' . $current_voucher_type['label'] . "/" . $row->id , "Edit", array('title' => 'Edit ' . $current_voucher_type['name'] . ' Entry', 'class' => 'red-link')) . " ";
 					echo " &nbsp;" . anchor('inventory/transfer/delete/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . $current_voucher_type['name'] . ' Entry', 'class' => "confirmClick", 'title' => "Delete Entry")), array('title' => 'Delete  ' . $current_voucher_type['name'] . ' Entry')) . " ";

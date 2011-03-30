@@ -100,7 +100,7 @@ class VoucherTypes extends Controller {
 			'4' => 'Only Bank or Cash Ledger account can be present on both Debit and Credit side',
 			'5' => 'Only NON Bank or Cash Ledger account can be present on both Debit and Credit side',
 		);
-		$data['stock_voucher_types'] = array(
+		$data['inventory_entry_types'] = array(
 			'1' => 'Purchase',
 			'2' => 'Sale',
 			'3' => 'Stock Transfer',
@@ -109,7 +109,7 @@ class VoucherTypes extends Controller {
 		$data['voucher_type_base_type_active'] = '1';
 		$data['voucher_type_numbering_active'] = '1';
 		$data['bank_cash_ledger_restriction_active'] = '1';
-		$data['stock_voucher_type_active'] = '1';
+		$data['inventory_entry_type_active'] = '1';
 
 		/* Repopulating form */
 		if ($_POST)
@@ -124,7 +124,7 @@ class VoucherTypes extends Controller {
 			$data['voucher_type_base_type_active'] = $this->input->post('voucher_type_base_type', TRUE);
 			$data['voucher_type_numbering_active'] = $this->input->post('voucher_type_numbering', TRUE);
 			$data['bank_cash_ledger_restriction_active'] = $this->input->post('bank_cash_ledger_restriction', TRUE);
-			$data['stock_voucher_type_active'] = $this->input->post('stock_voucher_type', TRUE);
+			$data['inventory_entry_type_active'] = $this->input->post('inventory_entry_type', TRUE);
 		}
 
 		/* Form validations */
@@ -153,7 +153,7 @@ class VoucherTypes extends Controller {
 			$data_voucher_type_base_type = $this->input->post('voucher_type_base_type', TRUE);
 			$data_voucher_type_numbering = $this->input->post('voucher_type_numbering', TRUE);
 			$data_bank_cash_ledger_restriction = $this->input->post('bank_cash_ledger_restriction', TRUE);
-			$data_stock_voucher_type = $this->input->post('stock_voucher_type', TRUE);
+			$data_inventory_entry_type = $this->input->post('inventory_entry_type', TRUE);
 
 			if (($data_voucher_type_base_type < 1) or ($data_voucher_type_base_type > 2))
 				$data_voucher_type_base_type = 1;
@@ -164,8 +164,8 @@ class VoucherTypes extends Controller {
 			if (($data_bank_cash_ledger_restriction < 1) or ($data_bank_cash_ledger_restriction > 5))
 				$data_bank_cash_ledger_restriction = 1;
 
-			if (($data_stock_voucher_type < 1) or ($data_stock_voucher_type > 3))
-				$data_stock_voucher_type = 1;
+			if (($data_inventory_entry_type < 1) or ($data_inventory_entry_type > 3))
+				$data_inventory_entry_type = 1;
 
 			/* Calculating Voucher Type Id */
 			$last_id = 1;
@@ -189,7 +189,7 @@ class VoucherTypes extends Controller {
 				'suffix' => $data_voucher_type_suffix,
 				'zero_padding' => $data_voucher_type_zero_padding,
 				'bank_cash_ledger_restriction' => $data_bank_cash_ledger_restriction,
-				'stock_voucher_type' => $data_stock_voucher_type,
+				'inventory_entry_type' => $data_inventory_entry_type,
 			);
 			if ( ! $this->db->insert('voucher_types', $insert_data))
 			{
@@ -298,12 +298,12 @@ class VoucherTypes extends Controller {
 			default: $data['base_type'] = '(Invalid)'; $data['is_normal_voucher'] = TRUE; break;
 		}
 
-		switch ($voucher_type_data->stock_voucher_type)
+		switch ($voucher_type_data->inventory_entry_type)
 		{
-			case 1: $data['stock_voucher_type'] = 'Purchase'; break;
-			case 2: $data['stock_voucher_type'] = 'Sale'; break;
-			case 3: $data['stock_voucher_type'] = 'Stock Transfer'; break;
-			default: $data['stock_voucher_type'] = '(Invalid)'; break;
+			case 1: $data['inventory_entry_type'] = 'Purchase'; break;
+			case 2: $data['inventory_entry_type'] = 'Sale'; break;
+			case 3: $data['inventory_entry_type'] = 'Stock Transfer'; break;
+			default: $data['inventory_entry_type'] = '(Invalid)'; break;
 		}
 
 		$data['voucher_type_numberings'] = array('1' => 'Auto', '2' => 'Manual (required)', '3' => 'Manual (optional)');
