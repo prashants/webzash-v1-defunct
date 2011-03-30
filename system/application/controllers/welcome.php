@@ -22,7 +22,7 @@
  *    3 = Stock Transfer
  *
  * table: voucher_items
- * column : stock_type
+ * column : inventory_type
  *    0 = Not Applicable
  *    1 = Account Ledger
  *    2 = Entity Ledger

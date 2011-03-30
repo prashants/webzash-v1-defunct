@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS voucher_items (
   amount decimal(15,2) NOT NULL DEFAULT '0.00',
   dc char(1) NOT NULL,
   reconciliation_date datetime NULL,
-  stock_type int(1) NOT NULL,
+  inventory_type int(1) NOT NULL,
   inventory_rate varchar(15) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;

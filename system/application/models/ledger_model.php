@@ -143,7 +143,7 @@ class Ledger_model extends Model {
 		$this->db->from('voucher_items')->join('ledgers', 'voucher_items.ledger_id = ledgers.id')->where('voucher_items.voucher_id', $voucher_id);
 		if ($current_voucher_type['base_type'] == '2')
 		{
-			$this->db->where('voucher_items.stock_type', 2);
+			$this->db->where('voucher_items.inventory_type', 2);
 		} else {
 			$this->db->where('voucher_items.dc', $ledger_type);
 		}
