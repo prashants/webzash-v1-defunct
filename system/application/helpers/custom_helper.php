@@ -108,7 +108,7 @@ if ( ! function_exists('voucher_type_info'))
 	function voucher_type_info($voucher_type_id)
 	{
 		$CI =& get_instance();
-		$voucher_type_all = $CI->config->item('account_voucher_types');
+		$voucher_type_all = $CI->config->item('account_entry_types');
 
 		if ($voucher_type_all[$voucher_type_id])
 		{
@@ -153,7 +153,7 @@ if ( ! function_exists('voucher_type_name_to_id'))
 	function voucher_type_name_to_id($voucher_type_name)
 	{
 		$CI =& get_instance();
-		$voucher_type_all = $CI->config->item('account_voucher_types');
+		$voucher_type_all = $CI->config->item('account_entry_types');
 		foreach ($voucher_type_all as $id => $row)
 		{
 			if ($row['label'] == $voucher_type_name)
@@ -178,7 +178,7 @@ if ( ! function_exists('full_voucher_number'))
 	function full_voucher_number($voucher_type_id, $voucher_number)
 	{
 		$CI =& get_instance();
-		$voucher_type_all = $CI->config->item('account_voucher_types');
+		$voucher_type_all = $CI->config->item('account_entry_types');
 		$return_html = "";
 		if ( ! $voucher_type_all[$voucher_type_id])
 		{

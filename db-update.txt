@@ -14,6 +14,8 @@ ALTER TABLE voucher_items ADD inventory_rate VARCHAR(15) NOT NULL;
 
 ALTER TABLE settings CHANGE manage_stocks manage_inventory INT(1) NOT NULL; 
 
+RENAME TABLE voucher_types TO entry_types;
+
 CREATE TABLE IF NOT EXISTS inventory_units (
   id int(11) NOT NULL AUTO_INCREMENT,
   symbol varchar(15) NOT NULL,

@@ -326,7 +326,7 @@ class Ledger extends Controller {
 			/* Check if bank_cash_ledger_restriction both voucher present */
 			if ($data_ledger_type_cashbank_value != "1")
 			{
-				$voucher_type_all = $this->config->item('account_voucher_types');
+				$voucher_type_all = $this->config->item('account_entry_types');
 				foreach ($voucher_type_all as $voucher_type_id => $row)
 				{
 					/* Check for Voucher types where bank_cash_ledger_restriction is for all ledgers */

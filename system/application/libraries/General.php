@@ -71,7 +71,7 @@ class General {
 			if ($CI->db->query("SHOW TABLES"))
 			{
 				/* Check for valid webzash database */
-				$table_names = array('groups', 'ledgers', 'voucher_types', 'vouchers', 'voucher_items', 'inventory_units', 'inventory_groups', 'inventory_items', 'inventory_entry_items', 'tags', 'logs', 'settings');
+				$table_names = array('groups', 'ledgers', 'entry_types', 'vouchers', 'voucher_items', 'inventory_units', 'inventory_groups', 'inventory_items', 'inventory_entry_items', 'tags', 'logs', 'settings');
 				foreach ($table_names as $id => $tbname)
 				{
 					$valid_db_q = mysql_query('DESC ' . $tbname);
@@ -171,20 +171,20 @@ class General {
 		return $user_data;
 	}
 
-	function setup_voucher_types()
+	function setup_entry_types()
 	{
 		$CI =& get_instance();
 
-		$CI->db->from('voucher_types')->order_by('id', 'asc');
-		$voucher_types = $CI->db->get();
-		if ($voucher_types->num_rows() < 1)
+		$CI->db->from('entry_types')->order_by('id', 'asc');
+		$entry_types = $CI->db->get();
+		if ($entry_types->num_rows() < 1)
 		{
-			$CI->messages->add('You need to create a voucher type before you can create any vouchers.', 'error');
+			$CI->messages->add('You need to create a Entry Type before you can create any Entry.', 'error');
 		}
-		$voucher_type_config = array();
-		foreach ($voucher_types->result() as $id => $row)
+		$entry_type_config = array();
+		foreach ($entry_types->result() as $id => $row)
 		{
-			$voucher_type_config[$row->id] = array(
+			$entry_type_config[$row->id] = array(
 				'label' => $row->label,
 				'name' => $row->name,
 				'description' => $row->description,
@@ -197,7 +197,7 @@ class General {
 				'zero_padding' => $row->zero_padding,
 			);
 		}
-		$CI->config->set_item('account_voucher_types', $voucher_type_config);
+		$CI->config->set_item('account_entry_types', $entry_type_config);
 	}
 }
 

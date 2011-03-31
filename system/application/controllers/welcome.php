@@ -12,7 +12,7 @@
  *    4 = Creditor
  *    5 = Debtor
  *
- * table: voucher_types
+ * table: entry_types
  * column : base_type
  *    1 = Normal Voucher
  *    2 = Stock Voucher
