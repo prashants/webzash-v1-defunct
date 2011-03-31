@@ -1,5 +1,5 @@
 <?php
-	echo form_open('setting/vouchertypes/edit/' . $entry_type_id);
+	echo form_open('setting/entrytypes/edit/' . $entry_type_id);
 
 	echo "<p>";
 	echo form_label('Label', 'entry_type_label');
@@ -69,7 +69,7 @@
 	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
-	echo anchor('setting/vouchertypes', 'Back', 'Back to Entry Types');
+	echo anchor('setting/entrytypes', 'Back', 'Back to Entry Types');
 	echo "</p>";
 
 	echo form_close();

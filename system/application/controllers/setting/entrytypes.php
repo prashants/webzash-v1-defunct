@@ -2,7 +2,7 @@
 
 class EntryTypes extends Controller {
 
-	function VoucherTypes()
+	function EntryTypes()
 	{
 		parent::Controller();
 		$this->load->model('Setting_model');
@@ -21,12 +21,12 @@ class EntryTypes extends Controller {
 	function index()
 	{
 		$this->template->set('page_title', 'Entry Types');
-		$this->template->set('nav_links', array('setting/vouchertypes/add' => 'Add Entry Type'));
+		$this->template->set('nav_links', array('setting/entrytypes/add' => 'Add Entry Type'));
 
 		$this->db->from('entry_types')->order_by('id', 'asc');
 		$data['entry_type_data'] = $this->db->get();
 
-		$this->template->load('template', 'setting/vouchertypes/index', $data);
+		$this->template->load('template', 'setting/entrytypes/index', $data);
 		return;
 	}
 
@@ -38,7 +38,7 @@ class EntryTypes extends Controller {
 		if ($this->config->item('account_locked') == 1)
 		{
 			$this->messages->add('Account is locked.', 'error');
-			redirect('setting/vouchertypes');
+			redirect('setting/entrytypes');
 			return;
 		}
 
@@ -139,7 +139,7 @@ class EntryTypes extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('template', 'setting/vouchertypes/add', $data);
+			$this->template->load('template', 'setting/entrytypes/add', $data);
 			return;
 		}
 		else
@@ -196,13 +196,13 @@ class EntryTypes extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Entry Type - ' . $data_entry_type_name . '.', 'error');
 				$this->logger->write_message("error", "Error adding Entry Type called " . $data_entry_type_name);
-				$this->template->load('template', 'setting/vouchertypes/add', $data);
+				$this->template->load('template', 'setting/entrytypes/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Added Entry Type - ' . $data_entry_type_name . '.', 'success');
 				$this->logger->write_message("success", "Added Entry Type called " . $data_entry_type_name);
-				redirect('setting/vouchertypes');
+				redirect('setting/entrytypes');
 				return;
 			}
 		}
@@ -217,7 +217,7 @@ class EntryTypes extends Controller {
 		if ($this->config->item('account_locked') == 1)
 		{
 			$this->messages->add('Account is locked.', 'error');
-			redirect('setting/vouchertypes');
+			redirect('setting/entrytypes');
 			return;
 		}
 
@@ -227,7 +227,7 @@ class EntryTypes extends Controller {
 		if ($id < 0)
 		{
 			$this->messages->add('Invalid Entry Type.', 'error');
-			redirect('setting/vouchertypes');
+			redirect('setting/entrytypes');
 			return;
 		}
 
@@ -237,7 +237,7 @@ class EntryTypes extends Controller {
 		if ($entry_type_data_q->num_rows() < 1)
 		{
 			$this->messages->add('Invalid Entry Type.', 'error');
-			redirect('setting/vouchertypes');
+			redirect('setting/entrytypes');
 			return;
 		}
 		$entry_type_data = $entry_type_data_q->row();
@@ -345,7 +345,7 @@ class EntryTypes extends Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->messages->add(validation_errors(), 'error');
-			$this->template->load('template', 'setting/vouchertypes/edit', $data);
+			$this->template->load('template', 'setting/entrytypes/edit', $data);
 			return;
 		}
 		else
@@ -382,13 +382,13 @@ class EntryTypes extends Controller {
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry Type - ' . $data_entry_type_name . '.', 'error');
 				$this->logger->write_message("error", "Error updating Entry Type named " . $data_entry_type_name . " [id:" . $id . "]");
-				$this->template->load('template', 'setting/vouchertypes/edit', $data);
+				$this->template->load('template', 'setting/entrytypes/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Updated Entry Type - ' . $data_entry_type_name . '.', 'success');
 				$this->logger->write_message("success", "Updated Entry Type named " . $data_entry_type_name . " [id:" . $id . "]");
-				redirect('setting/vouchertypes');
+				redirect('setting/entrytypes');
 				return;
 			}
 		}
@@ -401,7 +401,7 @@ class EntryTypes extends Controller {
 		if ($this->config->item('account_locked') == 1)
 		{
 			$this->messages->add('Account is locked.', 'error');
-			redirect('setting/vouchertypes');
+			redirect('setting/entrytypes');
 			return;
 		}
 
@@ -411,7 +411,7 @@ class EntryTypes extends Controller {
 		if ($id <= 0)
 		{
 			$this->messages->add('Invalid Entry Type.', 'error');
-			redirect('setting/vouchertypes');
+			redirect('setting/entrytypes');
 			return;
 		}
 
@@ -421,7 +421,7 @@ class EntryTypes extends Controller {
 		if ($entry_type_data_q->num_rows() < 1)
 		{
 			$this->messages->add('Invalid Entry Type.', 'error');
-			redirect('setting/vouchertypes');
+			redirect('setting/entrytypes');
 			return;
 		} else {
 			$entry_type_data = $entry_type_data_q->row();
@@ -433,7 +433,7 @@ class EntryTypes extends Controller {
 		if ($entry_data_q->num_rows() > 0)
 		{
 			$this->messages->add('Cannot delete Entry Type. There are still ' . $entry_data_q->num_rows() . ' Entries present.', 'error');
-			redirect('setting/vouchertypes');
+			redirect('setting/entrytypes');
 			return;
 		}
 
@@ -444,13 +444,13 @@ class EntryTypes extends Controller {
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Entry Type - ' . $entry_type_data->name . '.', 'error');
 			$this->logger->write_message("error", "Error deleting Entry Type named " . $entry_type_data->name . " [id:" . $id . "]");
-			redirect('setting/vouchertypes');
+			redirect('setting/entrytypes');
 			return;
 		} else {
 			$this->db->trans_complete();
 			$this->messages->add('Deleted Entry Type - ' . $entry_type_data->name . '.', 'success');
 			$this->logger->write_message("success", "Deleted Entry Type named " . $entry_type_data->name . " [id:" . $id . "]");
-			redirect('setting/vouchertypes');
+			redirect('setting/entrytypes');
 			return;
 		}
 		return;

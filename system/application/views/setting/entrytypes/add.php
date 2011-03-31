@@ -18,7 +18,7 @@ $(document).ready(function() {
 </script>
 
 <?php
-	echo form_open('setting/vouchertypes/add');
+	echo form_open('setting/entrytypes/add');
 
 	echo "<p>";
 	echo form_label('Label', 'entry_type_label');
@@ -89,7 +89,7 @@ $(document).ready(function() {
 	echo "<p>";
 	echo form_submit('submit', 'Create');
 	echo " ";
-	echo anchor('setting/vouchertypes', 'Back', 'Back to Entry Types');
+	echo anchor('setting/entrytypes', 'Back', 'Back to Entry Types');
 	echo "</p>";
 
 	echo form_close();

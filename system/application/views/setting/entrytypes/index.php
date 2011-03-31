@@ -16,8 +16,8 @@
 			echo "<td>" . $row->label . "</td>";
 			echo "<td>" . $row->name . "</td>";
 			echo "<td>" . $row->description . "</td>";
-			echo "<td>" . anchor('setting/vouchertypes/edit/' . $row->id , "Edit", array('title' => 'Edit ' . $row->name . ' Entry Type', 'class' => 'red-link')) . " ";
-			echo " &nbsp;" . anchor('setting/vouchertypes/delete/' . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . $row->name . ' Entry Type', 'class' => "confirmClick", 'title' => "Delete Entry Type")), array('title' => 'Delete ' . $row->name . ' Entry Type')) . " ";
+			echo "<td>" . anchor('setting/entrytypes/edit/' . $row->id , "Edit", array('title' => 'Edit ' . $row->name . ' Entry Type', 'class' => 'red-link')) . " ";
+			echo " &nbsp;" . anchor('setting/entrytypes/delete/' . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . $row->name . ' Entry Type', 'class' => "confirmClick", 'title' => "Delete Entry Type")), array('title' => 'Delete ' . $row->name . ' Entry Type')) . " ";
 			echo "</tr>";
 		}
 	?>

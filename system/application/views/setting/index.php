@@ -47,15 +47,15 @@
 				<?php echo anchor('tag', 'Tags', array('title' => 'Tags')); ?>
 			</div>
 			<div class="settings-desc">
-				Manage Voucher Tags
+				Manage Entry Tags
 			</div>
 		</div>
 		<div class="settings-container">
 			<div class="settings-title">
-				<?php echo anchor('setting/vouchertypes', 'Voucher Types', array('title' => 'Voucher Types')); ?>
+				<?php echo anchor('setting/entrytypes', 'Entry Types', array('title' => 'Entry Types')); ?>
 			</div>
 			<div class="settings-desc">
-				Manage Voucher Types
+				Manage Entry Types
 			</div>
 		</div>
 	</div>
