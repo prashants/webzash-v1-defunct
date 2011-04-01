@@ -5,7 +5,7 @@ class Transfer extends Controller {
 	function Transfer()
 	{
 		parent::Controller();
-		$this->load->model('Voucher_model');
+		$this->load->model('Entry_model');
 		$this->load->model('Ledger_model');
 		$this->load->model('Inventory_Item_model');
 		$this->load->model('Tag_model');
@@ -41,7 +41,7 @@ class Transfer extends Controller {
 		$this->template->set('page_title', 'View ' . $current_voucher_type['name'] . ' Entry');
 
 		/* Load current entry details */
-		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
+		if ( ! $cur_voucher = $this->Entry_model->get_entry($voucher_id, $voucher_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_voucher_type['label']);
@@ -303,7 +303,7 @@ class Transfer extends Controller {
 				if ($this->input->post('voucher_number', TRUE))
 					$data_number = $this->input->post('voucher_number', TRUE);
 				else
-					$data_number = $this->Voucher_model->next_voucher_number($voucher_type_id);
+					$data_number = $this->Entry_model->next_entry_number($voucher_type_id);
 			}
 
 			$data_date = $this->input->post('voucher_date', TRUE);
@@ -460,7 +460,7 @@ class Transfer extends Controller {
 		$this->template->set('page_title', 'Edit ' . $current_voucher_type['name'] . ' Entry');
 
 		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
+		if ( ! $cur_voucher = $this->Entry_model->get_entry($voucher_id, $voucher_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_voucher_type['label']);
@@ -847,7 +847,7 @@ class Transfer extends Controller {
 		}
 
 		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
+		if ( ! $cur_voucher = $this->Entry_model->get_entry($voucher_id, $voucher_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_voucher_type['label']);
@@ -910,7 +910,7 @@ class Transfer extends Controller {
 		}
 
 		/* Load current entry details */
-		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
+		if ( ! $cur_voucher = $this->Entry_model->get_entry($voucher_id, $voucher_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_voucher_type['label']);
@@ -975,7 +975,7 @@ class Transfer extends Controller {
 		}
 
 		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
+		if ( ! $cur_voucher = $this->Entry_model->get_entry($voucher_id, $voucher_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_voucher_type['label']);
@@ -1033,7 +1033,7 @@ class Transfer extends Controller {
 		$account_data = $this->Setting_model->get_current();
 
 		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Voucher_model->get_voucher($voucher_id, $voucher_type_id))
+		if ( ! $cur_voucher = $this->Entry_model->get_entry($voucher_id, $voucher_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_voucher_type['label']);
