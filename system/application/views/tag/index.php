@@ -9,7 +9,7 @@
 	{
 		echo "<tr class=\"tr-" . $odd_even. "\">";
 		echo "<td>" . $row->title . "</td>";
-		echo "<td>" . $this->Tag_model->show_voucher_tag($row->id) . "</td>";
+		echo "<td>" . $this->Tag_model->show_entry_tag($row->id) . "</td>";
 
 		echo "<td>" . anchor('tag/edit/' . $row->id , "Edit", array('title' => 'Edit Tag', 'class' => 'red-link'));
 		echo " &nbsp;";

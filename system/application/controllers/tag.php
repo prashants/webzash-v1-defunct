@@ -12,14 +12,14 @@ class Tag extends Controller {
 	{
 		$this->load->model('Tag_model');
 		$this->template->set('page_title', 'Tags');
-		$this->template->set('nav_links', array('tag/add' => 'New Tag'));
+		$this->template->set('nav_links', array('tag/add' => 'Add Tag'));
 		$this->template->load('template', 'tag/index');
 		return;
 	}
 
 	function add()
 	{
-		$this->template->set('page_title', 'New Tag');
+		$this->template->set('page_title', 'Add Tag');
 
 		/* Check access */
 		if ( ! check_access('create tag'))
@@ -298,7 +298,7 @@ class Tag extends Controller {
 		if ( !  $this->db->where('tag_id', $id)->update('vouchers', $update_data))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Tag from Vouchers.', 'error');
+			$this->messages->add('Error deleting Tag from Entries.', 'error');
 			$this->logger->write_message("error", "Error deleting tag named " . $data_tag->title . " [id:" . $id . "] from vouchers");
 			redirect('tag');
 			return;

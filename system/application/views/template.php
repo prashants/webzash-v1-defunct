@@ -117,7 +117,7 @@ $(document).ready(function() {
 			</li>
 			<li>
 				<?php
-					/* Showing Voucher Type sub-menu */
+					/* Showing Entry Type sub-menu */
 					$voucher_type_all = $this->config->item('account_entry_types');
 					$voucher_type_count = count($voucher_type_all);
 					if ($voucher_type_count < 1)
@@ -126,15 +126,15 @@ $(document).ready(function() {
 					} else if ($voucher_type_count == 1) {
 						foreach ($voucher_type_all as $id => $row)
 						{
-							echo anchor('voucher/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Entries'));
+							echo anchor('entry/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Entries'));
 						}
 					} else {
-						echo anchor('voucher', 'Entry', array('title' => 'Entry'));
+						echo anchor('entry', 'Entry', array('title' => 'Entry'));
 						echo "<ul>";
-						echo "<li>" . anchor('voucher/show/all', 'All', array('title' => 'All Entries')) . "</li>";
+						echo "<li>" . anchor('entry/show/all', 'All', array('title' => 'All Entries')) . "</li>";
 						foreach ($voucher_type_all as $id => $row)
 						{
-							echo "<li>" . anchor('voucher/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Entries')) . "</li>";
+							echo "<li>" . anchor('entry/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Entries')) . "</li>";
 						}
 						echo "</ul>";
 					}

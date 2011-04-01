@@ -97,7 +97,7 @@ if ( ! function_exists('print_value'))
 }
 
 /**
- * Return Voucher Type information
+ * Return Entry Type information
  *
  * @access	public
  * @param	int voucher type id
@@ -142,7 +142,7 @@ if ( ! function_exists('voucher_type_info'))
 }
 
 /**
- * Return Voucher Type Id from Voucher Type Name
+ * Return Entry Type Id from Entry Type Name
  *
  * @access	public
  * @param	string voucher type name
@@ -167,7 +167,7 @@ if ( ! function_exists('voucher_type_name_to_id'))
 }
 
 /**
- * Converts Voucher number to proper voucher prefix formats
+ * Converts Entry number to proper voucher prefix formats
  *
  * @access	public
  * @param	int voucher type id

@@ -122,7 +122,7 @@ class Ledger_model extends Model {
 			return "(Error)";
 	}
 
-	function get_voucher_name($voucher_id, $voucher_type_id)
+	function get_entry_name($voucher_id, $voucher_type_id)
 	{
 		/* Selecting whether to show debit side Ledger or credit side Ledger */
 		$current_voucher_type = voucher_type_info($voucher_type_id);
@@ -157,12 +157,12 @@ class Ledger_model extends Model {
 			$html = '';
 			if ($ledger_multiple)
 				if ($current_voucher_type['base_type'] == '1')
-					$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+					$html .= anchor('entry/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 				else
 					$html .= anchor('inventory/entry/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 			else
 				if ($current_voucher_type['base_type'] == '1')
-					$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+					$html .= anchor('entry/view/' . $current_voucher_type['label'] . "/" . $voucher_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 				else
 					$html .= anchor('inventory/entry/view/' . $current_voucher_type['label'] . "/" . $voucher_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 			return $html;
@@ -185,12 +185,12 @@ class Ledger_model extends Model {
 			if ($opp_voucher_name_q->num_rows() > 1)
 			{
 				if ($output_type == 'html')
-					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $voucher_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
+					$output = anchor('entry/view/' . $voucher_type_label . '/' . $voucher_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
 				else
 					$output = "(" . $opp_ledger_name . ")";
 			} else {
 				if ($output_type == 'html')
-					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $voucher_id, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
+					$output = anchor('entry/view/' . $voucher_type_label . '/' . $voucher_id, $opp_ledger_name, array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
 				else
 					$output = $opp_ledger_name;
 			}

@@ -21,7 +21,7 @@ class Tag_model extends Model {
 		return $options;
 	}
 
-	function show_voucher_tag($tag_id)
+	function show_entry_tag($tag_id)
 	{
 		if ($tag_id < 1)
 			return "";
@@ -33,7 +33,7 @@ class Tag_model extends Model {
 			return "";
 	}
 
-	function show_voucher_tag_link($tag_id)
+	function show_entry_tag_link($tag_id)
 	{
 		if ($tag_id < 1)
 			return "";

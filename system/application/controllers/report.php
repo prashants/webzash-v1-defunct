@@ -354,7 +354,7 @@ class Report extends Controller {
 			$ledgerst_q = $this->db->get();
 			foreach ($ledgerst_q->result() as $row)
 			{
-				/* Voucher Type */
+				/* Entry Type */
 				$current_voucher_type = voucher_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
@@ -477,7 +477,7 @@ class Report extends Controller {
 			$ledgerst_q = $this->db->get();
 			foreach ($ledgerst_q->result() as $row)
 			{
-				/* Voucher Type */
+				/* Entry Type */
 				$current_voucher_type = voucher_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);

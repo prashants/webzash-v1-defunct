@@ -1,14 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Email - <?php echo $current_voucher_type['name']; ?> Voucher Number <?php echo $voucher_number; ?></title>
+<title>Email - <?php echo $current_voucher_type['name']; ?> Entry Number <?php echo $voucher_number; ?></title>
 </head>
 <body>
 	<p><?php echo $this->config->item('account_name'); ?></p>
 	<p><?php echo $this->config->item('account_address'); ?></p>
-	<p><strong><?php echo $current_voucher_type['name']; ?> Voucher</strong></p>
-	<p><?php echo $current_voucher_type['name']; ?> Voucher Number : <strong><?php echo full_voucher_number($voucher_type_id, $voucher_number); ?></strong></p>
-	<p><?php echo $current_voucher_type['name']; ?> Voucher Date : <strong><?php echo $voucher_date; ?></strong></p>
+	<p><strong><?php echo $current_voucher_type['name']; ?> Entry</strong></p>
+	<p><?php echo $current_voucher_type['name']; ?> Entry Number : <strong><?php echo full_voucher_number($voucher_type_id, $voucher_number); ?></strong></p>
+	<p><?php echo $current_voucher_type['name']; ?> Entry Date : <strong><?php echo $voucher_date; ?></strong></p>
 	<table border=1 cellpadding=6>
 		<thead>
 			<tr><th align="left">Ledger Account</th><th>Dr Amount</th><th>Cr Amount</th></tr>

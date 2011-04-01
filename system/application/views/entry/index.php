@@ -17,7 +17,7 @@
 			echo "<td>" . date_mysql_to_php_display($row->date) . "</td>";
 			if ($current_voucher_type['base_type'] == '1')
 			{
-				echo "<td>" . anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a')) . "</td>";
+				echo "<td>" . anchor('entry/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
 			} else {
 				if ($current_voucher_type['inventory_entry_type'] == '3')
 				{
@@ -28,8 +28,8 @@
 			}
 
 			echo "<td>";
-			echo $this->Tag_model->show_voucher_tag($row->tag_id);
-			echo $this->Ledger_model->get_voucher_name($row->id, $row->voucher_type);
+			echo $this->Tag_model->show_entry_tag($row->tag_id);
+			echo $this->Ledger_model->get_entry_name($row->id, $row->voucher_type);
 			echo "</td>";
 
 			echo "<td>" . $current_voucher_type['name'] . "</td>";
@@ -38,11 +38,11 @@
 
 			if ($current_voucher_type['base_type'] == '1')
 			{
-				echo "<td>" . anchor('voucher/edit/' . $current_voucher_type['label'] . "/" . $row->id , "Edit", array('title' => 'Edit ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'red-link')) . " ";
-				echo " &nbsp;" . anchor('voucher/delete/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . $current_voucher_type['name'] . ' Voucher', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Delete  ' . $current_voucher_type['name'] . ' Voucher')) . " ";
-				echo " &nbsp;" . anchor_popup('voucher/printpreview/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . $current_voucher_type['name'] . ' Voucher')), array('title' => 'Print ' . $current_voucher_type['name']. ' Voucher', 'width' => '600', 'height' => '600')) . " ";
-				echo " &nbsp;" . anchor_popup('voucher/email/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . $current_voucher_type['name'] . ' Voucher')), array('title' => 'Email ' . $current_voucher_type['name'] . ' Voucher', 'width' => '500', 'height' => '300')) . " ";
-				echo " &nbsp;" . anchor('voucher/download/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/save.png", 'border' => '0', 'alt' => 'Download ' . $current_voucher_type['name'] . ' Voucher', 'title' => "Download voucher")), array('title' => 'Download  ' . $current_voucher_type['name'] . ' Voucher')) . "</td>";
+				echo "<td>" . anchor('entry/edit/' . $current_voucher_type['label'] . "/" . $row->id , "Edit", array('title' => 'Edit ' . $current_voucher_type['name'] . ' Entry', 'class' => 'red-link')) . " ";
+				echo " &nbsp;" . anchor('entry/delete/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . $current_voucher_type['name'] . ' Entry', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Delete  ' . $current_voucher_type['name'] . ' Entry')) . " ";
+				echo " &nbsp;" . anchor_popup('entry/printpreview/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . $current_voucher_type['name'] . ' Entry')), array('title' => 'Print ' . $current_voucher_type['name']. ' Entry', 'width' => '600', 'height' => '600')) . " ";
+				echo " &nbsp;" . anchor_popup('entry/email/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . $current_voucher_type['name'] . ' Entry')), array('title' => 'Email ' . $current_voucher_type['name'] . ' Entry', 'width' => '500', 'height' => '300')) . " ";
+				echo " &nbsp;" . anchor('entry/download/' . $current_voucher_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/save.png", 'border' => '0', 'alt' => 'Download ' . $current_voucher_type['name'] . ' Entry', 'title' => "Download voucher")), array('title' => 'Download  ' . $current_voucher_type['name'] . ' Entry')) . "</td>";
 			} else {
 				if ($current_voucher_type['inventory_entry_type'] == '3')
 				{

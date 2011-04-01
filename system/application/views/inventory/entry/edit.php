@@ -466,7 +466,7 @@ $(document).ready(function() {
 	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
-	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' . $current_voucher_type['name'] . ' Vouchers'));
+	echo anchor('entry/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' . $current_voucher_type['name'] . ' Entries'));
 	echo "</p>";
 
 	echo form_close();

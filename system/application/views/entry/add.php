@@ -202,7 +202,7 @@ $(document).ready(function() {
 	echo " ";
 	echo $current_voucher_type['prefix'] . form_input($voucher_number) . $current_voucher_type['suffix'];
 	echo "</span>";
-	echo "<span id=\"tooltip-content-1\">Leave Voucher Number empty for auto numbering</span>";
+	echo "<span id=\"tooltip-content-1\">Leave Entry Number empty for auto numbering</span>";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo "<span id=\"tooltip-target-2\">";
 	echo form_label('Entry Date', 'voucher_date');
@@ -276,7 +276,7 @@ $(document).ready(function() {
 	echo "<p>";
 	echo form_submit('submit', 'Create');
 	echo " ";
-	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' . $current_voucher_type['name'] . ' Vouchers'));
+	echo anchor('entry/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' . $current_voucher_type['name'] . ' Entries'));
 	echo "</p>";
 
 	echo form_close();

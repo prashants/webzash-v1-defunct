@@ -14,8 +14,8 @@
  *
  * table: entry_types
  * column : base_type
- *    1 = Normal Voucher
- *    2 = Stock Voucher
+ *    1 = Normal Entry
+ *    2 = Stock Entry
  * column : inventory_entry_type
  *    1 = Purchase
  *    2 = Sale

@@ -49,7 +49,7 @@ foreach ($cur_voucher_dest_inventory_items->result() as $row)
 <p>
 Tag : 
 <?php
-$cur_voucher_tag = $this->Tag_model->show_voucher_tag($cur_voucher->tag_id);
+$cur_voucher_tag = $this->Tag_model->show_entry_tag($cur_voucher->tag_id);
 if ($cur_voucher_tag == "")
 	echo "(None)";
 else
@@ -57,7 +57,7 @@ else
 ?>
 </p>
 <?php
-	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' .  $current_voucher_type['name'] . ' Entries'));
+	echo anchor('entry/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' .  $current_voucher_type['name'] . ' Entries'));
 	echo " | ";
 	echo anchor('inventory/transfer/edit/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Edit', array('title' => 'Edit ' . $current_voucher_type['name'] . ' Entry'));
 	echo " | ";

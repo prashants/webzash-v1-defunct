@@ -36,7 +36,7 @@
 <div class="qa-section" id="print-1">
 	<a name="print-1"></a>
 	<div class="qa-question">Q. How do I modify the voucher print format ?</div>
-	<div class="qa-answer">Voucher print template is located at "system/application/views/voucher/printpreview.php". Modify this file to change the voucher print format.</div>
+	<div class="qa-answer">Entry print template is located at "system/application/views/voucher/printpreview.php". Modify this file to change the voucher print format.</div>
 </div>
 
 <div class="qa-section" id="print-2">
@@ -48,7 +48,7 @@
 <div class="qa-section" id="email-1">
 	<a name="email-1"></a>
 	<div class="qa-question">Q. How do I modify the voucher email format ?</div>
-	<div class="qa-answer">Voucher email template is located at "system/application/views/voucher/emailpreview.php". Modify this file to change the voucher email format.</div>
+	<div class="qa-answer">Entry email template is located at "system/application/views/voucher/emailpreview.php". Modify this file to change the voucher email format.</div>
 </div>
 
 <div class="qa-section" id="email-2">
