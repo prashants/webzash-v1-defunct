@@ -358,7 +358,7 @@ class Report extends Controller {
 				$current_voucher_type = voucher_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
-				$ledgerst[$counter][1] = full_voucher_number($row->vtype, $row->vnumber);
+				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
 
 				/* Opposite voucher name */
 				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_voucher_type['label'], $row->ldc, 'text');
@@ -481,7 +481,7 @@ class Report extends Controller {
 				$current_voucher_type = voucher_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
-				$ledgerst[$counter][1] = full_voucher_number($row->vtype, $row->vnumber);
+				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
 
 				/* Opposite voucher name */
 				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_voucher_type['label'], $row->ldc, 'text');

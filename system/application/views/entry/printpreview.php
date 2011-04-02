@@ -11,7 +11,7 @@
 	<br />
 	<div id="print-voucher-type"><span class="value"><?php echo $current_voucher_type['name']; ?> Entry</span></div>
 	<br />
-	<div id="print-voucher-number"><?php echo $current_voucher_type['name']; ?> Entry Number : <span class="value"><?php echo full_voucher_number($voucher_type_id, $voucher_number); ?></span></div>
+	<div id="print-voucher-number"><?php echo $current_voucher_type['name']; ?> Entry Number : <span class="value"><?php echo full_entry_number($voucher_type_id, $voucher_number); ?></span></div>
 	<div id="print-voucher-number"><?php echo $current_voucher_type['name']; ?> Entry Date : <span class="value"><?php echo $voucher_date; ?></span></div>
 	<br />
 	<table id="print-voucher-table">

@@ -382,7 +382,7 @@ class Entry extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Entry.', 'error');
-				$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting entry");
+				$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed inserting entry");
 				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
 			} else {
@@ -409,10 +409,10 @@ class Entry extends Controller {
 				if ($current_voucher_type['inventory_entry_type'] == '1')
 				{
 					$this->messages->add('Error adding Purchase Ledger account to Entry.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting purchase ledger " . "[id:" . $data_main_account . "]");
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed inserting purchase ledger " . "[id:" . $data_main_account . "]");
 				} else {
 					$this->messages->add('Error adding Sale Ledger account to Entry.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting sale ledger " . "[id:" . $data_main_account . "]");
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed inserting sale ledger " . "[id:" . $data_main_account . "]");
 				}
 				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
@@ -440,10 +440,10 @@ class Entry extends Controller {
 				if ($current_voucher_type['inventory_entry_type'] == '1')
 				{
 					$this->messages->add('Error adding Creditor (Supplier) to Entry.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting creditor ledger " . "[id:" . $data_main_entity . "]");
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed inserting creditor ledger " . "[id:" . $data_main_entity . "]");
 				} else {
 					$this->messages->add('Error adding Debtor (Customer) - to Entry.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting debtor ledger " . "[id:" . $data_main_entity . "]");
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed inserting debtor ledger " . "[id:" . $data_main_entity . "]");
 				}
 				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
@@ -483,7 +483,7 @@ class Entry extends Controller {
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error adding Inventory Item - ' . $data_inventory_item_id . ' to Entry.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting inventory item " . "[id:" . $data_inventory_item_id . "]");
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed inserting inventory item " . "[id:" . $data_inventory_item_id . "]");
 					$this->template->load('template', 'inventory/entry/add', $data);
 					return;
 				}
@@ -519,7 +519,7 @@ class Entry extends Controller {
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Entry.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting entry ledger item " . "[id:" . $data_ledger_id . "]");
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed inserting entry ledger item " . "[id:" . $data_ledger_id . "]");
 					$this->template->load('template', 'inventory/entry/add', $data);
 					return;
 				}
@@ -535,7 +535,7 @@ class Entry extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry total.', 'error');
-				$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating debit and credit total");
+				$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed updating debit and credit total");
 				$this->template->load('template', 'inventory/entry/add', $data);
 				return;
 			}
@@ -552,7 +552,7 @@ class Entry extends Controller {
 			$this->session->set_userdata('voucher_added_number', $data_number);
 
 			/* Showing success message in show() method since message is too long for storing it in session */
-			$this->logger->write_message("success", "Added " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
+			$this->logger->write_message("success", "Added " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 			redirect('entry/show/' . $current_voucher_type['label']);
 			$this->template->load('template', 'inventory/entry/add', $data);
 			return;
@@ -899,7 +899,7 @@ class Entry extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry.', 'error');
-				$this->logger->write_message("error", "Error updating entry details for " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
+				$this->logger->write_message("error", "Error updating entry details for " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
@@ -909,7 +909,7 @@ class Entry extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting previous inventory items from Entry.', 'error');
-				$this->logger->write_message("error", "Error deleting previous inventory items from " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
+				$this->logger->write_message("error", "Error deleting previous inventory items from " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
@@ -919,7 +919,7 @@ class Entry extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting previous Ledger accounts from Entry.', 'error');
-				$this->logger->write_message("error", "Error deleting previous entry items for " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
+				$this->logger->write_message("error", "Error deleting previous entry items for " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
@@ -943,10 +943,10 @@ class Entry extends Controller {
 				if ($current_voucher_type['inventory_entry_type'] == '1')
 				{
 					$this->messages->add('Error updating Purchase Ledger account of Entry.', 'error');
-					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating purchase ledger " . "[id:" . $data_main_account . "]");
+					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed updating purchase ledger " . "[id:" . $data_main_account . "]");
 				} else {
 					$this->messages->add('Error updating Sale Ledger account of Entry.', 'error');
-					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating sale ledger " . "[id:" . $data_main_account . "]");
+					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed updating sale ledger " . "[id:" . $data_main_account . "]");
 				}
 				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
@@ -971,10 +971,10 @@ class Entry extends Controller {
 				if ($current_voucher_type['inventory_entry_type'] == '1')
 				{
 					$this->messages->add('Error updating Creditor (Supplier) of Entry.', 'error');
-					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating creditor ledger " . "[id:" . $data_main_entity . "]");
+					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed updating creditor ledger " . "[id:" . $data_main_entity . "]");
 				} else {
 					$this->messages->add('Error updating Debtor (Customer) of Entry.', 'error');
-					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating debtor ledger " . "[id:" . $data_main_entity . "]");
+					$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed updating debtor ledger " . "[id:" . $data_main_entity . "]");
 				}
 				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
@@ -1012,7 +1012,7 @@ class Entry extends Controller {
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error adding Inventory Item - ' . $data_inventory_item_id . ' to Entry.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting inventory item " . "[id:" . $data_inventory_item_id . "]");
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed inserting inventory item " . "[id:" . $data_inventory_item_id . "]");
 					$this->template->load('template', 'inventory/entry/edit', $data);
 					return;
 				}
@@ -1048,7 +1048,7 @@ class Entry extends Controller {
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Entry.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting entry ledger item " . "[id:" . $data_ledger_id . "]");
+					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed inserting entry ledger item " . "[id:" . $data_ledger_id . "]");
 					$this->template->load('template', 'inventory/entry/edit', $data);
 					return;
 				}
@@ -1064,7 +1064,7 @@ class Entry extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry total.', 'error');
-				$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " since failed updating debit and credit total");
+				$this->logger->write_message("error", "Error updating " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " since failed updating debit and credit total");
 				$this->template->load('template', 'inventory/entry/edit', $data);
 				return;
 			}
@@ -1084,7 +1084,7 @@ class Entry extends Controller {
 				$this->session->set_userdata('voucher_updated_has_reconciliation', FALSE);
 
 			/* Showing success message in show() method since message is too long for storing it in session */
-			$this->logger->write_message("success", "Updated " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
+			$this->logger->write_message("success", "Updated " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 
 			redirect('entry/show/' . $current_voucher_type['label']);
 			return;
@@ -1134,7 +1134,7 @@ class Entry extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Inventory Items.', 'error');
-			$this->logger->write_message("error", "Error deleting inventory item entries for " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
+			$this->logger->write_message("error", "Error deleting inventory item entries for " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 			redirect('entry/view/' . $current_voucher_type['label'] . '/' . $voucher_id);
 			return;
 		}
@@ -1142,7 +1142,7 @@ class Entry extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Entry - Ledger accounts.', 'error');
-			$this->logger->write_message("error", "Error deleting ledger entries for " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
+			$this->logger->write_message("error", "Error deleting ledger entries for " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 			redirect('entry/view/' . $current_voucher_type['label'] . '/' . $voucher_id);
 			return;
 		}
@@ -1150,13 +1150,13 @@ class Entry extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Entry.', 'error');
-			$this->logger->write_message("error", "Error deleting Entry for " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
+			$this->logger->write_message("error", "Error deleting Entry for " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 			redirect('entry/view/' . $current_voucher_type['label'] . '/' . $voucher_id);
 			return;
 		}
 		$this->db->trans_complete();
 		$this->messages->add('Deleted ' . $current_voucher_type['name'] . ' Entry.', 'success');
-		$this->logger->write_message("success", "Deleted " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
+		$this->logger->write_message("success", "Deleted " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 		redirect('entry/show/' . $current_voucher_type['label']);
 		return;
 	}
@@ -1428,15 +1428,15 @@ class Entry extends Controller {
 			/* Sending email */
 			$this->email->from('', 'Webzash');
 			$this->email->to($this->input->post('email_to', TRUE));
-			$this->email->subject($current_voucher_type['name'] . ' Entry No. ' . full_voucher_number($voucher_type_id, $cur_voucher->number));
+			$this->email->subject($current_voucher_type['name'] . ' Entry No. ' . full_entry_number($voucher_type_id, $cur_voucher->number));
 			$this->email->message($message);
 			if ($this->email->send())
 			{
 				$data['message'] = "Email sent.";
-				$this->logger->write_message("success", "Emailed " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
+				$this->logger->write_message("success", "Emailed " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 			} else {
 				$data['error'] = "Error sending email. Check you email settings.";
-				$this->logger->write_message("error", "Error emailing " . $current_voucher_type['name'] . " Entry number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
+				$this->logger->write_message("error", "Error emailing " . $current_voucher_type['name'] . " Entry number " . full_entry_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 			}
 			$this->load->view('inventory/entry/email', $data);
 			return;

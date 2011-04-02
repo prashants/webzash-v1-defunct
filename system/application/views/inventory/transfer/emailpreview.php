@@ -1,13 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Email - <?php echo $current_voucher_type['name']; ?> Entry Number <?php echo full_voucher_number($voucher_type_id, $cur_voucher->number); ?></title>
+<title>Email - <?php echo $current_voucher_type['name']; ?> Entry Number <?php echo full_entry_number($voucher_type_id, $cur_voucher->number); ?></title>
 </head>
 <body>
 	<p><?php echo $this->config->item('account_name'); ?></p>
 	<p><?php echo $this->config->item('account_address'); ?></p>
 	<p><strong><?php echo $current_voucher_type['name']; ?> Entry</strong></p>
-	<p><?php echo $current_voucher_type['name']; ?> Entry Number : <strong><?php echo full_voucher_number($voucher_type_id, $cur_voucher->number); ?></strong></p>
+	<p><?php echo $current_voucher_type['name']; ?> Entry Number : <strong><?php echo full_entry_number($voucher_type_id, $cur_voucher->number); ?></strong></p>
 	<p><?php echo $current_voucher_type['name']; ?> Entry Date : <strong><?php echo date_mysql_to_php_display($cur_voucher->date); ?></strong></p>
 
 	<br />

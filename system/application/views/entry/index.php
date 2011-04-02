@@ -17,13 +17,13 @@
 			echo "<td>" . date_mysql_to_php_display($row->date) . "</td>";
 			if ($current_voucher_type['base_type'] == '1')
 			{
-				echo "<td>" . anchor('entry/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
+				echo "<td>" . anchor('entry/view/' . $current_voucher_type['label'] . "/" . $row->id, full_entry_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
 			} else {
 				if ($current_voucher_type['inventory_entry_type'] == '3')
 				{
-					echo "<td>" . anchor('inventory/transfer/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
+					echo "<td>" . anchor('inventory/transfer/view/' . $current_voucher_type['label'] . "/" . $row->id, full_entry_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
 				} else {
-					echo "<td>" . anchor('inventory/entry/view/' . $current_voucher_type['label'] . "/" . $row->id, full_voucher_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
+					echo "<td>" . anchor('inventory/entry/view/' . $current_voucher_type['label'] . "/" . $row->id, full_entry_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
 				}
 			}
 

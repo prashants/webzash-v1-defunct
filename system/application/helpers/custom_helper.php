@@ -173,9 +173,9 @@ if ( ! function_exists('voucher_type_name_to_id'))
  * @param	int voucher type id
  * @return	string
  */
-if ( ! function_exists('full_voucher_number'))
+if ( ! function_exists('full_entry_number'))
 {
-	function full_voucher_number($voucher_type_id, $voucher_number)
+	function full_entry_number($voucher_type_id, $voucher_number)
 	{
 		$CI =& get_instance();
 		$voucher_type_all = $CI->config->item('account_entry_types');
