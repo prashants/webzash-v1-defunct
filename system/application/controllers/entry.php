@@ -255,7 +255,7 @@ class Entry extends Controller {
 	function add($voucher_type)
 	{
 		/* Check access */
-		if ( ! check_access('create voucher'))
+		if ( ! check_access('create entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('entry/show/' . $voucher_type);
@@ -593,7 +593,7 @@ class Entry extends Controller {
 	function edit($voucher_type, $voucher_id = 0)
 	{
 		/* Check access */
-		if ( ! check_access('edit voucher'))
+		if ( ! check_access('edit entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('entry/show/' . $voucher_type);
@@ -967,7 +967,7 @@ class Entry extends Controller {
 	function delete($voucher_type, $voucher_id = 0)
 	{
 		/* Check access */
-		if ( ! check_access('delete voucher'))
+		if ( ! check_access('delete entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('entry/show/' . $voucher_type);
@@ -1032,7 +1032,7 @@ class Entry extends Controller {
 		$this->load->model('Ledger_model');
 
 		/* Check access */
-		if ( ! check_access('download voucher'))
+		if ( ! check_access('download entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('entry/show/' . $voucher_type);
@@ -1098,7 +1098,7 @@ class Entry extends Controller {
 		$this->load->model('Ledger_model');
 
 		/* Check access */
-		if ( ! check_access('print voucher'))
+		if ( ! check_access('print entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('entry/show/' . $voucher_type);
@@ -1162,7 +1162,7 @@ class Entry extends Controller {
 		$this->load->library('email');
 
 		/* Check access */
-		if ( ! check_access('email voucher'))
+		if ( ! check_access('email entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('entry/show/' . $voucher_type);

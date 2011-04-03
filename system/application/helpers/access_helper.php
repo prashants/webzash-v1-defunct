@@ -6,13 +6,13 @@
  *
  * Valid permissions strings are given below :
  *
- * 'view voucher'
- * 'create voucher'
- * 'edit voucher'
- * 'delete voucher'
- * 'print voucher'
- * 'email voucher'
- * 'download voucher'
+ * 'view entry'
+ * 'create entry'
+ * 'edit entry'
+ * 'delete entry'
+ * 'print entry'
+ * 'email entry'
+ * 'download entry'
  * 'view inventory entry'
  * 'create inventory entry'
  * 'edit inventory entry'
@@ -54,13 +54,13 @@ if ( ! function_exists('check_access'))
 		$CI =& get_instance();
 		$user_role = $CI->session->userdata('user_role');
 		$permissions['manager'] = array(
-			'view voucher',
-			'create voucher',
-			'edit voucher',
-			'delete voucher',
-			'print voucher',
-			'email voucher',
-			'download voucher',
+			'view entry',
+			'create entry',
+			'edit entry',
+			'delete entry',
+			'print entry',
+			'email entry',
+			'download entry',
 			'view inventory entry',
 			'create inventory entry',
 			'edit inventory entry',
@@ -94,13 +94,13 @@ if ( ! function_exists('check_access'))
 			'backup account',
 		);
 		$permissions['accountant'] = array(
-			'view voucher',
-			'create voucher',
-			'edit voucher',
-			'delete voucher',
-			'print voucher',
-			'email voucher',
-			'download voucher',
+			'view entry',
+			'create entry',
+			'edit entry',
+			'delete entry',
+			'print entry',
+			'email entry',
+			'download entry',
 			'view inventory entry',
 			'create inventory entry',
 			'edit inventory entry',
@@ -131,13 +131,13 @@ if ( ! function_exists('check_access'))
 			'clear log',
 		);
 		$permissions['dataentry'] = array(
-			'view voucher',
-			'create voucher',
-			'edit voucher',
-			'delete voucher',
-			'print voucher',
-			'email voucher',
-			'download voucher',
+			'view entry',
+			'create entry',
+			'edit entry',
+			'delete entry',
+			'print entry',
+			'email entry',
+			'download entry',
 			'view inventory entry',
 			'create inventory entry',
 			'edit inventory entry',
@@ -151,10 +151,10 @@ if ( ! function_exists('check_access'))
 			'edit inventory item',
 		);
 		$permissions['guest'] = array(
-			'view voucher',
-			'print voucher',
-			'email voucher',
-			'download voucher',
+			'view entry',
+			'print entry',
+			'email entry',
+			'download entry',
 		);
 
 		if ( ! isset($user_role))
