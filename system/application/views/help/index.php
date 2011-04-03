@@ -7,14 +7,14 @@
 </li>
 <li><span class="qa-heading">Printing</span>
 	<ul>
-	<li><a href="#print-1" class="anchor-link-a">How do I modify the voucher print format ?</a></li>
+	<li><a href="#print-1" class="anchor-link-a">How do I modify the entry print format ?</a></li>
 	<li><a href="#print-2" class="anchor-link-a">How do I modify the reports print format (balance sheet, profit and loss statement, trial balance, ledger statement) ?</a></li>
 	</ul>
 </li>
 <li><span class="qa-heading">Email</span>
 	<ul>
-	<li><a href="#email-1" class="anchor-link-a">How do I modify the voucher email format ?</a></li>
-	<li><a href="#email-2" class="anchor-link-a">How do send vouchers using gmail ?</a></li>
+	<li><a href="#email-1" class="anchor-link-a">How do I modify the entry email format ?</a></li>
+	<li><a href="#email-2" class="anchor-link-a">How do I send entries using gmail ?</a></li>
 	</ul>
 </li>
 </ul>
@@ -35,8 +35,8 @@
 
 <div class="qa-section" id="print-1">
 	<a name="print-1"></a>
-	<div class="qa-question">Q. How do I modify the voucher print format ?</div>
-	<div class="qa-answer">Entry print template is located at "system/application/views/voucher/printpreview.php". Modify this file to change the voucher print format.</div>
+	<div class="qa-question">Q. How do I modify the entry print format ?</div>
+	<div class="qa-answer">Entry print template is located at "system/application/views/entry/printpreview.php". Modify this file to change the entry print format.</div>
 </div>
 
 <div class="qa-section" id="print-2">
@@ -47,13 +47,13 @@
 
 <div class="qa-section" id="email-1">
 	<a name="email-1"></a>
-	<div class="qa-question">Q. How do I modify the voucher email format ?</div>
-	<div class="qa-answer">Entry email template is located at "system/application/views/voucher/emailpreview.php". Modify this file to change the voucher email format.</div>
+	<div class="qa-question">Q. How do I modify the entry email format ?</div>
+	<div class="qa-answer">Entry email template is located at "system/application/views/entry/emailpreview.php". Modify this file to change the entry email format.</div>
 </div>
 
 <div class="qa-section" id="email-2">
 	<a name="email-2"></a>
-	<div class="qa-question">Q. How do I send vouchers using gmail ?</div>
+	<div class="qa-question">Q. How do I send entries using gmail ?</div>
 	<div class="qa-answer">You need to use the following gmail settings in Settings > Email Settings<br /><br />
 	Email protocol : smtp<br />
 	Hostname : ssl://smtp.googlemail.com<br />

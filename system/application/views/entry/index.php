@@ -8,28 +8,28 @@
 	</thead>
 	<tbody>
 	<?php
-		foreach ($voucher_data->result() as $row)
+		foreach ($entry_data->result() as $row)
 		{
-			$current_entry_type = entry_type_info($row->voucher_type);
+			$current_entry_type = entry_type_info($row->entry_type);
 
 			echo "<tr>";
 
 			echo "<td>" . date_mysql_to_php_display($row->date) . "</td>";
 			if ($current_entry_type['base_type'] == '1')
 			{
-				echo "<td>" . anchor('entry/view/' . $current_entry_type['label'] . "/" . $row->id, full_entry_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
+				echo "<td>" . anchor('entry/view/' . $current_entry_type['label'] . "/" . $row->id, full_entry_number($row->entry_type, $row->number), array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
 			} else {
 				if ($current_entry_type['inventory_entry_type'] == '3')
 				{
-					echo "<td>" . anchor('inventory/transfer/view/' . $current_entry_type['label'] . "/" . $row->id, full_entry_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
+					echo "<td>" . anchor('inventory/transfer/view/' . $current_entry_type['label'] . "/" . $row->id, full_entry_number($row->entry_type, $row->number), array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
 				} else {
-					echo "<td>" . anchor('inventory/entry/view/' . $current_entry_type['label'] . "/" . $row->id, full_entry_number($row->voucher_type, $row->number), array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
+					echo "<td>" . anchor('inventory/entry/view/' . $current_entry_type['label'] . "/" . $row->id, full_entry_number($row->entry_type, $row->number), array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a')) . "</td>";
 				}
 			}
 
 			echo "<td>";
 			echo $this->Tag_model->show_entry_tag($row->tag_id);
-			echo $this->Ledger_model->get_entry_name($row->id, $row->voucher_type);
+			echo $this->Ledger_model->get_entry_name($row->id, $row->entry_type);
 			echo "</td>";
 
 			echo "<td>" . $current_entry_type['name'] . "</td>";
@@ -39,10 +39,10 @@
 			if ($current_entry_type['base_type'] == '1')
 			{
 				echo "<td>" . anchor('entry/edit/' . $current_entry_type['label'] . "/" . $row->id , "Edit", array('title' => 'Edit ' . $current_entry_type['name'] . ' Entry', 'class' => 'red-link')) . " ";
-				echo " &nbsp;" . anchor('entry/delete/' . $current_entry_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . $current_entry_type['name'] . ' Entry', 'class' => "confirmClick", 'title' => "Delete voucher")), array('title' => 'Delete  ' . $current_entry_type['name'] . ' Entry')) . " ";
+				echo " &nbsp;" . anchor('entry/delete/' . $current_entry_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete ' . $current_entry_type['name'] . ' Entry', 'class' => "confirmClick", 'title' => "Delete Entry")), array('title' => 'Delete  ' . $current_entry_type['name'] . ' Entry')) . " ";
 				echo " &nbsp;" . anchor_popup('entry/printpreview/' . $current_entry_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/print.png", 'border' => '0', 'alt' => 'Print ' . $current_entry_type['name'] . ' Entry')), array('title' => 'Print ' . $current_entry_type['name']. ' Entry', 'width' => '600', 'height' => '600')) . " ";
 				echo " &nbsp;" . anchor_popup('entry/email/' . $current_entry_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/email.png", 'border' => '0', 'alt' => 'Email ' . $current_entry_type['name'] . ' Entry')), array('title' => 'Email ' . $current_entry_type['name'] . ' Entry', 'width' => '500', 'height' => '300')) . " ";
-				echo " &nbsp;" . anchor('entry/download/' . $current_entry_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/save.png", 'border' => '0', 'alt' => 'Download ' . $current_entry_type['name'] . ' Entry', 'title' => "Download voucher")), array('title' => 'Download  ' . $current_entry_type['name'] . ' Entry')) . "</td>";
+				echo " &nbsp;" . anchor('entry/download/' . $current_entry_type['label'] . "/" . $row->id , img(array('src' => asset_url() . "images/icons/save.png", 'border' => '0', 'alt' => 'Download ' . $current_entry_type['name'] . ' Entry', 'title' => "Download Entry")), array('title' => 'Download  ' . $current_entry_type['name'] . ' Entry')) . "</td>";
 			} else {
 				if ($current_entry_type['inventory_entry_type'] == '3')
 				{

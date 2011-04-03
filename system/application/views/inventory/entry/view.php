@@ -38,7 +38,7 @@ Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_entry-
 	</tr>
 </table>
 
-<table border=0 cellpadding=5 class="simple-table voucher-view-table">
+<table border=0 cellpadding=5 class="simple-table entry-view-table">
 <thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate</th><th>Discount</th><th>Total</th></tr></thead>
 <?php
 $inventory_total = 0;
@@ -54,12 +54,12 @@ foreach ($cur_entry_inventory_items->result() as $row)
 	$inventory_total += $row->total;
 }
 ?>
-<tr class="voucher-total"><td colspan=4><strong>Total</strong></td><td id="inventory-total"><?php echo convert_cur($inventory_total); ?></td></tr>
+<tr class="entry-total"><td colspan=4><strong>Total</strong></td><td id="inventory-total"><?php echo convert_cur($inventory_total); ?></td></tr>
 </table>
 
 <br />
 
-<table border=0 cellpadding=5 class="simple-table voucher-view-table">
+<table border=0 cellpadding=5 class="simple-table entry-view-table">
 <thead><tr><th>Type</th><th>Ledger Account</th><th>Rate</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>
 <?php
 foreach ($cur_entry_ledgers->result() as $row)
@@ -79,15 +79,15 @@ foreach ($cur_entry_ledgers->result() as $row)
 	echo "</tr>";
 }
 ?>
-<tr class="voucher-total"><td colspan=3><strong>Total</strong></td><td id=dr-total>Dr <?php echo $cur_entry->dr_total; ?></td><td id=cr-total">Cr <?php echo $cur_entry->cr_total; ?></td></tr>
+<tr class="entry-total"><td colspan=3><strong>Total</strong></td><td id=dr-total>Dr <?php echo $cur_entry->dr_total; ?></td><td id=cr-total">Cr <?php echo $cur_entry->cr_total; ?></td></tr>
 <?php
 if ($cur_entry->dr_total != $cur_entry->cr_total)
 {
 	$difference = $cur_entry->dr_total - $cur_entry->cr_total;
 	if ($difference < 0)
-		echo "<tr class=\"voucher-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\"></td><td id=\"cr-diff\">" . convert_amount_dc($difference) . "</td></tr>";
+		echo "<tr class=\"entry-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\"></td><td id=\"cr-diff\">" . convert_amount_dc($difference) . "</td></tr>";
 	else
-		echo "<tr class=\"voucher-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\">" . convert_amount_dc($difference) . "</td><td id=\"cr-diff\"></td></tr>";
+		echo "<tr class=\"entry-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\">" . convert_amount_dc($difference) . "</td><td id=\"cr-diff\"></td></tr>";
 }
 ?>
 </table>

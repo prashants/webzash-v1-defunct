@@ -1,14 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Email - <?php echo $current_entry_type['name']; ?> Entry Number <?php echo $voucher_number; ?></title>
+<title>Email - <?php echo $current_entry_type['name']; ?> Entry Number <?php echo $entry_number; ?></title>
 </head>
 <body>
 	<p><?php echo $this->config->item('account_name'); ?></p>
 	<p><?php echo $this->config->item('account_address'); ?></p>
 	<p><strong><?php echo $current_entry_type['name']; ?> Entry</strong></p>
-	<p><?php echo $current_entry_type['name']; ?> Entry Number : <strong><?php echo full_entry_number($voucher_type_id, $voucher_number); ?></strong></p>
-	<p><?php echo $current_entry_type['name']; ?> Entry Date : <strong><?php echo $voucher_date; ?></strong></p>
+	<p><?php echo $current_entry_type['name']; ?> Entry Number : <strong><?php echo full_entry_number($entry_type_id, $entry_number); ?></strong></p>
+	<p><?php echo $current_entry_type['name']; ?> Entry Date : <strong><?php echo $entry_date; ?></strong></p>
 	<table border=1 cellpadding=6>
 		<thead>
 			<tr><th align="left">Ledger Account</th><th>Dr Amount</th><th>Cr Amount</th></tr>
@@ -35,12 +35,12 @@
 				}
 				echo "</tr>";
 			}
-			echo "<tr><td>Total</td><td>" . $currency . " " .  $voucher_dr_total . "</td><td>" . $currency . " " . $voucher_cr_total . "</td></tr>";
+			echo "<tr><td>Total</td><td>" . $currency . " " .  $entry_dr_total . "</td><td>" . $currency . " " . $entry_cr_total . "</td></tr>";
 		?>
 		</tbody>
 	</table>
 	<br />
-	<p>Narration : <span class="value"><?php echo $voucher_narration; ?></p>
+	<p>Narration : <span class="value"><?php echo $entry_narration; ?></p>
 	<br />
 </body>
 </html>
