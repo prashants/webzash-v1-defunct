@@ -287,12 +287,12 @@ $(document).ready(function() {
 </script>
 
 <?php
-	echo form_open('inventory/entry/add/' . $current_voucher_type['label']);
+	echo form_open('inventory/entry/add/' . $current_entry_type['label']);
 	echo "<p>";
 	echo "<span id=\"tooltip-target-1\">";
 	echo form_label('Entry Number', 'voucher_number');
 	echo " ";
-	echo $current_voucher_type['prefix'] . form_input($voucher_number) . $current_voucher_type['suffix'];
+	echo $current_entry_type['prefix'] . form_input($voucher_number) . $current_entry_type['suffix'];
 	echo "</span>";
 	echo "<span id=\"tooltip-content-1\">Leave Entry Number empty for auto numbering</span>";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -304,7 +304,7 @@ $(document).ready(function() {
 	echo "<span id=\"tooltip-content-2\">Date format is " . $this->config->item('account_date_format') . ".</span>";
 	echo "</p>";
 
-	if ($current_voucher_type['inventory_entry_type'] == '1')
+	if ($current_entry_type['inventory_entry_type'] == '1')
 	{
 		echo "<p>";
 		echo "<table border=0 cellpadding=2>";
@@ -466,7 +466,7 @@ $(document).ready(function() {
 	echo "<p>";
 	echo form_submit('submit', 'Create');
 	echo " ";
-	echo anchor('entry/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' . $current_voucher_type['name'] . ' Entries'));
+	echo anchor('entry/show/' . $current_entry_type['label'], 'Back', array('title' => 'Back to ' . $current_entry_type['name'] . ' Entries'));
 	echo "</p>";
 
 	echo form_close();

@@ -116,23 +116,23 @@
 
 		foreach ($ledgerst_q->result() as $row)
 		{
-			$current_voucher_type = voucher_type_info($row->vtype);
+			$current_entry_type = entry_type_info($row->vtype);
 
 			echo "<tr class=\"tr-" . $odd_even . "\">";
 			echo "<td>";
 			echo date_mysql_to_php_display($row->vdate);
 			echo "</td>";
 			echo "<td>";
-			echo anchor('entry/view/' . $current_voucher_type['label'] . '/' . $row->vid, full_entry_number($row->vtype, $row->vnumber), array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
+			echo anchor('entry/view/' . $current_entry_type['label'] . '/' . $row->vid, full_entry_number($row->vtype, $row->vnumber), array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
 			echo "</td>";
 
 			/* Getting opposite Ledger name */
 			echo "<td>";
-			echo $this->Ledger_model->get_opp_ledger_name($row->vid, $current_voucher_type['label'], $row->ldc, 'html');
+			echo $this->Ledger_model->get_opp_ledger_name($row->vid, $current_entry_type['label'], $row->ldc, 'html');
 			echo "</td>";
 
 			echo "<td>";
-			echo $current_voucher_type['name'];
+			echo $current_entry_type['name'];
 			echo "</td>";
 			if ($row->ldc == "D")
 			{

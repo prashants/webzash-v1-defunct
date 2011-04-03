@@ -50,15 +50,15 @@ else
 ?>
 </p>
 <?php 
-	echo anchor('entry/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' .  $current_voucher_type['name'] . ' Entries'));
+	echo anchor('entry/show/' . $current_entry_type['label'], 'Back', array('title' => 'Back to ' .  $current_entry_type['name'] . ' Entries'));
 	echo " | ";
-	echo anchor('entry/edit/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Edit', array('title' => 'Edit ' . $current_voucher_type['name'] . ' Entry'));
+	echo anchor('entry/edit/' .  $current_entry_type['label'] . "/" . $cur_voucher->id, 'Edit', array('title' => 'Edit ' . $current_entry_type['name'] . ' Entry'));
 	echo " | ";
-	echo anchor('entry/delete/' . $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Delete', array('class' => "confirmClick", 'title' => "Delete Entry", 'title' => 'Delete this ' . $current_voucher_type['name'] . ' Entry'));
+	echo anchor('entry/delete/' . $current_entry_type['label'] . "/" . $cur_voucher->id, 'Delete', array('class' => "confirmClick", 'title' => "Delete Entry", 'title' => 'Delete this ' . $current_entry_type['name'] . ' Entry'));
 	echo " | ";
-	echo anchor_popup('entry/printpreview/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Print', array('title' => 'Print this ' . $current_voucher_type['name'] . ' Entry', 'width' => '600', 'height' => '600'));
+	echo anchor_popup('entry/printpreview/' .  $current_entry_type['label'] . "/" . $cur_voucher->id, 'Print', array('title' => 'Print this ' . $current_entry_type['name'] . ' Entry', 'width' => '600', 'height' => '600'));
 	echo " | ";
-	echo anchor_popup('entry/email/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Email', array('title' => 'Email this ' . $current_voucher_type['name'] . ' Entry', 'width' => '400', 'height' => '200'));
+	echo anchor_popup('entry/email/' .  $current_entry_type['label'] . "/" . $cur_voucher->id, 'Email', array('title' => 'Email this ' . $current_entry_type['name'] . ' Entry', 'width' => '400', 'height' => '200'));
 	echo " | ";
-	echo anchor('entry/download/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Download', array('title' => "Download Entry", 'title' => 'Download this ' . $current_voucher_type['name'] . ' Entry'));
+	echo anchor('entry/download/' .  $current_entry_type['label'] . "/" . $cur_voucher->id, 'Download', array('title' => "Download Entry", 'title' => 'Download this ' . $current_entry_type['name'] . ' Entry'));
 

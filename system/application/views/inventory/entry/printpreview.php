@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Print - <?php echo $current_voucher_type['name']; ?> Entry Number <?php echo $voucher_number; ?></title>
+<title>Print - <?php echo $current_entry_type['name']; ?> Entry Number <?php echo $voucher_number; ?></title>
 <?php echo link_tag(asset_url() . 'images/favicon.ico', 'shortcut icon', 'image/ico'); ?>
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/printvoucher.css">
 </head>
@@ -9,17 +9,17 @@
 	<div id="print-account-name"><span class="value"><?php echo  $this->config->item('account_name'); ?></span></div>
 	<div id="print-account-address"><span class="value"><?php echo $this->config->item('account_address'); ?></span></div>
 	<br />
-	<div id="print-voucher-type"><span class="value"><?php echo $current_voucher_type['name']; ?> Entry</span></div>
+	<div id="print-voucher-type"><span class="value"><?php echo $current_entry_type['name']; ?> Entry</span></div>
 	<br />
-	<div id="print-voucher-number"><?php echo $current_voucher_type['name']; ?> Entry Number : <span class="value"><?php echo full_entry_number($voucher_type_id, $cur_voucher->number); ?></span></div>
-	<div id="print-voucher-number"><?php echo $current_voucher_type['name']; ?> Entry Date : <span class="value"><?php echo date_mysql_to_php_display($cur_voucher->date); ?></span></div>
+	<div id="print-voucher-number"><?php echo $current_entry_type['name']; ?> Entry Number : <span class="value"><?php echo full_entry_number($voucher_type_id, $cur_voucher->number); ?></span></div>
+	<div id="print-voucher-number"><?php echo $current_entry_type['name']; ?> Entry Date : <span class="value"><?php echo date_mysql_to_php_display($cur_voucher->date); ?></span></div>
 	<br />
 
 	<table id="print-voucher-table">
 		<tr>
 			<td align=\"right\">
 				<?php
-					if ($current_voucher_type['inventory_entry_type'] == '1')
+					if ($current_entry_type['inventory_entry_type'] == '1')
 						echo "Purchase Ledger";
 					else
 						echo "Sale Ledger";
@@ -35,7 +35,7 @@
 		<tr>
 			<td align=\"right\">
 				<?php
-					if ($current_voucher_type['inventory_entry_type'] == '1')
+					if ($current_entry_type['inventory_entry_type'] == '1')
 						echo "Creditor (Supplier)";
 					else
 						echo "Debtor (Customer)";

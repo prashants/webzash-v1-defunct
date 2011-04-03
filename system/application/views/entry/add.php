@@ -1,8 +1,8 @@
 <?php
 	/* Add row ledger type */
-	if ($current_voucher_type['bank_cash_ledger_restriction'] == '4')
+	if ($current_entry_type['bank_cash_ledger_restriction'] == '4')
 		$add_type = "bankcash";
-	else if ($current_voucher_type['bank_cash_ledger_restriction'] == '5')
+	else if ($current_entry_type['bank_cash_ledger_restriction'] == '5')
 		$add_type = "nobankcash";
 	else
 		$add_type = "all";
@@ -195,12 +195,12 @@ $(document).ready(function() {
 </script>
 
 <?php
-	echo form_open('voucher/add/' . $current_voucher_type['label']);
+	echo form_open('voucher/add/' . $current_entry_type['label']);
 	echo "<p>";
 	echo "<span id=\"tooltip-target-1\">";
 	echo form_label('Entry Number', 'voucher_number');
 	echo " ";
-	echo $current_voucher_type['prefix'] . form_input($voucher_number) . $current_voucher_type['suffix'];
+	echo $current_entry_type['prefix'] . form_input($voucher_number) . $current_entry_type['suffix'];
 	echo "</span>";
 	echo "<span id=\"tooltip-content-1\">Leave Entry Number empty for auto numbering</span>";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -237,9 +237,9 @@ $(document).ready(function() {
 
 		echo "<td>" . form_dropdown_dc('ledger_dc[' . $i . ']', isset($ledger_dc[$i]) ? $ledger_dc[$i] : "D") . "</td>";
 
-		if ($current_voucher_type['bank_cash_ledger_restriction'] == '4')
+		if ($current_entry_type['bank_cash_ledger_restriction'] == '4')
 			echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0, '', $type = 'bankcash') . "</td>";
-		else if ($current_voucher_type['bank_cash_ledger_restriction'] == '5')
+		else if ($current_entry_type['bank_cash_ledger_restriction'] == '5')
 			echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0, '', $type = 'nobankcash') . "</td>";
 		else
 			echo "<td>" . form_input_ledger('ledger_id[' . $i . ']', isset($ledger_id[$i]) ? $ledger_id[$i] : 0) . "</td>";
@@ -276,7 +276,7 @@ $(document).ready(function() {
 	echo "<p>";
 	echo form_submit('submit', 'Create');
 	echo " ";
-	echo anchor('entry/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' . $current_voucher_type['name'] . ' Entries'));
+	echo anchor('entry/show/' . $current_entry_type['label'], 'Back', array('title' => 'Back to ' . $current_entry_type['name'] . ' Entries'));
 	echo "</p>";
 
 	echo form_close();

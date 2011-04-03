@@ -1,13 +1,13 @@
-<p>Entry Number : <span class="bold"><?php echo full_entry_number($voucher_type_id, $cur_voucher->number); ?></span>
+<p>Entry Number : <span class="bold"><?php echo full_entry_number($entry_type_id, $cur_entry->number); ?></span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_voucher->date); ?></span>
+Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_entry->date); ?></span>
 </p>
 
 <table border=0 cellpadding=2>
 	<tr>
 		<td align=\"right\">
 			<?php
-				if ($current_voucher_type['inventory_entry_type'] == '1')
+				if ($current_entry_type['inventory_entry_type'] == '1')
 					echo "Purchase Ledger :";
 				else
 					echo "Sale Ledger :";
@@ -15,7 +15,7 @@ Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_vouche
 		</td>
 		<td>
 			<?php
-				$main_account = $cur_voucher_main_account->row();
+				$main_account = $cur_entry_main_account->row();
 				echo "<span class=\"bold\">" . $this->Ledger_model->get_name($main_account->ledger_id) . "</span>";
 			?>
 		</td>
@@ -23,7 +23,7 @@ Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_vouche
 	<tr>
 		<td align=\"right\">
 			<?php
-				if ($current_voucher_type['inventory_entry_type'] == '1')
+				if ($current_entry_type['inventory_entry_type'] == '1')
 					echo "Creditor (Supplier) :";
 				else
 					echo "Debtor (Customer) :";
@@ -31,7 +31,7 @@ Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_vouche
 		</td>
 		<td>
 			<?php
-				$main_entity = $cur_voucher_main_entity->row();
+				$main_entity = $cur_entry_main_entity->row();
 				echo "<span class=\"bold\">" . $this->Ledger_model->get_name($main_entity->ledger_id) . "</span>";
 			?>
 		</td>
@@ -42,7 +42,7 @@ Entry Date : <span class="bold"><?php echo date_mysql_to_php_display($cur_vouche
 <thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate</th><th>Discount</th><th>Total</th></tr></thead>
 <?php
 $inventory_total = 0;
-foreach ($cur_voucher_inventory_items->result() as $row)
+foreach ($cur_entry_inventory_items->result() as $row)
 {
 	echo "<tr>";
 	echo "<td>" . $this->Inventory_Item_model->get_name($row->inventory_item_id) . "</td>";
@@ -62,7 +62,7 @@ foreach ($cur_voucher_inventory_items->result() as $row)
 <table border=0 cellpadding=5 class="simple-table voucher-view-table">
 <thead><tr><th>Type</th><th>Ledger Account</th><th>Rate</th><th>Dr Amount</th><th>Cr Amount</th></tr></thead>
 <?php
-foreach ($cur_voucher_ledgers->result() as $row)
+foreach ($cur_entry_ledgers->result() as $row)
 {
 	echo "<tr>";
 	echo "<td>" . convert_dc($row->dc) . "</td>";
@@ -79,11 +79,11 @@ foreach ($cur_voucher_ledgers->result() as $row)
 	echo "</tr>";
 }
 ?>
-<tr class="voucher-total"><td colspan=3><strong>Total</strong></td><td id=dr-total>Dr <?php echo $cur_voucher->dr_total; ?></td><td id=cr-total">Cr <?php echo $cur_voucher->cr_total; ?></td></tr>
+<tr class="voucher-total"><td colspan=3><strong>Total</strong></td><td id=dr-total>Dr <?php echo $cur_entry->dr_total; ?></td><td id=cr-total">Cr <?php echo $cur_entry->cr_total; ?></td></tr>
 <?php
-if ($cur_voucher->dr_total != $cur_voucher->cr_total)
+if ($cur_entry->dr_total != $cur_entry->cr_total)
 {
-	$difference = $cur_voucher->dr_total - $cur_voucher->cr_total;
+	$difference = $cur_entry->dr_total - $cur_entry->cr_total;
 	if ($difference < 0)
 		echo "<tr class=\"voucher-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\"></td><td id=\"cr-diff\">" . convert_amount_dc($difference) . "</td></tr>";
 	else
@@ -92,28 +92,28 @@ if ($cur_voucher->dr_total != $cur_voucher->cr_total)
 ?>
 </table>
 <p>Narration :<br />
-<span class="bold"><?php echo $cur_voucher->narration; ?></span>
+<span class="bold"><?php echo $cur_entry->narration; ?></span>
 </p>
 <p>
 Tag : 
 <?php
-$cur_voucher_tag = $this->Tag_model->show_entry_tag($cur_voucher->tag_id);
-if ($cur_voucher_tag == "")
+$cur_entry_tag = $this->Tag_model->show_entry_tag($cur_entry->tag_id);
+if ($cur_entry_tag == "")
 	echo "(None)";
 else
-	echo $cur_voucher_tag;
+	echo $cur_entry_tag;
 ?>
 </p>
 <?php
-	echo anchor('entry/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' .  $current_voucher_type['name'] . ' Entries'));
+	echo anchor('entry/show/' . $current_entry_type['label'], 'Back', array('title' => 'Back to ' .  $current_entry_type['name'] . ' Entries'));
 	echo " | ";
-	echo anchor('inventory/entry/edit/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Edit', array('title' => 'Edit ' . $current_voucher_type['name'] . ' Entry'));
+	echo anchor('inventory/entry/edit/' .  $current_entry_type['label'] . "/" . $cur_entry->id, 'Edit', array('title' => 'Edit ' . $current_entry_type['name'] . ' Entry'));
 	echo " | ";
-	echo anchor('inventory/entry/delete/' . $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Delete', array('class' => "confirmClick", 'title' => "Delete voucher", 'title' => 'Delete this ' . $current_voucher_type['name'] . ' Entry'));
+	echo anchor('inventory/entry/delete/' . $current_entry_type['label'] . "/" . $cur_entry->id, 'Delete', array('class' => "confirmClick", 'title' => "Delete Entry", 'title' => 'Delete this ' . $current_entry_type['name'] . ' Entry'));
 	echo " | ";
-	echo anchor_popup('inventory/entry/printpreview/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Print', array('title' => 'Print this ' . $current_voucher_type['name'] . ' Entry', 'width' => '600', 'height' => '600'));
+	echo anchor_popup('inventory/entry/printpreview/' .  $current_entry_type['label'] . "/" . $cur_entry->id, 'Print', array('title' => 'Print this ' . $current_entry_type['name'] . ' Entry', 'width' => '600', 'height' => '600'));
 	echo " | ";
-	echo anchor_popup('inventory/entry/email/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Email', array('title' => 'Email this ' . $current_voucher_type['name'] . ' Entry', 'width' => '400', 'height' => '200'));
+	echo anchor_popup('inventory/entry/email/' .  $current_entry_type['label'] . "/" . $cur_entry->id, 'Email', array('title' => 'Email this ' . $current_entry_type['name'] . ' Entry', 'width' => '400', 'height' => '200'));
 	echo " | ";
-	echo anchor('inventory/entry/download/' .  $current_voucher_type['label'] . "/" . $cur_voucher->id, 'Download', array('title' => "Download Entry", 'title' => 'Download this ' . $current_voucher_type['name'] . ' Entry'));
+	echo anchor('inventory/entry/download/' .  $current_entry_type['label'] . "/" . $cur_entry->id, 'Download', array('title' => "Download Entry", 'title' => 'Download this ' . $current_entry_type['name'] . ' Entry'));
 

@@ -122,26 +122,26 @@ class Ledger_model extends Model {
 			return "(Error)";
 	}
 
-	function get_entry_name($voucher_id, $voucher_type_id)
+	function get_entry_name($entry_id, $entry_type_id)
 	{
 		/* Selecting whether to show debit side Ledger or credit side Ledger */
-		$current_voucher_type = voucher_type_info($voucher_type_id);
+		$current_entry_type = entry_type_info($entry_type_id);
 
 		/* If Stock Transfer */
-		if ($current_voucher_type['inventory_entry_type'] == '3')
+		if ($current_entry_type['inventory_entry_type'] == '3')
 		{
-			$html = anchor('inventory/transfer/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "[Inventory Transfer]", array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
+			$html = anchor('inventory/transfer/view/' . $current_entry_type['label'] . "/" . $entry_id, "[Inventory Transfer]", array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 			return $html;
 		}
 
 		$ledger_type = 'C';
 
-		if ($current_voucher_type['bank_cash_ledger_restriction'] == '3')
+		if ($current_entry_type['bank_cash_ledger_restriction'] == '3')
 			$ledger_type = 'D';
 
 		$this->db->select('ledgers.name as name');
-		$this->db->from('voucher_items')->join('ledgers', 'voucher_items.ledger_id = ledgers.id')->where('voucher_items.voucher_id', $voucher_id);
-		if ($current_voucher_type['base_type'] == '2')
+		$this->db->from('voucher_items')->join('ledgers', 'voucher_items.ledger_id = ledgers.id')->where('voucher_items.voucher_id', $entry_id);
+		if ($current_entry_type['base_type'] == '2')
 		{
 			$this->db->where('voucher_items.inventory_type', 2);
 		} else {
@@ -156,41 +156,41 @@ class Ledger_model extends Model {
 			$ledger_multiple = ($ledger_q->num_rows() > 1) ? TRUE : FALSE;
 			$html = '';
 			if ($ledger_multiple)
-				if ($current_voucher_type['base_type'] == '1')
-					$html .= anchor('entry/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
+				if ($current_entry_type['base_type'] == '1')
+					$html .= anchor('entry/view/' . $current_entry_type['label'] . "/" . $entry_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 				else
-					$html .= anchor('inventory/entry/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
+					$html .= anchor('inventory/entry/view/' . $current_entry_type['label'] . "/" . $entry_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 			else
-				if ($current_voucher_type['base_type'] == '1')
-					$html .= anchor('entry/view/' . $current_voucher_type['label'] . "/" . $voucher_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
+				if ($current_entry_type['base_type'] == '1')
+					$html .= anchor('entry/view/' . $current_entry_type['label'] . "/" . $entry_id, $ledger->name, array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 				else
-					$html .= anchor('inventory/entry/view/' . $current_voucher_type['label'] . "/" . $voucher_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
+					$html .= anchor('inventory/entry/view/' . $current_entry_type['label'] . "/" . $entry_id, $ledger->name, array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 			return $html;
 		}
 		return;
 	}
 
-	function get_opp_ledger_name($voucher_id, $voucher_type_label, $ledger_type, $output_type)
+	function get_opp_ledger_name($entry_id, $entry_type_label, $ledger_type, $output_type)
 	{
 		$output = '';
 		if ($ledger_type == 'D')
 			$opp_ledger_type = 'C';
 		else
 			$opp_ledger_type = 'D';
-		$this->db->from('voucher_items')->where('voucher_id', $voucher_id)->where('dc', $opp_ledger_type);
-		$opp_voucher_name_q = $this->db->get();
-		if ($opp_voucher_name_d = $opp_voucher_name_q->row())
+		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('dc', $opp_ledger_type);
+		$opp_entry_name_q = $this->db->get();
+		if ($opp_entry_name_d = $opp_entry_name_q->row())
 		{
-			$opp_ledger_name = $this->get_name($opp_voucher_name_d->ledger_id);
-			if ($opp_voucher_name_q->num_rows() > 1)
+			$opp_ledger_name = $this->get_name($opp_entry_name_d->ledger_id);
+			if ($opp_entry_name_q->num_rows() > 1)
 			{
 				if ($output_type == 'html')
-					$output = anchor('entry/view/' . $voucher_type_label . '/' . $voucher_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
+					$output = anchor('entry/view/' . $entry_type_label . '/' . $entry_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
 				else
 					$output = "(" . $opp_ledger_name . ")";
 			} else {
 				if ($output_type == 'html')
-					$output = anchor('entry/view/' . $voucher_type_label . '/' . $voucher_id, $opp_ledger_name, array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
+					$output = anchor('entry/view/' . $entry_type_label . '/' . $entry_id, $opp_ledger_name, array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
 				else
 					$output = $opp_ledger_name;
 			}

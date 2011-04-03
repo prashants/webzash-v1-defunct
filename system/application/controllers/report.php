@@ -355,15 +355,15 @@ class Report extends Controller {
 			foreach ($ledgerst_q->result() as $row)
 			{
 				/* Entry Type */
-				$current_voucher_type = voucher_type_info($row->vtype);
+				$current_entry_type = entry_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
 				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
 
 				/* Opposite voucher name */
-				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_voucher_type['label'], $row->ldc, 'text');
+				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_entry_type['label'], $row->ldc, 'text');
 
-				$ledgerst[$counter][3] = $current_voucher_type['name'];
+				$ledgerst[$counter][3] = $current_entry_type['name'];
 
 				if ($row->ldc == "D")
 				{
@@ -478,15 +478,15 @@ class Report extends Controller {
 			foreach ($ledgerst_q->result() as $row)
 			{
 				/* Entry Type */
-				$current_voucher_type = voucher_type_info($row->vtype);
+				$current_entry_type = entry_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
 				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
 
 				/* Opposite voucher name */
-				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_voucher_type['label'], $row->ldc, 'text');
+				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_entry_type['label'], $row->ldc, 'text');
 
-				$ledgerst[$counter][3] = $current_voucher_type['name'];
+				$ledgerst[$counter][3] = $current_entry_type['name'];
 
 				if ($row->ldc == "D")
 				{
