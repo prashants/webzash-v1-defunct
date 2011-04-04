@@ -49,23 +49,23 @@ class Entry extends Controller {
 		}
 
 		/* Load current entry details - account, entity, ledgers */
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 1)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 1)->order_by('id', 'asc');
 		$cur_entry_main_account = $this->db->get();
 		if ($cur_entry_main_account->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated Purchase or Sale Ledger account.', 'error');
 		}
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 2)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 2)->order_by('id', 'asc');
 		$cur_entry_main_entity = $this->db->get();
 		if ($cur_entry_main_entity->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated Debtor or Creditor Ledger account.', 'error');
 		}
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 3)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 3)->order_by('id', 'asc');
 		$cur_entry_ledgers = $this->db->get();
 
 		/* Load current inventory items details */
-		$this->db->from('inventory_entry_items')->where('voucher_id', $entry_id)->order_by('id', 'asc');
+		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->order_by('id', 'asc');
 		$cur_entry_inventory_items = $this->db->get();
 		if ($cur_entry_inventory_items->num_rows() < 1)
 		{
@@ -375,7 +375,7 @@ class Entry extends Controller {
 				'number' => $data_number,
 				'date' => $data_date,
 				'narration' => $data_narration,
-				'voucher_type' => $data_type,
+				'entry_type' => $data_type,
 				'tag_id' => $data_tag,
 			);
 			if ( ! $this->db->insert('vouchers', $insert_data))
@@ -391,7 +391,7 @@ class Entry extends Controller {
 
 			/* Adding main - account */
 			$insert_data = array(
-				'voucher_id' => $entry_id,
+				'entry_id' => $entry_id,
 				'ledger_id' => $data_main_account,
 				'amount' => $data_main_account_total,
 				'dc' => '',
@@ -422,7 +422,7 @@ class Entry extends Controller {
 
 			/* Adding main - entity */
 			$insert_data = array(
-				'voucher_id' => $entry_id,
+				'entry_id' => $entry_id,
 				'ledger_id' => $data_main_entity,
 				'amount' => $data_main_entity_total,
 				'dc' => '',
@@ -471,7 +471,7 @@ class Entry extends Controller {
 				$data_inventory_item_amount = $data_all_inventory_item_amount[$id];
 
 				$insert_inventory_data = array(
-					'voucher_id' => $entry_id,
+					'entry_id' => $entry_id,
 					'inventory_item_id' => $data_inventory_item_id,
 					'quantity' => $data_inventory_item_quantity,
 					'rate_per_unit' => $data_inventory_item_rate_per_unit,
@@ -507,7 +507,7 @@ class Entry extends Controller {
 				$data_amount = $data_all_amount_item[$id];
 
 				$insert_ledger_data = array(
-					'voucher_id' => $entry_id,
+					'entry_id' => $entry_id,
 					'ledger_id' => $data_ledger_id,
 					'amount' => $data_amount,
 					'dc' => $data_ledger_dc,
@@ -634,19 +634,19 @@ class Entry extends Controller {
 		if ( ! $_POST)
 		{
 			/* main - account */
-			$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 1);
+			$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 1);
 			$cur_main_account_q = $this->db->get();
 			$cur_main_account = $cur_main_account_q->row();
 			$data['main_account_active'] = $cur_main_account->ledger_id;
 
 			/* main - entity */
-			$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 2);
+			$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 2);
 			$cur_main_entity_q = $this->db->get();
 			$cur_main_entity = $cur_main_entity_q->row();
 			$data['main_entity_active'] = $cur_main_entity->ledger_id;
 
 			/* ledgers */
-			$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 3);
+			$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 3);
 			$cur_ledgers_q = $this->db->get();
 			$counter = 0;
 			foreach ($cur_ledgers_q->result() as $row)
@@ -667,7 +667,7 @@ class Entry extends Controller {
 			$counter++;
 
 			/* inventory items */
-			$this->db->from('inventory_entry_items')->where('voucher_id', $entry_id);
+			$this->db->from('inventory_entry_items')->where('entry_id', $entry_id);
 			$cur_inventory_item_q = $this->db->get();
 			$counter = 0;
 			foreach ($cur_inventory_item_q->result() as $row)
@@ -905,7 +905,7 @@ class Entry extends Controller {
 			}
 
 			/* TODO : Deleting all old ledger data, Bad solution */
-			if ( ! $this->db->delete('inventory_entry_items', array('voucher_id' => $entry_id)))
+			if ( ! $this->db->delete('inventory_entry_items', array('entry_id' => $entry_id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting previous inventory items from Entry.', 'error');
@@ -915,7 +915,7 @@ class Entry extends Controller {
 			}
 
 			$this->db->where('inventory_type', 3);
-			if ( ! $this->db->delete('voucher_items', array('voucher_id' => $entry_id)))
+			if ( ! $this->db->delete('voucher_items', array('entry_id' => $entry_id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting previous Ledger accounts from Entry.', 'error');
@@ -937,7 +937,7 @@ class Entry extends Controller {
 				$update_data['dc'] = 'D';
 			else
 				$update_data['dc'] = 'C';
-			if ( ! $this->db->where('voucher_id', $entry_id)->where('inventory_type', 1)->update('voucher_items', $update_data))
+			if ( ! $this->db->where('entry_id', $entry_id)->where('inventory_type', 1)->update('voucher_items', $update_data))
 			{
 				$this->db->trans_rollback();
 				if ($current_entry_type['inventory_entry_type'] == '1')
@@ -965,7 +965,7 @@ class Entry extends Controller {
 				$insert_data['dc'] = 'C';
 			else
 				$insert_data['dc'] = 'D';
-			if ( ! $this->db->where('voucher_id', $entry_id)->where('inventory_type', 2)->update('voucher_items', $update_data))
+			if ( ! $this->db->where('entry_id', $entry_id)->where('inventory_type', 2)->update('voucher_items', $update_data))
 			{
 				$this->db->trans_rollback();
 				if ($current_entry_type['inventory_entry_type'] == '1')
@@ -1000,7 +1000,7 @@ class Entry extends Controller {
 				$data_inventory_item_amount = $data_all_inventory_item_amount[$id];
 
 				$insert_inventory_data = array(
-					'voucher_id' => $entry_id,
+					'entry_id' => $entry_id,
 					'inventory_item_id' => $data_inventory_item_id,
 					'quantity' => $data_inventory_item_quantity,
 					'rate_per_unit' => $data_inventory_item_rate_per_unit,
@@ -1036,7 +1036,7 @@ class Entry extends Controller {
 				$data_amount = $data_all_amount_item[$id];
 
 				$insert_ledger_data = array(
-					'voucher_id' => $entry_id,
+					'entry_id' => $entry_id,
 					'ledger_id' => $data_ledger_id,
 					'amount' => $data_amount,
 					'dc' => $data_ledger_dc,
@@ -1130,7 +1130,7 @@ class Entry extends Controller {
 		}
 
 		$this->db->trans_start();
-		if ( ! $this->db->delete('inventory_entry_items', array('voucher_id' => $entry_id)))
+		if ( ! $this->db->delete('inventory_entry_items', array('entry_id' => $entry_id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Inventory Items.', 'error');
@@ -1138,7 +1138,7 @@ class Entry extends Controller {
 			redirect('entry/view/' . $current_entry_type['label'] . '/' . $entry_id);
 			return;
 		}
-		if ( ! $this->db->delete('voucher_items', array('voucher_id' => $entry_id)))
+		if ( ! $this->db->delete('voucher_items', array('entry_id' => $entry_id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Entry - Ledger accounts.', 'error');
@@ -1201,23 +1201,23 @@ class Entry extends Controller {
 		}
 
 		/* Load current entry details - account, entity, ledgers */
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 1)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 1)->order_by('id', 'asc');
 		$cur_entry_main_account = $this->db->get();
 		if ($cur_entry_main_account->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated Purchase or Sale Ledger.', 'error');
 		}
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 2)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 2)->order_by('id', 'asc');
 		$cur_entry_main_entity = $this->db->get();
 		if ($cur_entry_main_entity->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated Debtor or Creditor.', 'error');
 		}
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 3)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 3)->order_by('id', 'asc');
 		$cur_entry_ledgers = $this->db->get();
 
 		/* Load current inventory items details */
-		$this->db->from('inventory_entry_items')->where('voucher_id', $entry_id)->order_by('id', 'asc');
+		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->order_by('id', 'asc');
 		$cur_entry_inventory_items = $this->db->get();
 		if ($cur_entry_inventory_items->num_rows() < 1)
 		{
@@ -1278,23 +1278,23 @@ class Entry extends Controller {
 		}
 
 		/* Load current entry details - account, entity, ledgers */
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 1)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 1)->order_by('id', 'asc');
 		$cur_entry_main_account = $this->db->get();
 		if ($cur_entry_main_account->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated Purchase or Sale Ledger.', 'error');
 		}
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 2)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 2)->order_by('id', 'asc');
 		$cur_entry_main_entity = $this->db->get();
 		if ($cur_entry_main_entity->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated Debtor or Creditor.', 'error');
 		}
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 3)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 3)->order_by('id', 'asc');
 		$cur_entry_ledgers = $this->db->get();
 
 		/* Load current inventory items details */
-		$this->db->from('inventory_entry_items')->where('voucher_id', $entry_id)->order_by('id', 'asc');
+		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->order_by('id', 'asc');
 		$cur_entry_inventory_items = $this->db->get();
 		if ($cur_entry_inventory_items->num_rows() < 1)
 		{
@@ -1348,23 +1348,23 @@ class Entry extends Controller {
 		}
 
 		/* Load current entry details - account, entity, ledgers */
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 1)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 1)->order_by('id', 'asc');
 		$cur_entry_main_account = $this->db->get();
 		if ($cur_entry_main_account->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated Purchase or Sale Ledger.', 'error');
 		}
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 2)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 2)->order_by('id', 'asc');
 		$cur_entry_main_entity = $this->db->get();
 		if ($cur_entry_main_entity->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated Debtor or Creditor Ledger.', 'error');
 		}
-		$this->db->from('voucher_items')->where('voucher_id', $entry_id)->where('inventory_type', 3)->order_by('id', 'asc');
+		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('inventory_type', 3)->order_by('id', 'asc');
 		$cur_entry_ledgers = $this->db->get();
 
 		/* Load current inventory items details */
-		$this->db->from('inventory_entry_items')->where('voucher_id', $entry_id)->order_by('id', 'asc');
+		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->order_by('id', 'asc');
 		$cur_entry_inventory_items = $this->db->get();
 		if ($cur_entry_inventory_items->num_rows() < 1)
 		{

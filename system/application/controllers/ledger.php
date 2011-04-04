@@ -332,7 +332,7 @@ class Ledger extends Controller {
 					/* Check for Entry types where bank_cash_ledger_restriction is for all ledgers */
 					if ($row['bank_cash_ledger_restriction'] == 4)
 					{
-						$this->db->from('voucher_items')->join('vouchers', 'voucher_items.voucher_id = vouchers.id')->where('vouchers.voucher_type', $entry_type_id)->where('voucher_items.ledger_id', $id);
+						$this->db->from('voucher_items')->join('vouchers', 'voucher_items.entry_id = vouchers.id')->where('vouchers.entry_type', $entry_type_id)->where('voucher_items.ledger_id', $id);
 						$all_ledger_bank_cash_count = $this->db->get()->num_rows();
 						if ($all_ledger_bank_cash_count > 0)
 						{

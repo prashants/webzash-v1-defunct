@@ -28,9 +28,9 @@
 		$config['per_page'] = $pagination_counter;
 		$config['uri_segment'] = 5;
 		if ($reconciliation_type == 'all')
-			$config['total_rows'] = (int)$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->count_all_results();
+			$config['total_rows'] = (int)$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.entry_id')->where('voucher_items.ledger_id', $ledger_id)->count_all_results();
 		else
-			$config['total_rows'] = (int)$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.reconciliation_date', NULL)->count_all_results();
+			$config['total_rows'] = (int)$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.entry_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.reconciliation_date', NULL)->count_all_results();
 		$config['full_tag_open'] = '<ul id="pagination-flickr">';
 		$config['full_close_open'] = '</ul>';
 		$config['num_tag_open'] = '<li>';
@@ -58,7 +58,7 @@
 		$clbalance = $this->Ledger_model->get_ledger_balance($ledger_id); /* Final Closing Balance */
 
 		/* Reconciliation Balance - Dr */
-		$this->db->select_sum('amount', 'drtotal')->from('voucher_items')->join('vouchers', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.dc', 'D')->where('voucher_items.reconciliation_date IS NOT NULL');
+		$this->db->select_sum('amount', 'drtotal')->from('voucher_items')->join('vouchers', 'vouchers.id = voucher_items.entry_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.dc', 'D')->where('voucher_items.reconciliation_date IS NOT NULL');
 		$dr_total_q = $this->db->get();
 		if ($dr_total = $dr_total_q->row())
 			$reconciliation_dr_total = $dr_total->drtotal;
@@ -66,7 +66,7 @@
 			$reconciliation_dr_total = 0;
 
 		/* Reconciliation Balance - Cr */
-		$this->db->select_sum('amount', 'crtotal')->from('voucher_items')->join('vouchers', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.dc', 'C')->where('voucher_items.reconciliation_date IS NOT NULL');
+		$this->db->select_sum('amount', 'crtotal')->from('voucher_items')->join('vouchers', 'vouchers.id = voucher_items.entry_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.dc', 'C')->where('voucher_items.reconciliation_date IS NOT NULL');
 		$cr_total_q = $this->db->get();
 		if ($cr_total = $cr_total_q->row())
 			$reconciliation_cr_total = $cr_total->crtotal;
@@ -93,19 +93,19 @@
 		echo "<br />";
 		if ( ! $print_preview)
 		{
-			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.voucher_type as vtype, voucher_items.id as lid, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.entry_type as vtype, voucher_items.id as lid, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
-				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($pagination_counter, $page_count);
+				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.entry_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($pagination_counter, $page_count);
 			else
-				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.reconciliation_date', NULL)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($pagination_counter, $page_count);
+				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.entry_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.reconciliation_date', NULL)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($pagination_counter, $page_count);
 			$ledgerst_q = $this->db->get();
 		} else {
 			$page_count = 0;
-			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.voucher_type as vtype, voucher_items.id as lid, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.entry_type as vtype, voucher_items.id as lid, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
-				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.entry_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			else
-				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.reconciliation_date', NULL)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.entry_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.reconciliation_date', NULL)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			$ledgerst_q = $this->db->get();
 		}
 

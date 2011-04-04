@@ -265,7 +265,7 @@ $(document).ready(function() {
 </script>
 
 <?php
-	echo form_open('inventory/transfer/edit/' . $current_entry_type['label'] . '/' . $voucher_id);
+	echo form_open('inventory/transfer/edit/' . $current_entry_type['label'] . '/' . $entry_id);
 	echo "<p>";
 	echo "<span id=\"tooltip-target-1\">";
 	echo form_label('Entry Number', 'voucher_number');

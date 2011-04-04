@@ -118,13 +118,13 @@ $(document).ready(function() {
 			<li>
 				<?php
 					/* Showing Entry Type sub-menu */
-					$voucher_type_all = $this->config->item('account_entry_types');
-					$voucher_type_count = count($voucher_type_all);
-					if ($voucher_type_count < 1)
+					$entry_type_all = $this->config->item('account_entry_types');
+					$entry_type_count = count($entry_type_all);
+					if ($entry_type_count < 1)
 					{
 						echo "";
-					} else if ($voucher_type_count == 1) {
-						foreach ($voucher_type_all as $id => $row)
+					} else if ($entry_type_count == 1) {
+						foreach ($entry_type_all as $id => $row)
 						{
 							echo anchor('entry/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Entries'));
 						}
@@ -132,7 +132,7 @@ $(document).ready(function() {
 						echo anchor('entry', 'Entry', array('title' => 'Entry'));
 						echo "<ul>";
 						echo "<li>" . anchor('entry/show/all', 'All', array('title' => 'All Entries')) . "</li>";
-						foreach ($voucher_type_all as $id => $row)
+						foreach ($entry_type_all as $id => $row)
 						{
 							echo "<li>" . anchor('entry/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Entries')) . "</li>";
 						}
