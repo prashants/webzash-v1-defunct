@@ -71,7 +71,7 @@ class General {
 			if ($CI->db->query("SHOW TABLES"))
 			{
 				/* Check for valid webzash database */
-				$table_names = array('groups', 'ledgers', 'entry_types', 'vouchers', 'voucher_items', 'inventory_units', 'inventory_groups', 'inventory_items', 'inventory_entry_items', 'tags', 'logs', 'settings');
+				$table_names = array('groups', 'ledgers', 'entry_types', 'vouchers', 'entry_items', 'inventory_units', 'inventory_groups', 'inventory_items', 'inventory_entry_items', 'tags', 'logs', 'settings');
 				foreach ($table_names as $id => $tbname)
 				{
 					$valid_db_q = mysql_query('DESC ' . $tbname);

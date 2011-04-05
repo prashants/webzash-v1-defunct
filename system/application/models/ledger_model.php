@@ -140,12 +140,12 @@ class Ledger_model extends Model {
 			$ledger_type = 'D';
 
 		$this->db->select('ledgers.name as name');
-		$this->db->from('voucher_items')->join('ledgers', 'voucher_items.ledger_id = ledgers.id')->where('voucher_items.entry_id', $entry_id);
+		$this->db->from('entry_items')->join('ledgers', 'entry_items.ledger_id = ledgers.id')->where('entry_items.entry_id', $entry_id);
 		if ($current_entry_type['base_type'] == '2')
 		{
-			$this->db->where('voucher_items.inventory_type', 2);
+			$this->db->where('entry_items.inventory_type', 2);
 		} else {
-			$this->db->where('voucher_items.dc', $ledger_type);
+			$this->db->where('entry_items.dc', $ledger_type);
 		}
 
 		$ledger_q = $this->db->get();
@@ -177,7 +177,7 @@ class Ledger_model extends Model {
 			$opp_ledger_type = 'C';
 		else
 			$opp_ledger_type = 'D';
-		$this->db->from('voucher_items')->where('entry_id', $entry_id)->where('dc', $opp_ledger_type);
+		$this->db->from('entry_items')->where('entry_id', $entry_id)->where('dc', $opp_ledger_type);
 		$opp_entry_name_q = $this->db->get();
 		if ($opp_entry_name_d = $opp_entry_name_q->row())
 		{
@@ -244,7 +244,7 @@ class Ledger_model extends Model {
 	/* Return debit total as positive value */
 	function get_dr_total($ledger_id)
 	{
-		$this->db->select_sum('amount', 'drtotal')->from('voucher_items')->join('vouchers', 'vouchers.id = voucher_items.entry_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.dc', 'D');
+		$this->db->select_sum('amount', 'drtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'D');
 		$dr_total_q = $this->db->get();
 		if ($dr_total = $dr_total_q->row())
 			return $dr_total->drtotal;
@@ -255,7 +255,7 @@ class Ledger_model extends Model {
 	/* Return credit total as positive value */
 	function get_cr_total($ledger_id)
 	{
-		$this->db->select_sum('amount', 'crtotal')->from('voucher_items')->join('vouchers', 'vouchers.id = voucher_items.entry_id')->where('voucher_items.ledger_id', $ledger_id)->where('voucher_items.dc', 'C');
+		$this->db->select_sum('amount', 'crtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'C');
 		$cr_total_q = $this->db->get();
 		if ($cr_total = $cr_total_q->row())
 			return $cr_total->crtotal;
@@ -269,7 +269,7 @@ class Ledger_model extends Model {
 		$update_data = array(
 			'reconciliation_date' => NULL,
 		);
-		$this->db->where('ledger_id', $ledger_id)->update('voucher_items', $update_data);
+		$this->db->where('ledger_id', $ledger_id)->update('entry_items', $update_data);
 		return;
 	}
 }

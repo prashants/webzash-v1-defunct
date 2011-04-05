@@ -21,7 +21,7 @@
  *    2 = Sale
  *    3 = Stock Transfer
  *
- * table: voucher_items
+ * table: entry_items
  * column : inventory_type
  *    0 = Not Applicable
  *    1 = Account Ledger

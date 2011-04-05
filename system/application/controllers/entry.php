@@ -238,7 +238,7 @@ class Entry extends Controller {
 			return;
 		}
 		/* Load current entry details */
-		$this->db->from('voucher_items')->where('entry_id', $entry_id)->order_by('id', 'asc');
+		$this->db->from('entry_items')->where('entry_id', $entry_id)->order_by('id', 'asc');
 		$cur_entry_ledgers = $this->db->get();
 		if ($cur_entry_ledgers->num_rows() < 1)
 		{
@@ -546,7 +546,7 @@ class Entry extends Controller {
 					'amount' => $data_amount,
 					'dc' => $data_ledger_dc,
 				);
-				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
+				if ( ! $this->db->insert('entry_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Entry.', 'error');
@@ -661,7 +661,7 @@ class Entry extends Controller {
 		/* Load current ledger details if not $_POST */
 		if ( ! $_POST)
 		{
-			$this->db->from('voucher_items')->where('entry_id', $entry_id);
+			$this->db->from('entry_items')->where('entry_id', $entry_id);
 			$cur_ledgers_q = $this->db->get();
 			if ($cur_ledgers_q->num_rows <= 0)
 			{
@@ -878,7 +878,7 @@ class Entry extends Controller {
 			}
 
 			/* TODO : Deleting all old ledger data, Bad solution */
-			if ( ! $this->db->delete('voucher_items', array('entry_id' => $entry_id)))
+			if ( ! $this->db->delete('entry_items', array('entry_id' => $entry_id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting previous Ledger accounts from Entry.', 'error');
@@ -917,7 +917,7 @@ class Entry extends Controller {
 					'amount' => $data_amount,
 					'dc' => $data_ledger_dc,
 				);
-				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
+				if ( ! $this->db->insert('entry_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
 					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Entry.', 'error');
@@ -1002,7 +1002,7 @@ class Entry extends Controller {
 		}
 
 		$this->db->trans_start();
-		if ( ! $this->db->delete('voucher_items', array('entry_id' => $entry_id)))
+		if ( ! $this->db->delete('entry_items', array('entry_id' => $entry_id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Entry associated Ledger accounts.', 'error');
@@ -1067,7 +1067,7 @@ class Entry extends Controller {
 		$data['entry_narration'] = $cur_entry->narration;
 
 		/* Getting Ledger details */
-		$this->db->from('voucher_items')->where('entry_id', $entry_id)->order_by('dc', 'desc');
+		$this->db->from('entry_items')->where('entry_id', $entry_id)->order_by('dc', 'desc');
 		$ledger_q = $this->db->get();
 		$counter = 0;
 		$data['ledger_data'] = array();
@@ -1133,7 +1133,7 @@ class Entry extends Controller {
 		$data['entry_narration'] = $cur_entry->narration;
 
 		/* Getting Ledger details */
-		$this->db->from('voucher_items')->where('entry_id', $entry_id)->order_by('dc', 'desc');
+		$this->db->from('entry_items')->where('entry_id', $entry_id)->order_by('dc', 'desc');
 		$ledger_q = $this->db->get();
 		$counter = 0;
 		$data['ledger_data'] = array();
@@ -1227,7 +1227,7 @@ class Entry extends Controller {
 			$entry_data['entry_narration'] = $cur_entry->narration;
 	
 			/* Getting Ledger details */
-			$this->db->from('voucher_items')->where('entry_id', $entry_id)->order_by('dc', 'desc');
+			$this->db->from('entry_items')->where('entry_id', $entry_id)->order_by('dc', 'desc');
 			$ledger_q = $this->db->get();
 			$counter = 0;
 			$entry_data['ledger_data'] = array();

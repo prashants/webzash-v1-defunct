@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS vouchers (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS voucher_items (
+CREATE TABLE IF NOT EXISTS entry_items (
   id int(11) NOT NULL AUTO_INCREMENT,
   entry_id int(11) NOT NULL,
   ledger_id int(11) NOT NULL,
