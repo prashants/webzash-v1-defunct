@@ -145,11 +145,11 @@ class Entry extends Controller {
 
 		/* Form validations */
 		if ($current_entry_type['numbering'] == '2')
-			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|required|is_natural_no_zero|uniquevoucherno[' . $entry_type_id . ']');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|required|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
 		else if ($current_entry_type['numbering'] == '3')
-			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniquevoucherno[' . $entry_type_id . ']');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
 		else
-			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniquevoucherno[' . $entry_type_id . ']');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
 		$this->form_validation->set_rules('entry_date', 'Entry Date', 'trim|required|is_date|is_date_within_range');
 		if ($current_entry_type['inventory_entry_type'] == '1')
 		{
@@ -690,9 +690,9 @@ class Entry extends Controller {
 
 		/* Form validations */
 		if ($current_entry_type['numbering'] == '3')
-			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniquevouchernowithid[' . $entry_type_id . '.' . $entry_id . ']');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniqueentrynowithid[' . $entry_type_id . '.' . $entry_id . ']');
 		else
-			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|required|is_natural_no_zero|uniquevouchernowithid[' . $entry_type_id . '.' . $entry_id . ']');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|required|is_natural_no_zero|uniqueentrynowithid[' . $entry_type_id . '.' . $entry_id . ']');
 		$this->form_validation->set_rules('entry_date', 'Entry Date', 'trim|required|is_date|is_date_within_range');
 		if ($current_entry_type['inventory_entry_type'] == '1')
 		{

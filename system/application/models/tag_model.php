@@ -40,7 +40,7 @@ class Tag_model extends Model {
 		$this->db->from('tags')->where('id', $tag_id)->limit(1);
 		$tag_q = $this->db->get();
 		if ($tag = $tag_q->row())
-			return "<span class=\"tags\" style=\"color:#" . $tag->color . "; background-color:#" . $tag->background . "\">" . anchor("voucher/show/tag/" . $tag->id , $tag->title, array('style' => 'text-decoration:none;color:#' . $tag->color . ';')) . "</span>";
+			return "<span class=\"tags\" style=\"color:#" . $tag->color . "; background-color:#" . $tag->background . "\">" . anchor("entry/show/tag/" . $tag->id , $tag->title, array('style' => 'text-decoration:none;color:#' . $tag->color . ';')) . "</span>";
 		else
 			return "";
 	}

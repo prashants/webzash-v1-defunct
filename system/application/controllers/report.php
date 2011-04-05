@@ -189,7 +189,7 @@ class Report extends Controller {
 						{
 							$this->db->trans_rollback();
 							$this->messages->add('Error updating reconciliation.', 'error');
-							$this->logger->write_message("error", "Error updating reconciliation for voucher item [id:" . $id . "]");
+							$this->logger->write_message("error", "Error updating reconciliation for entry item [id:" . $id . "]");
 						} else {
 							$this->db->trans_complete();
 						}
@@ -360,7 +360,7 @@ class Report extends Controller {
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
 				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
 
-				/* Opposite voucher name */
+				/* Opposite entry name */
 				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_entry_type['label'], $row->ldc, 'text');
 
 				$ledgerst[$counter][3] = $current_entry_type['name'];
@@ -483,7 +483,7 @@ class Report extends Controller {
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
 				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
 
-				/* Opposite voucher name */
+				/* Opposite entry name */
 				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_entry_type['label'], $row->ldc, 'text');
 
 				$ledgerst[$counter][3] = $current_entry_type['name'];

@@ -113,7 +113,7 @@ class Startup
 		/* Load general application settings */
 		$CI->general->check_setting();
 
-		/* Load voucher types */
+		/* Load entry types */
 		$CI->general->setup_entry_types();
 
 		return;

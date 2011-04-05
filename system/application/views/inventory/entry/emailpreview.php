@@ -1,14 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Email - <?php echo $current_entry_type['name']; ?> Entry Number <?php echo full_entry_number($entry_type_id, $cur_voucher->number); ?></title>
+<title>Email - <?php echo $current_entry_type['name']; ?> Entry Number <?php echo full_entry_number($entry_type_id, $cur_entry->number); ?></title>
 </head>
 <body>
 	<p><?php echo $this->config->item('account_name'); ?></p>
 	<p><?php echo $this->config->item('account_address'); ?></p>
 	<p><strong><?php echo $current_entry_type['name']; ?> Entry</strong></p>
-	<p><?php echo $current_entry_type['name']; ?> Entry Number : <strong><?php echo full_entry_number($entry_type_id, $cur_voucher->number); ?></strong></p>
-	<p><?php echo $current_entry_type['name']; ?> Entry Date : <strong><?php echo date_mysql_to_php_display($cur_voucher->date); ?></strong></p>
+	<p><?php echo $current_entry_type['name']; ?> Entry Number : <strong><?php echo full_entry_number($entry_type_id, $cur_entry->number); ?></strong></p>
+	<p><?php echo $current_entry_type['name']; ?> Entry Date : <strong><?php echo date_mysql_to_php_display($cur_entry->date); ?></strong></p>
 
 	<table border=1 cellpadding=6>
 		<tr>
@@ -22,7 +22,7 @@
 			</td>
 			<td>
 				<?php
-					$main_account = $cur_voucher_main_account->row();
+					$main_account = $cur_entry_main_account->row();
 					echo "<span class=\"bold\">" . $this->Ledger_model->get_name($main_account->ledger_id) . "</span>";
 				?>
 			</td>
@@ -38,7 +38,7 @@
 			</td>
 			<td>
 				<?php
-					$main_entity = $cur_voucher_main_entity->row();
+					$main_entity = $cur_entry_main_entity->row();
 					echo "<span class=\"bold\">" . $this->Ledger_model->get_name($main_entity->ledger_id) . "</span>";
 				?>
 			</td>
@@ -53,7 +53,7 @@
 		</thead>
 		<tbody>
 			<?php
-				foreach ($cur_voucher_inventory_items->result() as $row)
+				foreach ($cur_entry_inventory_items->result() as $row)
 				{
 					echo "<tr>";
 					echo "<td>" . $this->Inventory_Item_model->get_name($row->inventory_item_id) . "</td>";
@@ -76,7 +76,7 @@
 		<tbody>
 		<?php
 			$currency = $this->config->item('account_currency_symbol');
-			foreach ($cur_voucher_ledgers->result() as $row)
+			foreach ($cur_entry_ledgers->result() as $row)
 			{
 				echo "<tr>";
 				if ($row->dc == "D")
@@ -96,12 +96,12 @@
 				}
 				echo "</tr>";
 			}
-			echo "<tr><td colspan=\"2\">Total</td><td>" . $currency . " " .  $cur_voucher->dr_total . "</td><td>" . $currency . " " . $cur_voucher->cr_total . "</td></tr>";
+			echo "<tr><td colspan=\"2\">Total</td><td>" . $currency . " " .  $cur_entry->dr_total . "</td><td>" . $currency . " " . $cur_entry->cr_total . "</td></tr>";
 		?>
 		</tbody>
 	</table>
 	<br />
-	<p>Narration : <span class="value"><?php echo $cur_voucher->narration; ?></p>
+	<p>Narration : <span class="value"><?php echo $cur_entry->narration; ?></p>
 	<br />
 </body>
 </html>

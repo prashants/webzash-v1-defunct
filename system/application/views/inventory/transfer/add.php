@@ -268,22 +268,22 @@ $(document).ready(function() {
 	echo form_open('inventory/transfer/add/' . $current_entry_type['label']);
 	echo "<p>";
 	echo "<span id=\"tooltip-target-1\">";
-	echo form_label('Entry Number', 'voucher_number');
+	echo form_label('Entry Number', 'entry_number');
 	echo " ";
-	echo $current_entry_type['prefix'] . form_input($voucher_number) . $current_entry_type['suffix'];
+	echo $current_entry_type['prefix'] . form_input($entry_number) . $current_entry_type['suffix'];
 	echo "</span>";
 	echo "<span id=\"tooltip-content-1\">Leave Entry Number empty for auto numbering</span>";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo "<span id=\"tooltip-target-2\">";
-	echo form_label('Entry Date', 'voucher_date');
+	echo form_label('Entry Date', 'entry_date');
 	echo " ";
-	echo form_input_date_restrict($voucher_date);
+	echo form_input_date_restrict($entry_date);
 	echo "</span>";
 	echo "<span id=\"tooltip-content-2\">Date format is " . $this->config->item('account_date_format') . ".</span>";
 	echo "</p>";
 
 	echo "<h3>Source</h3>";
-	echo "<table class=\"voucher-table\">";
+	echo "<table class=\"entry-table\">";
 	echo "<thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
 
 	foreach ($source_inventory_item_id as $i => $row)
@@ -330,7 +330,7 @@ $(document).ready(function() {
 	echo "</table>";
 
 	echo "<h3>Destination</h3>";
-	echo "<table class=\"voucher-table\">";
+	echo "<table class=\"entry-table\">";
 	echo "<thead><tr><th>Inventory Item</th><th>Quantity</th><th>Rate Per Unit</th><th>Amount</th><th colspan=2></th><th colspan=2>Cur Balance</th></tr></thead>";
 
 	foreach ($dest_inventory_item_id as $i => $row)
@@ -380,15 +380,15 @@ $(document).ready(function() {
 	echo "<br />";
 
 	echo "<p>";
-	echo form_label('Narration', 'voucher_narration');
+	echo form_label('Narration', 'entry_narration');
 	echo "<br />";
-	echo form_textarea($voucher_narration);
+	echo form_textarea($entry_narration);
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Tag', 'voucher_tag');
+	echo form_label('Tag', 'entry_tag');
 	echo " ";
-	echo form_dropdown('voucher_tag', $voucher_tags, $voucher_tag);
+	echo form_dropdown('entry_tag', $entry_tags, $entry_tag);
 	echo "</p>";
 
 	echo "<p>";

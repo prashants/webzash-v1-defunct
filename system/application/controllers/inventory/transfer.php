@@ -41,7 +41,7 @@ class Transfer extends Controller {
 		$this->template->set('page_title', 'View ' . $current_entry_type['name'] . ' Entry');
 
 		/* Load current entry details */
-		if ( ! $cur_voucher = $this->Entry_model->get_entry($entry_id, $entry_type_id))
+		if ( ! $cur_entry = $this->Entry_model->get_entry($entry_id, $entry_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('entry/show/' . $current_entry_type['label']);
@@ -50,21 +50,21 @@ class Transfer extends Controller {
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->where('type', 2)->order_by('id', 'asc');
-		$cur_voucher_source_inventory_items = $this->db->get();
-		if ($cur_voucher_source_inventory_items->num_rows() < 1)
+		$cur_entry_source_inventory_items = $this->db->get();
+		if ($cur_entry_source_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated source inventory items.', 'error');
 		}
 		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->where('type', 1)->order_by('id', 'asc');
-		$cur_voucher_dest_inventory_items = $this->db->get();
-		if ($cur_voucher_dest_inventory_items->num_rows() < 1)
+		$cur_entry_dest_inventory_items = $this->db->get();
+		if ($cur_entry_dest_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated destination inventory items.', 'error');
 		}
 
-		$data['cur_voucher'] = $cur_voucher;
-		$data['cur_voucher_source_inventory_items'] = $cur_voucher_source_inventory_items;
-		$data['cur_voucher_dest_inventory_items'] = $cur_voucher_dest_inventory_items;
+		$data['cur_entry'] = $cur_entry;
+		$data['cur_entry_source_inventory_items'] = $cur_entry_source_inventory_items;
+		$data['cur_entry_dest_inventory_items'] = $cur_entry_dest_inventory_items;
 		$data['entry_type_id'] = $entry_type_id;
 		$data['current_entry_type'] = $current_entry_type;
 		$this->template->load('template', 'inventory/transfer/view', $data);
@@ -109,46 +109,46 @@ class Transfer extends Controller {
 		$this->template->set('page_title', 'Add ' . $current_entry_type['name'] . ' Entry');
 
 		/* Form fields */
-		$data['voucher_number'] = array(
-			'name' => 'voucher_number',
-			'id' => 'voucher_number',
+		$data['entry_number'] = array(
+			'name' => 'entry_number',
+			'id' => 'entry_number',
 			'maxlength' => '11',
 			'size' => '11',
 			'value' => '',
 		);
-		$data['voucher_date'] = array(
-			'name' => 'voucher_date',
-			'id' => 'voucher_date',
+		$data['entry_date'] = array(
+			'name' => 'entry_date',
+			'id' => 'entry_date',
 			'maxlength' => '11',
 			'size' => '11',
 			'value' => date_today_php(),
 		);
-		$data['voucher_narration'] = array(
-			'name' => 'voucher_narration',
-			'id' => 'voucher_narration',
+		$data['entry_narration'] = array(
+			'name' => 'entry_narration',
+			'id' => 'entry_narration',
 			'cols' => '50',
 			'rows' => '4',
 			'value' => '',
 		);
 		$data['entry_type_id'] = $entry_type_id;
 		$data['current_entry_type'] = $current_entry_type;
-		$data['voucher_tags'] = $this->Tag_model->get_all_tags();
-		$data['voucher_tag'] = 0;
+		$data['entry_tags'] = $this->Tag_model->get_all_tags();
+		$data['entry_tag'] = 0;
 
 		/* Form validations */
 		if ($current_entry_type['numbering'] == '2')
-			$this->form_validation->set_rules('voucher_number', 'Entry Number', 'trim|required|is_natural_no_zero|uniquevoucherno[' . $entry_type_id . ']');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|required|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
 		else if ($current_entry_type['numbering'] == '3')
-			$this->form_validation->set_rules('voucher_number', 'Entry Number', 'trim|is_natural_no_zero|uniquevoucherno[' . $entry_type_id . ']');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
 		else
-			$this->form_validation->set_rules('voucher_number', 'Entry Number', 'trim|is_natural_no_zero|uniquevoucherno[' . $entry_type_id . ']');
-		$this->form_validation->set_rules('voucher_date', 'Entry Date', 'trim|required|is_date|is_date_within_range');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
+		$this->form_validation->set_rules('entry_date', 'Entry Date', 'trim|required|is_date|is_date_within_range');
 		if ($current_entry_type['inventory_entry_type'] == '3')
 		{
 			/* TODO */
 		}
-		$this->form_validation->set_rules('voucher_narration', 'trim');
-		$this->form_validation->set_rules('voucher_tag', 'Tag', 'trim|is_natural');
+		$this->form_validation->set_rules('entry_narration', 'trim');
+		$this->form_validation->set_rules('entry_tag', 'Tag', 'trim|is_natural');
 
 		/* inventory item validation */
 		if ($_POST)
@@ -170,10 +170,10 @@ class Transfer extends Controller {
 		/* Repopulating form */
 		if ($_POST)
 		{
-			$data['voucher_number']['value'] = $this->input->post('voucher_number', TRUE);
-			$data['voucher_date']['value'] = $this->input->post('voucher_date', TRUE);
-			$data['voucher_narration']['value'] = $this->input->post('voucher_narration', TRUE);
-			$data['voucher_tag'] = $this->input->post('voucher_tag', TRUE);
+			$data['entry_number']['value'] = $this->input->post('entry_number', TRUE);
+			$data['entry_date']['value'] = $this->input->post('entry_date', TRUE);
+			$data['entry_narration']['value'] = $this->input->post('entry_narration', TRUE);
+			$data['entry_tag'] = $this->input->post('entry_tag', TRUE);
 
 			$data['source_inventory_item_id'] = $this->input->post('source_inventory_item_id', TRUE);
 			$data['source_inventory_item_quantity'] = $this->input->post('source_inventory_item_quantity', TRUE);
@@ -294,21 +294,21 @@ class Transfer extends Controller {
 			/* Adding main Entry */
 			if ($current_entry_type['numbering'] == '2')
 			{
-				$data_number = $this->input->post('voucher_number', TRUE);
+				$data_number = $this->input->post('entry_number', TRUE);
 			} else if ($current_entry_type['numbering'] == '3') {
-				$data_number = $this->input->post('voucher_number', TRUE);
+				$data_number = $this->input->post('entry_number', TRUE);
 				if ( ! $data_number)
 					$data_number = NULL;
 			} else {
-				if ($this->input->post('voucher_number', TRUE))
-					$data_number = $this->input->post('voucher_number', TRUE);
+				if ($this->input->post('entry_number', TRUE))
+					$data_number = $this->input->post('entry_number', TRUE);
 				else
 					$data_number = $this->Entry_model->next_entry_number($entry_type_id);
 			}
 
-			$data_date = $this->input->post('voucher_date', TRUE);
-			$data_narration = $this->input->post('voucher_narration', TRUE);
-			$data_tag = $this->input->post('voucher_tag', TRUE);
+			$data_date = $this->input->post('entry_date', TRUE);
+			$data_narration = $this->input->post('entry_narration', TRUE);
+			$data_tag = $this->input->post('entry_tag', TRUE);
 			if ($data_tag < 1)
 				$data_tag = NULL;
 			$data_type = $entry_type_id;
@@ -459,8 +459,8 @@ class Transfer extends Controller {
 
 		$this->template->set('page_title', 'Edit ' . $current_entry_type['name'] . ' Entry');
 
-		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Entry_model->get_entry($entry_id, $entry_type_id))
+		/* Load current entry details */
+		if ( ! $cur_entry = $this->Entry_model->get_entry($entry_id, $entry_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('entry/show/' . $current_entry_type['label']);
@@ -468,33 +468,33 @@ class Transfer extends Controller {
 		}
 
 		/* Form fields */
-		$data['voucher_number'] = array(
-			'name' => 'voucher_number',
-			'id' => 'voucher_number',
+		$data['entry_number'] = array(
+			'name' => 'entry_number',
+			'id' => 'entry_number',
 			'maxlength' => '11',
 			'size' => '11',
-			'value' => $cur_voucher->number,
+			'value' => $cur_entry->number,
 		);
-		$data['voucher_date'] = array(
-			'name' => 'voucher_date',
-			'id' => 'voucher_date',
+		$data['entry_date'] = array(
+			'name' => 'entry_date',
+			'id' => 'entry_date',
 			'maxlength' => '11',
 			'size' => '11',
-			'value' => date_mysql_to_php($cur_voucher->date),
+			'value' => date_mysql_to_php($cur_entry->date),
 		);
-		$data['voucher_narration'] = array(
-			'name' => 'voucher_narration',
-			'id' => 'voucher_narration',
+		$data['entry_narration'] = array(
+			'name' => 'entry_narration',
+			'id' => 'entry_narration',
 			'cols' => '50',
 			'rows' => '4',
-			'value' => $cur_voucher->narration,
+			'value' => $cur_entry->narration,
 		);
 
 		$data['entry_id'] = $entry_id;
 		$data['entry_type_id'] = $entry_type_id;
 		$data['current_entry_type'] = $current_entry_type;
-		$data['voucher_tag'] = $cur_voucher->tag_id;
-		$data['voucher_tags'] = $this->Tag_model->get_all_tags();
+		$data['entry_tag'] = $cur_entry->tag_id;
+		$data['entry_tags'] = $this->Tag_model->get_all_tags();
 
 		/* Load current ledger details if not $_POST */
 		if ( ! $_POST)
@@ -540,13 +540,13 @@ class Transfer extends Controller {
 
 		/* Form validations */
 		if ($current_entry_type['numbering'] == '3')
-			$this->form_validation->set_rules('voucher_number', 'Entry Number', 'trim|is_natural_no_zero|uniquevouchernowithid[' . $entry_type_id . '.' . $entry_id . ']');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniqueentrynowithid[' . $entry_type_id . '.' . $entry_id . ']');
 		else
-			$this->form_validation->set_rules('voucher_number', 'Entry Number', 'trim|required|is_natural_no_zero|uniquevouchernowithid[' . $entry_type_id . '.' . $entry_id . ']');
-		$this->form_validation->set_rules('voucher_date', 'Entry Date', 'trim|required|is_date|is_date_within_range');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|required|is_natural_no_zero|uniqueentrynowithid[' . $entry_type_id . '.' . $entry_id . ']');
+		$this->form_validation->set_rules('entry_date', 'Entry Date', 'trim|required|is_date|is_date_within_range');
 
-		$this->form_validation->set_rules('voucher_narration', 'trim');
-		$this->form_validation->set_rules('voucher_tag', 'Tag', 'trim|is_natural');
+		$this->form_validation->set_rules('entry_narration', 'trim');
+		$this->form_validation->set_rules('entry_tag', 'Tag', 'trim|is_natural');
 
 		/* Debit and Credit amount validation */
 		if ($_POST)
@@ -568,10 +568,10 @@ class Transfer extends Controller {
 		/* Repopulating form */
 		if ($_POST)
 		{
-			$data['voucher_number']['value'] = $this->input->post('voucher_number', TRUE);
-			$data['voucher_date']['value'] = $this->input->post('voucher_date', TRUE);
-			$data['voucher_narration']['value'] = $this->input->post('voucher_narration', TRUE);
-			$data['voucher_tag'] = $this->input->post('voucher_tag', TRUE);
+			$data['entry_number']['value'] = $this->input->post('entry_number', TRUE);
+			$data['entry_date']['value'] = $this->input->post('entry_date', TRUE);
+			$data['entry_narration']['value'] = $this->input->post('entry_narration', TRUE);
+			$data['entry_tag'] = $this->input->post('entry_tag', TRUE);
 
 			$data['source_inventory_item_id'] = $this->input->post('source_inventory_item_id', TRUE);
 			$data['source_inventory_item_quantity'] = $this->input->post('source_inventory_item_quantity', TRUE);
@@ -671,18 +671,18 @@ class Transfer extends Controller {
 				return;
 			}
 
-			/* Updating main voucher */
+			/* Updating main entry */
 			if ($current_entry_type['numbering'] == '3') {
-				$data_number = $this->input->post('voucher_number', TRUE);
+				$data_number = $this->input->post('entry_number', TRUE);
 				if ( ! $data_number)
 					$data_number = NULL;
 			} else {
-				$data_number = $this->input->post('voucher_number', TRUE);
+				$data_number = $this->input->post('entry_number', TRUE);
 			}
 
-			$data_date = $this->input->post('voucher_date', TRUE);
-			$data_narration = $this->input->post('voucher_narration', TRUE);
-			$data_tag = $this->input->post('voucher_tag', TRUE);
+			$data_date = $this->input->post('entry_date', TRUE);
+			$data_narration = $this->input->post('entry_narration', TRUE);
+			$data_tag = $this->input->post('entry_tag', TRUE);
 			if ($data_tag < 1)
 				$data_tag = NULL;
 			$data_type = $entry_type_id;
@@ -846,8 +846,8 @@ class Transfer extends Controller {
 			$current_entry_type = entry_type_info($entry_type_id);
 		}
 
-		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Entry_model->get_entry($entry_id, $entry_type_id))
+		/* Load current entry details */
+		if ( ! $cur_entry = $this->Entry_model->get_entry($entry_id, $entry_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('entry/show/' . $current_entry_type['label']);
@@ -859,7 +859,7 @@ class Transfer extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Inventory Items.', 'error');
-			$this->logger->write_message("error", "Error deleting inventory item entries for " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_voucher->number) . " [id:" . $entry_id . "]");
+			$this->logger->write_message("error", "Error deleting inventory item entries for " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
 			redirect('entry/view/' . $current_entry_type['label'] . '/' . $entry_id);
 			return;
 		}
@@ -867,13 +867,13 @@ class Transfer extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Entry.', 'error');
-			$this->logger->write_message("error", "Error deleting entry for " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_voucher->number) . " [id:" . $entry_id . "]");
+			$this->logger->write_message("error", "Error deleting entry for " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
 			redirect('entry/view/' . $current_entry_type['label'] . '/' . $entry_id);
 			return;
 		}
 		$this->db->trans_complete();
 		$this->messages->add('Deleted ' . $current_entry_type['name'] . ' Entry.', 'success');
-		$this->logger->write_message("success", "Deleted " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_voucher->number) . " [id:" . $entry_id . "]");
+		$this->logger->write_message("success", "Deleted " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
 		redirect('entry/show/' . $current_entry_type['label']);
 		return;
 	}
@@ -910,7 +910,7 @@ class Transfer extends Controller {
 		}
 
 		/* Load current entry details */
-		if ( ! $cur_voucher = $this->Entry_model->get_entry($entry_id, $entry_type_id))
+		if ( ! $cur_entry = $this->Entry_model->get_entry($entry_id, $entry_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('entry/show/' . $current_entry_type['label']);
@@ -919,26 +919,26 @@ class Transfer extends Controller {
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->where('type', 1)->order_by('id', 'asc');
-		$cur_voucher_source_inventory_items = $this->db->get();
-		if ($cur_voucher_source_inventory_items->num_rows() < 1)
+		$cur_entry_source_inventory_items = $this->db->get();
+		if ($cur_entry_source_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated source inventory items.', 'error');
 		}
 		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->where('type', 2)->order_by('id', 'asc');
-		$cur_voucher_dest_inventory_items = $this->db->get();
-		if ($cur_voucher_dest_inventory_items->num_rows() < 1)
+		$cur_entry_dest_inventory_items = $this->db->get();
+		if ($cur_entry_dest_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated destination inventory items.', 'error');
 		}
 
-		$data['cur_voucher'] = $cur_voucher;
-		$data['cur_voucher_source_inventory_items'] = $cur_voucher_source_inventory_items;
-		$data['cur_voucher_dest_inventory_items'] = $cur_voucher_dest_inventory_items;
+		$data['cur_entry'] = $cur_entry;
+		$data['cur_entry_source_inventory_items'] = $cur_entry_source_inventory_items;
+		$data['cur_entry_dest_inventory_items'] = $cur_entry_dest_inventory_items;
 		$data['entry_type_id'] = $entry_type_id;
 		$data['current_entry_type'] = $current_entry_type;
 
 		/* Download Entry */
-		$file_name = $current_entry_type['name'] . '_entry_' . $cur_voucher->number . ".html";
+		$file_name = $current_entry_type['name'] . '_entry_' . $cur_entry->number . ".html";
 		$download_data = $this->load->view('inventory/transfer/downloadpreview', $data, TRUE);
 		force_download($file_name, $download_data);
 		return;
@@ -974,8 +974,8 @@ class Transfer extends Controller {
 			return;
 		}
 
-		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Entry_model->get_entry($entry_id, $entry_type_id))
+		/* Load current entry details */
+		if ( ! $cur_entry = $this->Entry_model->get_entry($entry_id, $entry_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('entry/show/' . $current_entry_type['label']);
@@ -984,21 +984,21 @@ class Transfer extends Controller {
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->where('type', 1)->order_by('id', 'asc');
-		$cur_voucher_source_inventory_items = $this->db->get();
-		if ($cur_voucher_source_inventory_items->num_rows() < 1)
+		$cur_entry_source_inventory_items = $this->db->get();
+		if ($cur_entry_source_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated source inventory items.', 'error');
 		}
 		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->where('type', 2)->order_by('id', 'asc');
-		$cur_voucher_dest_inventory_items = $this->db->get();
-		if ($cur_voucher_dest_inventory_items->num_rows() < 1)
+		$cur_entry_dest_inventory_items = $this->db->get();
+		if ($cur_entry_dest_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated destination inventory items.', 'error');
 		}
 
-		$data['cur_voucher'] = $cur_voucher;
-		$data['cur_voucher_source_inventory_items'] = $cur_voucher_source_inventory_items;
-		$data['cur_voucher_dest_inventory_items'] = $cur_voucher_dest_inventory_items;
+		$data['cur_entry'] = $cur_entry;
+		$data['cur_entry_source_inventory_items'] = $cur_entry_source_inventory_items;
+		$data['cur_entry_dest_inventory_items'] = $cur_entry_dest_inventory_items;
 		$data['entry_type_id'] = $entry_type_id;
 		$data['current_entry_type'] = $current_entry_type;
 
@@ -1032,8 +1032,8 @@ class Transfer extends Controller {
 
 		$account_data = $this->Setting_model->get_current();
 
-		/* Load current voucher details */
-		if ( ! $cur_voucher = $this->Entry_model->get_entry($entry_id, $entry_type_id))
+		/* Load current entry details */
+		if ( ! $cur_entry = $this->Entry_model->get_entry($entry_id, $entry_type_id))
 		{
 			$this->messages->add('Invalid Entry.', 'error');
 			redirect('entry/show/' . $current_entry_type['label']);
@@ -1042,14 +1042,14 @@ class Transfer extends Controller {
 
 		/* Load current inventory items details */
 		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->where('type', 1)->order_by('id', 'asc');
-		$cur_voucher_source_inventory_items = $this->db->get();
-		if ($cur_voucher_source_inventory_items->num_rows() < 1)
+		$cur_entry_source_inventory_items = $this->db->get();
+		if ($cur_entry_source_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated source inventory items.', 'error');
 		}
 		$this->db->from('inventory_entry_items')->where('entry_id', $entry_id)->where('type', 2)->order_by('id', 'asc');
-		$cur_voucher_dest_inventory_items = $this->db->get();
-		if ($cur_voucher_dest_inventory_items->num_rows() < 1)
+		$cur_entry_dest_inventory_items = $this->db->get();
+		if ($cur_entry_dest_inventory_items->num_rows() < 1)
 		{
 			$this->messages->add('Entry has no associated destination inventory items.', 'error');
 		}
@@ -1057,7 +1057,7 @@ class Transfer extends Controller {
 		$data['entry_type_id'] = $entry_type_id;
 		$data['current_entry_type'] = $current_entry_type;
 		$data['entry_id'] = $entry_id;
-		$data['voucher_number'] = $cur_voucher->number;
+		$data['entry_number'] = $cur_entry->number;
 		$data['email_to'] = array(
 			'name' => 'email_to',
 			'id' => 'email_to',
@@ -1082,9 +1082,9 @@ class Transfer extends Controller {
 		}
 		else
 		{
-			$data['cur_voucher'] = $cur_voucher;
-			$data['cur_voucher_source_inventory_items'] = $cur_voucher_source_inventory_items;
-			$data['cur_voucher_dest_inventory_items'] = $cur_voucher_dest_inventory_items;
+			$data['cur_entry'] = $cur_entry;
+			$data['cur_entry_source_inventory_items'] = $cur_entry_source_inventory_items;
+			$data['cur_entry_dest_inventory_items'] = $cur_entry_dest_inventory_items;
 
 			/* Preparing message */
 			$message = $this->load->view('inventory/transfer/emailpreview', $data, TRUE);
@@ -1109,15 +1109,15 @@ class Transfer extends Controller {
 			/* Sending email */
 			$this->email->from('', 'Webzash');
 			$this->email->to($this->input->post('email_to', TRUE));
-			$this->email->subject($current_entry_type['name'] . ' Entry No. ' . full_entry_number($entry_type_id, $cur_voucher->number));
+			$this->email->subject($current_entry_type['name'] . ' Entry No. ' . full_entry_number($entry_type_id, $cur_entry->number));
 			$this->email->message($message);
 			if ($this->email->send())
 			{
 				$data['message'] = "Email sent.";
-				$this->logger->write_message("success", "Emailed " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_voucher->number) . " [id:" . $entry_id . "]");
+				$this->logger->write_message("success", "Emailed " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
 			} else {
 				$data['error'] = "Error sending email. Check you email settings.";
-				$this->logger->write_message("error", "Error emailing " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_voucher->number) . " [id:" . $entry_id . "]");
+				$this->logger->write_message("error", "Error emailing " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
 			}
 			$this->load->view('inventory/transfer/email', $data);
 			return;

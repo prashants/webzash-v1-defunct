@@ -38,7 +38,7 @@
 
 	echo form_open('inventory/entry/email/' . $current_entry_type['label'] . "/" . $entry_id);
 
-	echo "Emailing " .  $current_entry_type['name'] . " Entry No. " . $voucher_number . "<br />";
+	echo "Emailing " .  $current_entry_type['name'] . " Entry No. " . $entry_number . "<br />";
 
 	echo "<p>";
 	echo form_label('Email to', 'email_to');

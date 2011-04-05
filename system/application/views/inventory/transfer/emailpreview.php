@@ -1,14 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Email - <?php echo $current_entry_type['name']; ?> Entry Number <?php echo full_entry_number($entry_type_id, $cur_voucher->number); ?></title>
+<title>Email - <?php echo $current_entry_type['name']; ?> Entry Number <?php echo full_entry_number($entry_type_id, $cur_entry->number); ?></title>
 </head>
 <body>
 	<p><?php echo $this->config->item('account_name'); ?></p>
 	<p><?php echo $this->config->item('account_address'); ?></p>
 	<p><strong><?php echo $current_entry_type['name']; ?> Entry</strong></p>
-	<p><?php echo $current_entry_type['name']; ?> Entry Number : <strong><?php echo full_entry_number($entry_type_id, $cur_voucher->number); ?></strong></p>
-	<p><?php echo $current_entry_type['name']; ?> Entry Date : <strong><?php echo date_mysql_to_php_display($cur_voucher->date); ?></strong></p>
+	<p><?php echo $current_entry_type['name']; ?> Entry Number : <strong><?php echo full_entry_number($entry_type_id, $cur_entry->number); ?></strong></p>
+	<p><?php echo $current_entry_type['name']; ?> Entry Date : <strong><?php echo date_mysql_to_php_display($cur_entry->date); ?></strong></p>
 
 	<br />
 
@@ -21,7 +21,7 @@
 		<?php
 			$currency = $this->config->item('account_currency_symbol');
 			$source_total = 0;
-			foreach ($cur_voucher_source_inventory_items->result() as $row)
+			foreach ($cur_entry_source_inventory_items->result() as $row)
 			{
 				echo "<tr class=\"tr-inventory-item\">";
 				echo "<td class=\"item\">" . $this->Inventory_Item_model->get_name($row->inventory_item_id) . "</td>";
@@ -47,7 +47,7 @@
 		<?php
 			$currency = $this->config->item('account_currency_symbol');
 			$source_total = 0;
-			foreach ($cur_voucher_dest_inventory_items->result() as $row)
+			foreach ($cur_entry_dest_inventory_items->result() as $row)
 			{
 				echo "<tr class=\"tr-inventory-item\">";
 				echo "<td class=\"item\">" . $this->Inventory_Item_model->get_name($row->inventory_item_id) . "</td>";
@@ -64,7 +64,7 @@
 
 	<br />
 	
-	<p>Narration : <span class="value"><?php echo $cur_voucher->narration; ?></p>
+	<p>Narration : <span class="value"><?php echo $cur_entry->narration; ?></p>
 	<br />
 </body>
 </html>

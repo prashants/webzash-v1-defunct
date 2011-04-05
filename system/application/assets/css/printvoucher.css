@@ -18,39 +18,39 @@ body {
 	font-size:14px;
 }
 
-#print-voucher-type {
+#print-entry-type {
 	text-align:center;
 	font-size:15px;
 }
 
-table#print-voucher-table {
+table#print-entry-table {
 	border:1px solid #000000;
 	border-collapse: collapse;
 }
 
-table#print-voucher-table tr.tr-title {
+table#print-entry-table tr.tr-title {
 	text-align:left;
 	border:1px solid #000000;
 	padding:5px 0 5px 2px;
 }
 
-table#print-voucher-table tr.tr-title th {
+table#print-entry-table tr.tr-title th {
 	padding:5px 0 5px 5px;
 }
 
-table#print-voucher-table td {
+table#print-entry-table td {
 	padding:5px 0 5px 5px;
 }
 
-table#print-voucher-table td.item {
+table#print-entry-table td.item {
 	padding-right:35px;
 }
 
-table#print-voucher-table td.last-item {
+table#print-entry-table td.last-item {
 	padding-right:5px;
 }
 
-table#print-voucher-table tr.tr-total {
+table#print-entry-table tr.tr-total {
 	border:1px solid #000000;
 }
 
