@@ -29,7 +29,7 @@
 				<?php echo anchor('setting/printer', 'Printer Settings', array('title' => 'Printer Settings')); ?>
 			</div>
 			<div class="settings-desc">
-				Setup printing options for vouchers, reports, etc.
+				Setup printing options for entries, reports, etc.
 			</div>
 		</div>
 		<div class="settings-container">

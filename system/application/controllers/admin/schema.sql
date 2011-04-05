@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS entry_types (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS vouchers (
+CREATE TABLE IF NOT EXISTS entries (
   id int(11) NOT NULL AUTO_INCREMENT,
   tag_id int(11) DEFAULT NULL,
   entry_type int(5) NOT NULL,

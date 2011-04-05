@@ -64,6 +64,8 @@ ALTER TABLE inventory_entry_items CHANGE voucher_id entry_id INT(11) NOT NULL;
 
 RENAME TABLE voucher_items TO entry_items;
 
+RENAME TABLE vouchers TO entries;
+
 //--------------------------------- VERSION 3 ----------------------------------
 
 CREATE TABLE IF NOT EXISTS voucher_types (

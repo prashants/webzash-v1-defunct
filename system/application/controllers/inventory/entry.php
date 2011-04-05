@@ -378,7 +378,7 @@ class Entry extends Controller {
 				'entry_type' => $data_type,
 				'tag_id' => $data_tag,
 			);
-			if ( ! $this->db->insert('vouchers', $insert_data))
+			if ( ! $this->db->insert('entries', $insert_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Entry.', 'error');
@@ -531,7 +531,7 @@ class Entry extends Controller {
 				'cr_total' => $data_total_amount,
 			);
 
-			if ( ! $this->db->where('id', $entry_id)->update('vouchers', $update_data))
+			if ( ! $this->db->where('id', $entry_id)->update('entries', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry total.', 'error');
@@ -895,7 +895,7 @@ class Entry extends Controller {
 				'narration' => $data_narration,
 				'tag_id' => $data_tag,
 			);
-			if ( ! $this->db->where('id', $entry_id)->update('vouchers', $update_data))
+			if ( ! $this->db->where('id', $entry_id)->update('entries', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry.', 'error');
@@ -1060,7 +1060,7 @@ class Entry extends Controller {
 				'cr_total' => $data_total_amount,
 			);
 
-			if ( ! $this->db->where('id', $entry_id)->update('vouchers', $update_data))
+			if ( ! $this->db->where('id', $entry_id)->update('entries', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry total.', 'error');
@@ -1146,7 +1146,7 @@ class Entry extends Controller {
 			redirect('entry/view/' . $current_entry_type['label'] . '/' . $entry_id);
 			return;
 		}
-		if ( ! $this->db->delete('vouchers', array('id' => $entry_id)))
+		if ( ! $this->db->delete('entries', array('id' => $entry_id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Entry.', 'error');
