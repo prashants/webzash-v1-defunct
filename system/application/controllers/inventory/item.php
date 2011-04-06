@@ -37,6 +37,22 @@ class Item extends Controller {
 			return;
 		}
 
+		/* Check if any inventory units and groups is present */
+		$this->db->from('inventory_units');
+		$inventory_unit_q = $this->db->get();
+		if ($inventory_unit_q->num_rows() < 1){
+			$this->messages->add('Add a Inventory Unit before adding a Inventory Item.', 'error');
+			redirect('inventory/account');
+			return;
+		}
+		$this->db->from('inventory_groups');
+		$inventory_group_q = $this->db->get();
+		if ($inventory_group_q->num_rows() < 1){
+			$this->messages->add('Add a Inventory Group before adding a Inventory Item.', 'error');
+			redirect('inventory/account');
+			return;
+		}
+
 		/* Form fields */
 		$data['inventory_item_name'] = array(
 			'name' => 'inventory_item_name',

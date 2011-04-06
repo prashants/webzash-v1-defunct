@@ -126,12 +126,12 @@ $(document).ready(function() {
 					} else if ($entry_type_count == 1) {
 						foreach ($entry_type_all as $id => $row)
 						{
-							echo anchor('entry/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Entries'));
+							echo anchor('entry/show/' . $row['label'], $row['name'] . ' Entry', array('title' => $row['name'] . ' Entries'));
 						}
 					} else {
 						echo anchor('entry', 'Entry', array('title' => 'Entry'));
 						echo "<ul>";
-						echo "<li>" . anchor('entry/show/all', 'All', array('title' => 'All Entries')) . "</li>";
+						// echo "<li>" . anchor('entry/show/all', 'All', array('title' => 'All Entries')) . "</li>";
 						foreach ($entry_type_all as $id => $row)
 						{
 							echo "<li>" . anchor('entry/show/' . $row['label'], $row['name'], array('title' => $row['name'] . ' Entries')) . "</li>";

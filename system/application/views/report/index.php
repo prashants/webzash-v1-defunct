@@ -32,6 +32,14 @@
 				&nbsp;
 			</div>
 		</div>
+		<div class="settings-container">
+			<div class="settings-title">
+				<?php echo anchor('report/reconciliation/pending', 'Reconciliation', array('title' => 'Ledger Reconciliation')); ?>
+			</div>
+			<div class="settings-desc">
+				&nbsp;
+			</div>
+		</div>
 	</div>
 	<div id="right-col">
 
