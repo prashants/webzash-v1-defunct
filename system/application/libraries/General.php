@@ -67,18 +67,21 @@ class General {
 		/* Checking for valid database connection */
 		if ($CI->db->conn_id)
 		{
-			/* Checking for valid database name, username, password */
+			/* Checking for valid database */
 			if ($CI->db->query("SHOW TABLES"))
 			{
 				/* Check for valid webzash database */
-				$table_names = array('groups', 'ledgers', 'entry_types', 'entries', 'entry_items', 'inventory_units', 'inventory_groups', 'inventory_items', 'inventory_entry_items', 'tags', 'logs', 'settings');
-				foreach ($table_names as $id => $tbname)
+				if ($CI->uri->segment(1) != "udpate")
 				{
-					$valid_db_q = mysql_query('DESC ' . $tbname);
-					if ( ! $valid_db_q)
+					$table_names = array('groups', 'ledgers', 'entry_types', 'entries', 'entry_items', 'inventory_units', 'inventory_groups', 'inventory_items', 'inventory_entry_items', 'tags', 'logs', 'settings');
+					foreach ($table_names as $id => $tbname)
 					{
-						$CI->messages->add('Invalid account database. Table "' . $tbname . '" missing.', 'error');
-						return FALSE;
+						$valid_db_q = mysql_query('DESC ' . $tbname);
+						if ( ! $valid_db_q)
+						{
+							$CI->messages->add('Invalid account database. Table "' . $tbname . '" missing.', 'error');
+							return FALSE;
+						}
 					}
 				}
 			} else {
@@ -169,6 +172,24 @@ class General {
 			$CI->messages->add('Accounts missing from user file.', 'error');
 		}
 		return $user_data;
+	}
+
+	function check_database_version()
+	{
+		$CI =& get_instance();
+		if ($CI->uri->segment(1) == "update")
+			return;
+
+		if ($CI->config->item('account_database_version') < $CI->config->item('required_database_version'))
+		{
+			$CI->messages->add('You need to updated the account database before continuing. Click ' . anchor('update', 'here', array('ttile' => 'Click here to update account database')) . ' to update.', 'error');
+			redirect('user/account');
+			return;
+		} else if ($CI->config->item('account_database_version') > $CI->config->item('database_version')) {
+			$CI->messages->add('You need to updated the application version from <a href="http://webzash.org" target="_blank">http://webzash.org<a/> before continuing.', 'error');
+			redirect('user/account');
+			return;
+		}
 	}
 
 	function setup_entry_types()

@@ -376,7 +376,17 @@ $config['backup_path'] = 'backups/';
 | Sets the current application version
 |
 */
-$config['application_version'] = '1.2';
+$config['application_version'] = '2.0';
+
+/*
+|--------------------------------------------------------------------------
+| Custom : Compatible Database Version
+|--------------------------------------------------------------------------
+|
+| Sets the compattible database version
+|
+*/
+$config['required_database_version'] = '4';
 
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */

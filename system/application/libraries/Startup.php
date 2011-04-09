@@ -113,6 +113,9 @@ class Startup
 		/* Load general application settings */
 		$CI->general->check_setting();
 
+		/* check database version */
+		$CI->general->check_database_version();
+
 		/* Load entry types */
 		$CI->general->setup_entry_types();
 
