@@ -91,6 +91,15 @@ QUERY;
 				return FALSE;
 			}
 		}
+		/* Updating version number */
+		$update_data = array(
+			'database_version' => 4,
+		);
+		if (!$this->db->where('id', 1)->update('settings', $update_data))
+		{
+			$this->messages->add('Error updating settings table with correct database version.', 'error');
+			return FALSE;
+		}
 		$this->messages->add('Updated database version to 4.', 'success');
 		return TRUE;
 	}
