@@ -3,7 +3,71 @@
 class Update extends Controller {
 	function index()
 	{
-		$cur_db_version = $this->config->item('account_database_version');
+		$this->load->library('general');
+
+		/* Common functionality from Startup library */
+
+		/* Reading database settings ini file */
+		if ($this->session->userdata('active_account'))
+		{
+			/* Fetching database label details from session and checking the database ini file */
+			if ( ! $active_account = $this->general->check_account($this->session->userdata('active_account')))
+			{
+				$this->session->unset_userdata('active_account');
+				redirect('user/account');
+				return;
+			}
+
+			/* Preparing database settings */
+			$db_config['hostname'] = $active_account['db_hostname'];
+			$db_config['hostname'] .= ":" . $active_account['db_port'];
+			$db_config['database'] = $active_account['db_name'];
+			$db_config['username'] = $active_account['db_username'];
+			$db_config['password'] = $active_account['db_password'];
+			$db_config['dbdriver'] = "mysql";
+			$db_config['dbprefix'] = "";
+			$db_config['pconnect'] = FALSE;
+			$db_config['db_debug'] = FALSE;
+			$db_config['cache_on'] = FALSE;
+			$db_config['cachedir'] = "";
+			$db_config['char_set'] = "utf8";
+			$db_config['dbcollat'] = "utf8_general_ci";
+			$this->load->database($db_config, FALSE, TRUE);
+
+			/* Checking for valid database connection */
+			if ( ! $this->db->conn_id)
+			{
+				$this->session->unset_userdata('active_account');
+				$this->messages->add('Error connecting to database server. Check whether database server is running.', 'error');
+				redirect('user/account');
+				return;
+			}
+			/* Check for any database connection error messages */
+			if ($this->db->_error_message() != "")
+			{
+				$this->session->unset_userdata('active_account');
+				$this->messages->add('Error connecting to database server. ' . $this->db->_error_message(), 'error');
+				redirect('user/account');
+				return;
+			}
+		} else {
+			$this->messages->add('Select a account.', 'error');
+			redirect('user/account');
+			return;
+		}
+
+		/* Loading account data */
+		$this->db->from('settings')->where('id', 1)->limit(1);
+		$account_q = $this->db->get();
+		if ( ! ($account_d = $account_q->row()))
+		{
+			$this->messages->add('Invalid account settings.', 'error');
+			redirect('user/account');
+			return;
+		}
+		$data['account'] = $account_d;
+
+		$cur_db_version = $account_d->database_version;
 		$required_db_version = $this->config->item('required_database_version');
 
 		if ($_POST)
@@ -20,7 +84,7 @@ class Update extends Controller {
 			}
 			$this->messages->add('Done updating account database. Click ' . anchor('', 'here', array('title' => 'Click here to go back to accounts')) . ' to go back to accounts.', 'success');
 		}
-		$this->template->load('user_template', 'update/index');
+		$this->template->load('user_template', 'update/index', $data);
 		return;
 	}
 

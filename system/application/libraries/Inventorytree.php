@@ -64,17 +64,20 @@ class Inventorytree
 		$inventory_items = array();
 		$CI->db->from('inventory_items')->where('inventory_group_id', $id)->order_by('name', 'asc');
 		$inventory_item_q = $CI->db->get();
-		foreach ($inventory_item_q->result() as $row)
+		if ($inventory_item_q)
 		{
-			$inventory_items[$row->id] = array(
-				'id' => $row->id,
-				'name' => $row->name,
-				'type' => 'I',
-				'costing_method' => $row->costing_method,
-				'op_balance_quantity' => $row->op_balance_quantity,
-				'op_balance_rate_per_unit' => $row->op_balance_rate_per_unit,
-				'op_balance_total_value' => $row->op_balance_total_value,
-			);
+			foreach ($inventory_item_q->result() as $row)
+			{
+				$inventory_items[$row->id] = array(
+					'id' => $row->id,
+					'name' => $row->name,
+					'type' => 'I',
+					'costing_method' => $row->costing_method,
+					'op_balance_quantity' => $row->op_balance_quantity,
+					'op_balance_rate_per_unit' => $row->op_balance_rate_per_unit,
+					'op_balance_total_value' => $row->op_balance_total_value,
+				);
+			}
 		}
 		return $inventory_items;
 	}

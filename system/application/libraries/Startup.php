@@ -18,11 +18,15 @@ class Startup
 
 		$CI->messages->add('This is a development version of webzash not meant for production use. You can get the stable version from ' . anchor('http://webzash.org/download', 'http://webzash.org/download'), 'error');
 
-		/* Skip checking if accessing admin section*/
+		/* Skip checking if accessing admin section */
 		if ($CI->uri->segment(1) == "admin")
 			return;
 
-		/* Skip checking if accessing user section*/
+		/* Skip checking if accessing updated page */
+		if ($CI->uri->segment(1) == "update")
+			return;
+
+		/* Skip checking if accessing user section */
 		if ($CI->uri->segment(1) == "user")
 			return;
 

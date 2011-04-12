@@ -28,7 +28,6 @@ class Accountlist
 			$this->id = 0;
 			$this->name = "None";
 			$this->total = 0;
-
 		} else {
 			$CI->db->from('groups')->where('id', $id)->limit(1);
 			$group_q = $CI->db->get();
