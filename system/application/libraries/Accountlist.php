@@ -31,10 +31,12 @@ class Accountlist
 		} else {
 			$CI->db->from('groups')->where('id', $id)->limit(1);
 			$group_q = $CI->db->get();
-			$group = $group_q->row();
-			$this->id = $group->id;
-			$this->name = $group->name;
-			$this->total = 0;
+			if ($group = $group_q->row())
+			{
+				$this->id = $group->id;
+				$this->name = $group->name;
+				$this->total = 0;
+			}
 		}
 		$this->add_sub_ledgers();
 		$this->add_sub_groups();
