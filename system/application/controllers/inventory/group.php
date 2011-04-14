@@ -254,14 +254,14 @@ class Group extends Controller {
 		$this->db->from('inventory_groups')->where('parent_id', $id);
 		if ($this->db->get()->num_rows() > 0)
 		{
-			$this->messages->add('Cannot delete non-empty Inventory Group. Sub-Invenory Groups still present.', 'error');
+			$this->messages->add('Cannot delete non-empty Inventory Group. Sub-Invenory Groups present.', 'error');
 			redirect('inventory/account');
 			return;
 		}
 		$this->db->from('inventory_items')->where('inventory_group_id', $id);
 		if ($this->db->get()->num_rows() > 0)
 		{
-			$this->messages->add('Cannot delete non-empty Inventory Group. Inventory Items still present.', 'error');
+			$this->messages->add('Cannot delete non-empty Inventory Group. Inventory Items present.', 'error');
 			redirect('inventory/account');
 			return;
 		}

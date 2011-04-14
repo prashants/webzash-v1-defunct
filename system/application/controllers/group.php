@@ -279,7 +279,7 @@ class Group extends Controller {
 			return;
 		}
 		if ($id <= 4) {
-			$this->messages->add('Cannot delete System Group accounts.', 'error');
+			$this->messages->add('Cannot delete System Groups.', 'error');
 			redirect('account');
 			return;
 		}

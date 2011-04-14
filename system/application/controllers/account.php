@@ -16,7 +16,12 @@ class Account extends Controller {
 			$this->messages->add('Difference in Opening Balance is Cr ' . convert_cur(-$total_op) . '.', 'error');
 		}
 
-		$this->template->load('template', 'account/index');
+		/* Account Tree */
+		$this->load->library('accounttree');
+		$account_tree = new Accounttree();
+		$data['account_tree'] = $account_tree->init(0);
+
+		$this->template->load('template', 'account/index', $data);
 		return;
 	}
 }
