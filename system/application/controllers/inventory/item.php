@@ -143,7 +143,7 @@ class Item extends Controller {
 			$this->db->select('id')->from('inventory_groups')->where('id', $data_inventory_item_group_id);
 			if ($this->db->get()->num_rows() < 1)
 			{
-				$this->messages->add('Invalid inventory group.', 'error');
+				$this->messages->add('Invalid Inventory Group.', 'error');
 				$this->template->load('template', 'inventory/item/add', $data);
 				return;
 			}
@@ -152,7 +152,7 @@ class Item extends Controller {
 			$this->db->select('id')->from('inventory_units')->where('id', $data_inventory_item_unit_id);
 			if ($this->db->get()->num_rows() < 1)
 			{
-				$this->messages->add('Invalid inventory unit.', 'error');
+				$this->messages->add('Invalid Inventory Unit.', 'error');
 				$this->template->load('template', 'inventory/item/add', $data);
 				return;
 			}
@@ -175,13 +175,13 @@ class Item extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Inventory Item - ' . $data_inventory_item_name . '.', 'error');
-				$this->logger->write_message("error", "Error adding Inventory Item named " . $data_inventory_item_name);
+				$this->logger->write_message("error", "Error adding Inventory Item called " . $data_inventory_item_name);
 				$this->template->load('template', 'inventory/item/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Added Inventory Item - ' . $data_inventory_item_name . '.', 'success');
-				$this->logger->write_message("success", "Added Inventory Item named " . $data_inventory_item_name);
+				$this->logger->write_message("success", "Added Inventory Item called " . $data_inventory_item_name);
 				redirect('inventory/account');
 				return;
 			}
@@ -353,13 +353,13 @@ class Item extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Inventory Item - ' . $data_inventory_item_name . '.', 'error');
-				$this->logger->write_message("error", "Error updating Inventory Item named " . $data_inventory_item_name . " [id:" . $data_id . "]");
+				$this->logger->write_message("error", "Error updating Inventory Item called " . $data_inventory_item_name . " [id:" . $data_id . "]");
 				$this->template->load('template', 'inventory/item/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Updated Inventory Item - ' . $data_inventory_item_name . '.', 'success');
-				$this->logger->write_message("success", "Updated Inventory Item named " . $data_inventory_item_name . " [id:" . $data_id . "]");
+				$this->logger->write_message("success", "Updated Inventory Item called " . $data_inventory_item_name . " [id:" . $data_id . "]");
 				redirect('inventory/account');
 				return;
 			}
@@ -412,13 +412,13 @@ class Item extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Inventory Item - ' . $inventory_item_data->name . '.', 'error');
-			$this->logger->write_message("error", "Error deleting Inventory Item named " . $inventory_item_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("error", "Error deleting Inventory Item called " . $inventory_item_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		} else {
 			$this->db->trans_complete();
 			$this->messages->add('Deleted Inventory Item - ' . $inventory_item_data->name . '.', 'success');
-			$this->logger->write_message("success", "Deleted Inventory Item named " . $inventory_item_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("success", "Deleted Inventory Item called " . $inventory_item_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		}

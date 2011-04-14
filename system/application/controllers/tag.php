@@ -110,13 +110,13 @@ class Tag extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Tag - ' . $data_tag_title . '.', 'error');
-				$this->logger->write_message("error", "Error adding tag named " . $data_tag_title);
+				$this->logger->write_message("error", "Error adding tag called " . $data_tag_title);
 				$this->template->load('template', 'tag/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Added Tag - ' . $data_tag_title . '.', 'success');
-				$this->logger->write_message("success", "Added tag named " . $data_tag_title);
+				$this->logger->write_message("success", "Added tag called " . $data_tag_title);
 				redirect('tag');
 				return;
 			}
@@ -239,13 +239,13 @@ class Tag extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Tag - ' . $data_tag_title . '.', 'error');
-				$this->logger->write_message("error", "Error updating tag named " . $data_tag_title . " [id:" . $id . "]");
+				$this->logger->write_message("error", "Error updating tag called " . $data_tag_title . " [id:" . $id . "]");
 				$this->template->load('template', 'tag/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Updated Tag - ' . $data_tag_title . '.', 'success');
-				$this->logger->write_message("success", "Updated tag named " . $data_tag_title . " [id:" . $id . "]");
+				$this->logger->write_message("success", "Updated tag called " . $data_tag_title . " [id:" . $id . "]");
 				redirect('tag');
 				return;
 			}
@@ -299,7 +299,7 @@ class Tag extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Tag from Entries.', 'error');
-			$this->logger->write_message("error", "Error deleting tag named " . $data_tag->title . " [id:" . $id . "] from entries");
+			$this->logger->write_message("error", "Error deleting tag called " . $data_tag->title . " [id:" . $id . "] from entries");
 			redirect('tag');
 			return;
 		} else {
@@ -307,13 +307,13 @@ class Tag extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting Tag.', 'error');
-				$this->logger->write_message("error", "Error deleting tag named " . $data_tag->title . " [id:" . $id . "]");
+				$this->logger->write_message("error", "Error deleting tag called " . $data_tag->title . " [id:" . $id . "]");
 				redirect('tag');
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Tag deleted.', 'success');
-				$this->logger->write_message("success", "Deleted tag named " . $data_tag->title . " [id:" . $id . "]");
+				$this->logger->write_message("success", "Deleted tag called " . $data_tag->title . " [id:" . $id . "]");
 				redirect('tag');
 				return;
 			}

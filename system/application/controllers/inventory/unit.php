@@ -92,13 +92,13 @@ class Unit extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Inventory Unit - ' . $data_inventory_unit_name . '.', 'error');
-				$this->logger->write_message("error", "Error adding Inventory Unit named " . $data_inventory_unit_name);
+				$this->logger->write_message("error", "Error adding Inventory Unit called " . $data_inventory_unit_name);
 				$this->template->load('template', 'inventory/unit/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Added Inventory Unit - ' . $data_inventory_unit_name . '.', 'success');
-				$this->logger->write_message("success", "Added Inventory Unit named " . $data_inventory_unit_name);
+				$this->logger->write_message("success", "Added Inventory Unit called " . $data_inventory_unit_name);
 				redirect('inventory/account');
 				return;
 			}
@@ -206,13 +206,13 @@ class Unit extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Inventory Unit - ' . $data_inventory_unit_name . '.', 'error');
-				$this->logger->write_message("error", "Error updating Inventory Unit named " . $data_inventory_unit_name . " [id:" . $data_id . "]");
+				$this->logger->write_message("error", "Error updating Inventory Unit called " . $data_inventory_unit_name . " [id:" . $data_id . "]");
 				$this->template->load('template', 'inventory/unit/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Updated Inventory Unit - ' . $data_inventory_unit_name . '.', 'success');
-				$this->logger->write_message("success", "Udpated Inventory Unit named " . $data_inventory_unit_name . " [id:" . $data_id . "]");
+				$this->logger->write_message("success", "Udpated Inventory Unit called " . $data_inventory_unit_name . " [id:" . $data_id . "]");
 				redirect('inventory/account');
 				return;
 			}
@@ -274,13 +274,13 @@ class Unit extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Inventory Unit - ' . $inventory_unit_data->name . '.', 'error');
-			$this->logger->write_message("error", "Error deleting Inventory Unit named " . $inventory_unit_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("error", "Error deleting Inventory Unit called " . $inventory_unit_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		} else {
 			$this->db->trans_complete();
 			$this->messages->add('Deleted Inventory Unit - ' . $inventory_unit_data->name . '.', 'success');
-			$this->logger->write_message("success", "Deleted Inventory Unit named " . $inventory_unit_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("success", "Deleted Inventory Unit called " . $inventory_unit_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		}

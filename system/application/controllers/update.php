@@ -115,8 +115,8 @@ CREATE TABLE IF NOT EXISTS inventory_groups (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 CREATE TABLE IF NOT EXISTS inventory_items (
   id int(11) NOT NULL AUTO_INCREMENT,
-  stock_group_id int(11) NOT NULL,
-  stock_unit_id int(11) NOT NULL,
+  inventory_group_id int(11) NOT NULL,
+  inventory_unit_id int(11) NOT NULL,
   name varchar(100) NOT NULL,
   costing_method int(2) NOT NULL,
   op_balance_quantity float NOT NULL,
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS inventory_items (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 CREATE TABLE IF NOT EXISTS inventory_entry_items (
   id int(11) NOT NULL AUTO_INCREMENT,
-  voucher_id int(11) NOT NULL,
+  entry_id int(11) NOT NULL,
   inventory_item_id int(11) NOT NULL,
   quantity float NOT NULL,
   rate_per_unit decimal(15,2) NOT NULL DEFAULT '0.00',
@@ -138,7 +138,6 @@ CREATE TABLE IF NOT EXISTS inventory_entry_items (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 ALTER TABLE vouchers CHANGE voucher_type entry_type INT(5) NOT NULL;
 ALTER TABLE voucher_items CHANGE voucher_id entry_id INT(11) NOT NULL;
-ALTER TABLE inventory_entry_items CHANGE voucher_id entry_id INT(11) NOT NULL;
 RENAME TABLE voucher_items TO entry_items;
 RENAME TABLE vouchers TO entries;
 QUERY;

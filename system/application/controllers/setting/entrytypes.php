@@ -381,13 +381,13 @@ class EntryTypes extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry Type - ' . $data_entry_type_name . '.', 'error');
-				$this->logger->write_message("error", "Error updating Entry Type named " . $data_entry_type_name . " [id:" . $id . "]");
+				$this->logger->write_message("error", "Error updating Entry Type called " . $data_entry_type_name . " [id:" . $id . "]");
 				$this->template->load('template', 'setting/entrytypes/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Updated Entry Type - ' . $data_entry_type_name . '.', 'success');
-				$this->logger->write_message("success", "Updated Entry Type named " . $data_entry_type_name . " [id:" . $id . "]");
+				$this->logger->write_message("success", "Updated Entry Type called " . $data_entry_type_name . " [id:" . $id . "]");
 				redirect('setting/entrytypes');
 				return;
 			}
@@ -443,13 +443,13 @@ class EntryTypes extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Entry Type - ' . $entry_type_data->name . '.', 'error');
-			$this->logger->write_message("error", "Error deleting Entry Type named " . $entry_type_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("error", "Error deleting Entry Type called " . $entry_type_data->name . " [id:" . $id . "]");
 			redirect('setting/entrytypes');
 			return;
 		} else {
 			$this->db->trans_complete();
 			$this->messages->add('Deleted Entry Type - ' . $entry_type_data->name . '.', 'success');
-			$this->logger->write_message("success", "Deleted Entry Type named " . $entry_type_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("success", "Deleted Entry Type called " . $entry_type_data->name . " [id:" . $id . "]");
 			redirect('setting/entrytypes');
 			return;
 		}

@@ -89,13 +89,13 @@ class Group extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Inventory Group - ' . $data_inventory_group_name . '.', 'error');
-				$this->logger->write_message("error", "Error adding Inventory Group named " . $data_inventory_group_name);
+				$this->logger->write_message("error", "Error adding Inventory Group called " . $data_inventory_group_name);
 				$this->template->load('template', 'inventory/group/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Added Inventory Group - ' . $data_inventory_group_name . '.', 'success');
-				$this->logger->write_message("success", "Added Inventory Group named " . $data_inventory_group_name);
+				$this->logger->write_message("success", "Added Inventory Group called " . $data_inventory_group_name);
 				redirect('inventory/account');
 				return;
 			}
@@ -210,13 +210,13 @@ class Group extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Inventory Group - ' . $data_inventory_group_name . '.', 'error');
-				$this->logger->write_message("error", "Error updating Inventory Group named " . $data_inventory_group_name . " [id:" . $data_id . "]");
+				$this->logger->write_message("error", "Error updating Inventory Group called " . $data_inventory_group_name . " [id:" . $data_id . "]");
 				$this->template->load('template', 'inventory/group/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Updated Inventory Group - ' . $data_inventory_group_name . '.', 'success');
-				$this->logger->write_message("success", "Updated Inventory Group named " . $data_inventory_group_name . " [id:" . $data_id . "]");
+				$this->logger->write_message("success", "Updated Inventory Group called " . $data_inventory_group_name . " [id:" . $data_id . "]");
 				redirect('inventory/account');
 				return;
 			}
@@ -254,14 +254,14 @@ class Group extends Controller {
 		$this->db->from('inventory_groups')->where('parent_id', $id);
 		if ($this->db->get()->num_rows() > 0)
 		{
-			$this->messages->add('Cannot delete non-empty Inventory Group.', 'error');
+			$this->messages->add('Cannot delete non-empty Inventory Group. Sub-Invenory Groups still present.', 'error');
 			redirect('inventory/account');
 			return;
 		}
-		$this->db->from('inventory_items')->where('group_id', $id);
+		$this->db->from('inventory_items')->where('inventory_group_id', $id);
 		if ($this->db->get()->num_rows() > 0)
 		{
-			$this->messages->add('Cannot delete non-empty Inventory Group.', 'error');
+			$this->messages->add('Cannot delete non-empty Inventory Group. Inventory Items still present.', 'error');
 			redirect('inventory/account');
 			return;
 		}
@@ -284,13 +284,13 @@ class Group extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Inventory Group - ' . $inventory_group_data->name . '.', 'error');
-			$this->logger->write_message("error", "Error deleting Inventory Group named " . $inventory_group_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("error", "Error deleting Inventory Group called " . $inventory_group_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		} else {
 			$this->db->trans_complete();
 			$this->messages->add('Deleted Inventory Group - ' . $inventory_group_data->name . '.', 'success');
-			$this->logger->write_message("success", "Deleted Inventory Group named " . $inventory_group_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("success", "Deleted Inventory Group called " . $inventory_group_data->name . " [id:" . $id . "]");
 			redirect('inventory/account');
 			return;
 		}
