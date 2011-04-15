@@ -21,7 +21,7 @@ class Ledger extends Controller {
 		$this->template->set('page_title', 'Add Ledger');
 
 		/* Check access */
-		if ( ! check_access('create ledger'))
+		if ( ! check_access('add ledger'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('account');

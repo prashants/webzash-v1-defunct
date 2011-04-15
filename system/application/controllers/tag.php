@@ -22,7 +22,7 @@ class Tag extends Controller {
 		$this->template->set('page_title', 'Add Tag');
 
 		/* Check access */
-		if ( ! check_access('create tag'))
+		if ( ! check_access('add tag'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('tag');

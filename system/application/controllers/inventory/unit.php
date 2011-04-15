@@ -19,7 +19,7 @@ class Unit extends Controller {
 		$this->template->set('page_title', 'Add Inventory Unit');
 
 		/* Check access */
-		if ( ! check_access('create inventory unit'))
+		if ( ! check_access('add inventory unit'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');

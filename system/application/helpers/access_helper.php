@@ -7,35 +7,35 @@
  * Valid permissions strings are given below :
  *
  * 'view entry'
- * 'create entry'
+ * 'add entry'
  * 'edit entry'
  * 'delete entry'
  * 'print entry'
  * 'email entry'
  * 'download entry'
  * 'view inventory entry'
- * 'create inventory entry'
+ * 'add inventory entry'
  * 'edit inventory entry'
  * 'delete inventory entry'
  * 'print inventory entry'
  * 'email inventory entry'
  * 'download inventory entry'
- * 'create ledger'
+ * 'add ledger'
  * 'edit ledger'
  * 'delete ledger'
- * 'create group'
+ * 'add group'
  * 'edit group'
  * 'delete group'
- * 'create inventory unit'
+ * 'add inventory unit'
  * 'edit inventory unit'
  * 'delete inventory unit'
- * 'create inventory group'
+ * 'add inventory group'
  * 'edit inventory group'
  * 'delete inventory group'
- * 'create inventory item',
+ * 'add inventory item',
  * 'edit inventory item',
  * 'delete inventory item',
- * 'create tag'
+ * 'add tag'
  * 'edit tag'
  * 'delete tag'
  * 'view reports'
@@ -55,35 +55,35 @@ if ( ! function_exists('check_access'))
 		$user_role = $CI->session->userdata('user_role');
 		$permissions['manager'] = array(
 			'view entry',
-			'create entry',
+			'add entry',
 			'edit entry',
 			'delete entry',
 			'print entry',
 			'email entry',
 			'download entry',
 			'view inventory entry',
-			'create inventory entry',
+			'add inventory entry',
 			'edit inventory entry',
 			'delete inventory entry',
 			'print inventory entry',
 			'email inventory entry',
 			'download inventory entry',
-			'create ledger',
+			'add ledger',
 			'edit ledger',
 			'delete ledger',
-			'create group',
+			'add group',
 			'edit group',
 			'delete group',
-			'create inventory unit',
+			'add inventory unit',
 			'edit inventory unit',
 			'delete inventory unit',
-			'create inventory group',
+			'add inventory group',
 			'edit inventory group',
 			'delete inventory group',
-			'create inventory item',
+			'add inventory item',
 			'edit inventory item',
 			'delete inventory item',
-			'create tag',
+			'add tag',
 			'edit tag',
 			'delete tag',
 			'view reports',
@@ -95,35 +95,35 @@ if ( ! function_exists('check_access'))
 		);
 		$permissions['accountant'] = array(
 			'view entry',
-			'create entry',
+			'add entry',
 			'edit entry',
 			'delete entry',
 			'print entry',
 			'email entry',
 			'download entry',
 			'view inventory entry',
-			'create inventory entry',
+			'add inventory entry',
 			'edit inventory entry',
 			'delete inventory entry',
 			'print inventory entry',
 			'email inventory entry',
 			'download inventory entry',
-			'create ledger',
+			'add ledger',
 			'edit ledger',
 			'delete ledger',
-			'create group',
+			'add group',
 			'edit group',
 			'delete group',
-			'create inventory unit',
+			'add inventory unit',
 			'edit inventory unit',
 			'delete inventory unit',
-			'create inventory group',
+			'add inventory group',
 			'edit inventory group',
 			'delete inventory group',
-			'create inventory item',
+			'add inventory item',
 			'edit inventory item',
 			'delete inventory item',
-			'create tag',
+			'add tag',
 			'edit tag',
 			'delete tag',
 			'view reports',
@@ -132,22 +132,22 @@ if ( ! function_exists('check_access'))
 		);
 		$permissions['dataentry'] = array(
 			'view entry',
-			'create entry',
+			'add entry',
 			'edit entry',
 			'delete entry',
 			'print entry',
 			'email entry',
 			'download entry',
 			'view inventory entry',
-			'create inventory entry',
+			'add inventory entry',
 			'edit inventory entry',
 			'delete inventory entry',
 			'print inventory entry',
 			'email inventory entry',
 			'download inventory entry',
-			'create ledger',
+			'add ledger',
 			'edit ledger',
-			'create inventory item',
+			'add inventory item',
 			'edit inventory item',
 		);
 		$permissions['guest'] = array(

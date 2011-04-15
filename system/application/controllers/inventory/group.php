@@ -20,7 +20,7 @@ class Group extends Controller {
 		$this->template->set('page_title', 'Add Inventory Group');
 
 		/* Check access */
-		if ( ! check_access('create inventory group'))
+		if ( ! check_access('add inventory group'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');

@@ -22,7 +22,7 @@ class Item extends Controller {
 		$this->template->set('page_title', 'Add Inventory Item');
 
 		/* Check access */
-		if ( ! check_access('create inventory item'))
+		if ( ! check_access('add inventory item'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('inventory/account');

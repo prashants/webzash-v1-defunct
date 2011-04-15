@@ -86,7 +86,7 @@ class Entry extends Controller {
 	function add($entry_type)
 	{
 		/* Check access */
-		if ( ! check_access('create inventory entry'))
+		if ( ! check_access('add inventory entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('entry/show/' . $entry_type);

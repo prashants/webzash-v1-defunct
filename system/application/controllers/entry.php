@@ -255,7 +255,7 @@ class Entry extends Controller {
 	function add($entry_type)
 	{
 		/* Check access */
-		if ( ! check_access('create entry'))
+		if ( ! check_access('add entry'))
 		{
 			$this->messages->add('Permission denied.', 'error');
 			redirect('entry/show/' . $entry_type);
