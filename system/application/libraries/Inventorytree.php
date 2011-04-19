@@ -3,6 +3,7 @@
 class Inventorytree
 {
 	public static $counter = 0;
+	public static $total_value = 0;
 
 	function Inventorytree()
 	{
@@ -122,6 +123,55 @@ class Inventorytree
 				foreach ($row['sub_inventory_groups'] as $row_item)
 				{
 					self::print_tree($row_item);
+				}
+			}
+		}
+		self::$counter--;
+	}
+
+	/*
+	 * Prints the entire inventory tree as required in inventory report
+	 */
+	function print_report_tree($inventory_tree)
+	{
+		$CI =& get_instance();
+		self::$counter++;
+		foreach ($inventory_tree as $row)
+		{
+			if ($row['id'] != 0)
+			{
+				echo "<tr class=\"tr-group\">";
+				echo "<td>" . self::print_spaces(self::$counter) . $row['name'] . "</td>";
+				echo "<td>Group</td>";
+				echo "<td></td>";
+				echo "<td></td>";
+				echo "<td></td>";
+				echo "</tr>";
+			}
+			if ($row['sub_inventory_items'])
+			{
+				self::$counter++;
+				foreach ($row['sub_inventory_items'] as $row_item)
+				{
+					echo "<tr>";
+					echo "<td>" . self::print_spaces(self::$counter) . $row_item['name'] . "</td>";
+					echo "<td>Item</td>";
+
+					list($closing_quantity, $closing_rate, $closing_value) = $CI->Inventory_item_model->closing_inventory($row_item['id']);
+					echo "<td>" . $closing_quantity . "</td>";
+					echo "<td>" . convert_cur($closing_rate) . "</td>";
+					echo "<td>" . convert_cur($closing_value) . "</td>";
+					self::$total_value += $closing_value;
+
+					echo "</tr>";
+				}
+				self::$counter--;
+			}
+			if ($row['sub_inventory_groups'])
+			{
+				foreach ($row['sub_inventory_groups'] as $row_item)
+				{
+					self::print_report_tree($row_item);
 				}
 			}
 		}

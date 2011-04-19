@@ -40,6 +40,14 @@
 				&nbsp;
 			</div>
 		</div>
+		<div class="settings-container">
+			<div class="settings-title">
+				<?php echo anchor('report/inventory_summary', 'Inventory Summary', array('title' => 'Inventory Summary')); ?>
+			</div>
+			<div class="settings-desc">
+				&nbsp;
+			</div>
+		</div>
 	</div>
 	<div id="right-col">
 

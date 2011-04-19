@@ -203,6 +203,19 @@ class Report extends Controller {
 		return;
 	}
 
+	function inventory_summary()
+	{
+		/********************* INVENTORY SUMMARY **********************/
+		$this->load->model('Inventory_item_model');
+		$this->load->library('inventorytree');
+		$inventory_tree = new Inventorytree();
+		$data['inventory_tree'] = $inventory_tree->init(0);
+
+		$this->template->load('template', 'report/inventory/summary', $data);
+		return;
+	
+	}
+
 	function download($statement, $id = NULL)
 	{
 		/********************** TRIAL BALANCE *************************/

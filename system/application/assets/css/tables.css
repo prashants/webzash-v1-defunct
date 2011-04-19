@@ -253,3 +253,7 @@ tr.total-area {
 .manage-account-table td {
 	padding-right: 20px;
 }
+
+.inventory-summary-table .tr-balance {
+	font-weight:bold;
+}

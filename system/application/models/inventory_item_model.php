@@ -113,4 +113,65 @@ class Inventory_Item_model extends Model {
 		else
 			return "";
 	}
+
+	function closing_inventory($inventory_item_id)
+	{
+		$this->db->from('inventory_items')->where('id', $inventory_item_id)->limit(1);
+		$inventory_item_q = $this->db->get();
+		if ( ! $inventory_item = $inventory_item_q->row())
+			return array(0, 0, 0);
+
+		/* average costing */
+		if ($inventory_item->costing_method == 1)
+		{
+			/* opening */
+			$opening_inventory_quantity = $inventory_item->op_balance_quantity;
+			$opening_inventory_rate = $inventory_item->op_balance_rate_per_unit;
+			$opening_inventory_amount = $inventory_item->op_balance_total_value;
+
+			/* purchase quantity */
+			$this->db->select_sum('quantity', 'inquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
+			$purchase_quantity_q = $this->db->get();
+			if ($purchase_quantity_d = $purchase_quantity_q->row())
+				$purchase_quantity = $purchase_quantity_d->inquantity;
+			else
+				$purchase_quantity = 0;
+
+			/* total in quantity */
+			$total_in_quantity = $opening_inventory_quantity + $purchase_quantity;
+
+			/* sale quantity */
+			$this->db->select_sum('quantity', 'outquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 2);
+			$sale_quantity_q = $this->db->get();
+			if ($sale_quantity_d = $sale_quantity_q->row())
+				$sale_quantity = $sale_quantity_d->outquantity;
+			else
+				$sale_quantity = 0;
+
+			/* total out quantity */
+			$total_out_quantity = $sale_quantity;
+
+			/* purchase amount */
+			$this->db->select_sum('total', 'inamount')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
+			$purchase_amount_q = $this->db->get();
+			if ($purchase_amount_d = $purchase_amount_q->row())
+				$purchase_amount = $purchase_amount_d->inamount;
+			else
+				$purchase_amount = 0;
+
+			/* total in amount */
+			$total_in_amount = $opening_inventory_amount + $purchase_amount;
+
+			/* average rate */
+			if ($total_in_quantity == 0)
+				$average_rate = 0;
+			else
+				$average_rate = $total_in_amount / $total_in_quantity;
+			
+			$final_quantity = $total_in_quantity - $total_out_quantity;
+			$final_rate = $average_rate;
+			$final_amount = $final_quantity * $final_rate;
+			return array($final_quantity, $final_rate, $final_amount);
+		}
+	}
 }
