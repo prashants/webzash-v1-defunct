@@ -149,6 +149,7 @@ $(document).ready(function() {
 					<li><?php echo anchor('report/ledgerst', 'Ledger Statement', array('title' => 'Ledger Statement')); ?></li>
 					<li><?php echo anchor('report/reconciliation/pending', 'Reconciliation', array('title' => 'Reconciliation')); ?></li>
 					<li><?php echo anchor('report/inventory_summary', 'Inventory Summary', array('title' => 'Inventory Summary')); ?></li>
+					<li><?php echo anchor('report/inventory_statement', 'Inventory Statement', array('title' => 'Inventory Statement')); ?></li>
 				</ul>
 			</li>
 			<li>

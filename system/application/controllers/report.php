@@ -216,6 +216,46 @@ class Report extends Controller {
 	
 	}
 
+	function inventory_statement($inventory_item_id = 0)
+	{
+		/* Pagination setup */
+		$this->load->library('pagination');
+		$this->load->model('Inventory_item_model');
+
+		$this->template->set('page_title', 'Inventory Statement');
+		//if ($ledger_id != 0)
+		//	$this->template->set('nav_links', array('report/download/ledgerst/' . $ledger_id  => 'Download CSV', 'report/printpreview/ledgerst/' . $ledger_id => 'Print Preview'));
+
+		if ($_POST)
+		{
+			$inventory_item_id = $this->input->post('inventory_item_id', TRUE);
+			redirect('report/inventory_statement/' . $inventory_item_id);
+		}
+		$data['print_preview'] = FALSE;
+		$data['inventory_item_id'] = $inventory_item_id;
+
+		/* Checking for valid ledger id */
+		if ($data['inventory_item_id'] > 0)
+		{
+			$this->db->from('inventory_items')->where('id', $data['inventory_item_id'])->limit(1);
+			$inventory_item_data = $this->db->get();
+			if ($inventory_item_data->num_rows() < 1)
+			{
+				$this->messages->add('Invalid Inventory Item.', 'error');
+				redirect('report/inventory_statement');
+				return;
+			}
+			$data['inventory_item_data'] = $inventory_item_data->row();
+		} else if ($data['inventory_item_id'] < 0) {
+			$this->messages->add('Invalid Inventory Item.', 'error');
+			redirect('report/inventory_statement');
+			return;
+		}
+
+		$this->template->load('template', 'report/inventory/statement', $data);
+		return;
+	}
+
 	function download($statement, $id = NULL)
 	{
 		/********************** TRIAL BALANCE *************************/
