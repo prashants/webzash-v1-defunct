@@ -154,7 +154,7 @@ class Inventorytree
 				foreach ($row['sub_inventory_items'] as $row_item)
 				{
 					echo "<tr>";
-					echo "<td>" . self::print_spaces(self::$counter) . $row_item['name'] . "</td>";
+					echo "<td>" . self::print_spaces(self::$counter) . anchor('report/inventory_statement/' . $row_item['id'], $row_item['name'], array('title' => 'View Inventory Item Statement', 'class' => 'anchor-link-a')) . "</td>";
 					echo "<td>Item</td>";
 
 					list($closing_quantity, $closing_rate, $closing_value) = $CI->Inventory_item_model->closing_inventory($row_item['id']);
