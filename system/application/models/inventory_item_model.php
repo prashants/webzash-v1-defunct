@@ -121,8 +121,159 @@ class Inventory_Item_model extends Model {
 		if ( ! $inventory_item = $inventory_item_q->row())
 			return array(0, 0, 0);
 
+		/* LIFO costing */
+		if ($inventory_item->costing_method == 3)
+		{
+			/* sale quantity */
+			$this->db->select_sum('quantity', 'outquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 2);
+			$sale_quantity_q = $this->db->get();
+			if ($sale_quantity_d = $sale_quantity_q->row())
+				$sale_quantity = $sale_quantity_d->outquantity;
+			else
+				$sale_quantity = 0;
+
+			/* total out quantity */
+			$total_out_quantity = $sale_quantity;
+
+			/* opening */
+			$opening_inventory_quantity = $inventory_item->op_balance_quantity;
+			$opening_inventory_rate = $inventory_item->op_balance_rate_per_unit;
+			$opening_inventory_amount = $inventory_item->op_balance_total_value;
+
+			/* check if opening stock meets the sale quantity */
+			$diff_sale_op = $sale_quantity - $opening_inventory_quantity;
+			if ($diff_sale_op < 0)
+			{
+				$remaining_op_quantity = -$diff_sale_op;
+				$remaining_op_rate = $opening_inventory_amount / $opening_inventory_quantity;
+				$remaining_op_amount = $remaining_op_quantity * $remaining_op_rate;
+	
+				/* purchase quantity */
+				$this->db->select_sum('quantity', 'inquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
+				$purchase_quantity_q = $this->db->get();
+				if ($purchase_quantity_d = $purchase_quantity_q->row())
+					$purchase_quantity = $purchase_quantity_d->inquantity;
+				else
+					$purchase_quantity = 0;
+
+				/* purchase total */
+				$this->db->select_sum('total', 'intotal')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
+				$purchase_amount_q = $this->db->get();
+				if ($purchase_amount_d = $purchase_amount_q->row())
+					$purchase_amount = $purchase_amount_d->intotal;
+				else
+					$purchase_amount = 0;
+
+				/* purchase rate */
+				if ($purchase_quantity != 0)
+					$purchase_rate = $purchase_amount / $purchase_quantity;
+				else
+					$purchase_rate = 0;
+
+				/* closing calculation */
+				$final_quantity = $remaining_op_quantity + $purchase_quantity;
+				$final_amount = $remaining_op_amount + $purchase_amount;
+				if ($final_quantity != 0)
+					$final_rate = $final_amount / $final_quantity;
+				else
+					$final_rate = 0;
+				return array($final_quantity, $final_rate, $final_amount);
+			} else if ($diff_sale_op == 0) {
+				/* purchase quantity */
+				$this->db->select_sum('quantity', 'inquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
+				$purchase_quantity_q = $this->db->get();
+				if ($purchase_quantity_d = $purchase_quantity_q->row())
+					$purchase_quantity = $purchase_quantity_d->inquantity;
+				else
+					$purchase_quantity = 0;
+
+				/* purchase total */
+				$this->db->select_sum('total', 'intotal')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
+				$purchase_amount_q = $this->db->get();
+				if ($purchase_amount_d = $purchase_amount_q->row())
+					$purchase_amount = $purchase_amount_d->intotal;
+				else
+					$purchase_amount = 0;
+
+				/* purchase rate */
+				if ($purchase_quantity != 0)
+					$purchase_rate = $purchase_amount / $purchase_quantity;
+				else
+					$purchase_rate = 0;
+
+				/* closing calculation */
+				$final_quantity = $purchase_quantity;
+				$final_amount = $purchase_amount;
+				if ($final_quantity != 0)
+					$final_rate = $final_amount / $final_quantity;
+				else
+					$final_rate = 0;
+				return array($final_quantity, $final_rate, $final_amount);
+			} else {
+				$pending_quantity = $diff_sale_op;
+				$balance_quantity = 0
+				$balance_amount = 0;
+
+				$this->db->from('inventory_entry_items')->join('entries', 'inventory_entry_items.entry_id = entries.id', 'left')->order_by('entries.date', 'desc');
+				$pending_entries_q = $this->db->get();
+				while ($pending_entries_data = $pending_entries_q->row())
+				{
+					$pending_quantity -= $pending_entries_data->quantity;
+					if ($pending_quantity == 0)
+					{
+						break;
+					} else if ($pending_quantity < 0)
+					{
+						$balance_quantity = -$pending_quantity;
+						if ($pending_entries_data->quantity != 0)
+							$balance_amount = ($balance_quantity * $pending_entries_data->amount) / $pending_entries_data->quantity;
+						else
+							$balance_amount = 0;
+					}
+				}
+				while ($pending_entries_data = $pending_entries_q->row())
+				{
+					$balance_quantity += $pending_entries_data->quantity;
+					$balance_amount += $pending_entries_data->amount;
+				}
+			}
+
+			/* sale quantity */
+			$this->db->select_sum('quantity', 'outquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 2);
+			$sale_quantity_q = $this->db->get();
+			if ($sale_quantity_d = $sale_quantity_q->row())
+				$sale_quantity = $sale_quantity_d->outquantity;
+			else
+				$sale_quantity = 0;
+
+			/* total out quantity */
+			$total_out_quantity = $sale_quantity;
+
+			/* purchase amount */
+			$this->db->select_sum('total', 'inamount')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
+			$purchase_amount_q = $this->db->get();
+			if ($purchase_amount_d = $purchase_amount_q->row())
+				$purchase_amount = $purchase_amount_d->inamount;
+			else
+				$purchase_amount = 0;
+
+			/* total in amount */
+			$total_in_amount = $opening_inventory_amount + $purchase_amount;
+
+			/* average rate */
+			if ($total_in_quantity == 0)
+				$average_rate = 0;
+			else
+				$average_rate = $total_in_amount / $total_in_quantity;
+			
+			$final_quantity = $total_in_quantity - $total_out_quantity;
+			$final_rate = $average_rate;
+			$final_amount = $final_quantity * $final_rate;
+			return array($final_quantity, $final_rate, $final_amount);
+		}
+
 		/* average costing */
-		if ($inventory_item->costing_method == 1)
+		if ($inventory_item->costing_method == 3)
 		{
 			/* opening */
 			$opening_inventory_quantity = $inventory_item->op_balance_quantity;
