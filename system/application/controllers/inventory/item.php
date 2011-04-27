@@ -90,8 +90,9 @@ class Item extends Controller {
 			'value' => '',
 		);
 		$data['inventory_item_costing_methods'] = array(
-			'1' => 'Last In First Out (LIFO)',
-			'2' => 'First In First Out (FIFO)',
+			'1' => 'First In First Out (FIFO)',
+			'2' => 'Last In First Out (LIFO)',
+			'3' => 'Average Costing',
 		);
 		$data['inventory_item_costing_method_active'] = 1;
 		$data['inventory_item_units'] = $this->Inventory_Unit_model->get_all_units();
@@ -266,8 +267,9 @@ class Item extends Controller {
 			'value' => $inventory_item_data->default_sell_price,
 		);
 		$data['inventory_item_costing_methods'] = array(
-			'1' => 'Last In First Out (LIFO)',
-			'2' => 'First In First Out (FIFO)',
+			'1' => 'First In First Out (FIFO)',
+			'2' => 'Last In First Out (LIFO)',
+			'3' => 'Average Costing',
 		);
 		$data['inventory_item_costing_method_active'] = $inventory_item_data->costing_method;
 		$data['inventory_item_units'] = $this->Inventory_Unit_model->get_all_units();

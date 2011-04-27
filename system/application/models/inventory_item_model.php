@@ -121,8 +121,8 @@ class Inventory_Item_model extends Model {
 		if ( ! $inventory_item = $inventory_item_q->row())
 			return array(0, 0, 0);
 
-		/* LIFO costing */
-		if ($inventory_item->costing_method == 3)
+		/* FIFO costing */
+		if ($inventory_item->costing_method == 1)
 		{
 			/* sale quantity */
 			$this->db->select_sum('quantity', 'outquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 2);
@@ -211,65 +211,45 @@ class Inventory_Item_model extends Model {
 				return array($final_quantity, $final_rate, $final_amount);
 			} else {
 				$pending_quantity = $diff_sale_op;
-				$balance_quantity = 0
+				$balance_quantity = 0;
 				$balance_amount = 0;
 
-				$this->db->from('inventory_entry_items')->join('entries', 'inventory_entry_items.entry_id = entries.id', 'left')->order_by('entries.date', 'desc');
+				$this->db->select('inventory_entry_items.quantity as inventory_entry_items_quantity, inventory_entry_items.total as inventory_entry_items_total');
+				$this->db->from('inventory_entry_items')->join('entries', 'inventory_entry_items.entry_id = entries.id', 'left')->where('inventory_entry_items.inventory_item_id', $inventory_item_id)->where('inventory_entry_items.type', 1)->order_by('entries.date', 'desc');
 				$pending_entries_q = $this->db->get();
-				while ($pending_entries_data = $pending_entries_q->row())
+				$pending_entries_result = $pending_entries_q->result();
+				$finished_reached = FALSE;
+				foreach ($pending_entries_result as $pending_entries_data)
 				{
-					$pending_quantity -= $pending_entries_data->quantity;
-					if ($pending_quantity == 0)
+					if (!$finished_reached)
 					{
-						break;
-					} else if ($pending_quantity < 0)
-					{
-						$balance_quantity = -$pending_quantity;
-						if ($pending_entries_data->quantity != 0)
-							$balance_amount = ($balance_quantity * $pending_entries_data->amount) / $pending_entries_data->quantity;
-						else
-							$balance_amount = 0;
+						$pending_quantity -= $pending_entries_data->inventory_entry_items_quantity;
+						if ($pending_quantity == 0)
+						{
+							$finished_reached = TRUE;
+						} else if ($pending_quantity < 0) {
+							$finished_reached = TRUE;
+							$balance_quantity = -$pending_quantity;
+							if ($pending_entries_data->inventory_entry_items_quantity != 0)
+								$balance_amount = ($balance_quantity * $pending_entries_data->inventory_entry_items_total) / $pending_entries_data->inventory_entry_items_quantity;
+							else
+								$balance_amount = 0;
+						}
+					} else {
+						$balance_quantity += $pending_entries_data->inventory_entry_items_quantity;
+						$balance_amount += $pending_entries_data->inventory_entry_items_total;
 					}
 				}
-				while ($pending_entries_data = $pending_entries_q->row())
-				{
-					$balance_quantity += $pending_entries_data->quantity;
-					$balance_amount += $pending_entries_data->amount;
-				}
+
+				/* closing calculation */
+				$final_quantity = $balance_quantity;
+				$final_amount = $balance_amount;
+				if ($final_quantity != 0)
+					$final_rate = $final_amount / $final_quantity;
+				else
+					$final_rate = 0;
+				return array($final_quantity, $final_rate, $final_amount);
 			}
-
-			/* sale quantity */
-			$this->db->select_sum('quantity', 'outquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 2);
-			$sale_quantity_q = $this->db->get();
-			if ($sale_quantity_d = $sale_quantity_q->row())
-				$sale_quantity = $sale_quantity_d->outquantity;
-			else
-				$sale_quantity = 0;
-
-			/* total out quantity */
-			$total_out_quantity = $sale_quantity;
-
-			/* purchase amount */
-			$this->db->select_sum('total', 'inamount')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
-			$purchase_amount_q = $this->db->get();
-			if ($purchase_amount_d = $purchase_amount_q->row())
-				$purchase_amount = $purchase_amount_d->inamount;
-			else
-				$purchase_amount = 0;
-
-			/* total in amount */
-			$total_in_amount = $opening_inventory_amount + $purchase_amount;
-
-			/* average rate */
-			if ($total_in_quantity == 0)
-				$average_rate = 0;
-			else
-				$average_rate = $total_in_amount / $total_in_quantity;
-			
-			$final_quantity = $total_in_quantity - $total_out_quantity;
-			$final_rate = $average_rate;
-			$final_amount = $final_quantity * $final_rate;
-			return array($final_quantity, $final_rate, $final_amount);
 		}
 
 		/* average costing */
