@@ -128,118 +128,112 @@ class Inventory_Item_model extends Model {
 			$opening_inventory_rate = $inventory_item->op_balance_rate_per_unit;
 			$opening_inventory_amount = $inventory_item->op_balance_total_value;
 
-			$counter = 0;
-			$counter_remove = 0;
-			$inventory_tree[$counter] = array($opening_inventory_quantity, $opening_inventory_rate, $opening_inventory_amount);
-			//$this->db->select('inventory_entry_items.type as inventory_entry_items_type');
+			$in_counter = -1;
+			$out_counter = -1;
+			$inventory_in_tree = array();
+			$inventory_out_tree = array();
+
+			/* add opening */
+			if ($opening_inventory_quantity != 0)
+			{
+				$in_counter++;
+				$inventory_in_tree[$in_counter] = array(0 => '1', 1 => $opening_inventory_quantity, 2 => $opening_inventory_rate, 3 => $opening_inventory_amount);
+			}
+
+			/* setting up inventory in and out arrays */
 			$this->db->from('inventory_entry_items')->join('entries', 'inventory_entry_items.entry_id = entries.id', 'left')->where('inventory_entry_items.inventory_item_id', $inventory_item_id);
 			$inventory_q = $this->db->get();
-			$negative_balance = 0;
 			foreach ($inventory_q->result() as $inventory_data)
 			{
 				if ($inventory_data->type == 1)
 				{
-					$inventory_tree[$counter] = array($inventory_data->quantity, $inventory_data->rate_per_unit,  $inventory_data->total);
-					$counter++;
+					$in_counter++;
+					$inventory_in_tree[$in_counter] = array(0 => '1', 1 => $inventory_data->quantity, 2 => $inventory_data->rate_per_unit,  3 => $inventory_data->total);
 				} else {
-					$sale_count = $inventory_data->quantity + $negative_balance;
-					$temp_counter = 0;
-					while ($temp_counter <= $counter)
-					{
-						if ($inventory_tree[$temp_counter] > $sale_count)
-						{
-							$inventory_tree[$temp_counter][0] = $inventory_tree[$temp_counter][0] - $sale_count;
-							$negative_balance = 0;
-							break;
-						} else if ($inventory_tree[$temp_counter] == $sale_count) {
-							array_shift($inventory_tree);
-							$counter--;
-							$negative_balance = 0;
-							break;
-						} else {
-							array_shift($inventory_tree);
-							$counter--;
-							$sale_count = $sale_count - $inventory_tree[$temp_counter][0];
-							$temp_counter++;
-						}
-					}
-					if ($temp_counter > $counter)
-						$negative_balance = $temp_counter - $counter;
+					$out_counter++;
+					$inventory_out_tree[$out_counter] = array(0 => '1', 1 => $inventory_data->quantity, 2 => $inventory_data->rate_per_unit, 3 => $inventory_data->total);
 				}
 			}
 
-			/* closing calculation */
-			if ($negative_balance > 0)
+			/* inventory closing calculation */
+			$cl_in_counter = 0;
+			$cl_out_counter = 0;
+			$negative_balance = FALSE;
+			while (1)
 			{
-				$final_quantity = -$negative_balance;
-				$final_amount = 0;
-			} else {
-				$final_quantity = 0;
-				$final_amount = 0;
-				foreach ($inventory_tree as $row)
+				/* loop exit conditions */
+				if ($cl_out_counter > $out_counter)
 				{
-					$final_quantity += $row[0];
-					$final_amount += $row[2];
+					$negative_balance = FALSE;
+					break;
+				}
+				if ($cl_in_counter > $in_counter)
+				{
+					$negative_balance = TRUE;
+					break;
+				}
+
+				$current_transaction_quantity = $inventory_out_tree[$cl_out_counter][1] - $inventory_in_tree[$cl_in_counter][1];
+				if ($current_transaction_quantity == 0)
+				{
+					/* mark entry as invalid in both in and out array */
+					$inventory_in_tree[$cl_in_counter] = array(0, 0, 0, 0);
+					$inventory_out_tree[$cl_out_counter] = array(0, 0, 0, 0);
+					$cl_in_counter++;
+					$cl_out_counter++;
+				} else if ($current_transaction_quantity < 0) {
+					/* mark entry as invalid in out array and update in array */
+					$updated_quantity = -$current_transaction_quantity;
+					$updated_rate = $inventory_in_tree[$cl_in_counter][3] / $inventory_in_tree[$cl_in_counter][1];
+					$updated_value = $updated_rate * $updated_quantity;
+
+					$inventory_in_tree[$cl_in_counter] = array(0 => 1, 1 => $updated_quantity, 2 => $updated_rate, 3 => $updated_value);
+					$inventory_out_tree[$cl_out_counter] = array(0, 0, 0, 0);
+					$cl_out_counter++;
+				} else {
+					/* mark entry as invalid in in array and update out array */
+					$updated_quantity = $current_transaction_quantity;
+					$updated_rate = $inventory_out_tree[$cl_out_counter][3] / $inventory_out_tree[$cl_out_counter][1];
+					$updated_value = $updated_rate * $updated_quantity;
+
+					$inventory_in_tree[$cl_in_counter] = array(0, 0, 0, 0);
+					$inventory_out_tree[$cl_out_counter] = array(0 => 1, 1 => $updated_quantity, 2 => $updated_rate, 3 => $updated_value);
+					$cl_in_counter++;
 				}
 			}
-			if ($final_quantity != 0)
-				$final_rate = $final_amount / $final_quantity;
-			else
-				$final_rate = 0;
-			return array($final_quantity, $final_rate, $final_amount);
-		}
 
-		/* average costing */
-		if ($inventory_item->costing_method == 3)
-		{
-			/* opening */
-			$opening_inventory_quantity = $inventory_item->op_balance_quantity;
-			$opening_inventory_rate = $inventory_item->op_balance_rate_per_unit;
-			$opening_inventory_amount = $inventory_item->op_balance_total_value;
-
-			/* purchase quantity */
-			$this->db->select_sum('quantity', 'inquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
-			$purchase_quantity_q = $this->db->get();
-			if ($purchase_quantity_d = $purchase_quantity_q->row())
-				$purchase_quantity = $purchase_quantity_d->inquantity;
-			else
-				$purchase_quantity = 0;
-
-			/* total in quantity */
-			$total_in_quantity = $opening_inventory_quantity + $purchase_quantity;
-
-			/* sale quantity */
-			$this->db->select_sum('quantity', 'outquantity')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 2);
-			$sale_quantity_q = $this->db->get();
-			if ($sale_quantity_d = $sale_quantity_q->row())
-				$sale_quantity = $sale_quantity_d->outquantity;
-			else
-				$sale_quantity = 0;
-
-			/* total out quantity */
-			$total_out_quantity = $sale_quantity;
-
-			/* purchase amount */
-			$this->db->select_sum('total', 'inamount')->from('inventory_entry_items')->where('inventory_item_id', $inventory_item_id)->where('type', 1);
-			$purchase_amount_q = $this->db->get();
-			if ($purchase_amount_d = $purchase_amount_q->row())
-				$purchase_amount = $purchase_amount_d->inamount;
-			else
-				$purchase_amount = 0;
-
-			/* total in amount */
-			$total_in_amount = $opening_inventory_amount + $purchase_amount;
-
-			/* average rate */
-			if ($total_in_quantity == 0)
-				$average_rate = 0;
-			else
-				$average_rate = $total_in_amount / $total_in_quantity;
-			
-			$final_quantity = $total_in_quantity - $total_out_quantity;
-			$final_rate = $average_rate;
-			$final_amount = $final_quantity * $final_rate;
-			return array($final_quantity, $final_rate, $final_amount);
+			/* final calculations */
+			$final_quantity = 0; $final_rate = 0; $final_value = 0;
+			if (!$negative_balance)
+			{
+				foreach ($inventory_in_tree as $in_row)
+				{
+					/* skip entries marked as invalid */
+					if ($in_row[0] == 0)
+						continue;
+					$final_quantity += $in_row[1];
+					$final_value += $in_row[3];
+				}
+				if ($final_quantity != 0)
+					$final_rate = $final_value / $final_quantity;
+				else
+					$final_rate = 0;
+				return array($final_quantity, $final_rate, $final_value);
+			} else {
+				foreach ($inventory_out_tree as $out_row)
+				{
+					/* skip entries marked as invalid */
+					if ($out_row[0] == 0)
+						continue;
+					$final_quantity += $out_row[1];
+					$final_value += $out_row[3];
+				}
+				if ($final_quantity != 0)
+					$final_rate = $final_value / $final_quantity;
+				else
+					$final_rate = 0;
+				return array(-$final_quantity, $final_rate, -$final_value);
+			}
 		}
 	}
 }
