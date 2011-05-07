@@ -14,6 +14,10 @@
 	echo "<td width=\"" . $left_width . "\">";
 	echo "<table border=0 cellpadding=5 class=\"simple-table profit-loss-table\" width=\"100%\">";
 	echo "<thead><tr><th>Expenses (Gross)</th><th align=\"right\">Amount</th></tr></thead>";
+
+	echo "<tr><td>Opening Inventory</td><td align=\"right\">" . convert_cur($opening_inventory_total) . "</td></tr>";
+	$gross_expense_total += $opening_inventory_total;
+
 	foreach ($gross_expense_list_q->result() as $row)
 	{
 		$gross_expense = new Accountlist();
@@ -38,9 +42,13 @@
 		$gross_income->account_st_short(0);
 		$gross_income_total += $gross_income->total;
 	}
+
+	echo "<tr><td>Closing Inventory</td><td align=\"right\">" . convert_cur($closing_inventory_total) . "</td></tr>";
+
 	echo "</table>";
 	echo "</td>";
 	$gross_income_total = -$gross_income_total; /* Converting to positive value since Cr */
+	$gross_income_total += $closing_inventory_total;
 
 	echo "</tr>";
 

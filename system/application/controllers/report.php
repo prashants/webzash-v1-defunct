@@ -28,20 +28,52 @@ class Report extends Controller {
 
 	function balancesheet($period = NULL)
 	{
+		$this->load->model('Inventory_item_model');
 		$this->template->set('page_title', 'Balance Sheet');
 		$this->template->set('nav_links', array('report/download/balancesheet' => 'Download CSV', 'report/printpreview/balancesheet' => 'Print Preview'));
 		$data['left_width'] = "450";
 		$data['right_width'] = "450";
+
+		/* opening and closing inventory calculations */
+		$opening_inventory_total = 0; $closing_inventory_total = 0;
+
+		$this->db->from('inventory_items');
+		$inventory_items_q = $this->db->get();
+		foreach ($inventory_items_q->result() as $row)
+		{
+			$opening_inventory_total += $row->op_balance_total_value;
+			list($ignore, $ignore, $closing_inventory) = $this->Inventory_item_model->closing_inventory($row->id);
+			$closing_inventory_total += $closing_inventory;
+		}
+		$data['opening_inventory_total'] = $opening_inventory_total;
+		$data['closing_inventory_total'] = $closing_inventory_total;
+
 		$this->template->load('template', 'report/balancesheet', $data);
 		return;
 	}
 
 	function profitandloss($period = NULL)
 	{
+		$this->load->model('Inventory_item_model');
 		$this->template->set('page_title', 'Profit And Loss Statement');
 		$this->template->set('nav_links', array('report/download/profitandloss' => 'Download CSV', 'report/printpreview/profitandloss' => 'Print Preview'));
 		$data['left_width'] = "450";
 		$data['right_width'] = "450";
+
+		/* opening and closing inventory calculations */
+		$opening_inventory_total = 0; $closing_inventory_total = 0;
+
+		$this->db->from('inventory_items');
+		$inventory_items_q = $this->db->get();
+		foreach ($inventory_items_q->result() as $row)
+		{
+			$opening_inventory_total += $row->op_balance_total_value;
+			list($ignore, $ignore, $closing_inventory) = $this->Inventory_item_model->closing_inventory($row->id);
+			$closing_inventory_total += $closing_inventory;
+		}
+		$data['opening_inventory_total'] = $opening_inventory_total;
+		$data['closing_inventory_total'] = $closing_inventory_total;
+
 		$this->template->load('template', 'report/profitandloss', $data);
 		return;
 	}
