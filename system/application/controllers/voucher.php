@@ -393,12 +393,12 @@ class Voucher extends Controller {
 
 				if ($data_all_ledger_dc[$id] == "D")
 				{
-					$dr_total += $data_all_dr_amount[$id];
+					$dr_total = float_ops($data_all_dr_amount[$id], $dr_total, '+');
 				} else {
-					$cr_total += $data_all_cr_amount[$id];
+					$cr_total = float_ops($data_all_cr_amount[$id], $cr_total, '+');
 				}
 			}
-			if ($dr_total != $cr_total)
+			if (float_ops($dr_total, $cr_total, '!='))
 			{
 				$this->messages->add('Debit and Credit Total does not match!', 'error');
 				$this->template->load('template', 'voucher/add', $data);
@@ -500,10 +500,10 @@ class Voucher extends Controller {
 				if ($data_all_ledger_dc[$id] == "D")
 				{
 					$data_amount = $data_all_dr_amount[$id];
-					$dr_total += $data_all_dr_amount[$id];
+					$dr_total = float_ops($data_all_dr_amount[$id], $dr_total, '+');
 				} else {
 					$data_amount = $data_all_cr_amount[$id];
-					$cr_total += $data_all_cr_amount[$id];
+					$cr_total = float_ops($data_all_cr_amount[$id], $cr_total, '+');
 				}
 				$insert_ledger_data = array(
 					'voucher_id' => $voucher_id,
@@ -761,17 +761,17 @@ class Voucher extends Controller {
 				}
 				if ($data_all_ledger_dc[$id] == "D")
 				{
-					$dr_total += $data_all_dr_amount[$id];
+					$dr_total = float_ops($data_all_dr_amount[$id], $dr_total, '+');
 				} else {
-					$cr_total += $data_all_cr_amount[$id];
+					$cr_total = float_ops($data_all_cr_amount[$id], $cr_total, '+');
 				}
 			}
-			if ($dr_total != $cr_total)
+			if (float_ops($dr_total, $cr_total, '!='))
 			{
 				$this->messages->add('Debit and Credit Total does not match!', 'error');
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
-			} else if ($dr_total == 0 && $cr_total == 0) {
+			} else if (float_ops($dr_total, 0, '==') || float_ops($cr_total, 0, '==')) {
 				$this->messages->add('Cannot save empty Voucher.', 'error');
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
@@ -869,10 +869,10 @@ class Voucher extends Controller {
 				if ($data_all_ledger_dc[$id] == "D")
 				{
 					$data_amount = $data_all_dr_amount[$id];
-					$dr_total += $data_all_dr_amount[$id];
+					$dr_total = float_ops($data_all_dr_amount[$id], $dr_total, '+');
 				} else {
 					$data_amount = $data_all_cr_amount[$id];
-					$cr_total += $data_all_cr_amount[$id];
+					$cr_total = float_ops($data_all_cr_amount[$id], $cr_total, '+');
 				}
 
 				$insert_ledger_data = array(
