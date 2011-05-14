@@ -73,8 +73,8 @@
 		else
 			$reconciliation_cr_total = 0;
 
-		$reconciliation_total = $reconciliation_dr_total - $reconciliation_cr_total;
-		$reconciliation_pending = $clbalance - $reconciliation_total;
+		$reconciliation_total = float_ops($reconciliation_dr_total, $reconciliation_cr_total, '-');
+		$reconciliation_pending = float_ops($clbalance, $reconciliation_total, '-');
 
 		/* Ledger and Reconciliation Summary */
 		echo "<table class=\"reconciliation-summary\">";

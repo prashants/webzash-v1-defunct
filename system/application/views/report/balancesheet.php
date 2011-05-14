@@ -34,7 +34,7 @@
 	$income_total = -$income->total;
 	$expense_total = $expense->total;
 
-	$pandl = $income_total - $expense_total;
+	$pandl = float_ops($income_total, $expense_total, '-');
 
 	$diffop = $this->Ledger_model->get_diff_op_balance();
 
@@ -55,7 +55,7 @@
 	{
 		if ($pandl > 0)
 		{
-			$total += $pandl;
+			$total = float_ops($total, $pandl, '+');
 			echo "<tr valign=\"top\">";
 			echo "<td class=\"bold\">Profit & Loss A/C (Net Profit)</td>";
 			echo "<td align=\"right\" class=\"bold\">" . convert_cur($pandl) . "</td>";
@@ -73,7 +73,7 @@
 	{
 		if ($diffop > 0)
 		{
-			$total += $diffop;
+			$total = float_ops($total, $diffop, '+');
 			echo "<tr valign=\"top\">";
 			echo "<td class=\"bold\">Diff in O/P Balance</td>";
 			echo "<td align=\"right\" class=\"bold\">" . convert_cur($diffop) . "</td>";
@@ -114,7 +114,7 @@
 			echo "<td>&nbsp;</td>";
 			echo "</tr>";
 		} else {
-			$total += -$pandl;
+			$total = float_ops($total, -$pandl, '+');
 			echo "<tr valign=\"top\">";
 			echo "<td class=\"bold\">Profit & Loss A/C (Net Loss)</td>";
 			echo "<td align=\"right\" class=\"bold\">" . convert_cur(-$pandl) . "</td>";
@@ -132,7 +132,7 @@
 			echo "<td>&nbsp;</td>";
 			echo "</tr>";
 		} else {
-			$total += -$diffop;
+			$total = float_ops($total, -$diffop, '+');
 			echo "<tr valign=\"top\">";
 			echo "<td class=\"bold\">Diff in O/P Balance</td>";
 			echo "<td align=\"right\" class=\"bold\">" . convert_cur(-$diffop) . "</td>";

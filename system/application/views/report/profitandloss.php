@@ -19,7 +19,7 @@
 		$gross_expense = new Accountlist();
 		$gross_expense->init($row->id);
 		$gross_expense->account_st_short(0);
-		$gross_expense_total += $gross_expense->total;
+		$gross_expense_total = float_ops($gross_expense_total, $gross_expense->total, '+');
 	}
 	echo "</table>";
 	echo "</td>";
@@ -36,7 +36,7 @@
 		$gross_income = new Accountlist();
 		$gross_income->init($row->id);
 		$gross_income->account_st_short(0);
-		$gross_income_total += $gross_income->total;
+		$gross_income_total = float_ops($gross_income_total, $gross_income->total, '+');
 	}
 	echo "</table>";
 	echo "</td>";
@@ -45,7 +45,7 @@
 	echo "</tr>";
 
 	/* Calculating Gross P/L */
-	$grosspl = $gross_income_total - $gross_expense_total;
+	$grosspl = float_ops($gross_income_total, $gross_expense_total, '-');
 
 	/* Showing Gross P/L : Expenses */
 	$grosstotal = $gross_expense_total;
@@ -58,7 +58,7 @@
 	echo "</tr>";
 	if ($grosspl > 0)
 	{
-		$grosstotal += $grosspl;
+		$grosstotal = float_ops($grosstotal, $grosspl, '+');
 		echo "<tr valign=\"top\">";
 		echo "<td class=\"bold\">Gross Profit C/O</td>";
 		echo "<td align=\"right\" class=\"bold\">" . convert_cur($grosspl) . "</td>";
@@ -92,7 +92,7 @@
 		echo "<td>&nbsp;</td>";
 		echo "</tr>";
 	} else if ($grosspl < 0) {
-		$grosstotal += -$grosspl;
+		$grosstotal = float_ops($grosstotal, -$grosspl, '+');
 		echo "<tr valign=\"top\">";
 		echo "<td class=\"bold\">Gross Loss C/O</td>";
 		echo "<td align=\"right\" class=\"bold\">" . convert_cur(-$grosspl) . "</td>";
@@ -125,7 +125,7 @@
 		$net_expense = new Accountlist();
 		$net_expense->init($row->id);
 		$net_expense->account_st_short(0);
-		$net_expense_total += $net_expense->total;
+		$net_expense_total = float_ops($net_expense_total, $net_expense->total, '+');
 	}
 	echo "</table>";
 	echo "</td>";
@@ -142,7 +142,7 @@
 		$net_income = new Accountlist();
 		$net_income->init($row->id);
 		$net_income->account_st_short(0);
-		$net_income_total += $net_income->total;
+		$net_income_total = float_ops($net_income_total, $net_income->total, '+');
 	}
 	echo "</table>";
 	echo "</td>";
@@ -151,7 +151,7 @@
 	echo "</tr>";
 
 	/* Calculating Net P/L */
-	$netpl = $net_income_total - $net_expense_total + $grosspl;
+	$netpl = float_ops(float_ops($net_income_total, $net_expense_total, '-'), $grosspl, '+');
 
 	/* Showing Net P/L : Expenses */
 	$nettotal = $net_expense_total;
@@ -169,7 +169,7 @@
 		echo "<td>&nbsp;</td>";
 		echo "</tr>";
 	} else if ($grosspl < 0) {
-		$nettotal += -$grosspl;
+		$nettotal = float_ops($nettotal, -$grosspl, '+');
 		echo "<tr valign=\"top\">";
 		echo "<td class=\"bold\">Gross Loss B/F</td>";
 		echo "<td align=\"right\" class=\"bold\">" . convert_cur(-$grosspl) . "</td>";
@@ -177,7 +177,7 @@
 	}
 	if ($netpl > 0)
 	{
-		$nettotal += $netpl;
+		$nettotal = float_ops($nettotal, $netpl, '+');
 		echo "<tr valign=\"top\">";
 		echo "<td class=\"bold\">Net Profit</td>";
 		echo "<td align=\"right\" class=\"bold\">" . convert_cur($netpl) . "</td>";
@@ -206,7 +206,7 @@
 	echo "</tr>";
 	if ($grosspl > 0)
 	{
-		$nettotal += $grosspl;
+		$nettotal = float_ops($nettotal, $grosspl, '+');
 		echo "<tr valign=\"top\">";
 		echo "<td class=\"bold\">Gross Profit B/F</td>";
 		echo "<td align=\"right\" class=\"bold\">" . convert_cur($grosspl) . "</td>";
@@ -225,7 +225,7 @@
 		echo "<td>&nbsp;</td>";
 		echo "</tr>";
 	} else if ($netpl < 0) {
-		$nettotal += -$netpl;
+		$nettotal = float_ops($nettotal, -$netpl, '+');
 		echo "<tr valign=\"top\">";
 		echo "<td class=\"bold\">Net Loss</td>";
 		echo "<td align=\"right\" class=\"bold\">" . convert_cur(-$netpl) . "</td>";

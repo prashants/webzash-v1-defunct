@@ -84,18 +84,18 @@
 			if ($optype == "D")
 			{
 				echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>" . convert_opening($opbalance, $optype) . "</td></tr>";
-				$cur_balance += $opbalance;
+				$cur_balance = float_ops($cur_balance, $opbalance, '+');
 			} else {
 				echo "<tr class=\"tr-balance\"><td colspan=6>Opening Balance</td><td>" . convert_opening($opbalance, $optype) . "</td></tr>";
-				$cur_balance -= $opbalance;
+				$cur_balance = float_ops($cur_balance, $opbalance, '-');
 			}
 		} else {
 			/* Opening balance */
 			if ($optype == "D")
 			{
-				$cur_balance += $opbalance;
+				$cur_balance = float_ops($cur_balance, $opbalance, '+');
 			} else {
-				$cur_balance -= $opbalance;
+				$cur_balance = float_ops($cur_balance, $opbalance, '-');
 			}
 
 			/* Calculating previous balance */
@@ -105,9 +105,9 @@
 			foreach ($prevbal_q->result() as $row )
 			{
 				if ($row->ldc == "D")
-					$cur_balance += $row->lamount;
+					$cur_balance = float_ops($cur_balance, $row->lamount, '+');
 				else
-					$cur_balance -= $row->lamount;
+					$cur_balance = float_ops($cur_balance, $row->lamount, '-');
 			}
 
 			/* Show new current total */
@@ -136,7 +136,7 @@
 			echo "</td>";
 			if ($row->ldc == "D")
 			{
-				$cur_balance += $row->lamount;
+				$cur_balance = float_ops($cur_balance, $row->lamount, '+');
 				echo "<td>";
 				echo convert_dc($row->ldc);
 				echo " ";
@@ -144,7 +144,7 @@
 				echo "</td>";
 				echo "<td></td>";
 			} else {
-				$cur_balance -= $row->lamount;
+				$cur_balance = float_ops($cur_balance, $row->lamount, '-');
 				echo "<td></td>";
 				echo "<td>";
 				echo convert_dc($row->ldc);

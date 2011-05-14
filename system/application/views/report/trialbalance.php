@@ -31,7 +31,7 @@
 		if ($dr_total)
 		{
 			echo $dr_total;
-			$temp_dr_total += $dr_total;
+			$temp_dr_total = float_ops($temp_dr_total, $dr_total, '+');
 		} else {
 			echo "0";
 		}
@@ -41,7 +41,7 @@
 		if ($cr_total)
 		{
 			echo $cr_total;
-			$temp_cr_total += $cr_total;
+			$temp_cr_total = float_ops($temp_cr_total, $cr_total, '+');
 		} else {
 			echo "0";
 		}
@@ -50,7 +50,7 @@
 		$odd_even = ($odd_even == "odd") ? "even" : "odd";
 	}
 	echo "<tr class=\"tr-total\"><td colspan=3>TOTAL ";
-	if ($temp_dr_total == $temp_cr_total)
+	if (float_ops($temp_dr_total, $temp_cr_total, '=='))
 		echo "<img src=\"" . asset_url() . "images/icons/match.png\">";
 	else
 		echo "<img src=\"" . asset_url() . "images/icons/nomatch.png\">";
