@@ -10,6 +10,50 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
+
+	/* javascript floating point operations */
+	var jsFloatOps = function(param1, param2, op) {
+		param1 = param1 * 100;
+		param2 = param2 * 100;
+		param1 = Math.floor(param1);
+		param2 = Math.floor(param2);
+		var result = 0;
+		if (op == '+') {
+			result = param1 + param2;
+			result = result/100;
+			return result;
+		}
+		if (op == '-') {
+			result = param1 - param2;
+			result = result/100;
+			return result;
+		}
+		if (op == '!=') {
+			if (param1 != param2)
+				return true;
+			else
+				return false;
+		}
+		if (op == '==') {
+			if (param1 == param2)
+				return true;
+			else
+				return false;
+		}
+		if (op == '>') {
+			if (param1 > param2)
+				return true;
+			else
+				return false;
+		}
+		if (op == '<') {
+			if (param1 < param2)
+				return true;
+			else
+				return false;
+		}
+	}
+
 	/* Calculating Dr and Cr total */
 	$('.dr-item').live('change', function() {
 		var drTotal = 0;
@@ -18,7 +62,7 @@ $(document).ready(function() {
 			curDr = parseFloat(curDr);
 			if (isNaN(curDr))
 				curDr = 0;
-			drTotal += curDr;
+			drTotal = jsFloatOps(drTotal, curDr, '+');
 		});
 		$("table tr #dr-total").text(drTotal);
 		var crTotal = 0;
@@ -27,11 +71,11 @@ $(document).ready(function() {
 			curCr = parseFloat(curCr);
 			if (isNaN(curCr))
 				curCr = 0;
-			crTotal += curCr;
+			crTotal = jsFloatOps(crTotal, curCr, '+');
 		});
 		$("table tr #cr-total").text(crTotal);
 
-		if (drTotal == crTotal) {
+		if (jsFloatOps(drTotal, crTotal, '==')) {
 			$("table tr #dr-total").css("background-color", "#FFFF99");
 			$("table tr #cr-total").css("background-color", "#FFFF99");
 			$("table tr #dr-diff").text("-");
@@ -39,11 +83,11 @@ $(document).ready(function() {
 		} else {
 			$("table tr #dr-total").css("background-color", "#FFE9E8");
 			$("table tr #cr-total").css("background-color", "#FFE9E8");
-			if (drTotal > crTotal) {
+			if (jsFloatOps(drTotal, crTotal, '>')) {
 				$("table tr #dr-diff").text("");
-				$("table tr #cr-diff").text(drTotal - crTotal);
+				$("table tr #cr-diff").text(jsFloatOps(drTotal, crTotal, '-'));
 			} else {
-				$("table tr #dr-diff").text(crTotal - drTotal);
+				$("table tr #dr-diff").text(jsFloatOps(crTotal, drTotal, '-'));
 				$("table tr #cr-diff").text("");
 			}
 		}
@@ -56,7 +100,7 @@ $(document).ready(function() {
 			curDr = parseFloat(curDr);
 			if (isNaN(curDr))
 				curDr = 0;
-			drTotal += curDr;
+			drTotal = jsFloatOps(drTotal, curDr, '+');
 		});
 		$("table tr #dr-total").text(drTotal);
 		var crTotal = 0;
@@ -65,11 +109,11 @@ $(document).ready(function() {
 			curCr = parseFloat(curCr);
 			if (isNaN(curCr))
 				curCr = 0;
-			crTotal += curCr;
+			crTotal = jsFloatOps(crTotal, curCr, '+');
 		});
 		$("table tr #cr-total").text(crTotal);
 
-		if (drTotal == crTotal) {
+		if (jsFloatOps(drTotal, crTotal, '==')) {
 			$("table tr #dr-total").css("background-color", "#FFFF99");
 			$("table tr #cr-total").css("background-color", "#FFFF99");
 			$("table tr #dr-diff").text("-");
@@ -77,11 +121,11 @@ $(document).ready(function() {
 		} else {
 			$("table tr #dr-total").css("background-color", "#FFE9E8");
 			$("table tr #cr-total").css("background-color", "#FFE9E8");
-			if (drTotal > crTotal) {
+			if (jsFloatOps(drTotal, crTotal, '>')) {
 				$("table tr #dr-diff").text("");
-				$("table tr #cr-diff").text(drTotal - crTotal);
+				$("table tr #cr-diff").text(jsFloatOps(drTotal, crTotal, '-'));
 			} else {
-				$("table tr #dr-diff").text(crTotal - drTotal);
+				$("table tr #dr-diff").text(jsFloatOps(crTotal, drTotal, '-'));
 				$("table tr #cr-diff").text("");
 			}
 		}
@@ -147,9 +191,9 @@ $(document).ready(function() {
 					var ledger_bal = parseFloat(data);
 					if (isNaN(ledger_bal))
 						ledger_bal = 0;
-					if (ledger_bal == 0)
+					if (jsFloatOps(ledger_bal, 0, '=='))
 						rowid.parent().next().next().next().next().next().children().text("0");
-					else if (ledger_bal < 0)
+					else if (jsFloatOps(ledger_bal, 0, '<'))
 						rowid.parent().next().next().next().next().next().children().text("Cr " + -data);
 					else
 						rowid.parent().next().next().next().next().next().children().text("Dr " + data);
