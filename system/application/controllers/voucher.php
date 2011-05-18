@@ -403,7 +403,7 @@ class Voucher extends Controller {
 				$this->messages->add('Debit and Credit Total does not match!', 'error');
 				$this->template->load('template', 'voucher/add', $data);
 				return;
-			} else if ($dr_total == 0 && $cr_total == 0) {
+			} else if (float_ops($dr_total, 0, '==') && float_ops($cr_total, 0, '==')) {
 				$this->messages->add('Cannot save empty Voucher.', 'error');
 				$this->template->load('template', 'voucher/add', $data);
 				return;

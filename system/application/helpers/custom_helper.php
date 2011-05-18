@@ -221,20 +221,31 @@ if ( ! function_exists('float_ops'))
 			break;
 		case '==':
 			if ($param1 == $param2)
-				$result = TRUE;
+				return TRUE;
 			else
-				$result = FALSE;
+				return FALSE;
 			break;
 		case '!=':
 			if ($param1 != $param2)
-				$result = TRUE;
+				return TRUE;
 			else
-				$result = FALSE;
+				return FALSE;
+			break;
+		case '<':
+			if ($param1 < $param2)
+				return TRUE;
+			else
+				return FALSE;
+			break;
+		case '>':
+			if ($param1 > $param2)
+				return TRUE;
+			else
+				return FALSE;
 			break;
 
 		}
-		if (!(($op == '==') || ($op == '!=')))
-			$result = $result/100;
+		$result = $result/100;
 		return $result;
 	}
 }

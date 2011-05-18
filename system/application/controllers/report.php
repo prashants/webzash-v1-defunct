@@ -238,7 +238,7 @@ class Report extends Controller {
 				$trialbalance[$counter][0] = $ledger_name;
 
 				list ($opbal_amount, $opbal_type) = $this->Ledger_model->get_op_balance($ledger_id);
-				if ($opbal_amount == 0)
+				if (float_ops($opbal_amount, 0, '=='))
 				{
 					$trialbalance[$counter][1] = "";
 					$trialbalance[$counter][2] = 0;
@@ -249,7 +249,7 @@ class Report extends Controller {
 
 				$clbal_amount = $this->Ledger_model->get_ledger_balance($ledger_id);
 
-				if ($clbal_amount == 0)
+				if (float_ops($clbal_amount, 0, '=='))
 				{
 					$trialbalance[$counter][3] = "";
 					$trialbalance[$counter][4] = 0;
@@ -381,11 +381,11 @@ class Report extends Controller {
 					$ledgerst[$counter][7] = $row->lamount;
 				}
 
-				if ($cur_balance == 0)
+				if (float_ops($cur_balance, 0, '=='))
 				{
 					$ledgerst[$counter][8] = "";
 					$ledgerst[$counter][9] = 0;
-				} else if ($cur_balance < 0) {
+				} else if (float_ops($cur_balance, 0, '<')) {
 					$ledgerst[$counter][8] = "Cr";
 					$ledgerst[$counter][9] = convert_cur(-$cur_balance);
 				} else {
@@ -403,7 +403,7 @@ class Report extends Controller {
 			$ledgerst[$counter][6]= "";
 			$ledgerst[$counter][7]= "";
 			$ledgerst[$counter][8]= "";
-			if ($cur_balance < 0)
+			if (float_ops($cur_balance, 0, '<'))
 			{
 				$ledgerst[$counter][9]= "Cr";
 				$ledgerst[$counter][10]= convert_cur(-$cur_balance);
@@ -422,7 +422,7 @@ class Report extends Controller {
 			$ledgerst[$counter] = array ("Opening Balance", convert_dc($optype), $opbalance, "", "", "", "", "", "", "");
 			$counter++;
 
-			if ($clbalance == 0)
+			if (float_ops($clbalance, 0, '=='))
 				$ledgerst[$counter] = array ("Closing Balance", "", 0, "", "", "", "", "", "", "");
 			else if ($clbalance < 0)
 				$ledgerst[$counter] = array ("Closing Balance", "Cr", convert_cur(-$clbalance), "", "", "", "", "", "", "");
@@ -521,9 +521,9 @@ class Report extends Controller {
 			$ledgerst[$counter] = array ("Opening Balance", convert_dc($optype), $opbalance, "", "", "", "", "", "", "");
 			$counter++;
 
-			if ($clbalance == 0)
+			if (float_ops($clbalance, 0, '=='))
 				$ledgerst[$counter] = array ("Closing Balance", "", 0, "", "", "", "", "", "", "");
-			else if ($clbalance < 0)
+			else if (float_ops($clbalance, 0, '<'))
 				$ledgerst[$counter] = array ("Closing Balance", "Cr", convert_cur(-$clbalance), "", "", "", "", "", "", "");
 			else
 				$ledgerst[$counter] = array ("Closing Balance", "Dr", convert_cur($clbalance), "", "", "", "", "", "", "");
@@ -550,17 +550,17 @@ class Report extends Controller {
 			$reconciliation_pending = float_ops($clbalance, $reconciliation_total, '-');
 
 			$counter++;
-			if ($reconciliation_pending == 0)
+			if (float_ops($reconciliation_pending, 0, '=='))
 				$ledgerst[$counter] = array ("Reconciliation Pending", "", 0, "", "", "", "", "", "", "");
-			else if ($reconciliation_pending < 0)
+			else if (float_ops($reconciliation_pending, 0, '<'))
 				$ledgerst[$counter] = array ("Reconciliation Pending", "Cr", convert_cur(-$reconciliation_pending), "", "", "", "", "", "", "");
 			else
 				$ledgerst[$counter] = array ("Reconciliation Pending", "Dr", convert_cur($reconciliation_pending), "", "", "", "", "", "", "");
 
 			$counter++;
-			if ($reconciliation_total == 0)
+			if (float_ops($reconciliation_total, 0, '=='))
 				$ledgerst[$counter] = array ("Reconciliation Total", "", 0, "", "", "", "", "", "", "");
-			else if ($reconciliation_total < 0)
+			else if (float_ops($reconciliation_total, 0, '<'))
 				$ledgerst[$counter] = array ("Reconciliation Total", "Cr", convert_cur(-$reconciliation_total), "", "", "", "", "", "", "");
 			else
 				$ledgerst[$counter] = array ("Reconciliation Total", "Dr", convert_cur($reconciliation_total), "", "", "", "", "", "", "");
@@ -609,9 +609,9 @@ class Report extends Controller {
 			Accountlist::add_row_csv(array("Liabilities and Owners Equity Total", convert_cur($liability_total)));
 		
 			/* If Profit then Liability side, If Loss then Asset side */
-			if ($pandl != 0)
+			if (float_ops($pandl, 0, '!='))
 			{
-				if ($pandl > 0)
+				if (float_ops($pandl, 0, '>'))
 				{
 					$total = float_ops($total, $pandl, '+');
 					Accountlist::add_row_csv(array("Profit & Loss A/C (Net Profit)", convert_cur($pandl)));
@@ -619,9 +619,9 @@ class Report extends Controller {
 			}
 
 			/* If Op balance Dr then Liability side, If Op balance Cr then Asset side */
-			if ($diffop != 0)
+			if (float_ops($diffop, 0, '!='))
 			{
-				if ($diffop > 0)
+				if (float_ops($diffop, 0, '>'))
 				{
 					$total = float_ops($total, $diffop, '+');
 					Accountlist::add_row_csv(array("Diff in O/P Balance", "Dr " . convert_cur($diffop)));
@@ -635,9 +635,9 @@ class Report extends Controller {
 			Accountlist::add_row_csv(array("Asset Total", convert_cur($asset_total)));
 		
 			/* If Profit then Liability side, If Loss then Asset side */
-			if ($pandl != 0)
+			if (float_ops($pandl, 0, '!='))
 			{
-				if ($pandl < 0)
+				if (float_ops($pandl, 0, '<'))
 				{
 					$total = float_ops($total, -$pandl, '+');
 					Accountlist::add_row_csv(array("Profit & Loss A/C (Net Loss)", convert_cur(-$pandl)));
@@ -645,9 +645,9 @@ class Report extends Controller {
 			}
 		
 			/* If Op balance Dr then Liability side, If Op balance Cr then Asset side */
-			if ($diffop != 0)
+			if (float_ops($diffop, 0, '!='))
 			{
-				if ($diffop < 0)
+				if (float_ops($diffop, 0, '<'))
 				{
 					$total = float_ops($total, -$diffop, '+');
 					Accountlist::add_row_csv(array("Diff in O/P Balance", "Cr " . convert_cur(-$diffop)));
@@ -709,7 +709,7 @@ class Report extends Controller {
 			/* Showing Gross P/L : Expenses */
 			$grosstotal = $gross_expense_total;
 			Accountlist::add_row_csv(array("Total Gross Expenses", convert_cur($gross_expense_total)));
-			if ($grosspl > 0)
+			if (float_ops($grosspl, 0, '>'))
 			{
 				$grosstotal = float_ops($grosstotal, $grosspl, '+');
 				Accountlist::add_row_csv(array("Gross Profit C/O", convert_cur($grosspl)));
@@ -720,10 +720,10 @@ class Report extends Controller {
 			$grosstotal = $gross_income_total;
 			Accountlist::add_row_csv(array("Total Gross Incomes", convert_cur($gross_income_total)));
 
-			if ($grosspl > 0)
+			if (float_ops($grosspl, 0, '>'))
 			{
 
-			} else if ($grosspl < 0) {
+			} else if (float_ops($grosspl, 0, '<')) {
 				$grosstotal = float_ops($grosstotal, -$grosspl, '+');
 				Accountlist::add_row_csv(array("Gross Loss C/O", convert_cur(-$grosspl)));
 			}
@@ -774,13 +774,13 @@ class Report extends Controller {
 			$nettotal = $net_expense_total;
 			Accountlist::add_row_csv(array("Total Expenses", convert_cur($nettotal)));
 
-			if ($grosspl > 0)
+			if (float_ops($grosspl, 0, '>'))
 			{
-			} else if ($grosspl < 0) {
+			} else if (float_ops($grosspl, 0, '<')) {
 				$nettotal = float_ops($nettotal, -$grosspl, '+');
 				Accountlist::add_row_csv(array("Gross Loss B/F", convert_cur(-$grosspl)));
 			}
-			if ($netpl > 0)
+			if (float_ops($netpl, 0, '>'))
 			{
 				$nettotal = float_ops($nettotal, $netpl, '+');
 				Accountlist::add_row_csv(array("Net Profit", convert_cur($netpl)));
