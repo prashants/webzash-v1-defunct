@@ -428,17 +428,17 @@ class Entry extends Controller {
 
 				if ($data_all_ledger_dc[$id] == "D")
 				{
-					$dr_total += $data_all_dr_amount[$id];
+					$dr_total = float_ops($dr_total, $data_all_dr_amount[$id], '+');
 				} else {
-					$cr_total += $data_all_cr_amount[$id];
+					$cr_total = float_ops($cr_total, $data_all_cr_amount[$id], '+');
 				}
 			}
-			if ($dr_total != $cr_total)
+			if (float_ops($dr_total, $cr_total, '!='))
 			{
 				$this->messages->add('Debit and Credit Total does not match!', 'error');
 				$this->template->load('template', 'entry/add', $data);
 				return;
-			} else if ($dr_total == 0 && $cr_total == 0) {
+			} else if (float_ops($dr_total, 0, '==') && float_ops($cr_total, 0, '==')) {
 				$this->messages->add('Cannot save empty Entry.', 'error');
 				$this->template->load('template', 'entry/add', $data);
 				return;
@@ -535,10 +535,10 @@ class Entry extends Controller {
 				if ($data_all_ledger_dc[$id] == "D")
 				{
 					$data_amount = $data_all_dr_amount[$id];
-					$dr_total += $data_all_dr_amount[$id];
+					$dr_total = float_ops($dr_total, $data_all_dr_amount[$id], '+');
 				} else {
 					$data_amount = $data_all_cr_amount[$id];
-					$cr_total += $data_all_cr_amount[$id];
+					$cr_total = float_ops($cr_total, $data_all_cr_amount[$id], '+');
 				}
 				$insert_ledger_data = array(
 					'entry_id' => $entry_id,
@@ -797,17 +797,17 @@ class Entry extends Controller {
 				}
 				if ($data_all_ledger_dc[$id] == "D")
 				{
-					$dr_total += $data_all_dr_amount[$id];
+					$dr_total = float_ops($dr_total, $data_all_dr_amount[$id], '+');
 				} else {
-					$cr_total += $data_all_cr_amount[$id];
+					$cr_total = float_ops($cr_total, $data_all_cr_amount[$id], '+');
 				}
 			}
-			if ($dr_total != $cr_total)
+			if (float_ops($dr_total, $cr_total, '!='))
 			{
 				$this->messages->add('Debit and Credit Total does not match!', 'error');
 				$this->template->load('template', 'entry/edit', $data);
 				return;
-			} else if ($dr_total == 0 && $cr_total == 0) {
+			} else if (float_ops($dr_total, 0, '==') && float_ops($cr_total, 0, '==')) {
 				$this->messages->add('Cannot save empty Entry.', 'error');
 				$this->template->load('template', 'entry/edit', $data);
 				return;
@@ -905,10 +905,10 @@ class Entry extends Controller {
 				if ($data_all_ledger_dc[$id] == "D")
 				{
 					$data_amount = $data_all_dr_amount[$id];
-					$dr_total += $data_all_dr_amount[$id];
+					$dr_total = float_ops($dr_total, $data_all_dr_amount[$id], '+');
 				} else {
 					$data_amount = $data_all_cr_amount[$id];
-					$cr_total += $data_all_cr_amount[$id];
+					$cr_total = float_ops($cr_total, $data_all_cr_amount[$id], '+');
 				}
 
 				$insert_ledger_data = array(
