@@ -8,102 +8,40 @@ class Ledger_model extends Model {
 	}
 
 	/**************************** GET LEDGERS METHODS *********************/
-	function get_all_ledgers()
+	function get_all_ledgers($ledger_type = '')
 	{
 		$options = array();
 		$options[0] = "(Please Select)";
-		$this->db->from('ledgers')->order_by('name', 'asc');
-		$ledger_q = $this->db->get();
-		foreach ($ledger_q->result() as $row)
+		switch ($ledger_type)
 		{
-			$options[$row->id] = $row->name;
+		case '':
+			$this->db->from('ledgers')->order_by('name', 'asc');
+			break;
+		case 'bankcash':
+			$this->db->from('ledgers')->where('type', 1)->order_by('name', 'asc');
+			break;
+		case 'nobankcash':
+			$this->db->from('ledgers')->where('type !=', 1)->order_by('name', 'asc');
+			break;
+		case 'reconciliation':
+			$this->db->from('ledgers')->where('reconciliation', 1)->order_by('name', 'asc');
+			break;
+		case 'purchase':
+			$this->db->from('ledgers')->where('type', 2)->order_by('name', 'asc');
+			break;
+		case 'sale':
+			$this->db->from('ledgers')->where('type', 3)->order_by('name', 'asc');
+			break;
+		case 'creditor':
+			$this->db->from('ledgers')->where('type', 4)->or_where('type', 1)->order_by('name', 'asc');
+			break;
+		case 'debtor':
+			$this->db->from('ledgers')->where('type', 5)->or_where('type', 1)->order_by('name', 'asc');
+			break;
+		default:
+			$this->db->from('ledgers')->order_by('name', 'asc');
+			break;
 		}
-		return $options;
-	}
-
-	function get_all_ledgers_bankcash()
-	{
-		$options = array();
-		$options[0] = "(Please Select)";
-		$this->db->from('ledgers')->where('type', 1)->order_by('name', 'asc');
-		$ledger_q = $this->db->get();
-		foreach ($ledger_q->result() as $row)
-		{
-			$options[$row->id] = $row->name;
-		}
-		return $options;
-	}
-
-	function get_all_ledgers_nobankcash()
-	{
-		$options = array();
-		$options[0] = "(Please Select)";
-		$this->db->from('ledgers')->where('type !=', 1)->order_by('name', 'asc');
-		$ledger_q = $this->db->get();
-		foreach ($ledger_q->result() as $row)
-		{
-			$options[$row->id] = $row->name;
-		}
-		return $options;
-	}
-
-	function get_all_ledgers_reconciliation()
-	{
-		$options = array();
-		$options[0] = "(Please Select)";
-		$this->db->from('ledgers')->where('reconciliation', 1)->order_by('name', 'asc');
-		$ledger_q = $this->db->get();
-		foreach ($ledger_q->result() as $row)
-		{
-			$options[$row->id] = $row->name;
-		}
-		return $options;
-	}
-
-	function get_all_ledgers_purchase()
-	{
-		$options = array();
-		$options[0] = "(Please Select)";
-		$this->db->from('ledgers')->where('type', 2)->order_by('name', 'asc');
-		$ledger_q = $this->db->get();
-		foreach ($ledger_q->result() as $row)
-		{
-			$options[$row->id] = $row->name;
-		}
-		return $options;
-	}
-
-	function get_all_ledgers_creditor()
-	{
-		$options = array();
-		$options[0] = "(Please Select)";
-		$this->db->from('ledgers')->where('type', 4)->or_where('type', 1)->order_by('name', 'asc');
-		$ledger_q = $this->db->get();
-		foreach ($ledger_q->result() as $row)
-		{
-			$options[$row->id] = $row->name;
-		}
-		return $options;
-	}
-
-	function get_all_ledgers_sale()
-	{
-		$options = array();
-		$options[0] = "(Please Select)";
-		$this->db->from('ledgers')->where('type', 3)->order_by('name', 'asc');
-		$ledger_q = $this->db->get();
-		foreach ($ledger_q->result() as $row)
-		{
-			$options[$row->id] = $row->name;
-		}
-		return $options;
-	}
-
-	function get_all_ledgers_debtor()
-	{
-		$options = array();
-		$options[0] = "(Please Select)";
-		$this->db->from('ledgers')->where('type', 5)->or_where('type', 1)->order_by('name', 'asc');
 		$ledger_q = $this->db->get();
 		foreach ($ledger_q->result() as $row)
 		{
