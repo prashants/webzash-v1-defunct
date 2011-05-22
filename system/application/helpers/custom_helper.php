@@ -193,5 +193,66 @@ if ( ! function_exists('full_entry_number'))
 	}
 }
 
+/**
+ * Floating Point Operations
+ *
+ * Multiply the float by 100, convert it to integer,
+ * Perform the integer operation and then divide the result
+ * by 100 and return the result
+ *
+ * @access	public
+ * @param	float	number 1
+ * @param	float	number 2
+ * @param	string	operation to be performed
+ * @return	float	result of the operation
+ */
+if ( ! function_exists('float_ops'))
+{
+	function float_ops($param1 = 0, $param2 = 0, $op = '')
+	{
+		$result = 0;
+		$param1 = $param1 * 100;
+		$param2 = $param2 * 100;
+		$param1 = (int)$param1;
+		$param2 = (int)$param2;
+		switch ($op)
+		{
+		case '+':
+			$result = $param1 + $param2;
+			break;
+		case '-':
+			$result = $param1 - $param2;
+			break;
+		case '==':
+			if ($param1 == $param2)
+				return TRUE;
+			else
+				return FALSE;
+			break;
+		case '!=':
+			if ($param1 != $param2)
+				return TRUE;
+			else
+				return FALSE;
+			break;
+		case '<':
+			if ($param1 < $param2)
+				return TRUE;
+			else
+				return FALSE;
+			break;
+		case '>':
+			if ($param1 > $param2)
+				return TRUE;
+			else
+				return FALSE;
+			break;
+
+		}
+		$result = $result/100;
+		return $result;
+	}
+}
+
 /* End of file custom_helper.php */
 /* Location: ./system/application/helpers/custom_helper.php */
