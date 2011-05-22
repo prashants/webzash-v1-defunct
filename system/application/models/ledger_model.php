@@ -203,12 +203,12 @@ class Ledger_model extends Model {
 		list ($op_bal, $op_bal_type) = $this->get_op_balance($ledger_id);
 
 		if ($op_bal_type == "C")
-			$op_bal = $op_bal * -1;
+			$op_bal = -$op_bal;
 
 		$dr_total = $this->get_dr_total($ledger_id);
 		$cr_total = $this->get_cr_total($ledger_id);
 
-		$total = $op_bal + $dr_total - $cr_total;
+		$total = float_ops($op_bal, float_ops($dr_total, $cr_total, '-'), '+');
 		return $total;
 	}
 
@@ -233,9 +233,9 @@ class Ledger_model extends Model {
 			list ($opbalance, $optype) = $this->get_op_balance($row->id);
 			if ($optype == "D")
 			{
-				$total_op += $opbalance;
+				$total_op = float_ops($total_op, $opbalance, '+');
 			} else {
-				$total_op -= $opbalance;
+				$total_op = float_ops($total_op, $opbalance, '-');
 			}
 		}
 		return $total_op;
