@@ -52,7 +52,7 @@ class Accountlist
 		{
 			$this->children_groups[$counter] = new Accountlist();
 			$this->children_groups[$counter]->init($row->id);
-			$this->total += $this->children_groups[$counter]->total;
+			$this->total = float_ops($this->total, $this->children_groups[$counter]->total, '+');
 			$counter++;
 		}
 	}
@@ -69,7 +69,7 @@ class Accountlist
 			$this->children_ledgers[$counter]['name'] = $row->name;
 			$this->children_ledgers[$counter]['total'] = $CI->Ledger_model->get_ledger_balance($row->id);
 			list ($this->children_ledgers[$counter]['opbalance'], $this->children_ledgers[$counter]['optype']) = $CI->Ledger_model->get_op_balance($row->id);
-			$this->total += $this->children_ledgers[$counter]['total'];
+			$this->total = float_ops($this->total, $this->children_ledgers[$counter]['total'], '+');
 			$counter++;
 		}
 	}

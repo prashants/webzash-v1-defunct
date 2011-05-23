@@ -52,7 +52,7 @@ class Inventory_Item_model extends Model {
 		if ($out_quantity_d = $out_quantity_q->row())
 			$out_quantity = $out_quantity_d->outquantity;
 
-		$closing_quantity = $opening_quantity + $in_quantity - $out_quantity;
+		$closing_quantity = float_ops(float_ops($opening_quantity, $in_quantity, '+'), $out_quantity, '-');
 		return $closing_quantity;
 	}
 
@@ -78,7 +78,7 @@ class Inventory_Item_model extends Model {
 		if ($out_quantity_d = $out_quantity_q->row())
 			$out_quantity = $out_quantity_d->outquantity;
 
-		$closing_quantity = $opening_quantity + $in_quantity - $out_quantity;
+		$closing_quantity = float_ops(float_ops($opening_quantity, $in_quantity, '+'), $out_quantity, '-');
 
 		/* closing profit or loss */
 		$opening_amount = $inventory_item->op_balance_total_value;
@@ -98,7 +98,7 @@ class Inventory_Item_model extends Model {
 			if ($out_amount_d = $out_amount_q->row())
 				$out_amount = $out_amount_d->outamount;
 
-			$closing_amount = $opening_amount + $in_amount - $out_amount;
+			$closing_amount = float_ops(float_ops($opening_amount, $in_amount, '+'), $out_amount, '-');
 
 			return array($closing_amount, $closing_quantity);
 		}
@@ -212,7 +212,7 @@ class Inventory_Item_model extends Model {
 					if ($in_row[0] == 0)
 						continue;
 					$final_quantity += $in_row[1];
-					$final_value += $in_row[3];
+					$final_value = float_ops($final_value, $in_row[3], '+');
 				}
 				if ($final_quantity != 0)
 					$final_rate = $final_value / $final_quantity;
@@ -226,7 +226,7 @@ class Inventory_Item_model extends Model {
 					if ($out_row[0] == 0)
 						continue;
 					$final_quantity += $out_row[1];
-					$final_value += $out_row[3];
+					$final_value = float_ops($final_value, $out_row[3], '+');
 				}
 				if ($final_quantity != 0)
 					$final_rate = $final_value / $final_quantity;
