@@ -243,7 +243,7 @@ class Transfer extends Controller {
 					return;
 				}
 				$source_inventory_item_present = TRUE;
-				$data_total_source_inventory_amount += $data_all_source_inventory_item_amount[$id];
+				$data_total_source_inventory_amount = float_ops($data_total_source_inventory_amount, $data_all_source_inventory_item_amount[$id], '+');
 			}
 			if ( ! $source_inventory_item_present)
 			{
@@ -268,7 +268,7 @@ class Transfer extends Controller {
 					return;
 				}
 				$dest_inventory_item_present = TRUE;
-				$data_total_dest_inventory_amount += $data_all_dest_inventory_item_amount[$id];
+				$data_total_dest_inventory_amount = float_ops($data_total_dest_inventory_amount, $data_all_dest_inventory_item_amount[$id], '+');
 			}
 			if ( ! $dest_inventory_item_present)
 			{
@@ -623,7 +623,7 @@ class Transfer extends Controller {
 					return;
 				}
 				$source_inventory_item_present = TRUE;
-				$data_total_source_inventory_amount += $data_all_source_inventory_item_amount[$id];
+				$data_total_source_inventory_amount = float_ops($data_total_source_inventory_amount, $data_all_source_inventory_item_amount[$id], '+');
 			}
 			if ( ! $source_inventory_item_present)
 			{
@@ -648,7 +648,7 @@ class Transfer extends Controller {
 					return;
 				}
 				$dest_inventory_item_present = TRUE;
-				$data_total_dest_inventory_amount += $data_all_dest_inventory_item_amount[$id];
+				$data_total_dest_inventory_amount = float_ops($data_total_dest_inventory_amount, $data_all_dest_inventory_item_amount[$id], '+');
 			}
 			if ( ! $dest_inventory_item_present)
 			{

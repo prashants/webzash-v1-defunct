@@ -297,7 +297,7 @@ class Entry extends Controller {
 					return;
 				}
 				$inventory_item_present = TRUE;
-				$data_total_inventory_amount += $data_all_inventory_item_amount[$id];
+				$data_total_inventory_amount = float_ops($data_total_inventory_amount, $data_all_inventory_item_amount[$id], '+');
 			}
 			if ( ! $inventory_item_present)
 			{
@@ -323,21 +323,21 @@ class Entry extends Controller {
 					return;
 				}
 				if ($data_all_ledger_dc[$id] == 'D')
-					$data_total_ledger_amount += $data_all_amount_item[$id];
+					$data_total_ledger_amount = float_ops($data_total_ledger_amount, $data_all_amount_item[$id], '+');
 				else
-					$data_total_ledger_amount -= $data_all_amount_item[$id];
+					$data_total_ledger_amount = float_ops($data_total_ledger_amount, $data_all_amount_item[$id], '-');
 			}
 
 			/* Total amount calculations */
 			if ($current_entry_type['inventory_entry_type'] == '1')
 			{
 				$data_main_account_total = $data_total_inventory_amount;
-				$data_main_entity_total = $data_total_inventory_amount + $data_total_ledger_amount;
+				$data_main_entity_total = float_ops($data_total_inventory_amount, $data_total_ledger_amount, '+');
 			} else {
-				$data_main_account_total = $data_total_inventory_amount + $data_total_ledger_amount;
+				$data_main_account_total = float_ops($data_total_inventory_amount, $data_total_ledger_amount, '+');
 				$data_main_entity_total = $data_total_inventory_amount;
 			}
-			$data_total_amount = $data_total_inventory_amount + $data_total_ledger_amount;
+			$data_total_amount = float_ops($data_total_inventory_amount, $data_total_ledger_amount, '+');
 			if ($data_total_amount < 0)
 			{
 				$this->messages->add($current_entry_type['name'] . ' Entry total cannot be negative.', 'error');
@@ -822,7 +822,7 @@ class Entry extends Controller {
 					return;
 				}
 				$inventory_item_present = TRUE;
-				$data_total_inventory_amount += $data_all_inventory_item_amount[$id];
+				$data_total_inventory_amount = float_ops($data_total_inventory_amount, $data_all_inventory_item_amount[$id], '+');
 			}
 			if ( ! $inventory_item_present)
 			{
@@ -848,21 +848,21 @@ class Entry extends Controller {
 					return;
 				}
 				if ($data_all_ledger_dc[$id] == 'D')
-					$data_total_ledger_amount += $data_all_amount_item[$id];
+					$data_total_ledger_amount = float_ops($data_total_ledger_amount, $data_all_amount_item[$id], '+');
 				else
-					$data_total_ledger_amount -= $data_all_amount_item[$id];
+					$data_total_ledger_amount = float_ops($data_total_ledger_amount, $data_all_amount_item[$id], '-');
 			}
 
 			/* Total amount calculations */
 			if ($current_entry_type['inventory_entry_type'] == '1')
 			{
 				$data_main_account_total = $data_total_inventory_amount;
-				$data_main_entity_total = $data_total_inventory_amount + $data_total_ledger_amount;
+				$data_main_entity_total = float_ops($data_total_inventory_amount, $data_total_ledger_amount, '+');
 			} else {
-				$data_main_account_total = $data_total_inventory_amount + $data_total_ledger_amount;
+				$data_main_account_total = float_ops($data_total_inventory_amount, $data_total_ledger_amount, '+');
 				$data_main_entity_total = $data_total_inventory_amount;
 			}
-			$data_total_amount = $data_total_inventory_amount + $data_total_ledger_amount;
+			$data_total_amount = float_ops($data_total_inventory_amount, $data_total_ledger_amount, '+');
 			if ($data_total_amount < 0)
 			{
 				$this->messages->add($current_entry_type['name'] . ' Entry total cannot be negative.', 'error');
