@@ -26,10 +26,10 @@ foreach ($cur_entry_ledgers->result() as $row)
 ?>
 <tr class="entry-total"><td colspan=2><strong>Total</strong></td><td id=dr-total>Dr <?php echo $cur_entry->dr_total; ?></td><td id=cr-total">Cr <?php echo $cur_entry->cr_total; ?></td></tr>
 <?php
-if ($cur_entry->dr_total != $cur_entry->cr_total)
+if (float_ops($cur_entry->dr_total, $cur_entry->cr_total, '!='))
 {
-	$difference = $cur_entry->dr_total - $cur_entry->cr_total;
-	if ($difference < 0)
+	$difference = float_ops($cur_entry->dr_total, $cur_entry->cr_total, '-');
+	if (float_ops($difference, 0, '<'))
 		echo "<tr class=\"entry-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\"></td><td id=\"cr-diff\">" . convert_amount_dc($difference) . "</td></tr>";
 	else
 		echo "<tr class=\"entry-difference\"><td colspan=2><strong>Difference</strong></td><td id=\"dr-diff\">" . convert_amount_dc($difference) . "</td><td id=\"cr-diff\"></td></tr>";
