@@ -312,7 +312,7 @@ class Cf extends Controller {
 					{
 						/* Calculating closing balance for previous year */
 						$cl_balance = $this->Ledger_model->get_ledger_balance($row->id);
-						if ($cl_balance < 0)
+						if (float_ops($cl_balance, 0, '<'))
 						{
 							$op_balance = -$cl_balance;
 							$op_balance_dc = "C";
