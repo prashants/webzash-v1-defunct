@@ -215,9 +215,12 @@ class Inventory_Item_model extends Model {
 					$final_value = float_ops($final_value, $in_row[3], '+');
 				}
 				if ($final_quantity != 0)
+				{
 					$final_rate = $final_value / $final_quantity;
-				else
+				} else {
 					$final_rate = 0;
+					$final_value = 0;
+				}
 				return array($final_quantity, $final_rate, $final_value);
 			} else {
 				foreach ($inventory_out_tree as $out_row)
@@ -229,9 +232,12 @@ class Inventory_Item_model extends Model {
 					$final_value = float_ops($final_value, $out_row[3], '+');
 				}
 				if ($final_quantity != 0)
+				{
 					$final_rate = $final_value / $final_quantity;
-				else
+				} else {
 					$final_rate = 0;
+					$final_value = 0;
+				}
 				return array(-$final_quantity, $final_rate, -$final_value);
 			}
 		}
