@@ -97,6 +97,8 @@ class Report extends Controller {
 
 	function reconciliation($reconciliation_type = '', $ledger_id = 0)
 	{
+		$this->load->helper('text');
+
 		/* Pagination setup */
 		$this->load->library('pagination');
 
@@ -455,14 +457,15 @@ class Report extends Controller {
 			$counter = 0;
 			$ledgerst = array();
 
-			$ledgerst[$counter] = array ("", "", "RECONCILIATION STATEMENT FOR " . strtoupper($this->Ledger_model->get_name($ledger_id)), "", "", "", "", "", "", "", "");
+			$ledgerst[$counter] = array ("", "", "RECONCILIATION STATEMENT FOR " . strtoupper($this->Ledger_model->get_name($ledger_id)), "", "", "", "", "", "", "");
 			$counter++;
-			$ledgerst[$counter] = array ("", "", "FY " . date_mysql_to_php($this->config->item('account_fy_start')) . " - " . date_mysql_to_php($this->config->item('account_fy_end')), "", "", "", "", "", "", "", "");
+			$ledgerst[$counter] = array ("", "", "FY " . date_mysql_to_php($this->config->item('account_fy_start')) . " - " . date_mysql_to_php($this->config->item('account_fy_end')), "", "", "", "", "", "", "");
 			$counter++;
 
 			$ledgerst[$counter][0]= "Date";
 			$ledgerst[$counter][1]= "Number";
 			$ledgerst[$counter][2]= "Ledger Name";
+			$ledgerst[$counter][3]= "Narration";
 			$ledgerst[$counter][4]= "Type";
 			$ledgerst[$counter][5]= "";
 			$ledgerst[$counter][6]= "Dr Amount";
@@ -474,7 +477,7 @@ class Report extends Controller {
 			/* Opening Balance */
 			list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id);
 
-			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.voucher_type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.voucher_type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc, voucher_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			else
@@ -490,28 +493,28 @@ class Report extends Controller {
 
 				/* Opposite voucher name */
 				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_voucher_type['label'], $row->ldc, 'text');
-
-				$ledgerst[$counter][3] = $current_voucher_type['name'];
+				$ledgerst[$counter][3] = $row->vnarration;
+				$ledgerst[$counter][4] = $current_voucher_type['name'];
 
 				if ($row->ldc == "D")
 				{
-					$ledgerst[$counter][4] = convert_dc($row->ldc);
-					$ledgerst[$counter][5] = $row->lamount;
-					$ledgerst[$counter][6] = "";
+					$ledgerst[$counter][5] = convert_dc($row->ldc);
+					$ledgerst[$counter][6] = $row->lamount;
 					$ledgerst[$counter][7] = "";
+					$ledgerst[$counter][8] = "";
 
 				} else {
-					$ledgerst[$counter][4] = "";
 					$ledgerst[$counter][5] = "";
-					$ledgerst[$counter][6] = convert_dc($row->ldc);
-					$ledgerst[$counter][7] = $row->lamount;
+					$ledgerst[$counter][6] = "";
+					$ledgerst[$counter][7] = convert_dc($row->ldc);
+					$ledgerst[$counter][8] = $row->lamount;
 				}
 
 				if ($row->lreconciliation)
 				{
-					$ledgerst[$counter][8] = date_mysql_to_php($row->lreconciliation);
+					$ledgerst[$counter][9] = date_mysql_to_php($row->lreconciliation);
 				} else {
-					$ledgerst[$counter][8] = "";
+					$ledgerst[$counter][9] = "";
 				}
 				$counter++;
 			}
@@ -881,6 +884,8 @@ class Report extends Controller {
 
 		if ($statement == "reconciliation")
 		{
+			$this->load->helper('text');
+
 			$data['show_all'] = FALSE;
 			$data['ledger_id'] = $this->uri->segment(4);
 
