@@ -61,12 +61,12 @@
 		echo "</table>";
 		echo "<br />";
 		if ( ! $print_preview) {
-			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.voucher_type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc');
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.voucher_type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc');
 			$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($pagination_counter, $page_count);
 			$ledgerst_q = $this->db->get();
 		} else {
 			$page_count = 0;
-			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.voucher_type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc');
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.voucher_type as vtype, voucher_items.amount as lamount, voucher_items.dc as ldc');
 			$this->db->from('vouchers')->join('voucher_items', 'vouchers.id = voucher_items.voucher_id')->where('voucher_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			$ledgerst_q = $this->db->get();
 		}
@@ -129,6 +129,8 @@
 			/* Getting opposite Ledger name */
 			echo "<td>";
 			echo $this->Ledger_model->get_opp_ledger_name($row->vid, $current_voucher_type['label'], $row->ldc, 'html');
+			if ($row->vnarration)
+				echo "<div class=\"small-font\">" . character_limiter($row->vnarration, 50) . "</div>";
 			echo "</td>";
 
 			echo "<td>";
