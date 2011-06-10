@@ -7,6 +7,7 @@ class Report extends Controller {
 	{
 		parent::Controller();
 		$this->load->model('Ledger_model');
+		$this->load->helper('text');
 
 		/* Check access */
 		if ( ! check_access('view reports'))

@@ -164,6 +164,10 @@ a.no-underline {
 	text-decoration:none;
 }
 
+.small-font {
+	font-size:12px;
+}
+
 /* NOT SO COMMON */
 #beta-area {
 	font-size:18px;
