@@ -138,6 +138,10 @@ table.ledgerst-table td.td-group {
 	font-weight:bold;
 }
 
+.small-font {
+	font-size:12px;
+}
+
 /**************************** RECONCILIATION ST *******************************/
 table.reconciliation-table {
 	border:1px solid #000000;
