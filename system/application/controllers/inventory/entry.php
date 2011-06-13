@@ -962,9 +962,9 @@ class Entry extends Controller {
 				'inventory_rate' => '',
 			);
 			if ($current_entry_type['inventory_entry_type'] == '1')
-				$insert_data['dc'] = 'C';
+				$update_data['dc'] = 'C';
 			else
-				$insert_data['dc'] = 'D';
+				$update_data['dc'] = 'D';
 			if ( ! $this->db->where('entry_id', $entry_id)->where('inventory_type', 2)->update('entry_items', $update_data))
 			{
 				$this->db->trans_rollback();

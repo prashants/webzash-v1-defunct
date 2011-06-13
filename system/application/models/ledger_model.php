@@ -108,8 +108,9 @@ class Ledger_model extends Model {
 		return;
 	}
 
-	function get_opp_ledger_name($entry_id, $entry_type_label, $ledger_type, $output_type)
+	function get_opp_ledger_name($entry_id, $entry_type_id, $ledger_type, $output_type)
 	{
+		$current_entry_type = entry_type_info($entry_type_id);
 		$output = '';
 		if ($ledger_type == 'D')
 			$opp_ledger_type = 'C';
@@ -123,12 +124,18 @@ class Ledger_model extends Model {
 			if ($opp_entry_name_q->num_rows() > 1)
 			{
 				if ($output_type == 'html')
-					$output = anchor('entry/view/' . $entry_type_label . '/' . $entry_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
+					if ($current_entry_type['base_type'] == '1')
+						$output = anchor('entry/view/' . $current_entry_type['label'] . '/' . $entry_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
+					else
+						$output = anchor('inventory/entry/view/' . $current_entry_type['label'] . '/' . $entry_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
 				else
 					$output = "(" . $opp_ledger_name . ")";
 			} else {
 				if ($output_type == 'html')
-					$output = anchor('entry/view/' . $entry_type_label . '/' . $entry_id, $opp_ledger_name, array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
+					if ($current_entry_type['base_type'] == '1')
+						$output = anchor('entry/view/' . $current_entry_type['label'] . '/' . $entry_id, $opp_ledger_name, array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
+					else
+						$output = anchor('inventory/entry/view/' . $current_entry_type['label'] . '/' . $entry_id, $opp_ledger_name, array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
 				else
 					$output = $opp_ledger_name;
 			}

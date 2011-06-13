@@ -43,7 +43,7 @@ class Report extends Controller {
 		foreach ($inventory_items_q->result() as $row)
 		{
 			$opening_inventory_total = float_ops($opening_inventory_total, $row->op_balance_total_value, '+');
-			list($ignore, $ignore, $closing_inventory) = $this->Inventory_item_model->closing_inventory($row->id);
+			list($ignore, $ignore, $closing_inventory, $ignore) = $this->Inventory_item_model->closing_inventory($row->id);
 			$closing_inventory_total = float_ops($closing_inventory_total, $closing_inventory, '+');
 		}
 		$data['opening_inventory_total'] = $opening_inventory_total;
@@ -69,7 +69,7 @@ class Report extends Controller {
 		foreach ($inventory_items_q->result() as $row)
 		{
 			$opening_inventory_total = float_ops($opening_inventory_total, $row->op_balance_total_value, '+');
-			list($ignore, $ignore, $closing_inventory) = $this->Inventory_item_model->closing_inventory($row->id);
+			list($ignore, $ignore, $closing_inventory, $ignore) = $this->Inventory_item_model->closing_inventory($row->id);
 			$closing_inventory_total = float_ops($closing_inventory_total, $closing_inventory, '+');
 		}
 		$data['opening_inventory_total'] = $opening_inventory_total;
@@ -448,7 +448,7 @@ class Report extends Controller {
 				$ledgerst[$counter][1] = full_entry_number($row->entries_entry_type, $row->entries_number);
 
 				/* Opposite entry name */
-				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->entries_id, $current_entry_type['label'], $row->entry_items_dc, 'text');
+				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->entries_id, $row->entries_entry_type, $row->entry_items_dc, 'text');
 				$ledgerst[$counter][3] = $row->entries_narration;
 				$ledgerst[$counter][4] = $current_entry_type['name'];
 
@@ -573,7 +573,7 @@ class Report extends Controller {
 				$ledgerst[$counter][1] = full_entry_number($row->entries_entry_type, $row->entries_number);
 
 				/* Opposite entry name */
-				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->entries_id, $current_entry_type['label'], $row->entry_items_dc, 'text');
+				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->entries_id, $row->entries_entry_type, $row->entry_items_dc, 'text');
 				$ledgerst[$counter][3] = $row->entries_narration;
 				$ledgerst[$counter][4] = $current_entry_type['name'];
 

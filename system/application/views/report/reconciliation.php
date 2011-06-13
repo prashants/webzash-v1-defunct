@@ -135,7 +135,7 @@
 
 			/* Getting opposite Ledger name */
 			echo "<td>";
-			echo $this->Ledger_model->get_opp_ledger_name($row->entries_id, $current_entry_type['label'], $row->entry_items_dc, 'html');
+			echo $this->Ledger_model->get_opp_ledger_name($row->entries_id, $row->entries_entry_type, $row->entry_items_dc, 'html');
 			if ($row->entries_narration)
 				echo "<div class=\"small-font\">" . character_limiter($row->entries_narration, 50) . "</div>";
 			echo "</td>";
