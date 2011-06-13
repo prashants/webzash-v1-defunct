@@ -221,7 +221,7 @@ class Inventory_Item_model extends Model {
 					$final_rate = 0;
 					$final_value = 0;
 				}
-				return array($final_quantity, $final_rate, $final_value);
+				return array($final_quantity, $final_rate, $final_value, TRUE);
 			} else {
 				foreach ($inventory_out_tree as $out_row)
 				{
@@ -238,7 +238,7 @@ class Inventory_Item_model extends Model {
 					$final_rate = 0;
 					$final_value = 0;
 				}
-				return array(-$final_quantity, $final_rate, -$final_value);
+				return array(-$final_quantity, $final_rate, -$final_value, FALSE);
 			}
 		}
 
@@ -310,6 +310,7 @@ class Inventory_Item_model extends Model {
 					if (!isset($inventory_in_tree[$cl_in_counter]))
 					{
 						$cl_in_counter--;
+						continue;
 					} else {
 						if ($inventory_in_tree[$cl_in_counter][0] == 0)
 						{
@@ -322,17 +323,17 @@ class Inventory_Item_model extends Model {
 				}
 				if ($reached_in_last)
 				{
+					$negative_balance = TRUE;
 					$cl_out_counter++;
 					continue;
 				}
-////
+
 				$current_transaction_quantity = $inventory_out_tree[$cl_out_counter][1] - $inventory_in_tree[$cl_in_counter][1];
 				if ($current_transaction_quantity == 0)
 				{
 					/* mark entry as invalid in both in and out array */
 					$inventory_in_tree[$cl_in_counter] = array(0, 0, 0, 0);
 					$inventory_out_tree[$cl_out_counter] = array(0, 0, 0, 0);
-					$cl_in_counter++;
 					$cl_out_counter++;
 				} else if ($current_transaction_quantity < 0) {
 					/* mark entry as invalid in out array and update in array */
@@ -351,10 +352,9 @@ class Inventory_Item_model extends Model {
 
 					$inventory_in_tree[$cl_in_counter] = array(0, 0, 0, 0);
 					$inventory_out_tree[$cl_out_counter] = array(0 => 1, 1 => $updated_quantity, 2 => $updated_rate, 3 => $updated_value);
-					$cl_in_counter++;
 				}
 			}
-
+//
 			/* final calculations */
 			$final_quantity = 0; $final_rate = 0; $final_value = 0;
 			if (!$negative_balance)
@@ -374,24 +374,9 @@ class Inventory_Item_model extends Model {
 					$final_rate = 0;
 					$final_value = 0;
 				}
-				return array($final_quantity, $final_rate, $final_value);
+				return array($final_quantity, $final_rate, $final_value, TRUE);
 			} else {
-				foreach ($inventory_out_tree as $out_row)
-				{
-					/* skip entries marked as invalid */
-					if ($out_row[0] == 0)
-						continue;
-					$final_quantity += $out_row[1];
-					$final_value = float_ops($final_value, $out_row[3], '+');
-				}
-				if ($final_quantity != 0)
-				{
-					$final_rate = $final_value / $final_quantity;
-				} else {
-					$final_rate = 0;
-					$final_value = 0;
-				}
-				return array(-$final_quantity, $final_rate, -$final_value);
+				return array(0, 0, 0, FALSE);
 			}
 		}
 	}
