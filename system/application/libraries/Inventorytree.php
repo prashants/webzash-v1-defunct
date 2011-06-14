@@ -13,6 +13,7 @@ class Inventorytree
 	function init($start_id = 0)
 	{
 		$CI =& get_instance();
+		$CI->load->model('Inventory_Item_model');
 		$inventory_tree = $this->add_sub_groups($start_id);
 		return $inventory_tree;
 	}
@@ -69,6 +70,7 @@ class Inventorytree
 		{
 			foreach ($inventory_item_q->result() as $row)
 			{
+				list ($cl_quantity, $cl_rate, $cl_value, $ignore) = $CI->Inventory_Item_model->closing_inventory($row->id);
 				$inventory_items[$row->id] = array(
 					'id' => $row->id,
 					'name' => $row->name,
@@ -77,6 +79,9 @@ class Inventorytree
 					'op_balance_quantity' => $row->op_balance_quantity,
 					'op_balance_rate_per_unit' => $row->op_balance_rate_per_unit,
 					'op_balance_total_value' => $row->op_balance_total_value,
+					'cl_balance_quantity' => $cl_quantity,
+					'cl_balance_rate_per_unit' => $cl_rate,
+					'cl_balance_total_value' => $cl_value,
 				);
 			}
 		}
@@ -98,6 +103,8 @@ class Inventorytree
 				echo "<td>Group</td>";
 				echo "<td>-</td>";
 				echo "<td>-</td>";
+				echo "<td>-</td>";
+				echo "<td>-</td>";
 				echo "<td class=\"td-actions\">" . anchor('inventory/group/edit/' . $row['id'] , "Edit", array('title' => 'Edit Inventory Group', 'class' => 'red-link'));
 				echo " &nbsp;" . anchor('inventory/group/delete/' . $row['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Inventory Group')), array('class' => "confirmClick", 'title' => "Delete Inventory Group")) . "</td>";
 				echo "</tr>";
@@ -110,8 +117,10 @@ class Inventorytree
 					echo "<tr>";
 					echo "<td>" . self::print_spaces(self::$counter) . $row_item['name'] . "</td>";
 					echo "<td>Item</td>";
+					echo "<td>" . $row_item['op_balance_quantity'] . "</td>";
 					echo "<td>" . convert_amount_dc($row_item['op_balance_total_value']) . "</td>";
-					echo "<td></td>";
+					echo "<td>" . $row_item['cl_balance_quantity'] . "</td>";
+					echo "<td>" . convert_amount_dc($row_item['cl_balance_total_value']) . "</td>";
 					echo "<td class=\"td-actions\">" . anchor('inventory/item/edit/' . $row_item['id'] , "Edit", array('title' => 'Edit Inventory Item', 'class' => 'red-link'));
 					echo " &nbsp;" . anchor('inventory/item/delete/' . $row_item['id'], img(array('src' => asset_url() . "images/icons/delete.png", 'border' => '0', 'alt' => 'Delete Inventory Item')), array('class' => "confirmClick", 'title' => "Delete Inventory Item")) . "</td>";
 					echo "</tr>";
@@ -157,7 +166,7 @@ class Inventorytree
 					echo "<td>" . self::print_spaces(self::$counter) . anchor('report/inventory_statement/' . $row_item['id'], $row_item['name'], array('title' => 'View Inventory Item Statement', 'class' => 'anchor-link-a')) . "</td>";
 					echo "<td>Item</td>";
 
-					list($closing_quantity, $closing_rate, $closing_value) = $CI->Inventory_item_model->closing_inventory($row_item['id']);
+					list($closing_quantity, $closing_rate, $closing_value, $ignore) = $CI->Inventory_item_model->closing_inventory($row_item['id']);
 					echo "<td>" . $closing_quantity . "</td>";
 					echo "<td>" . convert_cur($closing_rate) . "</td>";
 					echo "<td>" . convert_cur($closing_value) . "</td>";
