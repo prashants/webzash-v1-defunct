@@ -166,11 +166,18 @@ class Inventorytree
 					echo "<td>" . self::print_spaces(self::$counter) . anchor('report/inventory_statement/' . $row_item['id'], $row_item['name'], array('title' => 'View Inventory Item Statement', 'class' => 'anchor-link-a')) . "</td>";
 					echo "<td>Item</td>";
 
-					list($closing_quantity, $closing_rate, $closing_value, $ignore) = $CI->Inventory_item_model->closing_inventory($row_item['id']);
-					echo "<td>" . $closing_quantity . "</td>";
-					echo "<td>" . convert_cur($closing_rate) . "</td>";
-					echo "<td>" . convert_cur($closing_value) . "</td>";
-					self::$total_value += $closing_value;
+					list($closing_quantity, $closing_rate, $closing_value, $status) = $CI->Inventory_item_model->closing_inventory($row_item['id']);
+					if ($status)
+					{
+						echo "<td>" . $closing_quantity . "</td>";
+						echo "<td>" . convert_cur($closing_rate) . "</td>";
+						echo "<td>" . convert_cur($closing_value) . "</td>";
+						self::$total_value += $closing_value;
+					} else {
+						echo "<td>(-ve bal.)</td>";
+						echo "<td>(Error)</td>";
+						echo "<td>(Error)</td>";
+					}
 
 					echo "</tr>";
 				}

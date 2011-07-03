@@ -238,7 +238,7 @@ class Inventory_Item_model extends Model {
 					$final_rate = 0;
 					$final_value = 0;
 				}
-				return array(-$final_quantity, $final_rate, -$final_value, FALSE);
+				return array(0, 0, 0, FALSE);
 			}
 		}
 
