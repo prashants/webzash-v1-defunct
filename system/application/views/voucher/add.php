@@ -163,8 +163,9 @@ $(document).ready(function() {
 			$(this).parent().next().next().children().attr('disabled', 'disabled');
 			$(this).parent().next().next().next().children().attr('disabled', '');
 		}
-		$(this).parent().next().next().children().trigger('change');
-		$(this).parent().next().next().next().children().trigger('change');
+		/* Recalculate Total */
+		$('.dr-item:first').trigger('change');
+		$('.cr-item:first').trigger('change');
 	});
 
 	/* Ledger dropdown changed */
@@ -206,6 +207,7 @@ $(document).ready(function() {
 
 	/* Recalculate Total */
 	$('table td .recalculate').live('click', function() {
+		/* Recalculate Total */
 		$('.dr-item:first').trigger('change');
 		$('.cr-item:first').trigger('change');
 	});
@@ -213,6 +215,9 @@ $(document).ready(function() {
 	/* Delete ledger row */
 	$('table td .deleterow').live('click', function() {
 		$(this).parent().parent().remove();
+		/* Recalculate Total */
+		$('.dr-item:first').trigger('change');
+		$('.cr-item:first').trigger('change');
 	});
 
 	/* Add ledger row */
