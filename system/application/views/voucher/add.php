@@ -15,6 +15,8 @@ $(document).ready(function() {
 	var jsFloatOps = function(param1, param2, op) {
 		param1 = param1 * 100;
 		param2 = param2 * 100;
+		param1 = param1.toFixed(0);
+		param2 = param2.toFixed(0);
 		param1 = Math.floor(param1);
 		param2 = Math.floor(param2);
 		var result = 0;
