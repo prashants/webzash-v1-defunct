@@ -1,3 +1,8 @@
+Webzash Version 1.3 2011-10-31
+------------------------------
+
+    * Fixed javascript floating point calculation bug
+
 Webzash Version 1.3 2011-05-21
 ------------------------------
 

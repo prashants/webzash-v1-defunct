@@ -376,7 +376,7 @@ $config['backup_path'] = 'backups/';
 | Sets the current application version
 |
 */
-$config['application_version'] = '1.3';
+$config['application_version'] = '1.4';
 
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */
