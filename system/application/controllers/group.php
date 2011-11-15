@@ -102,13 +102,13 @@ class Group extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Group account - ' . $data_name . '.', 'error');
-				$this->logger->write_message("error", "Error adding Group account named " . $data_name);
+				$this->logger->write_message("error", "Error adding Group account called " . $data_name);
 				$this->template->load('template', 'group/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Added Group account - ' . $data_name . '.', 'success');
-				$this->logger->write_message("success", "Added Group account named " . $data_name);
+				$this->logger->write_message("success", "Added Group account called " . $data_name);
 				redirect('account');
 				return;
 			}
@@ -238,13 +238,13 @@ class Group extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Group account - ' . $data_name . '.', 'error');
-				$this->logger->write_message("error", "Error updating Group account named " . $data_name . " [id:" . $data_id . "]");
+				$this->logger->write_message("error", "Error updating Group account called " . $data_name . " [id:" . $data_id . "]");
 				$this->template->load('template', 'group/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Updated Group account - ' . $data_name . '.', 'success');
-				$this->logger->write_message("success", "Updated Group account named " . $data_name . " [id:" . $data_id . "]");
+				$this->logger->write_message("success", "Updated Group account called " . $data_name . " [id:" . $data_id . "]");
 				redirect('account');
 				return;
 			}
@@ -316,13 +316,13 @@ class Group extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Group account - ' . $group_data->name . '.', 'error');
-			$this->logger->write_message("error", "Error deleting Group account named " . $group_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("error", "Error deleting Group account called " . $group_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;
 		} else {
 			$this->db->trans_complete();
 			$this->messages->add('Deleted Group account - ' . $group_data->name . '.', 'success');
-			$this->logger->write_message("success", "Deleted Group account named " . $group_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("success", "Deleted Group account called " . $group_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;
 		}

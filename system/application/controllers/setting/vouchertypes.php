@@ -183,13 +183,13 @@ class VoucherTypes extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Voucher Type - ' . $data_voucher_type_name . '.', 'error');
-				$this->logger->write_message("error", "Error adding Voucher Type named " . $data_voucher_type_name);
+				$this->logger->write_message("error", "Error adding Voucher Type called " . $data_voucher_type_name);
 				$this->template->load('template', 'setting/vouchertypes/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Added Voucher Type - ' . $data_voucher_type_name . '.', 'success');
-				$this->logger->write_message("success", "Added Voucher Type named " . $data_voucher_type_name);
+				$this->logger->write_message("success", "Added Voucher Type called " . $data_voucher_type_name);
 				redirect('setting/vouchertypes');
 				return;
 			}
@@ -362,13 +362,13 @@ class VoucherTypes extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Voucher Type - ' . $data_voucher_type_name . '.', 'error');
-				$this->logger->write_message("error", "Error updating Voucher Type named " . $data_voucher_type_name . " [id:" . $id . "]");
+				$this->logger->write_message("error", "Error updating Voucher Type called " . $data_voucher_type_name . " [id:" . $id . "]");
 				$this->template->load('template', 'setting/vouchertypes/edit', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Updated Voucher Type - ' . $data_voucher_type_name . '.', 'success');
-				$this->logger->write_message("success", "Updated Voucher Type named " . $data_voucher_type_name . " [id:" . $id . "]");
+				$this->logger->write_message("success", "Updated Voucher Type called " . $data_voucher_type_name . " [id:" . $id . "]");
 				redirect('setting/vouchertypes');
 				return;
 			}
@@ -424,13 +424,13 @@ class VoucherTypes extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Voucher Type - ' . $voucher_type_data->name . '.', 'error');
-			$this->logger->write_message("error", "Error deleting Voucher Type named " . $voucher_type_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("error", "Error deleting Voucher Type called " . $voucher_type_data->name . " [id:" . $id . "]");
 			redirect('setting/vouchertypes');
 			return;
 		} else {
 			$this->db->trans_complete();
 			$this->messages->add('Deleted Voucher Type - ' . $voucher_type_data->name . '.', 'success');
-			$this->logger->write_message("success", "Deleted Voucher Type named " . $voucher_type_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("success", "Deleted Voucher Type called " . $voucher_type_data->name . " [id:" . $id . "]");
 			redirect('setting/vouchertypes');
 			return;
 		}

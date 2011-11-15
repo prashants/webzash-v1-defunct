@@ -132,13 +132,13 @@ class Ledger extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Ledger account - ' . $data_name . '.', 'error');
-				$this->logger->write_message("error", "Error adding Ledger account named " . $data_name);
+				$this->logger->write_message("error", "Error adding Ledger account called " . $data_name);
 				$this->template->load('template', 'group/add', $data);
 				return;
 			} else {
 				$this->db->trans_complete();
 				$this->messages->add('Added Ledger account - ' . $data_name . '.', 'success');
-				$this->logger->write_message("success", "Added Ledger account named " . $data_name);
+				$this->logger->write_message("success", "Added Ledger account called " . $data_name);
 				redirect('account');
 				return;
 			}
@@ -309,7 +309,7 @@ class Ledger extends Controller {
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Ledger account - ' . $data_name . '.', 'error');
-				$this->logger->write_message("error", "Error updating Ledger account named " . $data_name . " [id:" . $data_id . "]");
+				$this->logger->write_message("error", "Error updating Ledger account called " . $data_name . " [id:" . $data_id . "]");
 				$this->template->load('template', 'ledger/edit', $data);
 				return;
 			} else {
@@ -320,7 +320,7 @@ class Ledger extends Controller {
 				}
 				$this->db->trans_complete();
 				$this->messages->add('Updated Ledger account - ' . $data_name . '.', 'success');
-				$this->logger->write_message("success", "Updated Ledger account named " . $data_name . " [id:" . $data_id . "]");
+				$this->logger->write_message("success", "Updated Ledger account called " . $data_name . " [id:" . $data_id . "]");
 				redirect('account');
 				return;
 			}
@@ -381,7 +381,7 @@ class Ledger extends Controller {
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Ledger account - ' . $ledger_data->name . '.', 'error');
-			$this->logger->write_message("error", "Error deleting Ledger account named " . $ledger_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("error", "Error deleting Ledger account called " . $ledger_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;
 		} else {
@@ -389,7 +389,7 @@ class Ledger extends Controller {
 			$this->Ledger_model->delete_reconciliation($id);
 			$this->db->trans_complete();
 			$this->messages->add('Deleted Ledger account - ' . $ledger_data->name . '.', 'success');
-			$this->logger->write_message("success", "Deleted Ledger account named " . $ledger_data->name . " [id:" . $id . "]");
+			$this->logger->write_message("success", "Deleted Ledger account called " . $ledger_data->name . " [id:" . $id . "]");
 			redirect('account');
 			return;
 		}
