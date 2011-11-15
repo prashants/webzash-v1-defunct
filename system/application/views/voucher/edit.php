@@ -261,7 +261,7 @@ $(document).ready(function() {
 	echo "</p>";
 
 	echo "<table class=\"voucher-table\">";
-	echo "<thead><tr><th>Type</th><th>Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th><th colspan=2>Actions</th><th colspan=2>Cur Balance</th></tr></thead>";
+	echo "<thead><tr><th>Type</th><th>Ledger Account</th><th>Dr Amount</th><th>Cr Amount</th><th colspan=2>Actions</th><th colspan=2>Cur Balance</th></tr></thead>";
 
 	foreach ($ledger_dc as $i => $ledger)
 	{

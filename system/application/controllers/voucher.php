@@ -207,7 +207,7 @@ class Voucher extends Controller {
 		$cur_voucher_ledgers = $this->db->get();
 		if ($cur_voucher_ledgers->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Ledger A/C\'s.', 'error');
+			$this->messages->add('Voucher has no associated Ledger accounts.', 'error');
 		}
 		$data['cur_voucher'] = $cur_voucher;
 		$data['cur_voucher_ledgers'] = $cur_voucher_ledgers;
@@ -331,15 +331,15 @@ class Voucher extends Controller {
 		}
 		else
 		{
-			/* Checking for Valid Ledgers A/C and Debit and Credit Total */
+			/* Checking for Valid Ledgers account and Debit and Credit Total */
 			$data_all_ledger_id = $this->input->post('ledger_id', TRUE);
 			$data_all_ledger_dc = $this->input->post('ledger_dc', TRUE);
 			$data_all_dr_amount = $this->input->post('dr_amount', TRUE);
 			$data_all_cr_amount = $this->input->post('cr_amount', TRUE);
 			$dr_total = 0;
 			$cr_total = 0;
-			$bank_cash_present = FALSE; /* Whether atleast one Ledger A/C is Bank or Cash A/C */
-			$non_bank_cash_present = FALSE;  /* Whether atleast one Ledger A/C is NOT a Bank or Cash A/C */
+			$bank_cash_present = FALSE; /* Whether atleast one Ledger account is Bank or Cash account */
+			$non_bank_cash_present = FALSE;  /* Whether atleast one Ledger account is NOT a Bank or Cash account */
 			foreach ($data_all_ledger_dc as $id => $ledger_data)
 			{
 				if ($data_all_ledger_id[$id] < 1)
@@ -350,7 +350,7 @@ class Voucher extends Controller {
 				$valid_ledger_q = $this->db->get();
 				if ($valid_ledger_q->num_rows() < 1)
 				{
-					$this->messages->add('Invalid Ledger A/C.', 'error');
+					$this->messages->add('Invalid Ledger account.', 'error');
 					$this->template->load('template', 'voucher/add', $data);
 					return;
 				} else {
@@ -376,7 +376,7 @@ class Voucher extends Controller {
 					{
 						if ($valid_ledger->type != 'B')
 						{
-							$this->messages->add('Invalid Ledger A/C. ' . $current_voucher_type['name'] . ' Vouchers can have only Bank and Cash Ledgers A/C\'s.', 'error');
+							$this->messages->add('Invalid Ledger account. ' . $current_voucher_type['name'] . ' Vouchers can have only Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'voucher/add', $data);
 							return;
 						}
@@ -384,7 +384,7 @@ class Voucher extends Controller {
 					{
 						if ($valid_ledger->type == 'B')
 						{
-							$this->messages->add('Invalid Ledger A/C. ' . $current_voucher_type['name'] . ' Vouchers cannot have Bank and Cash Ledgers A/C\'s.', 'error');
+							$this->messages->add('Invalid Ledger account. ' . $current_voucher_type['name'] . ' Vouchers cannot have Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'voucher/add', $data);
 							return;
 						}
@@ -408,18 +408,18 @@ class Voucher extends Controller {
 				$this->template->load('template', 'voucher/add', $data);
 				return;
 			}
-			/* Check if atleast one Bank or Cash Ledger A/C is present */
+			/* Check if atleast one Bank or Cash Ledger account is present */
 			if ($current_voucher_type['bank_cash_ledger_restriction'] == '2')
 			{
 				if ( ! $bank_cash_present)
 				{
-					$this->messages->add('Need to Debit atleast one Bank or Cash A/C.', 'error');
+					$this->messages->add('Need to Debit atleast one Bank or Cash account.', 'error');
 					$this->template->load('template', 'voucher/add', $data);
 					return;
 				}
 				if ( ! $non_bank_cash_present)
 				{
-					$this->messages->add('Need to Debit or Credit atleast one NON - Bank or Cash A/C.', 'error');
+					$this->messages->add('Need to Debit or Credit atleast one NON - Bank or Cash account.', 'error');
 					$this->template->load('template', 'voucher/add', $data);
 					return;
 				}
@@ -427,13 +427,13 @@ class Voucher extends Controller {
 			{
 				if ( ! $bank_cash_present)
 				{
-					$this->messages->add('Need to Credit atleast one Bank or Cash A/C.', 'error');
+					$this->messages->add('Need to Credit atleast one Bank or Cash account.', 'error');
 					$this->template->load('template', 'voucher/add', $data);
 					return;
 				}
 				if ( ! $non_bank_cash_present)
 				{
-					$this->messages->add('Need to Debit or Credit atleast one NON - Bank or Cash A/C.', 'error');
+					$this->messages->add('Need to Debit or Credit atleast one NON - Bank or Cash account.', 'error');
 					$this->template->load('template', 'voucher/add', $data);
 					return;
 				}
@@ -514,7 +514,7 @@ class Voucher extends Controller {
 				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Ledger A/C - ' . $data_ledger_id . ' to Voucher.', 'error');
+					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Voucher.', 'error');
 					$this->logger->write_message("error", "Error adding " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " since failed inserting voucher ledger item " . "[id:" . $data_ledger_id . "]");
 					$this->template->load('template', 'voucher/add', $data);
 					return;
@@ -629,7 +629,7 @@ class Voucher extends Controller {
 			$cur_ledgers_q = $this->db->get();
 			if ($cur_ledgers_q->num_rows <= 0)
 			{
-				$this->messages->add('No Ledger A/C\'s found!', 'error');
+				$this->messages->add('No Ledger accounts found!', 'error');
 			}
 			$counter = 0;
 			foreach ($cur_ledgers_q->result() as $row)
@@ -700,15 +700,15 @@ class Voucher extends Controller {
 			$this->messages->add(validation_errors(), 'error');
 			$this->template->load('template', 'voucher/edit', $data);
 		} else	{
-			/* Checking for Valid Ledgers A/C and Debit and Credit Total */
+			/* Checking for Valid Ledgers account and Debit and Credit Total */
 			$data_all_ledger_id = $this->input->post('ledger_id', TRUE);
 			$data_all_ledger_dc = $this->input->post('ledger_dc', TRUE);
 			$data_all_dr_amount = $this->input->post('dr_amount', TRUE);
 			$data_all_cr_amount = $this->input->post('cr_amount', TRUE);
 			$dr_total = 0;
 			$cr_total = 0;
-			$bank_cash_present = FALSE; /* Whether atleast one Ledger A/C is Bank or Cash A/C */
-			$non_bank_cash_present = FALSE;  /* Whether atleast one Ledger A/C is NOT a Bank or Cash A/C */
+			$bank_cash_present = FALSE; /* Whether atleast one Ledger account is Bank or Cash account */
+			$non_bank_cash_present = FALSE;  /* Whether atleast one Ledger account is NOT a Bank or Cash account */
 			foreach ($data_all_ledger_dc as $id => $ledger_data)
 			{
 				if ($data_all_ledger_id[$id] < 1)
@@ -719,7 +719,7 @@ class Voucher extends Controller {
 				$valid_ledger_q = $this->db->get();
 				if ($valid_ledger_q->num_rows() < 1)
 				{
-					$this->messages->add('Invalid Ledger A/C.', 'error');
+					$this->messages->add('Invalid Ledger account.', 'error');
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				} else {
@@ -745,7 +745,7 @@ class Voucher extends Controller {
 					{
 						if ($valid_ledger->type != 'B')
 						{
-							$this->messages->add('Invalid Ledger A/C. ' . $current_voucher_type['name'] . ' Vouchers can have only Bank and Cash Ledgers A/C\'s.', 'error');
+							$this->messages->add('Invalid Ledger account. ' . $current_voucher_type['name'] . ' Vouchers can have only Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'voucher/edit', $data);
 							return;
 						}
@@ -753,7 +753,7 @@ class Voucher extends Controller {
 					{
 						if ($valid_ledger->type == 'B')
 						{
-							$this->messages->add('Invalid Ledger A/C. ' . $current_voucher_type['name'] . ' Vouchers cannot have Bank and Cash Ledgers A/C\'s.', 'error');
+							$this->messages->add('Invalid Ledger account. ' . $current_voucher_type['name'] . ' Vouchers cannot have Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'voucher/edit', $data);
 							return;
 						}
@@ -776,18 +776,18 @@ class Voucher extends Controller {
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			}
-			/* Check if atleast one Bank or Cash Ledger A/C is present */
+			/* Check if atleast one Bank or Cash Ledger account is present */
 			if ($current_voucher_type['bank_cash_ledger_restriction'] == '2')
 			{
 				if ( ! $bank_cash_present)
 				{
-					$this->messages->add('Need to Debit atleast one Bank or Cash A/C.', 'error');
+					$this->messages->add('Need to Debit atleast one Bank or Cash account.', 'error');
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				}
 				if ( ! $non_bank_cash_present)
 				{
-					$this->messages->add('Need to Debit or Credit atleast one NON - Bank or Cash A/C.', 'error');
+					$this->messages->add('Need to Debit or Credit atleast one NON - Bank or Cash account.', 'error');
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				}
@@ -795,13 +795,13 @@ class Voucher extends Controller {
 			{
 				if ( ! $bank_cash_present)
 				{
-					$this->messages->add('Need to Credit atleast one Bank or Cash A/C.', 'error');
+					$this->messages->add('Need to Credit atleast one Bank or Cash account.', 'error');
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				}
 				if ( ! $non_bank_cash_present)
 				{
-					$this->messages->add('Need to Debit or Credit atleast one NON - Bank or Cash A/C.', 'error');
+					$this->messages->add('Need to Debit or Credit atleast one NON - Bank or Cash account.', 'error');
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				}
@@ -835,7 +835,7 @@ class Voucher extends Controller {
 			if ( ! $this->db->where('id', $voucher_id)->update('vouchers', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating Voucher A/C.', 'error');
+				$this->messages->add('Error updating Voucher account.', 'error');
 				$this->logger->write_message("error", "Error updating voucher details for " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
@@ -845,7 +845,7 @@ class Voucher extends Controller {
 			if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error deleting previous Ledger A/C\'s from Voucher.', 'error');
+				$this->messages->add('Error deleting previous Ledger accounts from Voucher.', 'error');
 				$this->logger->write_message("error", "Error deleting previous voucher items for " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
@@ -884,8 +884,8 @@ class Voucher extends Controller {
 				if ( ! $this->db->insert('voucher_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Ledger A/C - ' . $data_ledger_id . ' to Voucher.', 'error');
-					$this->logger->write_message("error", "Error adding Ledger A/C item [id:" . $data_ledger_id . "] for " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
+					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Voucher.', 'error');
+					$this->logger->write_message("error", "Error adding Ledger account item [id:" . $data_ledger_id . "] for " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $data_number) . " [id:" . $voucher_id . "]");
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				}
@@ -969,7 +969,7 @@ class Voucher extends Controller {
 		if ( ! $this->db->delete('voucher_items', array('voucher_id' => $voucher_id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Voucher - Ledger A/C\'s.', 'error');
+			$this->messages->add('Error deleting Voucher - Ledger accounts.', 'error');
 			$this->logger->write_message("error", "Error deleting ledger entries for " . $current_voucher_type['name'] . " Voucher number " . full_voucher_number($voucher_type_id, $cur_voucher->number) . " [id:" . $voucher_id . "]");
 			redirect('voucher/view/' . $current_voucher_type['label'] . '/' . $voucher_id);
 			return;

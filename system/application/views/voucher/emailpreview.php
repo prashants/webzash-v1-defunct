@@ -11,7 +11,7 @@
 	<p><?php echo $current_voucher_type['name']; ?> Voucher Date : <strong><?php echo $voucher_date; ?></strong></p>
 	<table border=1 cellpadding=6>
 		<thead>
-			<tr><th align="left">Ledger A/C</th><th>Dr Amount</th><th>Cr Amount</th></tr>
+			<tr><th align="left">Ledger Account</th><th>Dr Amount</th><th>Cr Amount</th></tr>
 		</thead>
 		<tbody>
 		<?php

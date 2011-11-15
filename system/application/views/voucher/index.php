@@ -7,7 +7,7 @@
 		<tr>
 			<th>Date</th>
 			<th>No</th>
-			<th>Ledger A/C</th>
+			<th>Ledger Account</th>
 			<th>Type</th>
 			<th>DR Amount</th>
 			<th>CR Amount</th>

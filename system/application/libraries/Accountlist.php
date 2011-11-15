@@ -124,7 +124,7 @@ class Accountlist
 			else
 				echo "&nbsp;" .  $this->name;
 			echo "</td>";
-			echo "<td>Group A/C</td>";
+			echo "<td>Group Account</td>";
 			echo "<td>-</td>";
 			echo "<td>-</td>";
 
@@ -153,7 +153,7 @@ class Accountlist
 				echo $this->print_space($this->counter);
 				echo "&nbsp;" . anchor('report/ledgerst/' . $data['id'], $data['name'], array('title' => $data['name'] . ' Ledger Statement', 'style' => 'color:#000000'));
 				echo "</td>";
-				echo "<td>Ledger A/C</td>";
+				echo "<td>Ledger Account</td>";
 				echo "<td>" . convert_opening($data['opbalance'], $data['optype']) . "</td>";
 				echo "<td>" . convert_amount_dc($data['total']) . "</td>";
 				echo "<td class=\"td-actions\">" . anchor('ledger/edit/' . $data['id'], 'Edit', array('title' => "Edit Ledger", 'class' => 'red-link'));
