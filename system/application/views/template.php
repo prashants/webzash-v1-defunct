@@ -115,7 +115,7 @@ $(document).ready(function() {
 			<li>
 				<?php
 					/* Showing Voucher Type sub-menu */
-					$voucher_type_all = $this->config->item('account_voucher_types');
+					$voucher_type_all = $this->config->item('account_entry_types');
 					$voucher_type_count = count($voucher_type_all);
 					if ($voucher_type_count < 1)
 					{

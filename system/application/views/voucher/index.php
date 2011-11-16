@@ -18,7 +18,7 @@
 	<?php
 		foreach ($voucher_data->result() as $row)
 		{
-			$current_voucher_type = voucher_type_info($row->voucher_type);
+			$current_voucher_type = entry_type_info($row->voucher_type);
 
 			echo "<tr>";
 

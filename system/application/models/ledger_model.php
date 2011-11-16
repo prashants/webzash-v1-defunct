@@ -72,7 +72,7 @@ class Ledger_model extends Model {
 	function get_voucher_name($voucher_id, $voucher_type_id)
 	{
 		/* Selecting whether to show debit side Ledger or credit side Ledger */
-		$current_voucher_type = voucher_type_info($voucher_type_id);
+		$current_voucher_type = entry_type_info($voucher_type_id);
 		$ledger_type = 'C';
 
 		if ($current_voucher_type['bank_cash_ledger_restriction'] == 3)

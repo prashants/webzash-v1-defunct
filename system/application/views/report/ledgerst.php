@@ -116,7 +116,7 @@
 
 		foreach ($ledgerst_q->result() as $row)
 		{
-			$current_voucher_type = voucher_type_info($row->vtype);
+			$current_voucher_type = entry_type_info($row->vtype);
 
 			echo "<tr class=\"tr-" . $odd_even . "\">";
 			echo "<td>";

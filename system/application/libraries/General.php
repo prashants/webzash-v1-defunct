@@ -196,7 +196,7 @@ class General {
 				'bank_cash_ledger_restriction' => $row->bank_cash_ledger_restriction,
 			);
 		}
-		$CI->config->set_item('account_voucher_types', $voucher_type_config);
+		$CI->config->set_item('account_entry_types', $voucher_type_config);
 	}
 }
 

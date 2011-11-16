@@ -361,7 +361,7 @@ class Report extends Controller {
 			foreach ($ledgerst_q->result() as $row)
 			{
 				/* Voucher Type */
-				$current_voucher_type = voucher_type_info($row->vtype);
+				$current_voucher_type = entry_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
 				$ledgerst[$counter][1] = full_voucher_number($row->vtype, $row->vnumber);
@@ -486,7 +486,7 @@ class Report extends Controller {
 			foreach ($ledgerst_q->result() as $row)
 			{
 				/* Voucher Type */
-				$current_voucher_type = voucher_type_info($row->vtype);
+				$current_voucher_type = entry_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
 				$ledgerst[$counter][1] = full_voucher_number($row->vtype, $row->vnumber);

@@ -47,7 +47,7 @@ class Voucher extends Controller {
 				redirect('voucher/show/all');
 				return;
 			} else {
-				$current_voucher_type = voucher_type_info($voucher_type_id);
+				$current_voucher_type = entry_type_info($voucher_type_id);
 				$this->template->set('page_title', $current_voucher_type['name'] . ' Vouchers');
 				$this->template->set('nav_links', array('voucher/add/' . $current_voucher_type['label'] => 'New ' . $current_voucher_type['name'] . ' Voucher'));
 			}
@@ -190,7 +190,7 @@ class Voucher extends Controller {
 			redirect('voucher/show/all');
 			return;
 		} else {
-			$current_voucher_type = voucher_type_info($voucher_type_id);
+			$current_voucher_type = entry_type_info($voucher_type_id);
 		}
 
 		$this->template->set('page_title', 'View ' . $current_voucher_type['name'] . ' Voucher');
@@ -243,7 +243,7 @@ class Voucher extends Controller {
 			redirect('voucher/show/all');
 			return;
 		} else {
-			$current_voucher_type = voucher_type_info($voucher_type_id);
+			$current_voucher_type = entry_type_info($voucher_type_id);
 		}
 
 		$this->template->set('page_title', 'New ' . $current_voucher_type['name'] . ' Voucher');
@@ -580,7 +580,7 @@ class Voucher extends Controller {
 			redirect('voucher/show/all');
 			return;
 		} else {
-			$current_voucher_type = voucher_type_info($voucher_type_id);
+			$current_voucher_type = entry_type_info($voucher_type_id);
 		}
 
 		$this->template->set('page_title', 'Edit ' . $current_voucher_type['name'] . ' Voucher');
@@ -954,7 +954,7 @@ class Voucher extends Controller {
 			redirect('voucher/show/all');
 			return;
 		} else {
-			$current_voucher_type = voucher_type_info($voucher_type_id);
+			$current_voucher_type = entry_type_info($voucher_type_id);
 		}
 
 		/* Load current voucher details */
@@ -1011,7 +1011,7 @@ class Voucher extends Controller {
 			redirect('voucher/show/all');
 			return;
 		} else {
-			$current_voucher_type = voucher_type_info($voucher_type_id);
+			$current_voucher_type = entry_type_info($voucher_type_id);
 		}
 
 		/* Load current voucher details */
@@ -1077,7 +1077,7 @@ class Voucher extends Controller {
 			redirect('voucher/show/all');
 			return;
 		} else {
-			$current_voucher_type = voucher_type_info($voucher_type_id);
+			$current_voucher_type = entry_type_info($voucher_type_id);
 		}
 
 		/* Load current voucher details */
@@ -1141,7 +1141,7 @@ class Voucher extends Controller {
 			redirect('voucher/show/all');
 			return;
 		} else {
-			$current_voucher_type = voucher_type_info($voucher_type_id);
+			$current_voucher_type = entry_type_info($voucher_type_id);
 		}
 
 		$account_data = $this->Setting_model->get_current();
