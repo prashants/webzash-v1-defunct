@@ -178,7 +178,6 @@ class Group extends Controller {
 		$this->form_validation->set_rules('group_name', 'Group name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[groups.name.' . $id . ']');
 		$this->form_validation->set_rules('group_parent', 'Parent group', 'trim|required|is_natural_no_zero');
 
-
 		/* Re-populating form */
 		if ($_POST)
 		{

@@ -13,8 +13,6 @@ class Welcome extends Controller {
 		$this->load->model('Ledger_model');
 		$this->load->library('accountlist');
 		$this->template->set('page_title', 'Welcome to Webzash');
-		$this->template->set('add_css', array("css/tufte-graph.css"));
-		$this->template->set('add_javascript', array("js/raphael.js", "js/jquery.enumerable.js", "js/jquery.tufte-graph.js"));
 
 		/* Bank and Cash Ledger accounts */
 		$this->db->from('ledgers')->where('type', 'B');
@@ -42,10 +40,6 @@ class Welcome extends Controller {
 		$liability->init(2);
 		$data['liability_total'] = $liability->total;
 
-		$data['show_asset_liability'] = TRUE;
-		if ($data['asset_total'] == 0 && $data['liability_total'] == 0)
-			$data['show_asset_liability'] = FALSE;
-
 		$income = new Accountlist();
 		$income->init(3);
 		$data['income_total'] = $income->total;
@@ -53,10 +47,6 @@ class Welcome extends Controller {
 		$expense = new Accountlist();
 		$expense->init(4);
 		$data['expense_total'] = $expense->total;
-
-		$data['show_income_expense'] = TRUE;
-		if ($data['income_total'] == 0 && $data['expense_total'] == 0)
-			$data['show_income_expense'] = FALSE;
 
 		/* Getting Log Messages */
 		$data['logs'] = $this->logger->read_recent_messages();
