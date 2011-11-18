@@ -97,7 +97,7 @@ if ( ! function_exists('print_value'))
 }
 
 /**
- * Return Voucher Type information
+ * Return Entry Type information
  *
  * @access	public
  * @param	int entry type id
@@ -138,7 +138,7 @@ if ( ! function_exists('entry_type_info'))
 }
 
 /**
- * Return Voucher Type Id from Voucher Type Name
+ * Return Entry Type Id from Entry Type Name
  *
  * @access	public
  * @param	string entry type name
@@ -146,7 +146,7 @@ if ( ! function_exists('entry_type_info'))
  */
 if ( ! function_exists('entry_type_name_to_id'))
 {
-	function entry_type_name_to_id($voucher_type_name)
+	function entry_type_name_to_id($entry_type_name)
 	{
 		$CI =& get_instance();
 		$entry_type_all = $CI->config->item('account_entry_types');
@@ -163,7 +163,7 @@ if ( ! function_exists('entry_type_name_to_id'))
 }
 
 /**
- * Converts Voucher number to proper entry prefix formats
+ * Converts Entry number to proper entry prefix formats
  *
  * @access	public
  * @param	int entry type id
@@ -171,16 +171,16 @@ if ( ! function_exists('entry_type_name_to_id'))
  */
 if ( ! function_exists('full_entry_number'))
 {
-	function full_entry_number($voucher_type_id, $voucher_number)
+	function full_entry_number($entry_type_id, $entry_number)
 	{
 		$CI =& get_instance();
-		$voucher_type_all = $CI->config->item('account_entry_types');
+		$entry_type_all = $CI->config->item('account_entry_types');
 		$return_html = "";
-		if ( ! $voucher_type_all[$voucher_type_id])
+		if ( ! $entry_type_all[$entry_type_id])
 		{
-			$return_html = $voucher_number;
+			$return_html = $entry_number;
 		} else {
-			$return_html = $voucher_type_all[$voucher_type_id]['prefix'] . str_pad($voucher_number, $voucher_type_all[$voucher_type_id]['zero_padding'], '0', STR_PAD_LEFT) . $voucher_type_all[$voucher_type_id]['suffix'];
+			$return_html = $entry_type_all[$entry_type_id]['prefix'] . str_pad($entry_number, $entry_type_all[$entry_type_id]['zero_padding'], '0', STR_PAD_LEFT) . $entry_type_all[$entry_type_id]['suffix'];
 		}
 		if ($return_html)
 			return $return_html;
