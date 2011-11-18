@@ -141,12 +141,12 @@ if ( ! function_exists('entry_type_info'))
  * Return Voucher Type Id from Voucher Type Name
  *
  * @access	public
- * @param	string voucher type name
- * @return	int voucher type id
+ * @param	string entry type name
+ * @return	int entry type id
  */
-if ( ! function_exists('voucher_type_name_to_id'))
+if ( ! function_exists('entry_type_name_to_id'))
 {
-	function voucher_type_name_to_id($voucher_type_name)
+	function entry_type_name_to_id($voucher_type_name)
 	{
 		$CI =& get_instance();
 		$voucher_type_all = $CI->config->item('account_entry_types');

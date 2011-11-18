@@ -40,7 +40,7 @@ class Voucher extends Controller {
 			$voucher_type_id = 0;
 			$this->template->set('page_title', 'All Vouchers');
 		} else {
-			$voucher_type_id = voucher_type_name_to_id($voucher_type);
+			$voucher_type_id = entry_type_name_to_id($voucher_type);
 			if ( ! $voucher_type_id)
 			{
 				$this->messages->add('Invalid Voucher type specified. Showing all Vouchers.', 'error');
@@ -183,7 +183,7 @@ class Voucher extends Controller {
 	function view($voucher_type, $voucher_id = 0)
 	{
 		/* Voucher Type */
-		$voucher_type_id = voucher_type_name_to_id($voucher_type);
+		$voucher_type_id = entry_type_name_to_id($voucher_type);
 		if ( ! $voucher_type_id)
 		{
 			$this->messages->add('Invalid Voucher type.', 'error');
@@ -236,7 +236,7 @@ class Voucher extends Controller {
 		}
 
 		/* Voucher Type */
-		$voucher_type_id = voucher_type_name_to_id($voucher_type);
+		$voucher_type_id = entry_type_name_to_id($voucher_type);
 		if ( ! $voucher_type_id)
 		{
 			$this->messages->add('Invalid Voucher type.', 'error');
@@ -573,7 +573,7 @@ class Voucher extends Controller {
 		}
 
 		/* Voucher Type */
-		$voucher_type_id = voucher_type_name_to_id($voucher_type);
+		$voucher_type_id = entry_type_name_to_id($voucher_type);
 		if ( ! $voucher_type_id)
 		{
 			$this->messages->add('Invalid Voucher type.', 'error');
@@ -947,7 +947,7 @@ class Voucher extends Controller {
 		}
 
 		/* Voucher Type */
-		$voucher_type_id = voucher_type_name_to_id($voucher_type);
+		$voucher_type_id = entry_type_name_to_id($voucher_type);
 		if ( ! $voucher_type_id)
 		{
 			$this->messages->add('Invalid Voucher type.', 'error');
@@ -1004,7 +1004,7 @@ class Voucher extends Controller {
 		}
 
 		/* Voucher Type */
-		$voucher_type_id = voucher_type_name_to_id($voucher_type);
+		$voucher_type_id = entry_type_name_to_id($voucher_type);
 		if ( ! $voucher_type_id)
 		{
 			$this->messages->add('Invalid Voucher type.', 'error');
@@ -1070,7 +1070,7 @@ class Voucher extends Controller {
 		}
 
 		/* Voucher Type */
-		$voucher_type_id = voucher_type_name_to_id($voucher_type);
+		$voucher_type_id = entry_type_name_to_id($voucher_type);
 		if ( ! $voucher_type_id)
 		{
 			$this->messages->add('Invalid Voucher type.', 'error');
@@ -1134,7 +1134,7 @@ class Voucher extends Controller {
 		}
 
 		/* Voucher Type */
-		$voucher_type_id = voucher_type_name_to_id($voucher_type);
+		$voucher_type_id = entry_type_name_to_id($voucher_type);
 		if ( ! $voucher_type_id)
 		{
 			$this->messages->add('Invalid Voucher type.', 'error');
