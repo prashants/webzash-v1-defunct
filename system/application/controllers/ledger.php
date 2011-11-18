@@ -261,16 +261,16 @@ class Ledger extends Controller {
 				return;
 			}
 
-			/* Check if bank_cash_ledger_restriction both voucher present */
+			/* Check if bank_cash_ledger_restriction both entry present */
 			if ($data_ledger_type_cashbank_value != "1")
 			{
-				$voucher_type_all = $this->config->item('account_entry_types');
-				foreach ($voucher_type_all as $voucher_type_id => $row)
+				$entry_type_all = $this->config->item('account_entry_types');
+				foreach ($entry_type_all as $entry_type_id => $row)
 				{
 					/* Check for Voucher types where bank_cash_ledger_restriction is for all ledgers */
 					if ($row['bank_cash_ledger_restriction'] == 4)
 					{
-						$this->db->from('voucher_items')->join('vouchers', 'voucher_items.voucher_id = vouchers.id')->where('vouchers.voucher_type', $voucher_type_id)->where('voucher_items.ledger_id', $id);
+						$this->db->from('voucher_items')->join('vouchers', 'voucher_items.voucher_id = vouchers.id')->where('vouchers.voucher_type', $entry_type_id)->where('voucher_items.ledger_id', $id);
 						$all_ledger_bank_cash_count = $this->db->get()->num_rows();
 						if ($all_ledger_bank_cash_count > 0)
 						{
