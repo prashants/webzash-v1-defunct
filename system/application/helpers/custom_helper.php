@@ -149,10 +149,10 @@ if ( ! function_exists('entry_type_name_to_id'))
 	function entry_type_name_to_id($voucher_type_name)
 	{
 		$CI =& get_instance();
-		$voucher_type_all = $CI->config->item('account_entry_types');
-		foreach ($voucher_type_all as $id => $row)
+		$entry_type_all = $CI->config->item('account_entry_types');
+		foreach ($entry_type_all as $id => $row)
 		{
-			if ($row['label'] == $voucher_type_name)
+			if ($row['label'] == $entry_type_name)
 			{
 				return $id;
 				break;
@@ -163,15 +163,15 @@ if ( ! function_exists('entry_type_name_to_id'))
 }
 
 /**
- * Converts Voucher number to proper voucher prefix formats
+ * Converts Voucher number to proper entry prefix formats
  *
  * @access	public
- * @param	int voucher type id
+ * @param	int entry type id
  * @return	string
  */
-if ( ! function_exists('full_voucher_number'))
+if ( ! function_exists('full_entry_number'))
 {
-	function full_voucher_number($voucher_type_id, $voucher_number)
+	function full_entry_number($voucher_type_id, $voucher_number)
 	{
 		$CI =& get_instance();
 		$voucher_type_all = $CI->config->item('account_entry_types');
