@@ -1,5 +1,7 @@
 //--------------------------------- VERSION 4 ----------------------------------
 
+RENAME TABLE voucher_items TO entry_items;
+
 RENAME TABLE voucher_types TO entry_types;
 
 //--------------------------------- VERSION 3 ----------------------------------
