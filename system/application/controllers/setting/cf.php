@@ -335,11 +335,11 @@ class Cf extends Controller {
 				}
 
 				/* Importing Voucher Types */
-				$this->db->from('voucher_types')->order_by('id', 'asc');
+				$this->db->from('entry_types')->order_by('id', 'asc');
 				$voucher_type_q = $this->db->get();
 				foreach ($voucher_type_q->result() as $row)
 				{
-					if ( ! $newacc->query("INSERT INTO voucher_types (id, label, name, description, base_type, numbering, prefix, suffix, zero_padding, bank_cash_ledger_restriction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($row->id, $row->label, $row->name, $row->description, $row->base_type, $row->numbering, $row->prefix, $row->suffix, $row->zero_padding, $row->bank_cash_ledger_restriction)))
+					if ( ! $newacc->query("INSERT INTO entry_types (id, label, name, description, base_type, numbering, prefix, suffix, zero_padding, bank_cash_ledger_restriction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($row->id, $row->label, $row->name, $row->description, $row->base_type, $row->numbering, $row->prefix, $row->suffix, $row->zero_padding, $row->bank_cash_ledger_restriction)))
 					{
 						$this->messages->add('Failed to add Voucher type  - ' . $row->name . '.', 'error');
 						$cf_status = FALSE;

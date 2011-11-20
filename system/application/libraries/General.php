@@ -171,18 +171,18 @@ class General {
 		return $user_data;
 	}
 
-	function setup_voucher_types()
+	function setup_entry_types()
 	{
 		$CI =& get_instance();
 
-		$CI->db->from('voucher_types')->order_by('id', 'asc');
-		$voucher_types = $CI->db->get();
-		if ($voucher_types->num_rows() < 1)
+		$CI->db->from('entry_types')->order_by('id', 'asc');
+		$entry_types = $CI->db->get();
+		if ($entry_types->num_rows() < 1)
 		{
 			$CI->messages->add('You need to create a voucher type before you can create any vouchers.', 'error');
 		}
 		$voucher_type_config = array();
-		foreach ($voucher_types->result() as $id => $row)
+		foreach ($entry_types->result() as $id => $row)
 		{
 			$voucher_type_config[$row->id] = array(
 				'label' => $row->label,

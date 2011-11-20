@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS ledgers (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS voucher_types (
+CREATE TABLE IF NOT EXISTS entry_types (
   id int(5) NOT NULL,
   label varchar(15) NOT NULL,
   name varchar(100) NOT NULL,

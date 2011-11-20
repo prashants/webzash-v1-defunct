@@ -23,7 +23,7 @@ class VoucherTypes extends Controller {
 		$this->template->set('page_title', 'Voucher Types');
 		$this->template->set('nav_links', array('setting/vouchertypes/add' => 'New Voucher Type'));
 
-		$this->db->from('voucher_types')->order_by('id', 'asc');
+		$this->db->from('entry_types')->order_by('id', 'asc');
 		$data['voucher_type_data'] = $this->db->get();
 
 		$this->template->load('template', 'setting/vouchertypes/index', $data);
@@ -121,8 +121,8 @@ class VoucherTypes extends Controller {
 		}
 
 		/* Form validations */
-		$this->form_validation->set_rules('voucher_type_label', 'Label', 'trim|required|min_length[2]|max_length[15]|alpha|unique[voucher_types.label]');
-		$this->form_validation->set_rules('voucher_type_name', 'Name', 'trim|required|min_length[2]|max_length[100]|unique[voucher_types.name]');
+		$this->form_validation->set_rules('voucher_type_label', 'Label', 'trim|required|min_length[2]|max_length[15]|alpha|unique[entry_types.label]');
+		$this->form_validation->set_rules('voucher_type_name', 'Name', 'trim|required|min_length[2]|max_length[100]|unique[entry_types.name]');
 		$this->form_validation->set_rules('voucher_type_description', 'Description', 'trim');
 		$this->form_validation->set_rules('voucher_type_prefix', 'Prefix', 'trim|max_length[10]');
 		$this->form_validation->set_rules('voucher_type_suffix', 'Suffix', 'trim|max_length[10]');
@@ -158,7 +158,7 @@ class VoucherTypes extends Controller {
 
 			/* Calculating Voucher Type Id */
 			$last_id = 1;
-			$this->db->select_max('id', 'lastid')->from('voucher_types');
+			$this->db->select_max('id', 'lastid')->from('entry_types');
 			$last_id_q = $this->db->get();
 			if ($row = $last_id_q->row())
 			{
@@ -179,7 +179,7 @@ class VoucherTypes extends Controller {
 				'zero_padding' => $data_voucher_type_zero_padding,
 				'bank_cash_ledger_restriction' => $data_bank_cash_ledger_restriction,
 			);
-			if ( ! $this->db->insert('voucher_types', $insert_data))
+			if ( ! $this->db->insert('entry_types', $insert_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Voucher Type - ' . $data_voucher_type_name . '.', 'error');
@@ -220,7 +220,7 @@ class VoucherTypes extends Controller {
 		}
 
 		/* Loading current Voucher Type */
-		$this->db->from('voucher_types')->where('id', $id);
+		$this->db->from('entry_types')->where('id', $id);
 		$voucher_type_data_q = $this->db->get();
 		if ($voucher_type_data_q->num_rows() < 1)
 		{
@@ -310,8 +310,8 @@ class VoucherTypes extends Controller {
 		}
 
 		/* Form validations */
-		$this->form_validation->set_rules('voucher_type_label', 'Label', 'trim|required|min_length[2]|max_length[15]|alpha|uniquewithid[voucher_types.label.' . $id . ']');
-		$this->form_validation->set_rules('voucher_type_name', 'Name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[voucher_types.name.' . $id . ']');
+		$this->form_validation->set_rules('voucher_type_label', 'Label', 'trim|required|min_length[2]|max_length[15]|alpha|uniquewithid[entry_types.label.' . $id . ']');
+		$this->form_validation->set_rules('voucher_type_name', 'Name', 'trim|required|min_length[2]|max_length[100]|uniquewithid[entry_types.name.' . $id . ']');
 		$this->form_validation->set_rules('voucher_type_description', 'Description', 'trim');
 		$this->form_validation->set_rules('voucher_type_prefix', 'Prefix', 'trim|max_length[10]');
 		$this->form_validation->set_rules('voucher_type_suffix', 'Suffix', 'trim|max_length[10]');
@@ -358,7 +358,7 @@ class VoucherTypes extends Controller {
 				'zero_padding' => $data_voucher_type_zero_padding,
 				'bank_cash_ledger_restriction' => $data_bank_cash_ledger_restriction,
 			);
-			if ( ! $this->db->where('id', $data_voucher_type_id)->update('voucher_types', $update_data))
+			if ( ! $this->db->where('id', $data_voucher_type_id)->update('entry_types', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Voucher Type - ' . $data_voucher_type_name . '.', 'error');
@@ -397,7 +397,7 @@ class VoucherTypes extends Controller {
 		}
 
 		/* Loading current Voucher Type */
-		$this->db->from('voucher_types')->where('id', $id);
+		$this->db->from('entry_types')->where('id', $id);
 		$voucher_type_data_q = $this->db->get();
 		if ($voucher_type_data_q->num_rows() < 1)
 		{
@@ -420,7 +420,7 @@ class VoucherTypes extends Controller {
 
 		/* Deleting Voucher Types */
 		$this->db->trans_start();
-		if ( ! $this->db->delete('voucher_types', array('id' => $id)))
+		if ( ! $this->db->delete('entry_types', array('id' => $id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Voucher Type - ' . $voucher_type_data->name . '.', 'error');

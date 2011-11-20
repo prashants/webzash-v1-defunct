@@ -112,7 +112,7 @@ class Startup
 		$CI->general->check_setting();
 
 		/* Load voucher types */
-		$CI->general->setup_voucher_types();
+		$CI->general->setup_entry_types();
 
 		return;
 	}
