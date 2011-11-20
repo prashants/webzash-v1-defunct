@@ -356,7 +356,7 @@ class Report extends Controller {
 			$counter++;
 
 			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.voucher_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
-			$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.voucher_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+			$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			$ledgerst_q = $this->db->get();
 			foreach ($ledgerst_q->result() as $row)
 			{
@@ -479,9 +479,9 @@ class Report extends Controller {
 
 			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.voucher_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
-				$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.voucher_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+				$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			else
-				$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.voucher_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.reconciliation_date', NULL)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+				$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.reconciliation_date', NULL)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			$ledgerst_q = $this->db->get();
 			foreach ($ledgerst_q->result() as $row)
 			{
@@ -539,7 +539,7 @@ class Report extends Controller {
 			/************* Final Reconciliation Balance ***********/
 
 			/* Reconciliation Balance - Dr */
-			$this->db->select_sum('amount', 'drtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.voucher_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'D')->where('entry_items.reconciliation_date IS NOT NULL');
+			$this->db->select_sum('amount', 'drtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'D')->where('entry_items.reconciliation_date IS NOT NULL');
 			$dr_total_q = $this->db->get();
 			if ($dr_total = $dr_total_q->row())
 				$reconciliation_dr_total = $dr_total->drtotal;
@@ -547,7 +547,7 @@ class Report extends Controller {
 				$reconciliation_dr_total = 0;
 
 			/* Reconciliation Balance - Cr */
-			$this->db->select_sum('amount', 'crtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.voucher_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'C')->where('entry_items.reconciliation_date IS NOT NULL');
+			$this->db->select_sum('amount', 'crtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'C')->where('entry_items.reconciliation_date IS NOT NULL');
 			$cr_total_q = $this->db->get();
 			if ($cr_total = $cr_total_q->row())
 				$reconciliation_cr_total = $cr_total->crtotal;

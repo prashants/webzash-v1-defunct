@@ -36,7 +36,7 @@
 		echo "</div>";
 	}
 
-	echo form_open('voucher/email/' . $current_voucher_type['label'] . "/" . $voucher_id);
+	echo form_open('voucher/email/' . $current_voucher_type['label'] . "/" . $entry_id);
 
 	echo "Emailing " .  $current_voucher_type['name'] . " Voucher No. " . $voucher_number . "<br />";
 

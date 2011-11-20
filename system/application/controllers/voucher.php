@@ -203,7 +203,7 @@ class Voucher extends Controller {
 			return;
 		}
 		/* Load current entry details */
-		$this->db->from('entry_items')->where('voucher_id', $entry_id)->order_by('id', 'asc');
+		$this->db->from('entry_items')->where('entry_id', $entry_id)->order_by('id', 'asc');
 		$cur_entry_ledgers = $this->db->get();
 		if ($cur_entry_ledgers->num_rows() < 1)
 		{
@@ -625,7 +625,7 @@ class Voucher extends Controller {
 		/* Load current ledger details if not $_POST */
 		if ( ! $_POST)
 		{
-			$this->db->from('entry_items')->where('voucher_id', $entry_id);
+			$this->db->from('entry_items')->where('entry_id', $entry_id);
 			$cur_ledgers_q = $this->db->get();
 			if ($cur_ledgers_q->num_rows <= 0)
 			{
@@ -842,7 +842,7 @@ class Voucher extends Controller {
 			}
 
 			/* TODO : Deleting all old ledger data, Bad solution */
-			if ( ! $this->db->delete('entry_items', array('voucher_id' => $entry_id)))
+			if ( ! $this->db->delete('entry_items', array('entry_id' => $entry_id)))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error deleting previous Ledger accounts from Voucher.', 'error');
@@ -966,7 +966,7 @@ class Voucher extends Controller {
 		}
 
 		$this->db->trans_start();
-		if ( ! $this->db->delete('entry_items', array('voucher_id' => $entry_id)))
+		if ( ! $this->db->delete('entry_items', array('entry_id' => $entry_id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Voucher - Ledger accounts.', 'error');
@@ -1031,7 +1031,7 @@ class Voucher extends Controller {
 		$data['entry_narration'] = $cur_entry->narration;
 
 		/* Getting Ledger details */
-		$this->db->from('entry_items')->where('voucher_id', $entry_id)->order_by('dc', 'desc');
+		$this->db->from('entry_items')->where('entry_id', $entry_id)->order_by('dc', 'desc');
 		$ledger_q = $this->db->get();
 		$counter = 0;
 		$data['ledger_data'] = array();
@@ -1097,7 +1097,7 @@ class Voucher extends Controller {
 		$data['entry_narration'] = $cur_entry->narration;
 
 		/* Getting Ledger details */
-		$this->db->from('entry_items')->where('voucher_id', $entry_id)->order_by('dc', 'desc');
+		$this->db->from('entry_items')->where('entry_id', $entry_id)->order_by('dc', 'desc');
 		$ledger_q = $this->db->get();
 		$counter = 0;
 		$data['ledger_data'] = array();
@@ -1191,7 +1191,7 @@ class Voucher extends Controller {
 			$entry_data['entry_narration'] = $cur_entry->narration;
 	
 			/* Getting Ledger details */
-			$this->db->from('entry_items')->where('voucher_id', $entry_id)->order_by('dc', 'desc');
+			$this->db->from('entry_items')->where('entry_id', $entry_id)->order_by('dc', 'desc');
 			$ledger_q = $this->db->get();
 			$counter = 0;
 			$entry_data['ledger_data'] = array();

@@ -23,7 +23,7 @@
 		$config['num_links'] = 10;
 		$config['per_page'] = $pagination_counter;
 		$config['uri_segment'] = 4;
-		$config['total_rows'] = (int)$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.voucher_id')->where('entry_items.ledger_id', $ledger_id)->count_all_results();
+		$config['total_rows'] = (int)$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->count_all_results();
 		$config['full_tag_open'] = '<ul id="pagination-flickr">';
 		$config['full_close_open'] = '</ul>';
 		$config['num_tag_open'] = '<li>';
@@ -62,12 +62,12 @@
 		echo "<br />";
 		if ( ! $print_preview) {
 			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.voucher_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
-			$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.voucher_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($pagination_counter, $page_count);
+			$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($pagination_counter, $page_count);
 			$ledgerst_q = $this->db->get();
 		} else {
 			$page_count = 0;
 			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.voucher_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
-			$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.voucher_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
+			$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			$ledgerst_q = $this->db->get();
 		}
 
@@ -100,7 +100,7 @@
 
 			/* Calculating previous balance */
 			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.voucher_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
-			$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.voucher_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($page_count, 0);
+			$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($page_count, 0);
 			$prevbal_q = $this->db->get();
 			foreach ($prevbal_q->result() as $row )
 			{

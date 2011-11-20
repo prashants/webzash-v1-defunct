@@ -21,9 +21,9 @@ class Voucher_model extends Model {
 		}
 	}
 
-	function get_voucher($voucher_id, $voucher_type_id)
+	function get_voucher($entry_id, $voucher_type_id)
 	{
-		$this->db->from('vouchers')->where('id', $voucher_id)->where('voucher_type', $voucher_type_id)->limit(1);
+		$this->db->from('vouchers')->where('id', $entry_id)->where('voucher_type', $voucher_type_id)->limit(1);
 		$voucher_q = $this->db->get();
 		return $voucher_q->row();
 	}

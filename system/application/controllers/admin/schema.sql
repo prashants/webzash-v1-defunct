@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS vouchers (
 
 CREATE TABLE IF NOT EXISTS entry_items (
   id int(11) NOT NULL AUTO_INCREMENT,
-  voucher_id int(11) NOT NULL,
+  entry_id int(11) NOT NULL,
   ledger_id int(11) NOT NULL,
   amount decimal(15,2) NOT NULL DEFAULT '0.00',
   dc char(1) NOT NULL,

@@ -69,7 +69,7 @@ class Ledger_model extends Model {
 			return "(Error)";
 	}
 
-	function get_voucher_name($voucher_id, $voucher_type_id)
+	function get_voucher_name($entry_id, $voucher_type_id)
 	{
 		/* Selecting whether to show debit side Ledger or credit side Ledger */
 		$current_voucher_type = entry_type_info($voucher_type_id);
@@ -79,7 +79,7 @@ class Ledger_model extends Model {
 			$ledger_type = 'D';
 
 		$this->db->select('ledgers.name as name');
-		$this->db->from('entry_items')->join('ledgers', 'entry_items.ledger_id = ledgers.id')->where('entry_items.voucher_id', $voucher_id)->where('entry_items.dc', $ledger_type);
+		$this->db->from('entry_items')->join('ledgers', 'entry_items.ledger_id = ledgers.id')->where('entry_items.entry_id', $entry_id)->where('entry_items.dc', $ledger_type);
 		$ledger_q = $this->db->get();
 		if ( ! $ledger = $ledger_q->row())
 		{
@@ -88,22 +88,22 @@ class Ledger_model extends Model {
 			$ledger_multiple = ($ledger_q->num_rows() > 1) ? TRUE : FALSE;
 			$html = '';
 			if ($ledger_multiple)
-				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $entry_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
 			else
-				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $voucher_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $entry_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
 			return $html;
 		}
 		return;
 	}
 
-	function get_opp_ledger_name($voucher_id, $voucher_type_label, $ledger_type, $output_type)
+	function get_opp_ledger_name($entry_id, $voucher_type_label, $ledger_type, $output_type)
 	{
 		$output = '';
 		if ($ledger_type == 'D')
 			$opp_ledger_type = 'C';
 		else
 			$opp_ledger_type = 'D';
-		$this->db->from('entry_items')->where('voucher_id', $voucher_id)->where('dc', $opp_ledger_type);
+		$this->db->from('entry_items')->where('entry_id', $entry_id)->where('dc', $opp_ledger_type);
 		$opp_voucher_name_q = $this->db->get();
 		if ($opp_voucher_name_d = $opp_voucher_name_q->row())
 		{
@@ -111,12 +111,12 @@ class Ledger_model extends Model {
 			if ($opp_voucher_name_q->num_rows() > 1)
 			{
 				if ($output_type == 'html')
-					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $voucher_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
+					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $entry_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
 				else
 					$output = "(" . $opp_ledger_name . ")";
 			} else {
 				if ($output_type == 'html')
-					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $voucher_id, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
+					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $entry_id, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
 				else
 					$output = $opp_ledger_name;
 			}
@@ -175,7 +175,7 @@ class Ledger_model extends Model {
 	/* Return debit total as positive value */
 	function get_dr_total($ledger_id)
 	{
-		$this->db->select_sum('amount', 'drtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.voucher_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'D');
+		$this->db->select_sum('amount', 'drtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'D');
 		$dr_total_q = $this->db->get();
 		if ($dr_total = $dr_total_q->row())
 			return $dr_total->drtotal;
@@ -186,7 +186,7 @@ class Ledger_model extends Model {
 	/* Return credit total as positive value */
 	function get_cr_total($ledger_id)
 	{
-		$this->db->select_sum('amount', 'crtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.voucher_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'C');
+		$this->db->select_sum('amount', 'crtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'C');
 		$cr_total_q = $this->db->get();
 		if ($cr_total = $cr_total_q->row())
 			return $cr_total->crtotal;
