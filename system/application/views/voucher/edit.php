@@ -248,12 +248,12 @@ $(document).ready(function() {
 <?php
 	echo form_open('voucher/edit/' . $current_voucher_type['label'] . "/" . $entry_id);
 	echo "<p>";
-	echo form_label('Voucher Number', 'voucher_number');
+	echo form_label('Entry Number', 'voucher_number');
 	echo " ";
 	echo $current_voucher_type['prefix'] . form_input($voucher_number) . $current_voucher_type['suffix'];
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo "<span id=\"tooltip-target-1\">";
-	echo form_label('Voucher Date', 'voucher_date');
+	echo form_label('Entry Date', 'voucher_date');
 	echo " ";
 	echo form_input_date_restrict($voucher_date);
 	echo "</span>";
@@ -326,9 +326,9 @@ $(document).ready(function() {
 	echo "<p>";
 	echo form_submit('submit', 'Update');
 	echo " ";
-	echo anchor('voucher/edit/' . $current_voucher_type['label'] . "/" . $entry_id, 'Reload', array('title' => 'Reload ' . $current_voucher_type['name'] . ' Voucher Original Data'));
+	echo anchor('voucher/edit/' . $current_voucher_type['label'] . "/" . $entry_id, 'Reload', array('title' => 'Reload ' . $current_voucher_type['name'] . ' Entry Original Data'));
 	echo " | ";
-	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' . $current_voucher_type['name'] . ' Vouchers'));
+	echo anchor('voucher/show/' . $current_voucher_type['label'], 'Back', array('title' => 'Back to ' . $current_voucher_type['name'] . ' Entries'));
 	echo "</p>";
 
 	echo form_close();

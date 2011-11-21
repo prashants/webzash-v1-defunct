@@ -35,21 +35,21 @@ class Voucher extends Controller {
 			}
 			$data['tag_id'] = $tag_id;
 			$tag_name = $this->Tag_model->tag_name($tag_id);
-			$this->template->set('page_title', 'Vouchers Tagged "' . $tag_name . '"');
+			$this->template->set('page_title', 'Entries Tagged "' . $tag_name . '"');
 		} else if ($entry_type == 'all') {
 			$entry_type_id = 0;
-			$this->template->set('page_title', 'All Vouchers');
+			$this->template->set('page_title', 'All Entries');
 		} else {
 			$entry_type_id = entry_type_name_to_id($entry_type);
 			if ( ! $entry_type_id)
 			{
-				$this->messages->add('Invalid Voucher type specified. Showing all Vouchers.', 'error');
+				$this->messages->add('Invalid Entry type specified. Showing all Entries.', 'error');
 				redirect('voucher/show/all');
 				return;
 			} else {
 				$current_entry_type = entry_type_info($entry_type_id);
-				$this->template->set('page_title', $current_entry_type['name'] . ' Vouchers');
-				$this->template->set('nav_links', array('voucher/add/' . $current_entry_type['label'] => 'New ' . $current_entry_type['name'] . ' Voucher'));
+				$this->template->set('page_title', $current_entry_type['name'] . ' Entries');
+				$this->template->set('nav_links', array('voucher/add/' . $current_entry_type['label'] => 'New ' . $current_entry_type['name'] . ' Entry'));
 			}
 		}
 
@@ -126,7 +126,7 @@ class Voucher extends Controller {
 			$entry_added_type_label_temp = $this->session->userdata('entry_added_type_label');
 			$entry_added_type_name_temp = $this->session->userdata('entry_added_type_name');
 			$entry_added_number_temp = $this->session->userdata('entry_added_number');
-			$entry_added_message = 'Added ' . $entry_added_type_name_temp . ' Voucher number ' . full_entry_number($entry_added_type_id_temp, $entry_added_number_temp) . ".";
+			$entry_added_message = 'Added ' . $entry_added_type_name_temp . ' Entry number ' . full_entry_number($entry_added_type_id_temp, $entry_added_number_temp) . ".";
 			$entry_added_message .= " You can [ ";
 			$entry_added_message .= anchor('voucher/view/' . $entry_added_type_label_temp . "/" . $entry_added_id_temp, 'View', array('class' => 'anchor-link-a')) . " | ";
 			$entry_added_message .= anchor('voucher/edit/' . $entry_added_type_label_temp . "/" . $entry_added_id_temp, 'Edit', array('class' => 'anchor-link-a')) . " | ";
@@ -151,7 +151,7 @@ class Voucher extends Controller {
 			$entry_updated_type_label_temp = $this->session->userdata('entry_updated_type_label');
 			$entry_updated_type_name_temp = $this->session->userdata('entry_updated_type_name');
 			$entry_updated_number_temp = $this->session->userdata('entry_updated_number');
-			$entry_updated_message = 'Updated ' . $entry_updated_type_name_temp . ' Voucher number ' . full_entry_number($entry_updated_type_id_temp, $entry_updated_number_temp) . ".";
+			$entry_updated_message = 'Updated ' . $entry_updated_type_name_temp . ' Entry number ' . full_entry_number($entry_updated_type_id_temp, $entry_updated_number_temp) . ".";
 			$entry_updated_message .= " You can [ ";
 			$entry_updated_message .= anchor('voucher/view/' . $entry_updated_type_label_temp . "/" . $entry_updated_id_temp, 'View', array('class' => 'anchor-link-a')) . " | ";
 			$entry_updated_message .= anchor('voucher/edit/' . $entry_updated_type_label_temp . "/" . $entry_updated_id_temp, 'Edit', array('class' => 'anchor-link-a')) . " | ";
@@ -182,23 +182,23 @@ class Voucher extends Controller {
 
 	function view($entry_type, $entry_id = 0)
 	{
-		/* Voucher Type */
+		/* Entry Type */
 		$entry_type_id = entry_type_name_to_id($entry_type);
 		if ( ! $entry_type_id)
 		{
-			$this->messages->add('Invalid Voucher type.', 'error');
+			$this->messages->add('Invalid Entry type.', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else {
 			$current_entry_type = entry_type_info($entry_type_id);
 		}
 
-		$this->template->set('page_title', 'View ' . $current_entry_type['name'] . ' Voucher');
+		$this->template->set('page_title', 'View ' . $current_entry_type['name'] . ' Entry');
 
 		/* Load current entry details */
 		if ( ! $cur_entry = $this->Voucher_model->get_voucher($entry_id, $entry_type_id))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_entry_type['label']);
 			return;
 		}
@@ -207,7 +207,7 @@ class Voucher extends Controller {
 		$cur_entry_ledgers = $this->db->get();
 		if ($cur_entry_ledgers->num_rows() < 1)
 		{
-			$this->messages->add('Voucher has no associated Ledger accounts.', 'error');
+			$this->messages->add('Entry has no associated Ledger accounts.', 'error');
 		}
 		$data['cur_entry'] = $cur_entry;
 		$data['cur_entry_ledgers'] = $cur_entry_ledgers;
@@ -235,18 +235,18 @@ class Voucher extends Controller {
 			return;
 		}
 
-		/* Voucher Type */
+		/* Entry Type */
 		$entry_type_id = entry_type_name_to_id($entry_type);
 		if ( ! $entry_type_id)
 		{
-			$this->messages->add('Invalid Voucher type.', 'error');
+			$this->messages->add('Invalid Entry type.', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else {
 			$current_entry_type = entry_type_info($entry_type_id);
 		}
 
-		$this->template->set('page_title', 'New ' . $current_entry_type['name'] . ' Voucher');
+		$this->template->set('page_title', 'New ' . $current_entry_type['name'] . ' Entry');
 
 		/* Form fields */
 		$data['entry_number'] = array(
@@ -277,12 +277,12 @@ class Voucher extends Controller {
 
 		/* Form validations */
 		if ($current_entry_type['numbering'] == '2')
-			$this->form_validation->set_rules('entry_number', 'Voucher Number', 'trim|required|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|required|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
 		else if ($current_entry_type['numbering'] == '3')
-			$this->form_validation->set_rules('entry_number', 'Voucher Number', 'trim|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
 		else
-			$this->form_validation->set_rules('entry_number', 'Voucher Number', 'trim|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
-		$this->form_validation->set_rules('entry_date', 'Voucher Date', 'trim|required|is_date|is_date_within_range');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniqueentryno[' . $entry_type_id . ']');
+		$this->form_validation->set_rules('entry_date', 'Entry Date', 'trim|required|is_date|is_date_within_range');
 		$this->form_validation->set_rules('entry_narration', 'trim');
 		$this->form_validation->set_rules('entry_tag', 'Tag', 'trim|is_natural');
 
@@ -376,7 +376,7 @@ class Voucher extends Controller {
 					{
 						if ($valid_ledger->type != 'B')
 						{
-							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Vouchers can have only Bank and Cash Ledgers accounts.', 'error');
+							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Entries can have only Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'voucher/add', $data);
 							return;
 						}
@@ -384,7 +384,7 @@ class Voucher extends Controller {
 					{
 						if ($valid_ledger->type == 'B')
 						{
-							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Vouchers cannot have Bank and Cash Ledgers accounts.', 'error');
+							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Entries cannot have Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'voucher/add', $data);
 							return;
 						}
@@ -404,7 +404,7 @@ class Voucher extends Controller {
 				$this->template->load('template', 'voucher/add', $data);
 				return;
 			} else if (float_ops($dr_total, 0, '==') && float_ops($cr_total, 0, '==')) {
-				$this->messages->add('Cannot save empty Voucher.', 'error');
+				$this->messages->add('Cannot save empty Entry.', 'error');
 				$this->template->load('template', 'voucher/add', $data);
 				return;
 			}
@@ -474,8 +474,8 @@ class Voucher extends Controller {
 			if ( ! $this->db->insert('vouchers', $insert_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error addding Voucher.', 'error');
-				$this->logger->write_message("error", "Error adding " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $data_number) . " since failed inserting entry");
+				$this->messages->add('Error addding Entry.', 'error');
+				$this->logger->write_message("error", "Error adding " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $data_number) . " since failed inserting entry");
 				$this->template->load('template', 'voucher/add', $data);
 				return;
 			} else {
@@ -514,8 +514,8 @@ class Voucher extends Controller {
 				if ( ! $this->db->insert('entry_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Voucher.', 'error');
-					$this->logger->write_message("error", "Error adding " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $data_number) . " since failed inserting entry ledger item " . "[id:" . $data_ledger_id . "]");
+					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Entry.', 'error');
+					$this->logger->write_message("error", "Error adding " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $data_number) . " since failed inserting entry ledger item " . "[id:" . $data_ledger_id . "]");
 					$this->template->load('template', 'voucher/add', $data);
 					return;
 				}
@@ -529,8 +529,8 @@ class Voucher extends Controller {
 			if ( ! $this->db->where('id', $entry_id)->update('vouchers', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating Voucher total.', 'error');
-				$this->logger->write_message("error", "Error adding " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $data_number) . " since failed updating debit and credit total");
+				$this->messages->add('Error updating Entry total.', 'error');
+				$this->logger->write_message("error", "Error adding " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $data_number) . " since failed updating debit and credit total");
 				$this->template->load('template', 'voucher/add', $data);
 				return;
 			}
@@ -546,7 +546,7 @@ class Voucher extends Controller {
 			$this->session->set_userdata('entry_added_number', $data_number);
 
 			/* Showing success message in show() method since message is too long for storing it in session */
-			$this->logger->write_message("success", "Added " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
+			$this->logger->write_message("success", "Added " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
 			redirect('voucher/show/' . $current_entry_type['label']);
 			$this->template->load('template', 'voucher/add', $data);
 			return;
@@ -572,28 +572,28 @@ class Voucher extends Controller {
 			return;
 		}
 
-		/* Voucher Type */
+		/* Entry Type */
 		$entry_type_id = entry_type_name_to_id($entry_type);
 		if ( ! $entry_type_id)
 		{
-			$this->messages->add('Invalid Voucher type.', 'error');
+			$this->messages->add('Invalid Entry type.', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else {
 			$current_entry_type = entry_type_info($entry_type_id);
 		}
 
-		$this->template->set('page_title', 'Edit ' . $current_entry_type['name'] . ' Voucher');
+		$this->template->set('page_title', 'Edit ' . $current_entry_type['name'] . ' Entry');
 
 		/* Load current entry details */
 		if ( ! $cur_entry = $this->Voucher_model->get_entry($entry_id, $entry_type_id))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_entry_type['label']);
 			return;
 		}
 
-		/* Form fields - Voucher */
+		/* Form fields - Entry */
 		$data['entry_number'] = array(
 			'name' => 'entry_number',
 			'id' => 'entry_number',
@@ -663,10 +663,10 @@ class Voucher extends Controller {
 
 		/* Form validations */
 		if ($current_entry_type['numbering'] == '3')
-			$this->form_validation->set_rules('entry_number', 'Voucher Number', 'trim|is_natural_no_zero|uniqueentrynowithid[' . $entry_type_id . '.' . $entry_id . ']');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|is_natural_no_zero|uniqueentrynowithid[' . $entry_type_id . '.' . $entry_id . ']');
 		else
-			$this->form_validation->set_rules('entry_number', 'Voucher Number', 'trim|required|is_natural_no_zero|uniqueentrynowithid[' . $entry_type_id . '.' . $entry_id . ']');
-		$this->form_validation->set_rules('entry_date', 'Voucher Date', 'trim|required|is_date|is_date_within_range');
+			$this->form_validation->set_rules('entry_number', 'Entry Number', 'trim|required|is_natural_no_zero|uniqueentrynowithid[' . $entry_type_id . '.' . $entry_id . ']');
+		$this->form_validation->set_rules('entry_date', 'Entry Date', 'trim|required|is_date|is_date_within_range');
 		$this->form_validation->set_rules('entry_narration', 'trim');
 		$this->form_validation->set_rules('entry_tag', 'Tag', 'trim|is_natural');
 
@@ -745,7 +745,7 @@ class Voucher extends Controller {
 					{
 						if ($valid_ledger->type != 'B')
 						{
-							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Vouchers can have only Bank and Cash Ledgers accounts.', 'error');
+							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Entries can have only Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'voucher/edit', $data);
 							return;
 						}
@@ -753,7 +753,7 @@ class Voucher extends Controller {
 					{
 						if ($valid_ledger->type == 'B')
 						{
-							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Vouchers cannot have Bank and Cash Ledgers accounts.', 'error');
+							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Entries cannot have Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'voucher/edit', $data);
 							return;
 						}
@@ -772,7 +772,7 @@ class Voucher extends Controller {
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			} else if (float_ops($dr_total, 0, '==') || float_ops($cr_total, 0, '==')) {
-				$this->messages->add('Cannot save empty Voucher.', 'error');
+				$this->messages->add('Cannot save empty Entry.', 'error');
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			}
@@ -835,8 +835,8 @@ class Voucher extends Controller {
 			if ( ! $this->db->where('id', $entry_id)->update('vouchers', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating Voucher account.', 'error');
-				$this->logger->write_message("error", "Error updating entry details for " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
+				$this->messages->add('Error updating Entry account.', 'error');
+				$this->logger->write_message("error", "Error updating entry details for " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			}
@@ -845,8 +845,8 @@ class Voucher extends Controller {
 			if ( ! $this->db->delete('entry_items', array('entry_id' => $entry_id)))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error deleting previous Ledger accounts from Voucher.', 'error');
-				$this->logger->write_message("error", "Error deleting previous entry items for " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
+				$this->messages->add('Error deleting previous Ledger accounts from Entry.', 'error');
+				$this->logger->write_message("error", "Error deleting previous entry items for " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			}
@@ -884,8 +884,8 @@ class Voucher extends Controller {
 				if ( ! $this->db->insert('entry_items', $insert_ledger_data))
 				{
 					$this->db->trans_rollback();
-					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Voucher.', 'error');
-					$this->logger->write_message("error", "Error adding Ledger account item [id:" . $data_ledger_id . "] for " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
+					$this->messages->add('Error adding Ledger account - ' . $data_ledger_id . ' to Entry.', 'error');
+					$this->logger->write_message("error", "Error adding Ledger account item [id:" . $data_ledger_id . "] for " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
 					$this->template->load('template', 'voucher/edit', $data);
 					return;
 				}
@@ -899,8 +899,8 @@ class Voucher extends Controller {
 			if ( ! $this->db->where('id', $entry_id)->update('vouchers', $update_data))
 			{
 				$this->db->trans_rollback();
-				$this->messages->add('Error updating Voucher total.', 'error');
-				$this->logger->write_message("error", "Error updating entry total for " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
+				$this->messages->add('Error updating Entry total.', 'error');
+				$this->logger->write_message("error", "Error updating entry total for " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
 				$this->template->load('template', 'voucher/edit', $data);
 				return;
 			}
@@ -920,7 +920,7 @@ class Voucher extends Controller {
 				$this->session->set_userdata('entry_updated_has_reconciliation', FALSE);
 
 			/* Showing success message in show() method since message is too long for storing it in session */
-			$this->logger->write_message("success", "Updated " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
+			$this->logger->write_message("success", "Updated " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $data_number) . " [id:" . $entry_id . "]");
 
 			redirect('voucher/show/' . $current_entry_type['label']);
 			return;
@@ -946,11 +946,11 @@ class Voucher extends Controller {
 			return;
 		}
 
-		/* Voucher Type */
+		/* Entry Type */
 		$entry_type_id = entry_type_name_to_id($entry_type);
 		if ( ! $entry_type_id)
 		{
-			$this->messages->add('Invalid Voucher type.', 'error');
+			$this->messages->add('Invalid Entry type.', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else {
@@ -960,7 +960,7 @@ class Voucher extends Controller {
 		/* Load current entry details */
 		if ( ! $cur_entry = $this->Voucher_model->get_entry($entry_id, $entry_type_id))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_entry_type['label']);
 			return;
 		}
@@ -969,22 +969,22 @@ class Voucher extends Controller {
 		if ( ! $this->db->delete('entry_items', array('entry_id' => $entry_id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Voucher - Ledger accounts.', 'error');
-			$this->logger->write_message("error", "Error deleting ledger entries for " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
+			$this->messages->add('Error deleting Entry - Ledger accounts.', 'error');
+			$this->logger->write_message("error", "Error deleting ledger entries for " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
 			redirect('voucher/view/' . $current_entry_type['label'] . '/' . $entry_id);
 			return;
 		}
 		if ( ! $this->db->delete('vouchers', array('id' => $entry_id)))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Voucher entry.', 'error');
-			$this->logger->write_message("error", "Error deleting Voucher entry for " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
+			$this->messages->add('Error deleting Entry entry.', 'error');
+			$this->logger->write_message("error", "Error deleting Entry entry for " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
 			redirect('voucher/view/' . $current_entry_type['label'] . '/' . $entry_id);
 			return;
 		}
 		$this->db->trans_complete();
-		$this->messages->add('Deleted ' . $current_entry_type['name'] . ' Voucher.', 'success');
-		$this->logger->write_message("success", "Deleted " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
+		$this->messages->add('Deleted ' . $current_entry_type['name'] . ' Entry.', 'success');
+		$this->logger->write_message("success", "Deleted " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
 		redirect('voucher/show/' . $current_entry_type['label']);
 		return;
 	}
@@ -1003,11 +1003,11 @@ class Voucher extends Controller {
 			return;
 		}
 
-		/* Voucher Type */
+		/* Entry Type */
 		$entry_type_id = entry_type_name_to_id($entry_type);
 		if ( ! $entry_type_id)
 		{
-			$this->messages->add('Invalid Voucher type.', 'error');
+			$this->messages->add('Invalid Entry type.', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else {
@@ -1017,7 +1017,7 @@ class Voucher extends Controller {
 		/* Load current entry details */
 		if ( ! $cur_entry = $this->Voucher_model->get_entry($entry_id, $entry_type_id))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_entry_type['label']);
 			return;
 		}
@@ -1049,7 +1049,7 @@ class Voucher extends Controller {
 			}
 		}
 
-		/* Download Voucher */
+		/* Download Entry */
 		$file_name = $current_entry_type['name'] . '_entry_' . $cur_entry->number . ".html";
 		$download_data = $this->load->view('voucher/downloadpreview', $data, TRUE);
 		force_download($file_name, $download_data);
@@ -1069,11 +1069,11 @@ class Voucher extends Controller {
 			return;
 		}
 
-		/* Voucher Type */
+		/* Entry Type */
 		$entry_type_id = entry_type_name_to_id($entry_type);
 		if ( ! $entry_type_id)
 		{
-			$this->messages->add('Invalid Voucher type.', 'error');
+			$this->messages->add('Invalid Entry type.', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else {
@@ -1083,7 +1083,7 @@ class Voucher extends Controller {
 		/* Load current entry details */
 		if ( ! $cur_entry = $this->Voucher_model->get_entry($entry_id, $entry_type_id))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_entry_type['label']);
 			return;
 		}
@@ -1133,11 +1133,11 @@ class Voucher extends Controller {
 			return;
 		}
 
-		/* Voucher Type */
+		/* Entry Type */
 		$entry_type_id = entry_type_name_to_id($entry_type);
 		if ( ! $entry_type_id)
 		{
-			$this->messages->add('Invalid Voucher type.', 'error');
+			$this->messages->add('Invalid Entry type.', 'error');
 			redirect('voucher/show/all');
 			return;
 		} else {
@@ -1149,7 +1149,7 @@ class Voucher extends Controller {
 		/* Load current entry details */
 		if ( ! $cur_entry = $this->Voucher_model->get_voucher($entry_id, $entry_type_id))
 		{
-			$this->messages->add('Invalid Voucher.', 'error');
+			$this->messages->add('Invalid Entry.', 'error');
 			redirect('voucher/show/' . $current_entry_type['label']);
 			return;
 		}
@@ -1232,15 +1232,15 @@ class Voucher extends Controller {
 			/* Sending email */
 			$this->email->from('', 'Webzash');
 			$this->email->to($this->input->post('email_to', TRUE));
-			$this->email->subject($current_entry_type['name'] . ' Voucher No. ' . full_entry_number($entry_type_id, $cur_entry->number));
+			$this->email->subject($current_entry_type['name'] . ' Entry No. ' . full_entry_number($entry_type_id, $cur_entry->number));
 			$this->email->message($message);
 			if ($this->email->send())
 			{
 				$data['message'] = "Email sent.";
-				$this->logger->write_message("success", "Emailed " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
+				$this->logger->write_message("success", "Emailed " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
 			} else {
 				$data['error'] = "Error sending email. Check you email settings.";
-				$this->logger->write_message("error", "Error emailing " . $current_entry_type['name'] . " Voucher number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
+				$this->logger->write_message("error", "Error emailing " . $current_entry_type['name'] . " Entry number " . full_entry_number($entry_type_id, $cur_entry->number) . " [id:" . $entry_id . "]");
 			}
 			$this->load->view('voucher/email', $data);
 			return;

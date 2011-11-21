@@ -298,7 +298,7 @@ class Tag extends Controller {
 		if ( !  $this->db->where('tag_id', $id)->update('vouchers', $update_data))
 		{
 			$this->db->trans_rollback();
-			$this->messages->add('Error deleting Tag from Vouchers.', 'error');
+			$this->messages->add('Error deleting Tag from Entries.', 'error');
 			$this->logger->write_message("error", "Error deleting tag called " . $data_tag->title . " [id:" . $id . "] from vouchers");
 			redirect('tag');
 			return;

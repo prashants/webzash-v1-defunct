@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title><?php $current_voucher_type['name']; ?> Voucher Number <?php echo $voucher_number; ?></title>
+<title><?php $current_voucher_type['name']; ?> Entry Number <?php echo $voucher_number; ?></title>
 
 <style type="text/css">
 	body {
@@ -63,10 +63,10 @@
 	<div id="print-account-name"><span class="value"><?php echo  $this->config->item('account_name'); ?></span></div>
 	<div id="print-account-address"><span class="value"><?php echo $this->config->item('account_address'); ?></span></div>
 	<br />
-	<div id="print-voucher-type"><span class="value"><?php echo $current_voucher_type['name']; ?> Voucher</span></div>
+	<div id="print-voucher-type"><span class="value"><?php echo $current_voucher_type['name']; ?> Entry</span></div>
 	<br />
-	<div id="print-voucher-number"><?php echo $current_voucher_type['name']; ?> Voucher Number : <span class="value"><?php echo full_entry_number($voucher_type_id, $voucher_number); ?></span></div>
-	<div id="print-voucher-number"><?php echo $current_voucher_type['name']; ?> Voucher Date : <span class="value"><?php echo $voucher_date; ?></span></div>
+	<div id="print-voucher-number"><?php echo $current_voucher_type['name']; ?> Entry Number : <span class="value"><?php echo full_entry_number($voucher_type_id, $voucher_number); ?></span></div>
+	<div id="print-voucher-number"><?php echo $current_voucher_type['name']; ?> Entry Date : <span class="value"><?php echo $voucher_date; ?></span></div>
 	<br />
 	<table id="print-voucher-table">
 		<thead>

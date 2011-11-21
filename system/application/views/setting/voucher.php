@@ -5,25 +5,25 @@
 	echo form_fieldset('Prefix Settings', array('class' => "fieldset-auto-width"));
 
 	echo "<p>";
-	echo form_label('Prefix Receipt Vouchers', 'receipt_prefix');
+	echo form_label('Prefix Receipt Entries', 'receipt_prefix');
 	echo "<br />";
 	echo form_input($receipt_prefix);
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Prefix Payment Vouchers', 'payment_prefix');
+	echo form_label('Prefix Payment Entries', 'payment_prefix');
 	echo "<br />";
 	echo form_input($payment_prefix);
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Prefix Contra Vouchers', 'contra_prefix');
+	echo form_label('Prefix Contra Entries', 'contra_prefix');
 	echo "<br />";
 	echo form_input($contra_prefix);
 	echo "</p>";
 
 	echo "<p>";
-	echo form_label('Prefix Journal Vouchers', 'journal_prefix');
+	echo form_label('Prefix Journal Entries', 'journal_prefix');
 	echo "<br />";
 	echo form_input($journal_prefix);
 	echo "</p>";

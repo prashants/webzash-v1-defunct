@@ -88,9 +88,9 @@ class Ledger_model extends Model {
 			$ledger_multiple = ($ledger_q->num_rows() > 1) ? TRUE : FALSE;
 			$html = '';
 			if ($ledger_multiple)
-				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $entry_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $entry_id, "(" . $ledger->name . ")", array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 			else
-				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $entry_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+				$html .= anchor('voucher/view/' . $current_voucher_type['label'] . "/" . $entry_id, $ledger->name, array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 			return $html;
 		}
 		return;
@@ -111,12 +111,12 @@ class Ledger_model extends Model {
 			if ($opp_voucher_name_q->num_rows() > 1)
 			{
 				if ($output_type == 'html')
-					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $entry_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
+					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $entry_id, "(" . $opp_ledger_name . ")", array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
 				else
 					$output = "(" . $opp_ledger_name . ")";
 			} else {
 				if ($output_type == 'html')
-					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $entry_id, $opp_ledger_name, array('title' => 'View ' . ' Voucher', 'class' => 'anchor-link-a'));
+					$output = anchor('voucher/view/' . $voucher_type_label . '/' . $entry_id, $opp_ledger_name, array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
 				else
 					$output = $opp_ledger_name;
 			}

@@ -267,14 +267,14 @@ class Ledger extends Controller {
 				$entry_type_all = $this->config->item('account_entry_types');
 				foreach ($entry_type_all as $entry_type_id => $row)
 				{
-					/* Check for Voucher types where bank_cash_ledger_restriction is for all ledgers */
+					/* Check for Entry types where bank_cash_ledger_restriction is for all ledgers */
 					if ($row['bank_cash_ledger_restriction'] == 4)
 					{
 						$this->db->from('entry_items')->join('vouchers', 'entry_items.entry_id = vouchers.id')->where('vouchers.voucher_type', $entry_type_id)->where('entry_items.ledger_id', $id);
 						$all_ledger_bank_cash_count = $this->db->get()->num_rows();
 						if ($all_ledger_bank_cash_count > 0)
 						{
-							$this->messages->add('Cannot remove the Bank or Cash Account status of this Ledger account since it is still linked with ' . $all_ledger_bank_cash_count . ' ' . $row['name'] . ' Vouchers entries.', 'error');
+							$this->messages->add('Cannot remove the Bank or Cash Account status of this Ledger account since it is still linked with ' . $all_ledger_bank_cash_count . ' ' . $row['name'] . ' entries.', 'error');
 							$this->template->load('template', 'ledger/edit', $data);
 							return;
 						}

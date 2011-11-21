@@ -7,7 +7,7 @@
 		echo form_input_ledger('ledger_id', $ledger_id, '', $type = 'reconciliation');
 		echo "</p>";
 		echo "<p>";
-		echo form_checkbox('show_all', 1, $show_all) . " Show All Vouchers";
+		echo form_checkbox('show_all', 1, $show_all) . " Show All Entries";
 		echo "</p>";
 		echo "<p>";
 		echo form_submit('submit', 'Submit');
@@ -130,7 +130,7 @@
 			echo date_mysql_to_php_display($row->vdate);
 			echo "</td>";
 			echo "<td>";
-			echo anchor('voucher/view/' . $current_voucher_type['label'] . '/' . $row->vid, full_entry_number($row->vtype, $row->vnumber), array('title' => 'View ' . $current_voucher_type['name'] . ' Voucher', 'class' => 'anchor-link-a'));
+			echo anchor('voucher/view/' . $current_voucher_type['label'] . '/' . $row->vid, full_entry_number($row->vtype, $row->vnumber), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 			echo "</td>";
 
 			/* Getting opposite Ledger name */
