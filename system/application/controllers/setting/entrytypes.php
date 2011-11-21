@@ -21,7 +21,7 @@ class EntryTypes extends Controller {
 	function index()
 	{
 		$this->template->set('page_title', 'Entry Types');
-		$this->template->set('nav_links', array('setting/entrytypes/add' => 'New Entry Type'));
+		$this->template->set('nav_links', array('setting/entrytypes/add' => 'Add Entry Type'));
 
 		$this->db->from('entry_types')->order_by('id', 'asc');
 		$data['entry_type_data'] = $this->db->get();

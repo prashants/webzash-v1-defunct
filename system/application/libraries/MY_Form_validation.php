@@ -30,11 +30,11 @@ class MY_Form_validation extends CI_Form_validation {
 			return TRUE;
 	}
 
-	function uniquevoucherno($str, $type)
+	function uniqueentryno($str, $type)
 	{
 		$CI =& get_instance();
 
-		$CI->form_validation->set_message('uniquevoucherno', 'The %s that you requested is already in use.');
+		$CI->form_validation->set_message('uniqueentryno', 'The %s that you requested is already in use.');
 
 		$CI->db->from('vouchers')->where('number', $str)->where('voucher_type', $type);
 		$dup_query = $CI->db->get();
@@ -44,12 +44,12 @@ class MY_Form_validation extends CI_Form_validation {
 			return TRUE;
 	}
 
-	function uniquevouchernowithid($str, $field)
+	function uniqueentrynowithid($str, $field)
 	{
 		$CI =& get_instance();
 
 		list ($type, $id) = explode('.', $field, 2);
-		$CI->form_validation->set_message('uniquevouchernowithid', 'The %s that you requested is already in use.');
+		$CI->form_validation->set_message('uniqueentrynowithid', 'The %s that you requested is already in use.');
 
 		$CI->db->from('vouchers')->where('number', $str)->where('voucher_type', $type)->where('id !=', $id);
 		$dup_query = $CI->db->get();

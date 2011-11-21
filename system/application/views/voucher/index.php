@@ -16,7 +16,7 @@
 	</thead>
 	<tbody>
 	<?php
-		foreach ($voucher_data->result() as $row)
+		foreach ($entry_data->result() as $row)
 		{
 			$current_voucher_type = entry_type_info($row->voucher_type);
 
