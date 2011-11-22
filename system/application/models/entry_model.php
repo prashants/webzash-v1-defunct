@@ -1,15 +1,15 @@
 <?php
 
-class Voucher_model extends Model {
+class Entry_model extends Model {
 
-	function Voucher_model()
+	function Entry_model()
 	{
 		parent::Model();
 	}
 
-	function next_voucher_number($voucher_type_id)
+	function next_entry_number($entry_type_id)
 	{
-		$this->db->select_max('number', 'lastno')->from('vouchers')->where('voucher_type', $voucher_type_id);
+		$this->db->select_max('number', 'lastno')->from('vouchers')->where('voucher_type', $entry_type_id);
 		$last_no_q = $this->db->get();
 		if ($row = $last_no_q->row())
 		{
@@ -21,10 +21,10 @@ class Voucher_model extends Model {
 		}
 	}
 
-	function get_voucher($entry_id, $voucher_type_id)
+	function get_entry($entry_id, $entry_type_id)
 	{
-		$this->db->from('vouchers')->where('id', $entry_id)->where('voucher_type', $voucher_type_id)->limit(1);
-		$voucher_q = $this->db->get();
-		return $voucher_q->row();
+		$this->db->from('vouchers')->where('id', $entry_id)->where('voucher_type', $entry_type_id)->limit(1);
+		$entry_q = $this->db->get();
+		return $entry_q->row();
 	}
 }

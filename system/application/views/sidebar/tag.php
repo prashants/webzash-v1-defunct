@@ -8,7 +8,7 @@ echo "<div class=\"tag-title\">Tags<span class=\"float-right\">" . anchor("tag",
 		foreach ($tags as $id => $title)
 		{
 
-			echo "<li>" . $this->Tag_model->show_voucher_tag_link($id) . "</li>";
+			echo "<li>" . $this->Tag_model->show_entry_tag_link($id) . "</li>";
 		}
 	} else {
 		echo "<li>No tags defined</li>";

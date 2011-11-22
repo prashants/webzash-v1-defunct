@@ -21,7 +21,7 @@ class Tag_model extends Model {
 		return $options;
 	}
 
-	function show_voucher_tag($tag_id)
+	function show_entry_tag($tag_id)
 	{
 		if ($tag_id < 1)
 			return "";
@@ -33,14 +33,14 @@ class Tag_model extends Model {
 			return "";
 	}
 
-	function show_voucher_tag_link($tag_id)
+	function show_entry_tag_link($tag_id)
 	{
 		if ($tag_id < 1)
 			return "";
 		$this->db->from('tags')->where('id', $tag_id)->limit(1);
 		$tag_q = $this->db->get();
 		if ($tag = $tag_q->row())
-			return "<span class=\"tags\" style=\"color:#" . $tag->color . "; background-color:#" . $tag->background . "\">" . anchor("voucher/show/tag/" . $tag->id , $tag->title, array('style' => 'text-decoration:none;color:#' . $tag->color . ';')) . "</span>";
+			return "<span class=\"tags\" style=\"color:#" . $tag->color . "; background-color:#" . $tag->background . "\">" . anchor("entry/show/tag/" . $tag->id , $tag->title, array('style' => 'text-decoration:none;color:#' . $tag->color . ';')) . "</span>";
 		else
 			return "";
 	}
