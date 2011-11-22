@@ -181,10 +181,10 @@ class General {
 		{
 			$CI->messages->add('You need to create a voucher type before you can create any vouchers.', 'error');
 		}
-		$voucher_type_config = array();
+		$entry_type_config = array();
 		foreach ($entry_types->result() as $id => $row)
 		{
-			$voucher_type_config[$row->id] = array(
+			$entry_type_config[$row->id] = array(
 				'label' => $row->label,
 				'name' => $row->name,
 				'description' => $row->description,
@@ -196,7 +196,7 @@ class General {
 				'bank_cash_ledger_restriction' => $row->bank_cash_ledger_restriction,
 			);
 		}
-		$CI->config->set_item('account_entry_types', $voucher_type_config);
+		$CI->config->set_item('account_entry_types', $entry_type_config);
 	}
 }
 

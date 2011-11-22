@@ -336,8 +336,8 @@ class Cf extends Controller {
 
 				/* Importing Entry Types */
 				$this->db->from('entry_types')->order_by('id', 'asc');
-				$voucher_type_q = $this->db->get();
-				foreach ($voucher_type_q->result() as $row)
+				$entry_type_q = $this->db->get();
+				foreach ($entry_type_q->result() as $row)
 				{
 					if ( ! $newacc->query("INSERT INTO entry_types (id, label, name, description, base_type, numbering, prefix, suffix, zero_padding, bank_cash_ledger_restriction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array($row->id, $row->label, $row->name, $row->description, $row->base_type, $row->numbering, $row->prefix, $row->suffix, $row->zero_padding, $row->bank_cash_ledger_restriction)))
 					{

@@ -93,7 +93,7 @@
 		echo "<br />";
 		if ( ! $print_preview)
 		{
-			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.voucher_type as vtype, entry_items.id as lid, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.entry_type as vtype, entry_items.id as lid, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc')->limit($pagination_counter, $page_count);
 			else
@@ -101,7 +101,7 @@
 			$ledgerst_q = $this->db->get();
 		} else {
 			$page_count = 0;
-			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.voucher_type as vtype, entry_items.id as lid, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.entry_type as vtype, entry_items.id as lid, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			else
@@ -120,7 +120,7 @@
 
 		foreach ($ledgerst_q->result() as $row)
 		{
-			$current_voucher_type = entry_type_info($row->vtype);
+			$current_entry_type = entry_type_info($row->vtype);
 
 			echo "<tr class=\"tr-" . $odd_even;
 			if ($row->lreconciliation)
@@ -130,18 +130,18 @@
 			echo date_mysql_to_php_display($row->vdate);
 			echo "</td>";
 			echo "<td>";
-			echo anchor('voucher/view/' . $current_voucher_type['label'] . '/' . $row->vid, full_entry_number($row->vtype, $row->vnumber), array('title' => 'View ' . $current_voucher_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
+			echo anchor('voucher/view/' . $current_entry_type['label'] . '/' . $row->vid, full_entry_number($row->vtype, $row->vnumber), array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 			echo "</td>";
 
 			/* Getting opposite Ledger name */
 			echo "<td>";
-			echo $this->Ledger_model->get_opp_ledger_name($row->vid, $current_voucher_type['label'], $row->ldc, 'html');
+			echo $this->Ledger_model->get_opp_ledger_name($row->vid, $current_entry_type['label'], $row->ldc, 'html');
 			if ($row->vnarration)
 				echo "<div class=\"small-font\">" . character_limiter($row->vnarration, 50) . "</div>";
 			echo "</td>";
 
 			echo "<td>";
-			echo $current_voucher_type['name'];
+			echo $current_entry_type['name'];
 			echo "</td>";
 			if ($row->ldc == "D")
 			{

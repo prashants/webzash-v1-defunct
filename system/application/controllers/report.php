@@ -355,21 +355,21 @@ class Report extends Controller {
 				$cur_balance = float_ops($cur_balance, $opbalance, '-');
 			$counter++;
 
-			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.voucher_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.entry_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
 			$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			$ledgerst_q = $this->db->get();
 			foreach ($ledgerst_q->result() as $row)
 			{
 				/* Entry Type */
-				$current_voucher_type = entry_type_info($row->vtype);
+				$current_entry_type = entry_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
 				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
 
 				/* Opposite voucher name */
-				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_voucher_type['label'], $row->ldc, 'text');
+				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_entry_type['label'], $row->ldc, 'text');
 				$ledgerst[$counter][3] = $row->vnarration;
-				$ledgerst[$counter][4] = $current_voucher_type['name'];
+				$ledgerst[$counter][4] = $current_entry_type['name'];
 
 				if ($row->ldc == "D")
 				{
@@ -477,7 +477,7 @@ class Report extends Controller {
 			/* Opening Balance */
 			list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id);
 
-			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.voucher_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('vouchers.id as vid, vouchers.number as vnumber, vouchers.date as vdate, vouchers.narration as vnarration, vouchers.entry_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('vouchers')->join('entry_items', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('vouchers.date', 'asc')->order_by('vouchers.number', 'asc');
 			else
@@ -486,15 +486,15 @@ class Report extends Controller {
 			foreach ($ledgerst_q->result() as $row)
 			{
 				/* Entry Type */
-				$current_voucher_type = entry_type_info($row->vtype);
+				$current_entry_type = entry_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
 				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
 
 				/* Opposite voucher name */
-				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_voucher_type['label'], $row->ldc, 'text');
+				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_entry_type['label'], $row->ldc, 'text');
 				$ledgerst[$counter][3] = $row->vnarration;
-				$ledgerst[$counter][4] = $current_voucher_type['name'];
+				$ledgerst[$counter][4] = $current_entry_type['name'];
 
 				if ($row->ldc == "D")
 				{

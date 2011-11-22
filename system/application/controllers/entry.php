@@ -106,9 +106,9 @@ class Entry extends Controller {
 			$entry_q = $this->db->get();
 			$config['total_rows'] = $this->db->from('vouchers')->where('tag_id', $tag_id)->get()->num_rows();
 		} else if ($entry_type_id > 0) {
-			$this->db->from('vouchers')->where('voucher_type', $entry_type_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
+			$this->db->from('vouchers')->where('entry_type', $entry_type_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
 			$entry_q = $this->db->get();
-			$config['total_rows'] = $this->db->from('vouchers')->where('voucher_type', $entry_type_id)->get()->num_rows();
+			$config['total_rows'] = $this->db->from('vouchers')->where('entry_type', $entry_type_id)->get()->num_rows();
 		} else {
 			$this->db->from('vouchers')->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
 			$entry_q = $this->db->get();

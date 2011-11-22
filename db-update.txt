@@ -1,5 +1,7 @@
 //--------------------------------- VERSION 4 ----------------------------------
 
+ALTER TABLE vouchers CHANGE voucher_type entry_type INT(5) NOT NULL;
+
 ALTER TABLE entry_items CHANGE voucher_id entry_id INT(11) NOT NULL;
 
 RENAME TABLE voucher_items TO entry_items;
