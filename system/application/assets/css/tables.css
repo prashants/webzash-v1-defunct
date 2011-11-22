@@ -47,26 +47,26 @@ tr.total-area {
 /****************************** VOUCHER TABLE *********************************/
 /******************************************************************************/
 
-.voucher-table {
+.entry-table {
 	font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size:14px;
 	border-collapse:collapse;
 	text-align:left;
 }
 
-.voucher-table th {
+.entry-table th {
 	font-weight:normal;
 	color:#000000;
 	padding:5px 8px;
 	background-color:#EEEEEE;
 }
 
-.voucher-table td {
+.entry-table td {
 	color:#000000;
 	padding:8px 8px 8px 8px;
 }
 
-.voucher-table tr.new-row {
+.entry-table tr.new-row {
 	background-color:#FFFFE0;
 }
 
@@ -82,15 +82,15 @@ tr.total-area {
 	padding-right: 8px;
 }
 
-.voucher-view-table td {
+.entry-view-table td {
 	padding-right: 30px;
 }
 
-.voucher-view-table tr.voucher-total {
+.entry-view-table tr.entry-total {
 	background-color:#FFFFE0;
 }
 
-.voucher-view-table tr.voucher-difference {
+.entry-view-table tr.entry-difference {
 	background-color:#FFE9E8;
 }
 
