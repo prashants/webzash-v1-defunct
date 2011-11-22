@@ -366,7 +366,7 @@ class Report extends Controller {
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
 				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
 
-				/* Opposite voucher name */
+				/* Opposite entry name */
 				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_entry_type['label'], $row->ldc, 'text');
 				$ledgerst[$counter][3] = $row->vnarration;
 				$ledgerst[$counter][4] = $current_entry_type['name'];
@@ -491,7 +491,7 @@ class Report extends Controller {
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
 				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
 
-				/* Opposite voucher name */
+				/* Opposite entry name */
 				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->vid, $current_entry_type['label'], $row->ldc, 'text');
 				$ledgerst[$counter][3] = $row->vnarration;
 				$ledgerst[$counter][4] = $current_entry_type['name'];
