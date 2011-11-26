@@ -93,7 +93,7 @@
 		echo "<br />";
 		if ( ! $print_preview)
 		{
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.id as entry_items_id, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.id as entry_items_id, entry_items.amount as entry_items_amount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc')->limit($pagination_counter, $page_count);
 			else
@@ -101,7 +101,7 @@
 			$ledgerst_q = $this->db->get();
 		} else {
 			$page_count = 0;
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.id as entry_items_id, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.id as entry_items_id, entry_items.amount as entry_items_amount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
 			else
@@ -148,7 +148,7 @@
 				echo "<td>";
 				echo convert_dc($row->ldc);
 				echo " ";
-				echo $row->lamount;
+				echo $row->entry_items_amount;
 				echo "</td>";
 				echo "<td></td>";
 			} else {
@@ -156,7 +156,7 @@
 				echo "<td>";
 				echo convert_dc($row->ldc);
 				echo " ";
-				echo $row->lamount;
+				echo $row->entry_items_amount;
 				echo "</td>";
 			}
 

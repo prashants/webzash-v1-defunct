@@ -355,7 +355,7 @@ class Report extends Controller {
 				$cur_balance = float_ops($cur_balance, $opbalance, '-');
 			$counter++;
 
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as lamount, entry_items.dc as ldc');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as ldc');
 			$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
 			$ledgerst_q = $this->db->get();
 			foreach ($ledgerst_q->result() as $row)
@@ -373,18 +373,18 @@ class Report extends Controller {
 
 				if ($row->ldc == "D")
 				{
-					$cur_balance = float_ops($cur_balance, $row->lamount, '+');
+					$cur_balance = float_ops($cur_balance, $row->entry_items_amount, '+');
 					$ledgerst[$counter][5] = convert_dc($row->ldc);
-					$ledgerst[$counter][6] = $row->lamount;
+					$ledgerst[$counter][6] = $row->entry_items_amount;
 					$ledgerst[$counter][7] = "";
 					$ledgerst[$counter][8] = "";
 
 				} else {
-					$cur_balance = float_ops($cur_balance, $row->lamount, '-');
+					$cur_balance = float_ops($cur_balance, $row->entry_items_amount, '-');
 					$ledgerst[$counter][5] = "";
 					$ledgerst[$counter][6] = "";
 					$ledgerst[$counter][7] = convert_dc($row->ldc);
-					$ledgerst[$counter][8] = $row->lamount;
+					$ledgerst[$counter][8] = $row->entry_items_amount;
 				}
 
 				if (float_ops($cur_balance, 0, '=='))
@@ -477,7 +477,7 @@ class Report extends Controller {
 			/* Opening Balance */
 			list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id);
 
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
 			else
@@ -499,7 +499,7 @@ class Report extends Controller {
 				if ($row->ldc == "D")
 				{
 					$ledgerst[$counter][5] = convert_dc($row->ldc);
-					$ledgerst[$counter][6] = $row->lamount;
+					$ledgerst[$counter][6] = $row->entry_items_amount;
 					$ledgerst[$counter][7] = "";
 					$ledgerst[$counter][8] = "";
 
@@ -507,7 +507,7 @@ class Report extends Controller {
 					$ledgerst[$counter][5] = "";
 					$ledgerst[$counter][6] = "";
 					$ledgerst[$counter][7] = convert_dc($row->ldc);
-					$ledgerst[$counter][8] = $row->lamount;
+					$ledgerst[$counter][8] = $row->entry_items_amount;
 				}
 
 				if ($row->lreconciliation)
