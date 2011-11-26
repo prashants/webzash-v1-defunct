@@ -36,7 +36,7 @@ class MY_Form_validation extends CI_Form_validation {
 
 		$CI->form_validation->set_message('uniqueentryno', 'The %s that you requested is already in use.');
 
-		$CI->db->from('vouchers')->where('number', $str)->where('entry_type', $type);
+		$CI->db->from('entries')->where('number', $str)->where('entry_type', $type);
 		$dup_query = $CI->db->get();
 		if ($dup_query->num_rows() > 0)
 			return FALSE;
@@ -51,7 +51,7 @@ class MY_Form_validation extends CI_Form_validation {
 		list ($type, $id) = explode('.', $field, 2);
 		$CI->form_validation->set_message('uniqueentrynowithid', 'The %s that you requested is already in use.');
 
-		$CI->db->from('vouchers')->where('number', $str)->where('entry_type', $type)->where('id !=', $id);
+		$CI->db->from('entries')->where('number', $str)->where('entry_type', $type)->where('id !=', $id);
 		$dup_query = $CI->db->get();
 		if ($dup_query->num_rows() > 0)
 			return FALSE;

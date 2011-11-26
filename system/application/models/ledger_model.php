@@ -175,7 +175,7 @@ class Ledger_model extends Model {
 	/* Return debit total as positive value */
 	function get_dr_total($ledger_id)
 	{
-		$this->db->select_sum('amount', 'drtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'D');
+		$this->db->select_sum('amount', 'drtotal')->from('entry_items')->join('entries', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'D');
 		$dr_total_q = $this->db->get();
 		if ($dr_total = $dr_total_q->row())
 			return $dr_total->drtotal;
@@ -186,7 +186,7 @@ class Ledger_model extends Model {
 	/* Return credit total as positive value */
 	function get_cr_total($ledger_id)
 	{
-		$this->db->select_sum('amount', 'crtotal')->from('entry_items')->join('vouchers', 'vouchers.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'C');
+		$this->db->select_sum('amount', 'crtotal')->from('entry_items')->join('entries', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'C');
 		$cr_total_q = $this->db->get();
 		if ($cr_total = $cr_total_q->row())
 			return $cr_total->crtotal;

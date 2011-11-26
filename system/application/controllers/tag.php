@@ -295,11 +295,11 @@ class Tag extends Controller {
 		$update_data = array(
 			'tag_id' => NULL,
 		);
-		if ( !  $this->db->where('tag_id', $id)->update('vouchers', $update_data))
+		if ( !  $this->db->where('tag_id', $id)->update('entries', $update_data))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Tag from Entries.', 'error');
-			$this->logger->write_message("error", "Error deleting tag called " . $data_tag->title . " [id:" . $id . "] from vouchers");
+			$this->logger->write_message("error", "Error deleting tag called " . $data_tag->title . " [id:" . $id . "] from entries");
 			redirect('tag');
 			return;
 		} else {

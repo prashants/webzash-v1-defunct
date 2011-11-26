@@ -102,17 +102,17 @@ class Entry extends Controller {
 		$config['last_tag_close'] = '</li>';
 
 		if ($entry_type == "tag") {
-			$this->db->from('vouchers')->where('tag_id', $tag_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
+			$this->db->from('entries')->where('tag_id', $tag_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
 			$entry_q = $this->db->get();
-			$config['total_rows'] = $this->db->from('vouchers')->where('tag_id', $tag_id)->get()->num_rows();
+			$config['total_rows'] = $this->db->from('entries')->where('tag_id', $tag_id)->get()->num_rows();
 		} else if ($entry_type_id > 0) {
-			$this->db->from('vouchers')->where('entry_type', $entry_type_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
+			$this->db->from('entries')->where('entry_type', $entry_type_id)->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
 			$entry_q = $this->db->get();
-			$config['total_rows'] = $this->db->from('vouchers')->where('entry_type', $entry_type_id)->get()->num_rows();
+			$config['total_rows'] = $this->db->from('entries')->where('entry_type', $entry_type_id)->get()->num_rows();
 		} else {
-			$this->db->from('vouchers')->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
+			$this->db->from('entries')->order_by('date', 'desc')->order_by('number', 'desc')->limit($pagination_counter, $page_count);
 			$entry_q = $this->db->get();
-			$config['total_rows'] = $this->db->count_all('vouchers');
+			$config['total_rows'] = $this->db->count_all('entries');
 		}
 
 		/* Pagination initializing */
@@ -471,7 +471,7 @@ class Entry extends Controller {
 				'entry_type' => $data_type,
 				'tag_id' => $data_tag,
 			);
-			if ( ! $this->db->insert('vouchers', $insert_data))
+			if ( ! $this->db->insert('entries', $insert_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error addding Entry.', 'error');
@@ -526,7 +526,7 @@ class Entry extends Controller {
 				'dr_total' => $dr_total,
 				'cr_total' => $cr_total,
 			);
-			if ( ! $this->db->where('id', $entry_id)->update('vouchers', $update_data))
+			if ( ! $this->db->where('id', $entry_id)->update('entries', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry total.', 'error');
@@ -832,7 +832,7 @@ class Entry extends Controller {
 				'narration' => $data_narration,
 				'tag_id' => $data_tag,
 			);
-			if ( ! $this->db->where('id', $entry_id)->update('vouchers', $update_data))
+			if ( ! $this->db->where('id', $entry_id)->update('entries', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry account.', 'error');
@@ -896,7 +896,7 @@ class Entry extends Controller {
 				'dr_total' => $dr_total,
 				'cr_total' => $cr_total,
 			);
-			if ( ! $this->db->where('id', $entry_id)->update('vouchers', $update_data))
+			if ( ! $this->db->where('id', $entry_id)->update('entries', $update_data))
 			{
 				$this->db->trans_rollback();
 				$this->messages->add('Error updating Entry total.', 'error');
@@ -974,7 +974,7 @@ class Entry extends Controller {
 			redirect('entry/view/' . $current_entry_type['label'] . '/' . $entry_id);
 			return;
 		}
-		if ( ! $this->db->delete('vouchers', array('id' => $entry_id)))
+		if ( ! $this->db->delete('entries', array('id' => $entry_id)))
 		{
 			$this->db->trans_rollback();
 			$this->messages->add('Error deleting Entry entry.', 'error');

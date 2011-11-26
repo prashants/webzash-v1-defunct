@@ -409,7 +409,7 @@ class EntryTypes extends Controller {
 		}
 
 		/* Check if an Entry present for the Entry Type */
-		$this->db->from('vouchers')->where('entry_type', $id);
+		$this->db->from('entries')->where('entry_type', $id);
 		$entry_data_q = $this->db->get();
 		if ($entry_data_q->num_rows() > 0)
 		{

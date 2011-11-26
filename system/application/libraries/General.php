@@ -71,7 +71,7 @@ class General {
 			if ($CI->db->query("SHOW TABLES"))
 			{
 				/* Check for valid webzash database */
-				$table_names = array('groups', 'ledgers', 'vouchers', 'entry_items', 'tags', 'logs', 'settings');
+				$table_names = array('groups', 'ledgers', 'entries', 'entry_items', 'tags', 'logs', 'settings');
 				foreach ($table_names as $id => $tbname)
 				{
 					$valid_db_q = mysql_query('DESC ' . $tbname);
@@ -179,7 +179,7 @@ class General {
 		$entry_types = $CI->db->get();
 		if ($entry_types->num_rows() < 1)
 		{
-			$CI->messages->add('You need to create a voucher type before you can create any vouchers.', 'error');
+			$CI->messages->add('You need to create a entry type before you can create any entries.', 'error');
 		}
 		$entry_type_config = array();
 		foreach ($entry_types->result() as $id => $row)
