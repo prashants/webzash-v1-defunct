@@ -93,7 +93,7 @@
 		echo "<br />";
 		if ( ! $print_preview)
 		{
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.id as entry_items_id, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.id as entry_items_id, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc, entry_items.reconciliation_date as entry_items_reconciliation_date');
 			if ($reconciliation_type == 'all')
 				$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc')->limit($pagination_counter, $page_count);
 			else
@@ -101,7 +101,7 @@
 			$ledgerst_q = $this->db->get();
 		} else {
 			$page_count = 0;
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.id as entry_items_id, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.id as entry_items_id, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc, entry_items.reconciliation_date as entry_items_reconciliation_date');
 			if ($reconciliation_type == 'all')
 				$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
 			else
@@ -123,7 +123,7 @@
 			$current_entry_type = entry_type_info($row->entries_entry_type);
 
 			echo "<tr class=\"tr-" . $odd_even;
-			if ($row->lreconciliation)
+			if ($row->entry_items_reconciliation_date)
 				echo " tr-reconciled";
 			echo "\">";
 			echo "<td>";
@@ -170,12 +170,12 @@
 					'size' => '11',
 					'value' => '',
 				);
-				if ($row->lreconciliation)
-					$reconciliation_date['value'] = date_mysql_to_php($row->lreconciliation);
+				if ($row->entry_items_reconciliation_date)
+					$reconciliation_date['value'] = date_mysql_to_php($row->entry_items_reconciliation_date);
 				echo form_input_date_restrict($reconciliation_date);
 			} else {
-				if ($row->lreconciliation)
-					echo date_mysql_to_php($row->lreconciliation);
+				if ($row->entry_items_reconciliation_date)
+					echo date_mysql_to_php($row->entry_items_reconciliation_date);
 				else
 					echo "-";
 			}

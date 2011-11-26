@@ -477,7 +477,7 @@ class Report extends Controller {
 			/* Opening Balance */
 			list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id);
 
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc, entry_items.reconciliation_date as entry_items_reconciliation_date');
 			if ($reconciliation_type == 'all')
 				$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
 			else
@@ -510,9 +510,9 @@ class Report extends Controller {
 					$ledgerst[$counter][8] = $row->entry_items_amount;
 				}
 
-				if ($row->lreconciliation)
+				if ($row->entry_items_reconciliation_date)
 				{
-					$ledgerst[$counter][9] = date_mysql_to_php($row->lreconciliation);
+					$ledgerst[$counter][9] = date_mysql_to_php($row->entry_items_reconciliation_date);
 				} else {
 					$ledgerst[$counter][9] = "";
 				}
