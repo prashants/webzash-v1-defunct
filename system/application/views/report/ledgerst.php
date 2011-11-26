@@ -61,12 +61,12 @@
 		echo "</table>";
 		echo "<br />";
 		if ( ! $print_preview) {
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as vnarration, entries.entry_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
 			$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc')->limit($pagination_counter, $page_count);
 			$ledgerst_q = $this->db->get();
 		} else {
 			$page_count = 0;
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as vnarration, entries.entry_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
 			$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
 			$ledgerst_q = $this->db->get();
 		}
@@ -129,8 +129,8 @@
 			/* Getting opposite Ledger name */
 			echo "<td>";
 			echo $this->Ledger_model->get_opp_ledger_name($row->entries_id, $current_entry_type['label'], $row->ldc, 'html');
-			if ($row->vnarration)
-				echo "<div class=\"small-font\">" . character_limiter($row->vnarration, 50) . "</div>";
+			if ($row->entries_narration)
+				echo "<div class=\"small-font\">" . character_limiter($row->entries_narration, 50) . "</div>";
 			echo "</td>";
 
 			echo "<td>";
