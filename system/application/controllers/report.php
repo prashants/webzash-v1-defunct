@@ -355,7 +355,7 @@ class Report extends Controller {
 				$cur_balance = float_ops($cur_balance, $opbalance, '-');
 			$counter++;
 
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as ldc');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc');
 			$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
 			$ledgerst_q = $this->db->get();
 			foreach ($ledgerst_q->result() as $row)
@@ -367,14 +367,14 @@ class Report extends Controller {
 				$ledgerst[$counter][1] = full_entry_number($row->entries_entry_type, $row->entries_number);
 
 				/* Opposite entry name */
-				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->entries_id, $current_entry_type['label'], $row->ldc, 'text');
+				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->entries_id, $current_entry_type['label'], $row->entry_items_dc, 'text');
 				$ledgerst[$counter][3] = $row->entries_narration;
 				$ledgerst[$counter][4] = $current_entry_type['name'];
 
-				if ($row->ldc == "D")
+				if ($row->entry_items_dc == "D")
 				{
 					$cur_balance = float_ops($cur_balance, $row->entry_items_amount, '+');
-					$ledgerst[$counter][5] = convert_dc($row->ldc);
+					$ledgerst[$counter][5] = convert_dc($row->entry_items_dc);
 					$ledgerst[$counter][6] = $row->entry_items_amount;
 					$ledgerst[$counter][7] = "";
 					$ledgerst[$counter][8] = "";
@@ -383,7 +383,7 @@ class Report extends Controller {
 					$cur_balance = float_ops($cur_balance, $row->entry_items_amount, '-');
 					$ledgerst[$counter][5] = "";
 					$ledgerst[$counter][6] = "";
-					$ledgerst[$counter][7] = convert_dc($row->ldc);
+					$ledgerst[$counter][7] = convert_dc($row->entry_items_dc);
 					$ledgerst[$counter][8] = $row->entry_items_amount;
 				}
 
@@ -477,7 +477,7 @@ class Report extends Controller {
 			/* Opening Balance */
 			list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id);
 
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc, entry_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
 			else
@@ -492,13 +492,13 @@ class Report extends Controller {
 				$ledgerst[$counter][1] = full_entry_number($row->entries_entry_type, $row->entries_number);
 
 				/* Opposite entry name */
-				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->entries_id, $current_entry_type['label'], $row->ldc, 'text');
+				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->entries_id, $current_entry_type['label'], $row->entry_items_dc, 'text');
 				$ledgerst[$counter][3] = $row->entries_narration;
 				$ledgerst[$counter][4] = $current_entry_type['name'];
 
-				if ($row->ldc == "D")
+				if ($row->entry_items_dc == "D")
 				{
-					$ledgerst[$counter][5] = convert_dc($row->ldc);
+					$ledgerst[$counter][5] = convert_dc($row->entry_items_dc);
 					$ledgerst[$counter][6] = $row->entry_items_amount;
 					$ledgerst[$counter][7] = "";
 					$ledgerst[$counter][8] = "";
@@ -506,7 +506,7 @@ class Report extends Controller {
 				} else {
 					$ledgerst[$counter][5] = "";
 					$ledgerst[$counter][6] = "";
-					$ledgerst[$counter][7] = convert_dc($row->ldc);
+					$ledgerst[$counter][7] = convert_dc($row->entry_items_dc);
 					$ledgerst[$counter][8] = $row->entry_items_amount;
 				}
 
