@@ -123,7 +123,7 @@
 			echo date_mysql_to_php_display($row->vdate);
 			echo "</td>";
 			echo "<td>";
-			echo anchor('voucher/view/' . $current_entry_type['label'] . '/' . $row->vid, full_entry_number($row->vtype, $row->vnumber), array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
+			echo anchor('entry/view/' . $current_entry_type['label'] . '/' . $row->vid, full_entry_number($row->vtype, $row->vnumber), array('title' => 'View ' . ' Entry', 'class' => 'anchor-link-a'));
 			echo "</td>";
 
 			/* Getting opposite Ledger name */

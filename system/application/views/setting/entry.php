@@ -1,5 +1,5 @@
 <?php
-	echo form_open('setting/voucher');
+	echo form_open('setting/entry');
 
 	echo "<p>";
 	echo form_fieldset('Prefix Settings', array('class' => "fieldset-auto-width"));

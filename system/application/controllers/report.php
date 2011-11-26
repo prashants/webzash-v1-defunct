@@ -193,7 +193,7 @@ class Report extends Controller {
 						{
 							$this->db->trans_rollback();
 							$this->messages->add('Error updating reconciliation.', 'error');
-							$this->logger->write_message("error", "Error updating reconciliation for voucher item [id:" . $id . "]");
+							$this->logger->write_message("error", "Error updating reconciliation for entry item [id:" . $id . "]");
 						} else {
 							$this->db->trans_complete();
 						}

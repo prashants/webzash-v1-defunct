@@ -2,7 +2,7 @@
 
 class Entry extends Controller {
 
-	function Voucher()
+	function Entry()
 	{
 		parent::Controller();
 		$this->load->model('Entry_model');
