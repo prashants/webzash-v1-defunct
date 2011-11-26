@@ -355,7 +355,7 @@ class Report extends Controller {
 				$cur_balance = float_ops($cur_balance, $opbalance, '-');
 			$counter++;
 
-			$this->db->select('entries.id as entries_id, entries.number as vnumber, entries.date as vdate, entries.narration as vnarration, entries.entry_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as vdate, entries.narration as vnarration, entries.entry_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc');
 			$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
 			$ledgerst_q = $this->db->get();
 			foreach ($ledgerst_q->result() as $row)
@@ -364,7 +364,7 @@ class Report extends Controller {
 				$current_entry_type = entry_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
-				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
+				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->entries_number);
 
 				/* Opposite entry name */
 				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->entries_id, $current_entry_type['label'], $row->ldc, 'text');
@@ -477,7 +477,7 @@ class Report extends Controller {
 			/* Opening Balance */
 			list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id);
 
-			$this->db->select('entries.id as entries_id, entries.number as vnumber, entries.date as vdate, entries.narration as vnarration, entries.entry_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as vdate, entries.narration as vnarration, entries.entry_type as vtype, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
 			else
@@ -489,7 +489,7 @@ class Report extends Controller {
 				$current_entry_type = entry_type_info($row->vtype);
 
 				$ledgerst[$counter][0] = date_mysql_to_php($row->vdate);
-				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->vnumber);
+				$ledgerst[$counter][1] = full_entry_number($row->vtype, $row->entries_number);
 
 				/* Opposite entry name */
 				$ledgerst[$counter][2] = $this->Ledger_model->get_opp_ledger_name($row->entries_id, $current_entry_type['label'], $row->ldc, 'text');

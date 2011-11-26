@@ -93,7 +93,7 @@
 		echo "<br />";
 		if ( ! $print_preview)
 		{
-			$this->db->select('entries.id as entries_id, entries.number as vnumber, entries.date as vdate, entries.narration as vnarration, entries.entry_type as vtype, entry_items.id as lid, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as vdate, entries.narration as vnarration, entries.entry_type as vtype, entry_items.id as lid, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc')->limit($pagination_counter, $page_count);
 			else
@@ -101,7 +101,7 @@
 			$ledgerst_q = $this->db->get();
 		} else {
 			$page_count = 0;
-			$this->db->select('entries.id as entries_id, entries.number as vnumber, entries.date as vdate, entries.narration as vnarration, entries.entry_type as vtype, entry_items.id as lid, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as vdate, entries.narration as vnarration, entries.entry_type as vtype, entry_items.id as lid, entry_items.amount as lamount, entry_items.dc as ldc, entry_items.reconciliation_date as lreconciliation');
 			if ($reconciliation_type == 'all')
 				$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
 			else
@@ -130,7 +130,7 @@
 			echo date_mysql_to_php_display($row->vdate);
 			echo "</td>";
 			echo "<td>";
-			echo anchor('entry/view/' . $current_entry_type['label'] . '/' . $row->entries_id, full_entry_number($row->vtype, $row->vnumber), array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
+			echo anchor('entry/view/' . $current_entry_type['label'] . '/' . $row->entries_id, full_entry_number($row->vtype, $row->entries_number), array('title' => 'View ' . $current_entry_type['name'] . ' Entry', 'class' => 'anchor-link-a'));
 			echo "</td>";
 
 			/* Getting opposite Ledger name */
