@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS ledgers (
   type INT(2) NOT NULL DEFAULT 0,
   reconciliation int(1) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS entry_types (
   id int(5) NOT NULL,
@@ -100,4 +100,4 @@ CREATE TABLE IF NOT EXISTS settings (
   print_orientation varchar(1) NOT NULL,
   print_page_format varchar(1) NOT NULL,
   database_version int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
