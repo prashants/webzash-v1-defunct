@@ -71,14 +71,26 @@ class General {
 			if ($CI->db->query("SHOW TABLES"))
 			{
 				/* Check for valid webzash database */
-				$table_names = array('groups', 'ledgers', 'entries', 'entry_items', 'tags', 'logs', 'settings');
-				foreach ($table_names as $id => $tbname)
+				if ($CI->uri->segment(1) != "update")
 				{
-					$valid_db_q = mysql_query('DESC ' . $tbname);
-					if ( ! $valid_db_q)
+					/* check for valid settings table */
+					$valid_settings_q = mysql_query('DESC settings');
+					if ( ! $valid_settings_q)
 					{
-						$CI->messages->add('Invalid account database. Table "' . $tbname . '" missing.', 'error');
+						$CI->messages->add('Invalid account database. Table "settings" missing.', 'error');
 						return FALSE;
+					}
+					$this->check_database_version();
+
+					$table_names = array('groups', 'ledgers', 'entry_types', 'entries', 'entry_items', 'tags', 'logs', 'settings');
+					foreach ($table_names as $id => $tbname)
+					{
+						$valid_db_q = mysql_query('DESC ' . $tbname);
+						if ( ! $valid_db_q)
+						{
+							$CI->messages->add('Invalid account database. Table "' . $tbname . '" missing.', 'error');
+							return FALSE;
+						}
 					}
 				}
 			} else {
@@ -169,6 +181,34 @@ class General {
 			$CI->messages->add('Accounts missing from user file.', 'error');
 		}
 		return $user_data;
+	}
+
+	function check_database_version()
+	{
+		$CI =& get_instance();
+		if ($CI->uri->segment(1) == "update")
+			return;
+
+		/* Loading account data */
+		$CI->db->from('settings')->where('id', 1)->limit(1);
+		$account_q = $CI->db->get();
+		if ( ! ($account_d = $account_q->row()))
+		{
+			$CI->messages->add('Invalid account settings.', 'error');
+			redirect('user/account');
+			return;
+		}
+
+		if ($account_d->database_version < $CI->config->item('required_database_version'))
+		{
+			$CI->messages->add('You need to updated the account database before continuing. Click ' . anchor('update', 'here', array('ttile' => 'Click here to update account database')) . ' to update.', 'error');
+			redirect('user/account');
+			return;
+		} else if ($account_d->database_version > $CI->config->item('required_database_version')) {
+			$CI->messages->add('You need to updated the application version from <a href="http://webzash.org" target="_blank">http://webzash.org<a/> before continuing.', 'error');
+			redirect('user/account');
+			return;
+		}
 	}
 
 	function setup_entry_types()
