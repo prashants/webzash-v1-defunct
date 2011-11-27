@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS groups (
   id int(11) NOT NULL AUTO_INCREMENT,
   parent_id int(11) NOT NULL,
   name varchar(100) NOT NULL,
-  affects_gross int(1) NOT NULL DEFAULT '0',
+  affects_gross int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS ledgers (
   name varchar(100) NOT NULL,
   op_balance decimal(15,2) NOT NULL DEFAULT '0.00',
   op_balance_dc char(1) NOT NULL,
-  type INT(2) NOT NULL DEFAULT '0',
+  type INT(2) NOT NULL DEFAULT 0,
   reconciliation int(1) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=1;
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS entry_types (
   prefix varchar(10) NOT NULL,
   suffix varchar(10) NOT NULL,
   zero_padding int(2) NOT NULL,
-  bank_cash_ledger_restriction int(2) NOT NULL,
+  bank_cash_ledger_restriction int(2) NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

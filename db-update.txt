@@ -1,5 +1,7 @@
 //--------------------------------- VERSION 4 ----------------------------------
 
+ALTER TABLE entry_types CHANGE bank_cash_ledger_restriction bank_cash_ledger_restriction INT(2) NOT NULL DEFAULT 1;
+
 ALTER TABLE ledgers CHANGE type type INT(2) NOT NULL DEFAULT '0';
 UPDATE ledgers SET type = '1' WHERE type = 'B';
 UPDATE ledgers SET type = '0' WHERE type = 'N';
