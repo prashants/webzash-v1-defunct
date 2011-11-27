@@ -15,7 +15,7 @@ class Welcome extends Controller {
 		$this->template->set('page_title', 'Welcome to Webzash');
 
 		/* Bank and Cash Ledger accounts */
-		$this->db->from('ledgers')->where('type', 'B');
+		$this->db->from('ledgers')->where('type', 1);
 		$bank_q = $this->db->get();
 		if ($bank_q->num_rows() > 0)
 		{

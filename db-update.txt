@@ -1,5 +1,9 @@
 //--------------------------------- VERSION 4 ----------------------------------
 
+ALTER TABLE ledgers CHANGE type type INT(2) NOT NULL DEFAULT '0';
+UPDATE ledgers SET type = '1' WHERE type = 'B';
+UPDATE ledgers SET type = '0' WHERE type = 'N';
+
 ALTER TABLE settings CHANGE manage_stocks manage_inventory INT(1) NOT NULL;
 
 RENAME TABLE vouchers TO entries;

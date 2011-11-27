@@ -107,9 +107,9 @@ class Ledger extends Controller {
 
 			if ($data_ledger_type_cashbank_value == "1")
 			{
-				$data_ledger_type_cashbank = "B";
+				$data_ledger_type = 1;
 			} else {
-				$data_ledger_type_cashbank = "N";
+				$data_ledger_type = 0;
 			}
 
 			if ($data_reconciliation == "1")
@@ -125,7 +125,7 @@ class Ledger extends Controller {
 				'group_id' => $data_group_id,
 				'op_balance' => $data_op_balance,
 				'op_balance_dc' => $data_op_balance_dc,
-				'type' => $data_ledger_type_cashbank,
+				'type' => $data_ledger_type,
 				'reconciliation' => $data_reconciliation,
 			);
 			if ( ! $this->db->insert('ledgers', $insert_data))
@@ -206,7 +206,7 @@ class Ledger extends Controller {
 		$data['ledger_group_active'] = $ledger_data->group_id;
 		$data['op_balance_dc'] = $ledger_data->op_balance_dc;
 		$data['ledger_id'] = $id;
-		if ($ledger_data->type == "B")
+		if ($ledger_data->type == 1)
 			$data['ledger_type_cashbank'] = TRUE;
 		else
 			$data['ledger_type_cashbank'] = FALSE;
@@ -284,9 +284,9 @@ class Ledger extends Controller {
 
 			if ($data_ledger_type_cashbank_value == "1")
 			{
-				$data_ledger_type_cashbank = "B";
+				$data_ledger_type = 1;
 			} else {
-				$data_ledger_type_cashbank = "N";
+				$data_ledger_type = 0;
 			}
 
 			if ($data_reconciliation == "1")
@@ -302,7 +302,7 @@ class Ledger extends Controller {
 				'group_id' => $data_group_id,
 				'op_balance' => $data_op_balance,
 				'op_balance_dc' => $data_op_balance_dc,
-				'type' => $data_ledger_type_cashbank,
+				'type' => $data_ledger_type,
 				'reconciliation' => $data_reconciliation,
 			);
 			if ( ! $this->db->where('id', $data_id)->update('ledgers', $update_data))

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS ledgers (
   name varchar(100) NOT NULL,
   op_balance decimal(15,2) NOT NULL DEFAULT '0.00',
   op_balance_dc char(1) NOT NULL,
-  type char(1) NOT NULL,
+  type INT(2) NOT NULL DEFAULT '0',
   reconciliation int(1) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=1;

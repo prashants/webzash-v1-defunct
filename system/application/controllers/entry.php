@@ -358,23 +358,23 @@ class Entry extends Controller {
 					$valid_ledger = $valid_ledger_q->row();
 					if ($current_entry_type['bank_cash_ledger_restriction'] == '2')
 					{
-						if ($data_all_ledger_dc[$id] == 'D' && $valid_ledger->type == 'B')
+						if ($data_all_ledger_dc[$id] == 'D' && $valid_ledger->type == 1)
 						{
 							$bank_cash_present = TRUE;
 						}
-						if ($valid_ledger->type != 'B')
+						if ($valid_ledger->type != 1)
 							$non_bank_cash_present = TRUE;
 					} else if ($current_entry_type['bank_cash_ledger_restriction'] == '3')
 					{
-						if ($data_all_ledger_dc[$id] == 'C' && $valid_ledger->type == 'B')
+						if ($data_all_ledger_dc[$id] == 'C' && $valid_ledger->type == 1)
 						{
 							$bank_cash_present = TRUE;
 						}
-						if ($valid_ledger->type != 'B')
+						if ($valid_ledger->type != 1)
 							$non_bank_cash_present = TRUE;
 					} else if ($current_entry_type['bank_cash_ledger_restriction'] == '4')
 					{
-						if ($valid_ledger->type != 'B')
+						if ($valid_ledger->type != 1)
 						{
 							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Entries can have only Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'entry/add', $data);
@@ -382,7 +382,7 @@ class Entry extends Controller {
 						}
 					} else if ($current_entry_type['bank_cash_ledger_restriction'] == '5')
 					{
-						if ($valid_ledger->type == 'B')
+						if ($valid_ledger->type == 1)
 						{
 							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Entries cannot have Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'entry/add', $data);
@@ -727,23 +727,23 @@ class Entry extends Controller {
 					$valid_ledger = $valid_ledger_q->row();
 					if ($current_entry_type['bank_cash_ledger_restriction'] == '2')
 					{
-						if ($data_all_ledger_dc[$id] == 'D' && $valid_ledger->type == 'B')
+						if ($data_all_ledger_dc[$id] == 'D' && $valid_ledger->type == 1)
 						{
 							$bank_cash_present = TRUE;
 						}
-						if ($valid_ledger->type != 'B')
+						if ($valid_ledger->type != 1)
 							$non_bank_cash_present = TRUE;
 					} else if ($current_entry_type['bank_cash_ledger_restriction'] == '3')
 					{
-						if ($data_all_ledger_dc[$id] == 'C' && $valid_ledger->type == 'B')
+						if ($data_all_ledger_dc[$id] == 'C' && $valid_ledger->type == 1)
 						{
 							$bank_cash_present = TRUE;
 						}
-						if ($valid_ledger->type != 'B')
+						if ($valid_ledger->type != 1)
 							$non_bank_cash_present = TRUE;
 					} else if ($current_entry_type['bank_cash_ledger_restriction'] == '4')
 					{
-						if ($valid_ledger->type != 'B')
+						if ($valid_ledger->type != 1)
 						{
 							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Entries can have only Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'entry/edit', $data);
@@ -751,7 +751,7 @@ class Entry extends Controller {
 						}
 					} else if ($current_entry_type['bank_cash_ledger_restriction'] == '5')
 					{
-						if ($valid_ledger->type == 'B')
+						if ($valid_ledger->type == 1)
 						{
 							$this->messages->add('Invalid Ledger account. ' . $current_entry_type['name'] . ' Entries cannot have Bank and Cash Ledgers accounts.', 'error');
 							$this->template->load('template', 'entry/edit', $data);
