@@ -1,5 +1,7 @@
 //--------------------------------- VERSION 4 ----------------------------------
 
+ALTER TABLE settings CHANGE manage_stocks manage_inventory INT(1) NOT NULL;
+
 RENAME TABLE vouchers TO entries;
 
 ALTER TABLE vouchers CHANGE voucher_type entry_type INT(5) NOT NULL;
