@@ -2,6 +2,10 @@ Webzash Version 1.5 2011-
 ------------------------------
     * Changed A/C to account
     * Updated the system/application/controllers/admin/initialize.sql
+    * Changed string named to called
+    * Changed voucher to entries
+    * Changed type of ledger type column to int
+    * Added database update script
 
 Webzash Version 1.4 2011-10-31
 ------------------------------
