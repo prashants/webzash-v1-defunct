@@ -1,5 +1,6 @@
-Webzash Version 1.5 2011-
+Webzash Version 1.5 2011-12-25
 ------------------------------
+
     * Changed A/C to account
     * Updated the system/application/controllers/admin/initialize.sql
     * Changed string named to called
