@@ -128,9 +128,6 @@ class Ledger_model extends Model {
 	{
 		list ($op_bal, $op_bal_type) = $this->get_op_balance($ledger_id);
 
-		if ($op_bal_type == "C")
-			$op_bal = $op_bal * -1;
-
 		$dr_total = $this->get_dr_total($ledger_id);
 		$cr_total = $this->get_cr_total($ledger_id);
 
