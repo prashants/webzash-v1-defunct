@@ -1,3 +1,12 @@
+Webzash Version 1.6 2012-02-11
+------------------------------
+
+    * Added all columns for INSERT statements
+    * Removed the sample.ini account file
+    * Added web.config for IIS support
+    * Fixed bug in closing balance calculation
+    * git master branch now points to v1.x
+
 Webzash Version 1.5 2011-12-25
 ------------------------------
 
