@@ -105,6 +105,10 @@ class Ledger extends Controller {
 				return;
 			}
 
+			if (!$data_op_balance) {
+				$data_op_balance = "0.00";
+			}
+
 			if ($data_ledger_type_cashbank_value == "1")
 			{
 				$data_ledger_type = 1;
@@ -259,6 +263,10 @@ class Ledger extends Controller {
 				$this->messages->add('Invalid Parent group.', 'error');
 				$this->template->load('template', 'ledger/edit', $data);
 				return;
+			}
+
+			if (!$data_op_balance) {
+				$data_op_balance = "0.00";
 			}
 
 			/* Check if bank_cash_ledger_restriction both entry present */
