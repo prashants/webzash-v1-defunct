@@ -1,3 +1,8 @@
+Webzash Version 1.7 2012-12-21
+------------------------------
+
+    * Switched to Apache License, Version 2.0
+
 Webzash Version 1.6 2012-02-11
 ------------------------------
 
