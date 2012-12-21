@@ -5,8 +5,8 @@ http://webzash.org
 
 Webzash is a web based double entry accouting software written in PHP - CodeIgniter and uses MySQL as database backend.
 
-It is licensed under GNU Affero General Public License, version 3.
-http://www.gnu.org/licenses/agpl-3.0.txt
+Webzash is licensed under Apache License, Version 2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Features include
 - No setup required
@@ -17,4 +17,4 @@ Features include
 - Support for colored tags
 - Reports include balance sheet, profit and loss statement, trial balance, ledger statement
 
-Note : Webzash includes works under other copyright notices and distributed according to the terms of the GNU General Public License or a compatible license
+Note : Webzash includes works under other copyright notices and distributed according to the terms of their own licenses

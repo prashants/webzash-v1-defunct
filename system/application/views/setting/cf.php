@@ -72,6 +72,10 @@
 	echo "</p>";
 
 	echo "<p>";
+	echo "<b>Note: </b>You need to manually carry forward the profit and loss balance to the capital account for the next year.";
+	echo "</p>";
+
+	echo "<p>";
 	echo form_submit('submit', 'Carrfy forward');
 	echo " ";
 	echo anchor('setting', 'Back', array('title' => 'Back to settings'));
