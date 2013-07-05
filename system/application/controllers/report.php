@@ -55,6 +55,15 @@ class Report extends Controller {
 		$this->template->load('template', 'report/trialbalance');
 		return;
 	}
+	
+	function charts($period = NULL)
+	{
+		$this->template->set('page_title', 'Charts');
+
+		$this->load->library('accountlist');
+		$this->template->load('template', 'report/charts');
+		return;
+	}
 
 	function ledgerst($ledger_id = 0)
 	{

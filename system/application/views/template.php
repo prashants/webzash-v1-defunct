@@ -28,7 +28,6 @@ if (isset($add_css))
 </script>
 
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.min.js"></script>
-<script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.datepick.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/custom.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/hoverIntent.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/superfish.js"></script>
@@ -37,6 +36,7 @@ if (isset($add_css))
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/ezpz_tooltip.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcutslibrary.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcuts.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/highcharts.js"></script>
 
 <?php
 /* Dynamically adding javascript files from controllers */
@@ -49,24 +49,6 @@ if (isset($add_javascript))
 }
 ?>
 
-<script type="text/javascript">
-/* Loading JQuery Superfish menu */
-$(document).ready(function() {
-	$("ul.sf-menu").supersubs({ 
-		minWidth:12,
-		maxWidth:27,
-		extraWidth: 1
-	}).superfish(); // call supersubs first, then superfish, so that subs are 
-	$('.datepicker').datepick({
-		dateFormat: '<?php echo $this->config->item('account_date_format'); ?>',
-	});
-	$('.datepicker-restrict').datepick({
-		dateFormat: '<?php echo $this->config->item('account_date_format'); ?>',
-		minDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_start')); ?>',
-		maxDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_end')); ?>',
-	});
-});
-</script>
 
 </head>
 <body>
@@ -145,6 +127,7 @@ $(document).ready(function() {
 					<li><?php echo anchor('report/trialbalance', 'Trial Balance', array('title' => 'Trial Balance')); ?></li>
 					<li><?php echo anchor('report/ledgerst', 'Ledger Statement', array('title' => 'Ledger Statement')); ?></li>
 					<li><?php echo anchor('report/reconciliation/pending', 'Reconciliation', array('title' => 'Reconciliation')); ?></li>
+					<li><?php echo anchor('report/charts', 'Charts', array('title' => 'Charts')); ?></li>
 				</ul>
 			</li>
 			<li>
