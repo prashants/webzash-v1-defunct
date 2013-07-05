@@ -119,7 +119,7 @@ FOOBAR;
 			data: [
 FOOBAR;
 ?>
-<?php $result = mysql_query("select DATE_FORMAT(e.date,  '%m/%Y'), sum(e.dr_total) from entries e where entry_type = 2 group by MONTH(e.date) order by e.date") 
+<?php $result = mysql_query("select CONCAT(MONTHNAME(STR_TO_DATE(DATE_FORMAT(e.date,  '%m'), '%m')), '/' , DATE_FORMAT(e.date,  '%Y')), sum(e.dr_total) from entries e where entry_type = 2 group by MONTH(e.date) order by e.date") 
 	or die("Query non valida: " . mysql_error());
 	
 	while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
@@ -160,7 +160,7 @@ FOOBAR;
 			data: [
 FOOBAR;
 ?>
-<?php $result = mysql_query("select DATE_FORMAT(e.date,  '%m/%Y'), sum(e.dr_total) from entries e where entry_type = 1 group by MONTH(e.date) order by e.date") 
+<?php $result = mysql_query("select CONCAT(MONTHNAME(STR_TO_DATE(DATE_FORMAT(e.date,  '%m'), '%m')), '/' , DATE_FORMAT(e.date,  '%Y')), sum(e.dr_total) from entries e where entry_type = 1 group by MONTH(e.date) order by e.date") 
 	or die("Query non valida: " . mysql_error());
 	
 	while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
