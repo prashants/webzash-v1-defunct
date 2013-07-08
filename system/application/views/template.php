@@ -28,6 +28,7 @@ if (isset($add_css))
 </script>
 
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>js/jquery.datepick.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/custom.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/hoverIntent.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/superfish.js"></script>
@@ -48,6 +49,25 @@ if (isset($add_javascript))
 	}
 }
 ?>
+
+<script type="text/javascript">
+/* Loading JQuery Superfish menu */
+$(document).ready(function() {
+  $("ul.sf-menu").supersubs({ 
+    minWidth:12,
+    maxWidth:27,
+    extraWidth: 1
+  }).superfish(); // call supersubs first, then superfish, so that subs are 
+  $('.datepicker').datepick({
+    dateFormat: '<?php echo $this->config->item('account_date_format'); ?>',
+  });
+  $('.datepicker-restrict').datepick({
+    dateFormat: '<?php echo $this->config->item('account_date_format'); ?>',
+    minDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_start')); ?>',
+    maxDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_end')); ?>',
+  });
+});
+</script>
 
 
 </head>

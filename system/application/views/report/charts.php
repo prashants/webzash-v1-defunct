@@ -13,12 +13,14 @@
 		<!-- TAG -> Expense -->
 
 
-<!--		
- CHART: Expenses Per TAG
--->
+<?php
+	/**
+	 * EXPENSES PER TAG.
+	 * The first 10 tags with greatest values will be shown and the remaining ones will be collapsed in a generic "Others" tag.
+	 */
+?>
+<hr>
 <div id="expensesPerTag" style="min-width: 400px; height: 400px; margin: 0 auto"></div>	
-	</div>
-	<br />	
 	
 <?php
 		echo <<<"FOOBAR"
@@ -36,13 +38,21 @@
 			data: [
 FOOBAR;
 ?>
-<?php $result = mysql_query("select * from ( select t.title as tag, sum(e.dr_total) AS total from entries e, tags t where entry_type = 2 and e.tag_id = t.id group by tag ) AS t ORDER BY total DESC") 
-	or die("Query non valida: " . mysql_error());
+<?php $result = mysql_query("select t.title as tag, sum(e.dr_total) AS total from entries e, tags t where entry_type = 2 and e.tag_id = t.id group by tag ORDER BY sum(e.dr_total) DESC LIMIT 10") 
+	or die("Invalid Query: " . mysql_error());
 	
 	while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
 		printf("['%s', %s],", $row[0], $row[1]); 
 	}
 ?>
+<?php $result = mysql_query("select sub-main AS others from (select sum(total) as sub from ( select t.title as tag, sum(e.dr_total) AS total from entries e, tags t where entry_type = 2 and e.tag_id = t.id group by tag ORDER BY sum(e.dr_total) ) AS t1) AS Tsub, (select sum(total) as main from ( select t.title as tag, sum(e.dr_total) AS total from entries e, tags t where entry_type = 2 and e.tag_id = t.id group by tag ORDER BY sum(e.dr_total) DESC LIMIT 10 ) AS t0) AS Tmain") 
+	or die("Query non valida: " . mysql_error());
+	
+	while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
+		printf("['Others', %s],", $row[0]); 
+	}
+?>
+
 <?php
 		echo <<<"FOOBAR"
 		]}]
@@ -53,12 +63,14 @@ FOOBAR;
 ?>
 
 
-<!--		
- CHART: Entries Per TAG
--->
+<?php
+	/**
+	 * ENTRIES PER TAG.
+	 * The first 10 tags with greatest values will be shown and the remaining ones will be collapsed in a generic "Others" tag.
+	 */
+?>
+<hr>
 <div id="entriesPerTag" style="min-width: 400px; height: 400px; margin: 0 auto"></div>	
-	</div>
-	<br />	
 	
 <?php
 		echo <<<"FOOBAR"
@@ -76,13 +88,21 @@ FOOBAR;
 			data: [
 FOOBAR;
 ?>
-<?php $result = mysql_query("select * from ( select t.title as tag, sum(e.dr_total) AS total from entries e, tags t where entry_type = 1 and e.tag_id = t.id group by tag ) AS t ORDER BY total DESC") 
-	or die("Query non valida: " . mysql_error());
+<?php $result = mysql_query("select t.title as tag, sum(e.dr_total) AS total from entries e, tags t where entry_type = 1 and e.tag_id = t.id group by tag ORDER BY sum(e.dr_total) DESC LIMIT 10") 
+	or die("Invalid Query: " . mysql_error());
 	
 	while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
 		printf("['%s', %s],", $row[0], $row[1]); 
 	}
 ?>
+<?php $result = mysql_query("select sub-main AS others from (select sum(total) as sub from ( select t.title as tag, sum(e.dr_total) AS total from entries e, tags t where entry_type = 1 and e.tag_id = t.id group by tag ORDER BY sum(e.dr_total) ) AS t1) AS Tsub, (select sum(total) as main from ( select t.title as tag, sum(e.dr_total) AS total from entries e, tags t where entry_type = 1 and e.tag_id = t.id group by tag ORDER BY sum(e.dr_total) DESC LIMIT 10 ) AS t0) AS Tmain") 
+	or die("Query non valida: " . mysql_error());
+	
+	while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
+		printf("['Others', %s],", $row[0]); 
+	}
+?>
+
 <?php
 		echo <<<"FOOBAR"
 		]}]
@@ -99,9 +119,8 @@ FOOBAR;
 <!--		
  CHART: Expenses Per Month
 -->
+<hr>
 <div id="expensesPerMonth" style="min-width: 400px; height: 400px; margin: 0 auto"></div>	
-	</div>
-	<br />	
 	
 <?php
 		echo <<<"FOOBAR"
@@ -140,9 +159,8 @@ FOOBAR;
 <!--		
  CHART: Expenses Per Month
 -->
-<div id="entriesPerMonth" style="min-width: 400px; height: 400px; margin: 0 auto"></div>	
-	</div>
-	<br />	
+<hr>
+<div id="entriesPerMonth" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 	
 <?php
 		echo <<<"FOOBAR"
@@ -175,3 +193,6 @@ FOOBAR;
 </script>
 FOOBAR;
 ?>
+
+</div> <!-- main content -->
+<br />	
