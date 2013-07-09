@@ -59,9 +59,14 @@ class Report extends Controller {
 	function charts($period = NULL)
 	{
 		$this->template->set('page_title', 'Charts');
-
-		$this->load->library('accountlist');
 		$this->template->load('template', 'report/charts');
+		return;
+	}
+
+	function charts_data($period = NULL)
+	{
+		/* No html data rendered since the output will be JSON data.*/
+		$this->template->load('plain', 'report/charts_data');
 		return;
 	}
 
