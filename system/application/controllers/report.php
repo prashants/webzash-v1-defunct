@@ -59,6 +59,7 @@ class Report extends Controller {
 	function charts($period = NULL)
 	{
 		$this->template->set('page_title', 'Charts');
+<<<<<<< HEAD
 		$this->template->load('template', 'report/charts');
 		return;
 	}
@@ -67,6 +68,11 @@ class Report extends Controller {
 	{
 		/* No html data rendered since the output will be JSON data.*/
 		$this->template->load('plain', 'report/charts_data');
+=======
+
+		$this->load->library('accountlist');
+		$this->template->load('template', 'report/charts');
+>>>>>>> 40e2de423a33b54a1ced977d6c508bf48d8e47a0
 		return;
 	}
 
