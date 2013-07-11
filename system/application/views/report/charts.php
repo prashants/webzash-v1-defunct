@@ -21,14 +21,16 @@
 			credits: {enabled: false},
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
 			series: [{}]
-		};    
-		var url = '<?php echo (site_url('report/charts_data') . '/type/outTag/callback/') ?>';
+		}; 
+		var callback = 'jsonp' + (new Date().getTime());
+		var url = '<?php echo (site_url('report/charts_data') . '/type/outTag/callback/') ?>' + callback;
 		$.getJSON(url,  function(data) {
 			options.series[0].data = data;
 			var chart = new Highcharts.Chart(options);
 		});
 	});
 	</script>
+	
 	<!-- ENDOF EXPENSES PER TAG -->
 
 

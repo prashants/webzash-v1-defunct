@@ -30,7 +30,7 @@
 		printf("]);");
 	}
 	
-	function buildSetPerMonth($entryT) {
+	function buildSetPerMonth($get, $entryT) {
 		if (isset($get['callback'])) {
 			echo($get['callback']);
 		} else {
