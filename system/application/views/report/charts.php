@@ -22,7 +22,7 @@
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
 			series: [{}]
 		};    
-		var url = '<?php echo (site_url('report/charts_data') . '/type/outTag') ?>';
+		var url = '<?php echo (site_url('report/charts_data') . '/type/outTag/callback/') ?>';
 		$.getJSON(url,  function(data) {
 			options.series[0].data = data;
 			var chart = new Highcharts.Chart(options);
@@ -49,7 +49,7 @@
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
 			series: [{}]
 		};    
-		var url = '<?php echo (site_url('report/charts_data') . '/type/inTag') ?>';
+		var url = '<?php echo (site_url('report/charts_data') . '/type/inTag/callback/') ?>';
 		$.getJSON(url,  function(data) {
 			options.series[0].data = data;
 			var chart = new Highcharts.Chart(options);
@@ -74,7 +74,7 @@
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
 			series: [{}]
 		};    
-		var url = '<?php echo (site_url('report/charts_data') . '/type/outMonth') ?>';
+		var url = '<?php echo (site_url('report/charts_data') . '/type/outMonth/callback/') ?>';
 		$.getJSON(url,  function(data) {
 			options.series[0].data = data;
 			var chart = new Highcharts.Chart(options);
@@ -99,7 +99,7 @@
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i>' }, showInLegend: true } },
 			series: [{}]
 		};    
-		var url = '<?php echo (site_url('report/charts_data') . '/type/inMonth') ?>';
+		var url = '<?php echo (site_url('report/charts_data') . '/type/inMonth/callback/') ?>';
 		$.getJSON(url,  function(data) {
 			options.series[0].data = data;
 			var chart = new Highcharts.Chart(options);

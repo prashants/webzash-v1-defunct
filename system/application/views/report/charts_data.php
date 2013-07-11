@@ -5,10 +5,7 @@
 		exit('No proper type parameter specified');
 	}
 	
-	/**
-	 * Support functions
-	 */
-	function buildSetPerTag($entryT, $maxRows=10) {
+	function buildSetPerTag($get, $entryT, $maxRows=10) {
 		if (isset($get['callback'])) {
 			echo($get['callback']);
 		} else {
@@ -54,28 +51,28 @@
 			/**
 			 * EXPENSES PER TAG.
 			 */
-			buildSetPerTag(2);
+			buildSetPerTag($get, 2);
 		break;
 		
 		case 'inTag':
 			/**
 			 * ENTRIES PER TAG.
 			 */
-			buildSetPerTag(1);
+			buildSetPerTag($get, 1);
 		break;
 		
 		case 'outMonth':
 			/**
 			 * EXPENSES PER MONTH.
 			 */
-			buildSetPerMonth(2);
+			buildSetPerMonth($get, 2);
 		break;
 		
 		case 'inMonth':
 			/**
 			 * ENTRIES PER MONTH.
 			 */
-			buildSetPerMonth(1);
+			buildSetPerMonth($get, 1);
 		break;
 	}
 ?>
