@@ -22,10 +22,10 @@
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
 			series: [{}]
 		};    
-		var url = '<?php echo (site_url('report/charts_data') . '?type=outTag&callback=?') ?>';
+		var url = '<?php echo (site_url('report/charts_data') . '/type/outTag') ?>';
 		$.getJSON(url,  function(data) {
-		options.series[0].data = data;
-		var chart = new Highcharts.Chart(options);
+			options.series[0].data = data;
+			var chart = new Highcharts.Chart(options);
 		});
 	});
 	</script>
@@ -49,10 +49,10 @@
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
 			series: [{}]
 		};    
-		var url = '<?php echo (site_url('report/charts_data') . '?type=inTag&callback=?') ?>';
+		var url = '<?php echo (site_url('report/charts_data') . '/type/inTag') ?>';
 		$.getJSON(url,  function(data) {
-		options.series[0].data = data;
-		var chart = new Highcharts.Chart(options);
+			options.series[0].data = data;
+			var chart = new Highcharts.Chart(options);
 		});
 	});
 	</script>
@@ -74,10 +74,10 @@
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
 			series: [{}]
 		};    
-		var url = '<?php echo (site_url('report/charts_data') . '?type=outMonth&callback=?') ?>';
+		var url = '<?php echo (site_url('report/charts_data') . '/type/outMonth') ?>';
 		$.getJSON(url,  function(data) {
-		options.series[0].data = data;
-		var chart = new Highcharts.Chart(options);
+			options.series[0].data = data;
+			var chart = new Highcharts.Chart(options);
 		});
 	});
 	</script>
@@ -99,10 +99,10 @@
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i>' }, showInLegend: true } },
 			series: [{}]
 		};    
-		var url = '<?php echo (site_url('report/charts_data') . '?type=inMonth&callback=?') ?>';
+		var url = '<?php echo (site_url('report/charts_data') . '/type/inMonth') ?>';
 		$.getJSON(url,  function(data) {
-		options.series[0].data = data;
-		var chart = new Highcharts.Chart(options);
+			options.series[0].data = data;
+			var chart = new Highcharts.Chart(options);
 		});
 	});
 	</script>

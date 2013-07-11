@@ -1,16 +1,18 @@
 
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-	if (!isset($_GET['type'])) {
+	$get = $this->uri->uri_to_assoc();
+	if (!isset($get['type'])) {
 		exit('No proper type parameter specified');
 	}
+	
 	/**
 	 * Support functions
 	 */
 	function buildSetPerTag($entryT, $maxRows=10) {
-		if (isset($_GET['callback'])) {
-			echo($_GET['callback']);
+		if (isset($get['callback'])) {
+			echo($get['callback']);
 		} else {
-			echo('callback');
+			echo('?');
 		}
 		printf(" ([");
 		
@@ -32,10 +34,10 @@
 	}
 	
 	function buildSetPerMonth($entryT) {
-		if (isset($_GET['callback'])) {
-			echo($_GET['callback']);
+		if (isset($get['callback'])) {
+			echo($get['callback']);
 		} else {
-			echo('callback');
+			echo('?');
 		}
 		printf(" ([");
 		$entry_type = $entryT;
@@ -47,7 +49,7 @@
 		printf("]);");
 	}
 
-	switch ($_GET['type']) {	
+	switch ($get['type']) {	
 		case 'outTag':
 			/**
 			 * EXPENSES PER TAG.
