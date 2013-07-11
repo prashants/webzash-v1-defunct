@@ -22,12 +22,14 @@
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
 			series: [{}]
 		}; 
-		var callback = 'jsonp' + (new Date().getTime());
-		var url = '<?php echo (site_url('report/charts_data') . '/type/outTag/callback/') ?>' + callback;
-		$.getJSON(url,  function(data) {
+		var url = '<?php echo (site_url('report/charts_data') . '/type/outTag/callback/handleOutTag') ?>';
+		window.handleOutTag = function(data) {
 			options.series[0].data = data;
 			var chart = new Highcharts.Chart(options);
-		});
+		}
+		
+		jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleOutTag"});
+		
 	});
 	</script>
 	
@@ -51,11 +53,12 @@
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
 			series: [{}]
 		};    
-		var url = '<?php echo (site_url('report/charts_data') . '/type/inTag/callback/') ?>';
-		$.getJSON(url,  function(data) {
+		var url = '<?php echo (site_url('report/charts_data') . '/type/inTag/callback/handleInTag') ?>';
+		window.handleInTag = function(data) {
 			options.series[0].data = data;
 			var chart = new Highcharts.Chart(options);
-		});
+		}		
+		jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleInTag"});
 	});
 	</script>
 	<!-- ENDOF ENTRIES PER TAG -->
@@ -75,12 +78,13 @@
 			credits: {enabled: false},
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
 			series: [{}]
-		};    
-		var url = '<?php echo (site_url('report/charts_data') . '/type/outMonth/callback/') ?>';
-		$.getJSON(url,  function(data) {
+		};  
+		var url = '<?php echo (site_url('report/charts_data') . '/type/outMonth/callback/handleOutMonth') ?>';
+		window.handleOutMonth = function(data) {
 			options.series[0].data = data;
 			var chart = new Highcharts.Chart(options);
-		});
+		}		
+		jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleOutMonth"});
 	});
 	</script>
 	<!-- ENDOF ENTRIES PER TAG -->
@@ -101,11 +105,12 @@
 			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i>' }, showInLegend: true } },
 			series: [{}]
 		};    
-		var url = '<?php echo (site_url('report/charts_data') . '/type/inMonth/callback/') ?>';
-		$.getJSON(url,  function(data) {
+		var url = '<?php echo (site_url('report/charts_data') . '/type/inMonth/callback/handleInMonth') ?>';
+		window.handleInMonth = function(data) {
 			options.series[0].data = data;
 			var chart = new Highcharts.Chart(options);
-		});
+		}		
+		jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleInMonth"});
 	});
 	</script>
 	<!-- ENDOF ENTRIES PER TAG -->
