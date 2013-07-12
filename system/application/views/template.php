@@ -43,6 +43,7 @@ if (isset($add_css))
 <script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.json2.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.pieRenderer.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.donutRenderer.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.highlighter.js"></script>
 
 <?php
 /* Dynamically adding javascript files from controllers */

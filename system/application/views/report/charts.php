@@ -3,6 +3,7 @@
 <!-- Sample of jqplot charts -->
 <div id="chartdiv" style="height:400px;width:600px; "></div>
 <script>
+$.jqplot.config.enablePlugins = true;
 	var url = '<?php echo (site_url('report/charts_data') . '/type/outTag/callback/handleOutTag1') ?>';
 	window.handleOutTag1 = function(data) {
 		var plot1 = jQuery.jqplot ('chartdiv', [data], 
@@ -17,6 +18,12 @@
 			  dataLabels: 'percent'
 			}
 		  }, 
+			 highlighter: {
+    show:true,
+    tooltipLocation: 'n',
+    useAxesFormatters: false,
+    formatString:'%s, %P',
+},
 		  legend: { show:true, location: 'e' }
 		}
 	  );
