@@ -8,10 +8,12 @@
 	function buildSetPerTag($get, $entryT, $maxRows=10) {
 		if (isset($get['callback'])) {
 			echo($get['callback']);
+			echo(' (');
 		} else {
-			echo('?');
+			echo('[');
 		}
-		printf(" ([");
+		
+		printf("[");
 		
 		// Expense
 		$entry_type = $entryT;			
@@ -27,14 +29,19 @@
 			printf("['%s', %s]", $row[0], $row[1]); 
 		}
 		
-		printf("]);");
+		printf("]");
+		if (isset($get['callback'])) {
+			echo(');');
+		} else {
+			echo(']');
+		}
 	}
 	
 	function buildSetPerMonth($get, $entryT) {
 		if (isset($get['callback'])) {
 			echo($get['callback']);
 		} else {
-			echo('?');
+			echo('');
 		}
 		printf(" ([");
 		$entry_type = $entryT;

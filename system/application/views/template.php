@@ -11,6 +11,7 @@
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/menu.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/jquery.datepick.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/thickbox.css">
+<link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>jqplot/jquery.jqplot.css">
 
 <?php
 /* Dynamically adding css files from controllers */
@@ -38,6 +39,10 @@ if (isset($add_css))
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcutslibrary.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcuts.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/highcharts.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.json2.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.pieRenderer.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.donutRenderer.min.js"></script>
 
 <?php
 /* Dynamically adding javascript files from controllers */

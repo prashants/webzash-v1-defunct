@@ -1,5 +1,33 @@
 <div id="main-content">
 
+<!-- Sample of jqplot charts -->
+<div id="chartdiv" style="height:400px;width:600px; "></div>
+<script>
+	var url = '<?php echo (site_url('report/charts_data') . '/type/outTag/callback/handleOutTag1') ?>';
+	window.handleOutTag1 = function(data) {
+		var plot1 = jQuery.jqplot ('chartdiv', [data], 
+		{ 
+		  seriesDefaults: {
+			// Make this a pie chart.
+			renderer: jQuery.jqplot.PieRenderer, 
+			rendererOptions: {
+			  // Put data labels on the pie slices.
+			  // By default, labels show the percentage of the slice.
+			  showDataLabels: true,
+			  dataLabels: 'percent'
+			}
+		  }, 
+		  legend: { show:true, location: 'e' }
+		}
+	  );
+	}
+	
+	jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleOutTag1"});
+
+</script>
+
+
+
 	<?php
 	$chart_type= 'pie';
 	if (isset($_GET['type'])) {
