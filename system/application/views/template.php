@@ -38,7 +38,6 @@ if (isset($add_css))
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/ezpz_tooltip.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcutslibrary.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcuts.js"></script>
-<script type="text/javascript" src="<?php echo asset_url(); ?>js/highcharts.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.json2.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.pieRenderer.min.js"></script>

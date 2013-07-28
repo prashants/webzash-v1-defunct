@@ -1,155 +1,170 @@
 <div id="main-content">
 
+<!-- EXPENSES PER TAG -->
 <!-- Sample of jqplot charts -->
-<div id="chartdiv" style="height:400px;width:600px; "></div>
+<div id="expensesPerTag" style="height:400px;width:600px;margin-left:auto;margin-right:auto;"></div>
 <script>
 $.jqplot.config.enablePlugins = true;
-	var url = '<?php echo (site_url('report/charts_data') . '/type/outTag/callback/handleOutTag1') ?>';
-	window.handleOutTag1 = function(data) {
-		var plot1 = jQuery.jqplot ('chartdiv', [data], 
-		{ 
-		  seriesDefaults: {
+	var url = '<?php echo (site_url('report/charts_data') . '/type/outTag/callback/handleOutTag') ?>';
+	window.handleOutTag = function(data) {
+	var plot1 = jQuery.jqplot ('expensesPerTag', [data], 
+	{
+		title: 'Expenses Per TAG',
+		seriesDefaults: {
 			// Make this a pie chart.
 			renderer: jQuery.jqplot.PieRenderer, 
 			rendererOptions: {
-			  // Put data labels on the pie slices.
-			  // By default, labels show the percentage of the slice.
-			  showDataLabels: true,
-			  dataLabels: 'percent'
+				// Put data labels on the pie slices.
+				// By default, labels show the percentage of the slice.
+				showDataLabels: true,
+				dataLabels: 'percent'
 			}
-		  }, 
-			 highlighter: {
-    show:true,
-    tooltipLocation: 'n',
-    useAxesFormatters: false,
-    formatString:'%s, %P',
-},
-		  legend: { show:true, location: 'e' }
-		}
-	  );
-	}
+		}, 
+		highlighter: {
+			show:true,
+			tooltipLocation: 'n',
+			useAxesFormatters: false,
+			formatString:'%s, %P',
+		},
+		legend: { show:true, location: 'e' },
+		grid: {
+			borderWidth: 0,
+			background: '#fff',
+			shadow: false,
+		},
+	}); // End of jqplot def
+	}; // End of Json response handler
 	
-	jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleOutTag1"});
+	jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleOutTag"});
 
 </script>
+<!-- ENDOF EXPENSES PER TAG -->
 
+<hr>
 
-
-	<?php
-	$chart_type= 'pie';
-	if (isset($_GET['type'])) {
-		$chart_type= $_GET['type'];
-	}
-	?>
+<!-- INCOMES PER TAG -->
+<!-- Sample of jqplot charts -->
+<div id="entriesPerTag" style="height:400px;width:600px;margin-left:auto;margin-right:auto;"></div>
+<script>
+$.jqplot.config.enablePlugins = true;
+	var url = '<?php echo (site_url('report/charts_data') . '/type/inTag/callback/handleInTag') ?>';
+	window.handleInTag = function(data) {
+	var plot1 = jQuery.jqplot ('entriesPerTag', [data], 
+	{
+		title: 'Incomes Per TAG',
+		seriesDefaults: {
+			// Make this a pie chart.
+			renderer: jQuery.jqplot.PieRenderer, 
+			rendererOptions: {
+				// Put data labels on the pie slices.
+				// By default, labels show the percentage of the slice.
+				showDataLabels: true,
+				dataLabels: 'percent'
+			}
+		}, 
+		highlighter: {
+			show:true,
+			tooltipLocation: 'n',
+			useAxesFormatters: false,
+			formatString:'%s, %P',
+		},
+		legend: { show:true, location: 'e' },
+		grid: {
+			borderWidth: 0,
+			background: '#fff',
+			shadow: false,
+		},
+	}); // End of jqplot def
+	}; // End of Json response handler
 	
-	<!-- EXPENSES PER TAG -->
-	<hr>
-	<div id="expensesPerTag" style="min-width: 400px; height: 400px; margin: 0 auto"></div>	
-	<script>
-	$(document).ready(function() {
-		var options = {
-			chart: {
-				renderTo: 'expensesPerTag',
-				type: '<?php echo ($chart_type) ?>'
-			},
-			title: { text: 'Expenses Per TAG' },
-			credits: {enabled: false},
-			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
-			series: [{}]
-		}; 
-		var url = '<?php echo (site_url('report/charts_data') . '/type/outTag/callback/handleOutTag') ?>';
-		window.handleOutTag = function(data) {
-			options.series[0].data = data;
-			var chart = new Highcharts.Chart(options);
-		}
-		
-		jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleOutTag"});
-		
-	});
-	</script>
+	jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleInTag"});
+
+</script>
+<!-- ENDOF INCOMES PER TAG -->
+
+<hr>
+
+<!-- EXPENSES PER TAG -->
+<!-- Sample of jqplot charts -->
+<div id="expensesPerMonth" style="height:400px;width:600px;margin-left:auto;margin-right:auto;"></div>
+<script>
+$.jqplot.config.enablePlugins = true;
+	var url = '<?php echo (site_url('report/charts_data') . '/type/outMonth/callback/handleOutMonth') ?>';
+	window.handleOutMonth = function(data) {
+	var plot1 = jQuery.jqplot ('expensesPerMonth', [data], 
+	{
+		title: 'Expenses Per Month',
+		seriesDefaults: {
+			// Make this a pie chart.
+			renderer: jQuery.jqplot.PieRenderer, 
+			rendererOptions: {
+				// Put data labels on the pie slices.
+				// By default, labels show the percentage of the slice.
+				showDataLabels: true,
+				dataLabels: 'percent'
+			}
+		}, 
+		highlighter: {
+			show:true,
+			tooltipLocation: 'n',
+			useAxesFormatters: false,
+			formatString:'%s, %P',
+		},
+		legend: { show:true, location: 'e' },
+		grid: {
+			borderWidth: 0,
+			background: '#fff',
+			shadow: false,
+		},
+	}); // End of jqplot def
+	}; // End of Json response handler
 	
-	<!-- ENDOF EXPENSES PER TAG -->
+	jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleOutMonth"});
 
+</script>
+<!-- ENDOF EXPENSES PER MONTH -->
 
+<hr>
 
-
-	<!-- ENTRIES PER TAG -->
-	<hr>
-	<div id="entriesPerTag" style="min-width: 400px; height: 400px; margin: 0 auto"></div>	
-	<script>
-	$(document).ready(function() {
-		var options = {
-			chart: {
-				renderTo: 'entriesPerTag',
-				type: '<?php echo ($chart_type) ?>'
-			},
-			title: { text: 'Entries Per TAG' },
-			credits: {enabled: false},
-			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
-			series: [{}]
-		};    
-		var url = '<?php echo (site_url('report/charts_data') . '/type/inTag/callback/handleInTag') ?>';
-		window.handleInTag = function(data) {
-			options.series[0].data = data;
-			var chart = new Highcharts.Chart(options);
-		}		
-		jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleInTag"});
-	});
-	</script>
-	<!-- ENDOF ENTRIES PER TAG -->
-
-
-	<!-- EXPENSES PER MONTH -->
-	<hr>
-	<div id="expensesPerMonth" style="min-width: 400px; height: 400px; margin: 0 auto"></div>	
-	<script>
-	$(document).ready(function() {
-		var options = {
-			chart: {
-				renderTo: 'expensesPerMonth',
-				type: '<?php echo ($chart_type) ?>'
-			},
-			title: { text: 'Expenses Per Month' },
-			credits: {enabled: false},
-			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i> ({point.percentage:.1f}%)' }, showInLegend: true } },
-			series: [{}]
-		};  
-		var url = '<?php echo (site_url('report/charts_data') . '/type/outMonth/callback/handleOutMonth') ?>';
-		window.handleOutMonth = function(data) {
-			options.series[0].data = data;
-			var chart = new Highcharts.Chart(options);
-		}		
-		jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleOutMonth"});
-	});
-	</script>
-	<!-- ENDOF ENTRIES PER TAG -->
+<!-- INCOMES PER TAG -->
+<!-- Sample of jqplot charts -->
+<div id="entriesPerMonth" style="height:400px;width:600px;margin-left:auto;margin-right:auto;"></div>
+<script>
+$.jqplot.config.enablePlugins = true;
+	var url = '<?php echo (site_url('report/charts_data') . '/type/inMonth/callback/handleInMonth') ?>';
+	window.handleInMonth = function(data) {
+	var plot1 = jQuery.jqplot ('entriesPerMonth', [data], 
+	{
+		title: 'Incomes Per Month',
+		seriesDefaults: {
+			// Make this a pie chart.
+			renderer: jQuery.jqplot.PieRenderer, 
+			rendererOptions: {
+				// Put data labels on the pie slices.
+				// By default, labels show the percentage of the slice.
+				showDataLabels: true,
+				dataLabels: 'percent'
+			}
+		}, 
+		highlighter: {
+			show:true,
+			tooltipLocation: 'n',
+			useAxesFormatters: false,
+			formatString:'%s, %P',
+		},
+		legend: { show:true, location: 'e' },
+		grid: {
+			borderWidth: 0,
+			background: '#fff',
+			shadow: false,
+		},
+	}); // End of jqplot def
+	}; // End of Json response handler
 	
-	
-	<!-- ENTRIES PER MONTH -->
-	<hr>
-	<div id="entriesPerMonth" style="min-width: 400px; height: 400px; margin: 0 auto"></div>	
-	<script>
-	$(document).ready(function() {
-		var options = {
-			chart: {
-				renderTo: 'entriesPerMonth',
-				type: '<?php echo ($chart_type) ?>'
-			},
-			title: { text: 'Entries Per Month' },
-			credits: {enabled: false},
-			plotOptions: { series: { allowPointSelect: true, cursor: 'pointer', dataLabels: { enabled: true, format: '<b>{point.name}:</b> <i>{point.y}</i>' }, showInLegend: true } },
-			series: [{}]
-		};    
-		var url = '<?php echo (site_url('report/charts_data') . '/type/inMonth/callback/handleInMonth') ?>';
-		window.handleInMonth = function(data) {
-			options.series[0].data = data;
-			var chart = new Highcharts.Chart(options);
-		}		
-		jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleInMonth"});
-	});
-	</script>
-	<!-- ENDOF ENTRIES PER TAG -->
+	jQuery.ajax({ url: url, dataType: "jsonp", type: "GET", cache: true, jsonp: false, jsonpCallback: "handleInMonth"});
 
+</script>
+<!-- ENDOF INCOMES PER MONTH -->
 
 </div> <!-- main content -->
 <br />	
