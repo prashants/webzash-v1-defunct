@@ -11,6 +11,7 @@
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/menu.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/jquery.datepick.css">
 <link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>css/thickbox.css">
+<link type="text/css" rel="stylesheet" href="<?php echo asset_url(); ?>jqplot/jquery.jqplot.css">
 
 <?php
 /* Dynamically adding css files from controllers */
@@ -37,6 +38,11 @@ if (isset($add_css))
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/ezpz_tooltip.min.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcutslibrary.js"></script>
 <script type="text/javascript" src="<?php echo asset_url(); ?>js/shortcuts.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.json2.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.pieRenderer.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.donutRenderer.min.js"></script>
+<script type="text/javascript" src="<?php echo asset_url(); ?>jqplot/plugins/jqplot.highlighter.js"></script>
 
 <?php
 /* Dynamically adding javascript files from controllers */
@@ -52,21 +58,22 @@ if (isset($add_javascript))
 <script type="text/javascript">
 /* Loading JQuery Superfish menu */
 $(document).ready(function() {
-	$("ul.sf-menu").supersubs({ 
-		minWidth:12,
-		maxWidth:27,
-		extraWidth: 1
-	}).superfish(); // call supersubs first, then superfish, so that subs are 
-	$('.datepicker').datepick({
-		dateFormat: '<?php echo $this->config->item('account_date_format'); ?>',
-	});
-	$('.datepicker-restrict').datepick({
-		dateFormat: '<?php echo $this->config->item('account_date_format'); ?>',
-		minDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_start')); ?>',
-		maxDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_end')); ?>',
-	});
+  $("ul.sf-menu").supersubs({ 
+    minWidth:12,
+    maxWidth:27,
+    extraWidth: 1
+  }).superfish(); // call supersubs first, then superfish, so that subs are 
+  $('.datepicker').datepick({
+    dateFormat: '<?php echo $this->config->item('account_date_format'); ?>',
+  });
+  $('.datepicker-restrict').datepick({
+    dateFormat: '<?php echo $this->config->item('account_date_format'); ?>',
+    minDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_start')); ?>',
+    maxDate: '<?php echo date_mysql_to_php($this->config->item('account_fy_end')); ?>',
+  });
 });
 </script>
+
 
 </head>
 <body>
@@ -145,6 +152,7 @@ $(document).ready(function() {
 					<li><?php echo anchor('report/trialbalance', 'Trial Balance', array('title' => 'Trial Balance')); ?></li>
 					<li><?php echo anchor('report/ledgerst', 'Ledger Statement', array('title' => 'Ledger Statement')); ?></li>
 					<li><?php echo anchor('report/reconciliation/pending', 'Reconciliation', array('title' => 'Reconciliation')); ?></li>
+					<li><?php echo anchor('report/charts', 'Charts', array('title' => 'Charts')); ?></li>
 				</ul>
 			</li>
 			<li>
