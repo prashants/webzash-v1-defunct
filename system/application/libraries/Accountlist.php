@@ -116,13 +116,16 @@ class Accountlist
 		$this->counter = $c;
 		if ($this->id != 0)
 		{
-			echo "<tr class=\"tr-group\">";
+			$display="";
+                        if ($this->id <= 4)
+                           $display=" style=\"display:table-row;\"";
+			echo "<tr class=\"tr-group\"".$display.">";
 			echo "<td class=\"td-group\">";
 			echo $this->print_space($this->counter);
 			if ($this->id <= 4)
-				echo "&nbsp;<strong>" .  $this->name. "</strong>";
+				echo "&nbsp;<label>+</label><strong>" .  $this->name. "</strong>";
 			else
-				echo "&nbsp;" .  $this->name;
+				echo "&nbsp;<label>+</label>" .  $this->name;
 			echo "</td>";
 			echo "<td>Group Account</td>";
 			echo "<td>-</td>";
