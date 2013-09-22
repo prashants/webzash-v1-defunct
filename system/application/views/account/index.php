@@ -11,22 +11,13 @@
 </style>
 <script type="text/javascript">
     var mode=true;
-    var processTr = function(currElem,spaceCount,innerTrshow){
-        innerTrshow=innerTrshow||false;
+    var processTr = function(currElem,spaceCount){
         var display='table-row';
         if(mode==false)
             display='none';
         var nextnbspStr=currElem.nextSibling.children[0].innerHTML;
         var nextnbspCount=((nextnbspStr.match(/&nbsp;/g) || []).length);
         nextnbspCount=(nextnbspCount-1)/6;
-        if(innerTrshow==true){
-            var innertrnbspStr=currElem.children[0].innerHTML;
-            var innertrnbspCount=((innertrnbspStr.match(/&nbsp;/g) || []).length);
-            innertrnbspCount--;
-            if(innertrnbspCount>=6)
-                innertrnbspCount=innertrnbspCount/6;
-            spaceCount=innertrnbspCount;
-        }
         if(spaceCount==nextnbspCount)
             return;
         else{
@@ -37,9 +28,9 @@
             }
             if(innerSign=='-'){
                     currElem.nextSibling.style.display = display;
-                    processTr(currElem.nextSibling,spaceCount,true);
+                    processTr(currElem.nextSibling,nextnbspCount);
             }
-            processTr(currElem.nextSibling,spaceCount,false);
+            processTr(currElem.nextSibling,spaceCount);
         }
     }
     $(document).ready(function() { 
