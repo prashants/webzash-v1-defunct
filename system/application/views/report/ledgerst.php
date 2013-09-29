@@ -3,18 +3,28 @@
 	if ( ! $print_preview)
 	{
 		echo form_open('report/ledgerst/' . $ledger_id);
-		echo "<p>";
-		echo form_input_ledger('ledger_id', $ledger_id);
-		echo " ";
-		echo form_submit('submit', 'Show');
-		echo "</p>";
+		echo "<table border=0 cellpadding=5>";
+                echo "<tr>";
+                echo "<td colspan='2'>".form_input_ledger('ledger_id', $ledger_id)."</td>";
+                echo "</tr>";
+                echo "<tr>";
+                echo "<td>".form_input_date_restrict($from_date)."</td>";
+                echo "<td align='right'>".form_input_date_restrict($to_date)."</td>";
+		echo "<td>".form_submit('submit', 'Show')."</td>";
+		echo "</table>";
 		echo form_close();
 	}
-
+        
+        $fromdate='';
+        $todate='';
+        
 	/* Pagination configuration */
 	if ( ! $print_preview)
 	{
-		$pagination_counter = $this->config->item('row_count');
+                $fromdate=$from_date['value'];
+                $todate=$to_date['value'];
+                $this->session->set_flashdata('from_to_date', $fromdate.'-'.$todate);
+                $pagination_counter = $this->config->item('row_count');
 		$page_count = (int)$this->uri->segment(4);
 		$page_count = $this->input->xss_clean($page_count);
 		if ( ! $page_count)
@@ -46,9 +56,37 @@
 	}
 
 	if ($ledger_id != 0)
-	{
-		list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id); /* Opening Balance */
-		$clbalance = $this->Ledger_model->get_ledger_balance($ledger_id); /* Final Closing Balance */
+	{       
+		/*  */                
+                $innerdateqry="";
+                if ($fromdate != '') {
+                    $innerdateqry = " AND `entries`.`date` >= '" . date_php_to_mysql($fromdate) . "' ";
+                }
+                if ($todate != '') {
+                    if ($fromdate != '') {
+                        $innerdateqry = " AND `entries`.`date` BETWEEN '" . date_php_to_mysql($fromdate) . "' AND '" . date_php_to_mysql($todate) . "' ";
+                    }
+                    else {
+                        $innerdateqry = " AND `entries`.`date` <= '" . date_php_to_mysql($todate) . "' ";
+                    }
+                }
+                $innerwhereqry="`entry_items`.`ledger_id`='$ledger_id'".$innerdateqry;//'entry_items.ledger_id', $ledger_id
+                
+		if ( ! $print_preview) {
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc');
+			$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where($innerwhereqry,NULL,FALSE)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc')->limit($pagination_counter, $page_count);
+			$ledgerst_q = $this->db->get();
+		} else {
+			$page_count = 0;
+			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc');
+			$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where($innerwhereqry,NULL,FALSE)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
+			$ledgerst_q = $this->db->get();
+		}
+                if($fromdate=='')
+                    list ($opbalance, $optype) = $this->Ledger_model->get_op_balance($ledger_id); /* Opening Balance */
+                else
+                    list ($opbalance, $optype) = $this->Ledger_model->convert_ledgerbal_opbal($this->Ledger_model->get_ledger_balance($ledger_id,$fromdate));
+		$clbalance = $this->Ledger_model->get_ledger_balance($ledger_id,null,$todate); /* Final Closing Balance */
 
 		/* Ledger Summary */
 		echo "<table class=\"ledger-summary\">";
@@ -60,17 +98,7 @@
 		echo "</tr>";
 		echo "</table>";
 		echo "<br />";
-		if ( ! $print_preview) {
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc');
-			$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc')->limit($pagination_counter, $page_count);
-			$ledgerst_q = $this->db->get();
-		} else {
-			$page_count = 0;
-			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.narration as entries_narration, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc');
-			$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc');
-			$ledgerst_q = $this->db->get();
-		}
-
+                
 		echo "<table border=0 cellpadding=5 class=\"simple-table ledgerst-table\">";
 
 		echo "<thead><tr><th>Date</th><th>No.</th><th>Ledger Name</th><th>Type</th><th>Dr Amount</th><th>Cr Amount</th><th>Balance</th></tr></thead>";
@@ -100,7 +128,7 @@
 
 			/* Calculating previous balance */
 			$this->db->select('entries.id as entries_id, entries.number as entries_number, entries.date as entries_date, entries.entry_type as entries_entry_type, entry_items.amount as entry_items_amount, entry_items.dc as entry_items_dc');
-			$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc')->limit($page_count, 0);
+			$this->db->from('entries')->join('entry_items', 'entries.id = entry_items.entry_id')->where($innerwhereqry,NULL,FALSE)->order_by('entries.date', 'asc')->order_by('entries.number', 'asc')->limit($page_count, 0);
 			$prevbal_q = $this->db->get();
 			foreach ($prevbal_q->result() as $row )
 			{
@@ -113,8 +141,8 @@
 			/* Show new current total */
 			echo "<tr class=\"tr-balance\"><td colspan=6>Opening</td><td>" . convert_amount_dc($cur_balance) . "</td></tr>";
 		}
-
-		foreach ($ledgerst_q->result() as $row)
+                
+                foreach ($ledgerst_q->result() as $row)
 		{
 			$current_entry_type = entry_type_info($row->entries_entry_type);
 
