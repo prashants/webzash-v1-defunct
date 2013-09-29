@@ -15,6 +15,8 @@
         var display='table-row';
         if(mode==false)
             display='none';
+        if(currElem.nextSibling==null)
+            return;
         var nextnbspStr=currElem.nextSibling.children[0].innerHTML;
         var nextnbspCount=((nextnbspStr.match(/&nbsp;/g) || []).length);
         nextnbspCount=(nextnbspCount-1)/6;
