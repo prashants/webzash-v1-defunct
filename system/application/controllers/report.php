@@ -59,22 +59,57 @@ class Report extends Controller {
 	function ledgerst($ledger_id = 0)
 	{
 		$this->load->helper('text');
-
+                
 		/* Pagination setup */
 		$this->load->library('pagination');
-
+                $this->load->library('session');
+                
 		$this->template->set('page_title', 'Ledger Statement');
-		if ($ledger_id != 0)
-			$this->template->set('nav_links', array('report/download/ledgerst/' . $ledger_id  => 'Download CSV', 'report/printpreview/ledgerst/' . $ledger_id => 'Print Preview'));
-
-		if ($_POST)
+                
+                $from_date='';
+                $to_date='';
+                if ($ledger_id != '0'){
+                        $from_to_date=explode('-',$this->session->flashdata('from_to_date'));
+                        $from_date = isset($from_to_date[0]) ? $from_to_date[0] : '';
+                        $to_date = isset($from_to_date[1]) ? $from_to_date[1] : '';
+                }
+                
+                if ($_POST)
 		{
 			$ledger_id = $this->input->post('ledger_id', TRUE);
-			redirect('report/ledgerst/' . $ledger_id);
+                        $this->form_validation->set_rules('from_date', 'From Date', 'trim|is_date|is_date_within_range');
+                        $this->form_validation->set_rules('to_date', 'To Date', 'trim|is_date|is_date_within_range');
+                        if ($this->form_validation->run() == FALSE)
+                            $this->messages->add(validation_errors(), 'error');
+                        else{
+                            $from_date = $this->input->post('from_date', TRUE);
+                            $to_date = $this->input->post('to_date', TRUE);
+                        }
 		}
+                
+                if ($ledger_id != 0)
+			$this->template->set('nav_links', array('report/download/ledgerst/' . $ledger_id  => 'Download CSV', 'report/printpreview/ledgerst/' . $ledger_id => 'Print Preview'));
+                
+                
 		$data['print_preview'] = FALSE;
 		$data['ledger_id'] = $ledger_id;
-
+                $data['from_date'] = array(
+			'name' => 'from_date',
+			'id' => 'from_date',
+			'maxlength' => '11',
+			'size' => '11',
+                        'placeholder' => 'From Date',
+                        'value' => $from_date
+		);
+                $data['to_date'] = array(
+			'name' => 'to_date',
+			'id' => 'to_date',
+			'maxlength' => '11',
+			'size' => '11',
+                        'placeholder' => 'To Date',
+                        'value' => $to_date
+		);
+                
 		/* Checking for valid ledger id */
 		if ($data['ledger_id'] > 0)
 		{
@@ -90,7 +125,7 @@ class Report extends Controller {
 			redirect('report/ledgerst');
 			return;
 		}
-
+                
 		$this->template->load('template', 'report/ledgerst', $data);
 		return;
 	}
