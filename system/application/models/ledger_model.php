@@ -124,12 +124,12 @@ class Ledger_model extends Model {
 		return $output;
 	}
 
-	function get_ledger_balance($ledger_id)
+	function get_ledger_balance($ledger_id,$from_date=null,$to_date=null)
 	{
 		list ($op_bal, $op_bal_type) = $this->get_op_balance($ledger_id);
 
-		$dr_total = $this->get_dr_total($ledger_id);
-		$cr_total = $this->get_cr_total($ledger_id);
+		$dr_total = $this->get_dr_total($ledger_id,$from_date,$to_date);
+		$cr_total = $this->get_cr_total($ledger_id,$from_date,$to_date);
 
 		$total = float_ops($dr_total, $cr_total, '-');
 		if ($op_bal_type == "D")
@@ -170,22 +170,36 @@ class Ledger_model extends Model {
 	}
 
 	/* Return debit total as positive value */
-	function get_dr_total($ledger_id)
+	function get_dr_total($ledger_id,$from_date=null,$to_date=null)
 	{
-		$this->db->select_sum('amount', 'drtotal')->from('entry_items')->join('entries', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'D');
+                $innerdateqry="";
+                if (!empty($from_date)) 
+                    $innerdateqry = " AND `entries`.`date` < '" . date_php_to_mysql($from_date) . "' ";
+                if (!empty($to_date))
+                    $innerdateqry = " AND `entries`.`date` <= '" . date_php_to_mysql($to_date) . "' ";
+                $innerwhereqry="`entry_items`.`ledger_id` ='$ledger_id'" . $innerdateqry; //'entry_items.ledger_id', $ledger_id
+		
+                $this->db->select_sum('amount', 'drtotal')->from('entry_items')->join('entries', 'entries.id = entry_items.entry_id')->where($innerwhereqry,NULL,FALSE)->where('entry_items.dc', 'D');
 		$dr_total_q = $this->db->get();
-		if ($dr_total = $dr_total_q->row())
+                if ($dr_total = $dr_total_q->row())
 			return $dr_total->drtotal;
 		else
 			return 0;
 	}
 
 	/* Return credit total as positive value */
-	function get_cr_total($ledger_id)
+	function get_cr_total($ledger_id,$from_date=null,$to_date=null)
 	{
-		$this->db->select_sum('amount', 'crtotal')->from('entry_items')->join('entries', 'entries.id = entry_items.entry_id')->where('entry_items.ledger_id', $ledger_id)->where('entry_items.dc', 'C');
+                $innerdateqry="";
+                if (!empty($from_date))
+                    $innerdateqry = " AND `entries`.`date` < '" . date_php_to_mysql($from_date) . "' ";
+                if (!empty($to_date))
+                    $innerdateqry = " AND `entries`.`date` <= '" . date_php_to_mysql($to_date) . "' ";
+                $innerwhereqry="`entry_items`.`ledger_id` ='$ledger_id'" . $innerdateqry; //'entry_items.ledger_id', $ledger_id
+		
+                $this->db->select_sum('amount', 'crtotal')->from('entry_items')->join('entries', 'entries.id = entry_items.entry_id')->where($innerwhereqry,NULL,FALSE)->where('entry_items.dc', 'C');
 		$cr_total_q = $this->db->get();
-		if ($cr_total = $cr_total_q->row())
+                if ($cr_total = $cr_total_q->row())
 			return $cr_total->crtotal;
 		else
 			return 0;
@@ -200,4 +214,15 @@ class Ledger_model extends Model {
 		$this->db->where('ledger_id', $ledger_id)->update('entry_items', $update_data);
 		return;
 	}
+        
+        /* Convert the ledger balance to opening balance array */
+        function convert_ledgerbal_opbal($openbalance=0)
+        {
+                if ($openbalance == 0)
+                    return array(0, "D");
+                else if ($openbalance < 0)
+                    return array($openbalance, "C");
+                else
+                    return array($openbalance, "D");
+        }
 }
