@@ -247,8 +247,6 @@ class Entry extends Controller {
 		}
 
 		$this->template->set('page_title', 'New ' . $current_entry_type['name'] . ' Entry');
-                
-                $this->template->set('add_javascript', array("js/jquery.searchabledropdown-1.0.8.min.js"));
 
 		/* Form fields */
 		$data['entry_number'] = array(
@@ -586,8 +584,6 @@ class Entry extends Controller {
 		}
 
 		$this->template->set('page_title', 'Edit ' . $current_entry_type['name'] . ' Entry');
-                
-                $this->template->set('add_javascript', array("js/jquery.searchabledropdown-1.0.8.min.js"));
 
 		/* Load current entry details */
 		if ( ! $cur_entry = $this->Entry_model->get_entry($entry_id, $entry_type_id))
