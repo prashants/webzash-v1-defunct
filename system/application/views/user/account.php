@@ -21,7 +21,7 @@
 		echo anchor('', 'Back', array('title' => 'Back to accounts'));
 		echo "</p>";
 	} else {
-		echo "<p>Please create a account by clicking on the above 'Create account' button.</p>";
+		echo "<p>Please create an account by clicking on the above 'Create account' button.</p>";
 	}
 
 	echo form_close();
