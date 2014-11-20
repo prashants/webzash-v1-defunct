@@ -52,7 +52,7 @@ class Update extends Controller {
 				return;
 			}
 		} else {
-			$this->messages->add('Select a account.', 'error');
+			$this->messages->add('Select an account.', 'error');
 			redirect('user/account');
 			return;
 		}
