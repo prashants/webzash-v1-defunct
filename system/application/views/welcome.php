@@ -5,7 +5,7 @@
 			<table class="dashboard-summary-table">
 				<tbody>
 					<tr>
-						<td><div>Welcome back, <strong><?php echo $this->config->item('account_name'); ?> !</strong></div></td>
+						<td><div>Welcome back, <strong><?php echo $this->config->item('account_name'); ?>!</strong></div></td>
 					</tr>
 					<tr>
 						<td><div>Account for Financial Year <strong><?php echo date_mysql_to_php_display($this->config->item('account_fy_start')) . " - " . date_mysql_to_php_display($this->config->item('account_fy_end')); ?></strong></div></td>
